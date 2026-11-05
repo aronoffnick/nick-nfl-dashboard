@@ -13,6 +13,14 @@ const metrics = [
 ]
 const num = x => Number(String(x).replaceAll(',', ''))
 const fmt = x => Number.isFinite(x) ? x.toFixed(1) : '—'
+const easternDay = d => {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/New_York',
+    year: 'numeric', month: '2-digit', day: '2-digit',
+  }).formatToParts(new Date(d))
+  return ['year', 'month', 'day']
+    .map(key => parts.find(p => p.type === key).value).join('-')
+}
 const kickoff = d => new Date(d).toLocaleString('en-US', {
   timeZone: 'America/New_York', weekday: 'short', month: 'short',
   day: 'numeric', hour: 'numeric', minute: '2-digit',
@@ -230,7 +238,7 @@ export default function App() {
   }, [])
 
   const result = useMemo(() => compute(data, halfLife, advantage, mode), [data, halfLife, advantage, mode])
-  const days = [...new Set((data?.matchups || []).map(g => g.date.slice(0, 10)))].sort()
+  const days = [...new Set((data?.matchups || []).map(g => easternDay(g.date)))].sort()
   function changeSort(key) {
     setSort(s => ({ key, ascending: s.key === key ? !s.ascending : true }))
   }
@@ -239,7 +247,7 @@ export default function App() {
     const q = query.toLowerCase()
     const source = view === 'matchups' ? result.matchups.filter(g =>
       `${g.away.name} ${g.home.name} ${g.away.abbr} ${g.home.abbr}`.toLowerCase().includes(q) &&
-      (day === 'all' || g.date.slice(0, 10) === day)
+      (day === 'all' || easternDay(g.date) === day)
     ) : result.teams.filter(t => `${t.name} ${t.abbr}`.toLowerCase().includes(q))
     function value(row) {
       if (sort.key === 'date') return row.date || row.name
