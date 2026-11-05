@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import './App.css'
+import MatchupExplorer from './props/MatchupExplorer.jsx'
+import { parsePlayers } from './props/model.js'
 
 let YEAR
 let WEEK
@@ -110,6 +112,7 @@ async function loadData(progress) {
           id: String(side.team.id), name: side.team.displayName,
           abbr: side.team.abbreviation, logo: side.team.logo,
           pass: passing, rush: rushing, points,
+          playerBox: parsePlayers(detail, String(side.team.id)),
         }
       })
       return { id: event.id, date: event.date, neutral: Boolean(c.neutralSite), away: sides[0], home: sides[1] }
@@ -331,19 +334,6 @@ export default function App() {
       <p>Only completed {data?.year || 'current-season'} regular-season games from earlier weeks, before the first kickoff of Week {data?.week || '—'}, enter the model. All required box scores and 32-team coverage must pass validation before results display.</p>
       <p>Last fetched: {data ? kickoff(data.updated) + ' ET' : 'Not yet loaded'} · Schedule and rankings refresh on opening and every 30 minutes while open. Completed box scores are cached for 24 hours. The current week follows ESPN's season/week designation; this is a pregame model and excludes the current week's results.</p>
     </footer>
-    {detail && <div className="overlay" onClick={() => setSelected(null)}><section className="modal" role="dialog" aria-modal="true" aria-label="Matchup analysis" onClick={e => e.stopPropagation()} onKeyDown={e => { if (e.key === 'Escape') setSelected(null) }}>
-      <button autoFocus className="close" onClick={() => setSelected(null)}>Close ✕</button>
-      <p className="eyebrow">{kickoff(detail.date)} ET {detail.neutral && '· NEUTRAL SITE'}</p>
-      <h2>{detail.away.name}<br /><span className="muted">at</span> {detail.home.name}</h2>
-      <div className="score"><span>{detail.away.abbr}<strong>{fmt(detail.awayPoints)}</strong></span><span>{detail.home.abbr}<strong>{fmt(detail.homePoints)}</strong></span></div>
-      <h3>{detail.margin < .05 ? 'Model toss-up' : `${detail.winner.name} by ${fmt(detail.margin)}`}</h3>
-      <p>Weighted matchup estimates, yards per game:</p>
-      <div className="table-wrap"><table><thead><tr><th>Offense vs defense</th><th>Pass yards</th><th>Rush yards</th></tr></thead><tbody>
-        <tr><td>{detail.away.abbr} offense vs {detail.home.abbr}</td><td>{fmt((detail.away.recent.passO + detail.home.recent.passD) / 2)}</td><td>{fmt((detail.away.recent.rushO + detail.home.recent.rushD) / 2)}</td></tr>
-        <tr><td>{detail.home.abbr} offense vs {detail.away.abbr}</td><td>{fmt((detail.home.recent.passO + detail.away.recent.passD) / 2)}</td><td>{fmt((detail.home.recent.rushO + detail.away.recent.rushD) / 2)}</td></tr>
-      </tbody></table></div>
-      <p className="muted">Uses {halfLife}-game half-life and {detail.neutral ? 'no' : `${advantage.toFixed(1)}-point`} home advantage. Review the methodology below the dashboard.</p>
-      <a href={detail.source} target="_blank" rel="noreferrer">View ESPN game source ↗</a>
-    </section></div>}
+    {detail && <MatchupExplorer key={detail.id} data={data} matchup={detail} halfLife={halfLife} advantage={advantage} onClose={() => setSelected(null)} />}
   </main>
 }

@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local backups created by NFL analytics upgrades
+.nfl-props-backups/
