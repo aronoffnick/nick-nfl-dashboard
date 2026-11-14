@@ -255,6 +255,16 @@ export default function App() {
   const [view, setView] = useState('matchups')
   const [sort, setSort] = useState({ key: 'date', ascending: true })
   const [selected, setSelected] = useState(null)
+  const [props, setProps] = useState(() => {
+    try { return JSON.parse(localStorage.getItem('nfl-tracked-props-v1')) || {} }
+    catch { return {} }
+  })
+  function saveProp(key, record) {
+    const next = { ...props, [key]: record }
+    localStorage.setItem('nfl-tracked-props-v1', JSON.stringify(next))
+    setProps(next)
+  }
+
 
   async function refresh() {
     setBusy(true); setError('')
@@ -355,7 +365,7 @@ export default function App() {
         <td><button className="pick" onClick={() => setSelected(row.id)}>{row.margin < .05 ? 'Toss-up' : `${row.winner.abbr} by ${fmt(row.margin)}`}<small>Explore matchup →</small></button></td>
       </tr> : <tr key={row.id}><td><Team team={row} /></td>{metrics.map(([k]) => <td key={k}><Rank value={row.ranks[k]} /><small>{fmt(row.display[k])} yd</small></td>)}<td>{fmt(row.ppg)}</td><td>{fmt(row.papg)}</td></tr>)}</tbody>
     </table>{!rows.length && <p className="notice">No teams or games match these filters.</p>}</div>}
-    <PickTracker data={data} matchups={trackedPicks} historicalPicks={historicalPicks} />
+    <PickTracker data={data} matchups={trackedPicks} historicalPicks={historicalPicks} props={props} saveProp={saveProp} />
     <section className="method">
       <div><p className="eyebrow">MODEL SETTINGS</p><h2>Recent games count more.</h2>
         <label>Weight half-life: {halfLife} games<input type="range" min="1" max="6" step=".5" value={halfLife} onChange={e => setHalfLife(Number(e.target.value))} /></label>
@@ -372,6 +382,6 @@ export default function App() {
       <p>Only completed {data?.year || 'current-season'} regular-season games from earlier weeks, before the first kickoff of Week {data?.week || '—'}, enter the model. All required box scores and 32-team coverage must pass validation before results display.</p>
       <p>Last fetched: {data ? kickoff(data.updated) + ' ET' : 'Not yet loaded'} · Schedule and rankings refresh on opening and every 30 minutes while open. Completed box scores are cached for 24 hours. The current week follows ESPN's season/week designation; this is a pregame model and excludes the current week's results.</p>
     </footer>
-    {detail && <MatchupExplorer key={detail.id} data={data} matchup={detail} halfLife={halfLife} advantage={advantage} onClose={() => setSelected(null)} />}
+    {detail && <MatchupExplorer key={detail.id} data={data} matchup={detail} saveProp={saveProp} halfLife={halfLife} advantage={advantage} onClose={() => setSelected(null)} />}
   </main>
 }

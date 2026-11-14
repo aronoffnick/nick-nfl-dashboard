@@ -49,7 +49,8 @@ function PositionDefense({data,defense,roster,halfLife,window,position,metric}){
   </section>
 }
 
-function PlayerProjections({data,team,opponent,roster,halfLife,window,position,metric}){
+function PlayerProjections({matchup,saveProp,data,team,opponent,roster,halfLife,window,position,metric}){
+  const [trackMessage, setTrackMessage] = useState('')
   const [chosen,setChosen]=useState('')
   const [line,setLine]=useState('')
   const [ascending,setAscending]=useState(false)
@@ -84,13 +85,28 @@ function PlayerProjections({data,team,opponent,roster,halfLife,window,position,m
     <p className="prop-help">Click a player's name for their game log and a manual prop-line comparison. Players must appear in an offensive box score in one of the team's last two games. Missing appearances are not silently counted as zero. No snap-count or starter confirmation is available.</p>
     {selected&&<div className="prop-comparison"><h3>{selected.name} · {label(metric)}</h3>
       <label>Your prop line <input type="number" min="0" step="0.5" placeholder="Enter a line, e.g. 64.5" value={line} onChange={e=>setLine(e.target.value)}/></label>
+      {validLine && !selected.unavailable && valid(selectedStat.projection) &&
+        selectedStat.projection !== Number(line) && !matchup.started &&
+        <button onClick={() => {
+          if (Date.now() >= Date.parse(matchup.date)) return setTrackMessage('Kickoff has passed.')
+          const pick = selectedStat.projection > Number(line) ? 'Over' : 'Under'
+          try {
+            saveProp(`${matchup.id}:${selected.id}:${metric}`, {
+              week: `${data.year} Week ${data.week}`, date: matchup.date, player: selected.name,
+              position: selected.position, team: team.abbr, teamName: team.name,
+              metric: label(metric), line: Number(line), pick, result: 'Pending',
+            })
+            setTrackMessage(`Saved ${selected.name} ${pick.toLowerCase()} ${line} for ${label(metric)}.`)
+          } catch { setTrackMessage('This browser could not save the prop.') }
+        }}>Track model pick</button>}
+      {trackMessage && <p role="status">{trackMessage}</p>}
       {validLine&&<p>{!selected.unavailable&&valid(selectedStat.projection)?<>Projection <b>{format(selectedStat.projection,metric)}</b> · Difference from your line <b>{(selectedStat.projection-Number(line)).toFixed(1)}</b> · </>:null}Over your line in <b>{over}/{sample.length}</b> recent recorded appearances{pushes?` (${pushes} pushes)`:''}. Historical frequency is not a forecast probability.</p>}
       <div className="table-wrap"><table><thead><tr><th>Date</th><th>Opponent</th>{METRICS.map(([k,l])=><th key={k}>{l}</th>)}</tr></thead><tbody>{[...selected.logs].reverse().map(l=><tr key={l.gameId}><td>{date(l.date)}</td><td>{l.opponent}</td>{METRICS.map(([k])=><td key={k}>{format(l[k],k)}</td>)}</tr>)}</tbody></table></div>
     </div>}
   </section>
 }
 
-export default function MatchupExplorer({data,matchup,halfLife,advantage,onClose}){
+export default function MatchupExplorer({saveProp,data,matchup,halfLife,advantage,onClose}){
   const [rosters,setRosters]=useState(null)
   const [error,setError]=useState('')
   const [message,setMessage]=useState('Loading player positions…')
@@ -140,7 +156,7 @@ export default function MatchupExplorer({data,matchup,halfLife,advantage,onClose
     {error&&<p role="alert" className="prop-warning">{error} <button onClick={()=>load(true)}>Retry</button></p>}
     {rosters&&<>
       {rosters.failed.length>0&&<p className="prop-warning">{rosters.failed.length} team rosters unavailable. Unknown positions are labeled; incomplete position groups are excluded from adjustments. <button onClick={()=>load(true)}>Retry rosters</button></p>}
-      {tab==='projections'&&<PlayerProjections key={offense.id} data={data} team={offense} opponent={defense} roster={rosters.roster} halfLife={halfLife} window={window} position={position} metric={metric}/>}
+      {tab==='projections'&&<PlayerProjections matchup={matchup} saveProp={saveProp} key={offense.id} data={data} team={offense} opponent={defense} roster={rosters.roster} halfLife={halfLife} window={window} position={position} metric={metric}/>}
       {tab==='defense'&&<PositionDefense data={data} defense={defense} roster={rosters.roster} halfLife={halfLife} window={window} position={position} metric={metric}/>}
       {tab==='bets'&&<Bets data={data} matchup={matchup} roster={rosters.roster} halfLife={halfLife} window={window}/>}
       {tab==='history'&&<Historical data={data} defense={defense} roster={rosters.roster} halfLife={halfLife} window={window} position={position} metric={metric}/>}

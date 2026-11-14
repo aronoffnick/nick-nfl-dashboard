@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 
 const storageKey = 'nfl-moneyline-picks-v1'
 
-export default function PickTracker({ data, matchups, historicalPicks }) {
+export default function PickTracker({ data, matchups, historicalPicks, props, saveProp }) {
   const currentWeek = data ? `${data.year} Week ${data.week}` : ''
   const [records, setRecords] = useState(() => {
     try { return JSON.parse(localStorage.getItem(storageKey)) || {} }
@@ -10,6 +10,8 @@ export default function PickTracker({ data, matchups, historicalPicks }) {
   })
   const [storageError, setStorageError] = useState(false)
   const [week, setWeek] = useState('')
+  const [showProps, setShowProps] = useState(false)
+  const [gradeError, setGradeError] = useState('')
   const [team, setTeam] = useState('')
   const [filter, setFilter] = useState('All results')
 
@@ -48,7 +50,7 @@ export default function PickTracker({ data, matchups, historicalPicks }) {
   }, [records])
 
   const entries = Object.entries({ ...Object.fromEntries(historicalPicks), ...records })
-  const weeks = [...new Set([currentWeek, ...entries.map(([, item]) => item.week)].filter(Boolean))]
+  const weeks = [...new Set([currentWeek, ...entries.map(([, item]) => item.week), ...Object.values(props).map(item => item.week)].filter(Boolean))]
   const selectedWeek = week || currentWeek
   const weekly = entries.filter(([, item]) => (selectedWeek === 'All weeks' || item.week === selectedWeek) &&
     `${item.matchup} ${item.teams || ''}`.toLowerCase().includes(team.trim().toLowerCase()))
@@ -62,6 +64,24 @@ export default function PickTracker({ data, matchups, historicalPicks }) {
     ['7+ pts', margin => margin >= 7],
   ]
   const decided = weekly.filter(([, item]) => ['Win', 'Loss'].includes(item.result))
+
+  const propRows = Object.entries(props).filter(([, item]) =>
+    (selectedWeek === 'All weeks' || selectedWeek === item.week) &&
+    `${item.team} ${item.teamName}`.toLowerCase().includes(team.trim().toLowerCase()))
+  const teamNames = [...new Set(decided.map(([, item]) => item.team))].sort()
+
+  function accuracy(label, sample) {
+    const graded = sample.filter(item => ['Win', 'Loss'].includes(item.result))
+    const hits = graded.filter(item => item.result === 'Win').length
+    const percent = graded.length ? Math.round(100 * hits / graded.length) : null
+    return <div className="pick-accuracy-row" key={label}>
+      <span>{label}</span>
+      {percent === null ? <span>No graded picks</span> : <>
+        <progress aria-label={label + ' accuracy'} value={percent} max="100" />
+        <span>{percent}% ({hits}/{graded.length})</span>
+      </>}
+    </div>
+  }
 
   function saveOdds(event, id) {
     event.preventDefault()
@@ -79,6 +99,10 @@ export default function PickTracker({ data, matchups, historicalPicks }) {
 
   return <section>
     <h2>Weekly picks</h2>
+    <div className="tabs">
+      <button aria-pressed={!showProps} onClick={() => setShowProps(false)}>Game winners</button>
+      <button aria-pressed={showProps} onClick={() => setShowProps(true)}>Player props</button>
+    </div>
     <p>One moneyline pick per game. Open the dashboard before kickoff to save picks on this browser. Enter DraftKings prices before kickoff. Backtests use prior box scores and the default model settings. Week 1 has no same-season history.</p>
     {storageError && <p role="alert">This browser could not save the pick history.</p>}
     <div className="controls">
@@ -91,6 +115,25 @@ export default function PickTracker({ data, matchups, historicalPicks }) {
         {['All results', 'Pending', 'Win', 'Loss', 'Push'].map(value => <option key={value}>{value}</option>)}
       </select></label>
     </div>
+    {showProps ? <>
+      <p>Save a pick from Player projections before kickoff. After the game, record its settlement here.</p>
+      <div className="pick-accuracy">
+        {accuracy('All player props', propRows.map(([, item]) => item))}
+        {['QB', 'RB', 'FB', 'WR', 'TE'].map(position =>
+          accuracy(position, propRows.map(([, item]) => item).filter(item => item.position === position)))}
+      </div>
+      {gradeError && <p role="alert">{gradeError}</p>}
+      <ul>{propRows.filter(([, item]) => filter === 'All results' || filter === item.result).map(([id, item]) =>
+        <li key={id}>{item.player} ({item.team} {item.position}) · {item.pick} {item.line} {item.metric} · {item.week}
+          {Date.now() >= Date.parse(item.date) ? <select aria-label={`Result for ${item.player} ${item.metric}`}
+            value={item.result} onChange={event => {
+              try { saveProp(id, { ...item, result: event.target.value }); setGradeError('') }
+              catch { setGradeError('This browser could not save the result.') }
+            }}>
+            {['Pending', 'Win', 'Loss', 'Push'].map(result => <option key={result}>{result}</option>)}
+          </select> : ' · Pending'}
+        </li>)}</ul>
+    </> : <>
     <p>{count('Win')} wins · {count('Loss')} losses · {count('Push')} pushes · {count('Pending')} pending</p>
     <div className="pick-accuracy">
       <h3>Winner accuracy by projected margin</h3>
@@ -108,6 +151,9 @@ export default function PickTracker({ data, matchups, historicalPicks }) {
       })}
       <small>Hits are correct outright winners. Pushes and pending games are excluded.</small>
     </div>
+    <details className="pick-accuracy"><summary>Accuracy by picked team</summary>
+      {teamNames.map(name => accuracy(name, decided.map(([, item]) => item).filter(item => item.team === name)))}
+    </details>
     {rows.length ? <div className="table-wrap"><table>
       <thead><tr><th>Matchup</th><th>Model pick</th><th>Projected margin</th><th>DraftKings moneyline</th><th>Result</th></tr></thead>
       <tbody>{rows.map(([id, item]) => <tr key={id}>
@@ -121,5 +167,6 @@ export default function PickTracker({ data, matchups, historicalPicks }) {
         <td>{item.result}</td>
       </tr>)}</tbody>
     </table></div> : <p>No saved picks match these filters.</p>}
+    </>}
   </section>
 }
