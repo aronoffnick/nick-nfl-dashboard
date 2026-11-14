@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import './App.css'
+import PickTracker from './PickTracker.jsx'
 import MatchupExplorer from './props/MatchupExplorer.jsx'
 import { parsePlayers } from './props/model.js'
 
@@ -76,12 +77,14 @@ async function loadData(progress) {
   progress(`Loading ${YEAR} Week ${WEEK}…`)
   const firstKickoff = Math.min(...schedule.events.map(e => +new Date(e.date)))
   const events = new Map()
+  const historicalWeeks = []
   for (let week = 1; week < WEEK; week++) {
     progress(`Loading completed games: week ${week} of ${WEEK - 1}…`)
     const board = await get(`scoreboard?dates=${YEAR}&seasontype=2&week=${week}&limit=100`)
     if (Number(board.season?.year) !== YEAR || Number(board.week?.number) !== week) {
       throw new Error(`Historical schedule validation failed for week ${week}.`)
     }
+    historicalWeeks.push({ week, events: board.events || [] })
     for (const e of board.events || []) {
       const { c } = competition(e)
       if (c.status?.type?.completed && +new Date(e.date) < firstKickoff) events.set(e.id, e)
@@ -128,13 +131,18 @@ async function loadData(progress) {
     if (!teams[String(away.team.id)] || !teams[String(home.team.id)]) throw new Error('A matchup team is missing historical data.')
     return {
       id: e.id, date: e.date, away: String(away.team.id), home: String(home.team.id),
+      started: c.status?.type?.state !== 'pre',
+      final: c.status?.type?.name === 'STATUS_FINAL' && away.score != null && home.score != null ? {
+        away: { id: String(away.team.id), points: num(away.score) },
+        home: { id: String(home.team.id), points: num(home.score) },
+      } : null,
       neutral: Boolean(c.neutralSite), status: c.status?.type?.description || 'Scheduled',
       source: e.links?.find(l => l.href)?.href || 'https://www.espn.com/nfl/scoreboard',
     }
   })
   const data = {
     year: YEAR, week: WEEK,
-    teams, games, matchups, updated: new Date().toISOString(),
+    teams, games, matchups, historicalWeeks, updated: new Date().toISOString(),
     cutoff: new Date(firstKickoff).toISOString(),
   }
   // Schedule is fetched fresh; completed box scores are cached for 24 hours.
@@ -200,6 +208,32 @@ function compute(data, halfLife, advantage, mode) {
   return { teams: all, matchups }
 }
 
+function backtest(data) {
+  if (!data) return []
+  const finals = new Map(data.games.map(game => [game.id, game]))
+  return data.historicalWeeks.flatMap(({ week, events }) => {
+    const cutoff = Math.min(...events.map(event => Date.parse(event.date)))
+    const games = data.games.filter(game => Date.parse(game.date) + 8 * 3600_000 < cutoff)
+    if (games.length === 0) return []
+    const matchups = events.flatMap(event => {
+      const final = finals.get(event.id)
+      if (!final) return []
+      return [{ ...final, away: final.away.id, home: final.home.id }]
+    })
+    const estimates = compute({ ...data, games, matchups }, 3, 2, 'season')
+    return estimates.matchups.filter(game => Number.isFinite(game.margin)).map(game => {
+      const final = finals.get(game.id)
+      const { away, home } = final
+      const winner = away.points > home.points ? away : home
+      return [game.id, {
+        week: `${data.year} Week ${week}`, date: game.date, team: game.winner.abbr,
+        matchup: `${game.away.abbr} @ ${game.home.abbr}`, odds: '', backtested: true,
+        result: away.points === home.points ? 'Push' : winner.id === game.winner.id ? 'Win' : 'Loss',
+      }]
+    })
+  })
+}
+
 function Team({ team }) {
   return <span className="team">{team.logo && <img src={team.logo} alt="" />}<span>{team.name}<small>{team.wins}–{team.losses}{team.ties ? `–${team.ties}` : ''} · {team.n} games</small></span></span>
 }
@@ -241,6 +275,8 @@ export default function App() {
   }, [])
 
   const result = useMemo(() => compute(data, halfLife, advantage, mode), [data, halfLife, advantage, mode])
+  const historicalPicks = useMemo(() => backtest(data), [data])
+  const trackedPicks = useMemo(() => compute(data, 3, 2, 'season')?.matchups, [data])
   const days = [...new Set((data?.matchups || []).map(g => easternDay(g.date)))].sort()
   function changeSort(key) {
     setSort(s => ({ key, ascending: s.key === key ? !s.ascending : true }))
@@ -318,6 +354,7 @@ export default function App() {
         <td><button className="pick" onClick={() => setSelected(row.id)}>{row.margin < .05 ? 'Toss-up' : `${row.winner.abbr} by ${fmt(row.margin)}`}<small>Explore matchup →</small></button></td>
       </tr> : <tr key={row.id}><td><Team team={row} /></td>{metrics.map(([k]) => <td key={k}><Rank value={row.ranks[k]} /><small>{fmt(row.display[k])} yd</small></td>)}<td>{fmt(row.ppg)}</td><td>{fmt(row.papg)}</td></tr>)}</tbody>
     </table>{!rows.length && <p className="notice">No teams or games match these filters.</p>}</div>}
+    <PickTracker data={data} matchups={trackedPicks} historicalPicks={historicalPicks} />
     <section className="method">
       <div><p className="eyebrow">MODEL SETTINGS</p><h2>Recent games count more.</h2>
         <label>Weight half-life: {halfLife} games<input type="range" min="1" max="6" step=".5" value={halfLife} onChange={e => setHalfLife(Number(e.target.value))} /></label>
