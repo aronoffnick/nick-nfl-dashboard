@@ -10,6 +10,7 @@ export default function PickTracker({ data, matchups, historicalPicks }) {
   })
   const [storageError, setStorageError] = useState(false)
   const [week, setWeek] = useState('')
+  const [team, setTeam] = useState('')
   const [filter, setFilter] = useState('All results')
 
   useEffect(() => {
@@ -20,7 +21,8 @@ export default function PickTracker({ data, matchups, historicalPicks }) {
         if (next[game.id] || game.started || Date.now() >= Date.parse(game.date)) continue
         next[game.id] = {
           week: currentWeek, date: game.date, team: game.winner.abbr, teamId: game.winner.id,
-          matchup: `${game.away.abbr} @ ${game.home.abbr}`, result: 'Pending', odds: '',
+          matchup: `${game.away.abbr} @ ${game.home.abbr}`, result: 'Pending', odds: '', margin: game.margin,
+          teams: `${game.away.name} ${game.home.name}`,
         }
       }
       const finals = [...data.games, ...data.matchups.filter(game => game.final)]
@@ -48,10 +50,19 @@ export default function PickTracker({ data, matchups, historicalPicks }) {
   const entries = Object.entries({ ...Object.fromEntries(historicalPicks), ...records })
   const weeks = [...new Set([currentWeek, ...entries.map(([, item]) => item.week)].filter(Boolean))]
   const selectedWeek = week || currentWeek
-  const weekly = entries.filter(([, item]) => item.week === selectedWeek)
+  const weekly = entries.filter(([, item]) => (selectedWeek === 'All weeks' || item.week === selectedWeek) &&
+    `${item.matchup} ${item.teams || ''}`.toLowerCase().includes(team.trim().toLowerCase()))
   const count = result => weekly.filter(([, item]) => item.result === result).length
   const rows = weekly.filter(([, item]) => filter === 'All results' || item.result === filter)
     .sort(([, a], [, b]) => a.date.localeCompare(b.date))
+  const marginBands = [
+    ['All picks', () => true],
+    ['Under 3 pts', margin => margin < 3],
+    ['3 to under 7 pts', margin => margin >= 3 && margin < 7],
+    ['7+ pts', margin => margin >= 7],
+  ]
+  const decided = weekly.filter(([, item]) => ['Win', 'Loss'].includes(item.result))
+
   function saveOdds(event, id) {
     event.preventDefault()
     const input = event.currentTarget.elements.price
@@ -72,17 +83,35 @@ export default function PickTracker({ data, matchups, historicalPicks }) {
     {storageError && <p role="alert">This browser could not save the pick history.</p>}
     <div className="controls">
       <label>Week<select value={selectedWeek} onChange={event => setWeek(event.target.value)}>
+        <option>All weeks</option>
         {weeks.map(value => <option key={value}>{value}</option>)}
       </select></label>
+      <label>Find a team<input value={team} onChange={event => setTeam(event.target.value)} placeholder="Ravens or BAL" /></label>
       <label>Result<select value={filter} onChange={event => setFilter(event.target.value)}>
         {['All results', 'Pending', 'Win', 'Loss', 'Push'].map(value => <option key={value}>{value}</option>)}
       </select></label>
     </div>
     <p>{count('Win')} wins · {count('Loss')} losses · {count('Push')} pushes · {count('Pending')} pending</p>
+    <div className="pick-accuracy">
+      <h3>Winner accuracy by projected margin</h3>
+      {marginBands.map(([label, includes]) => {
+        const sample = decided.filter(([, item]) => includes(item.margin))
+        const hits = sample.filter(([, item]) => item.result === 'Win').length
+        const percent = sample.length ? Math.round(100 * hits / sample.length) : null
+        return <div className="pick-accuracy-row" key={label}>
+          <span>{label}</span>
+          {percent === null ? <span>No graded picks</span> : <>
+            <progress aria-label={label + ' winner accuracy'} value={percent} max="100" />
+            <span>{percent}% ({hits}/{sample.length})</span>
+          </>}
+        </div>
+      })}
+      <small>Hits are correct outright winners. Pushes and pending games are excluded.</small>
+    </div>
     {rows.length ? <div className="table-wrap"><table>
-      <thead><tr><th>Matchup</th><th>Model pick</th><th>DraftKings moneyline</th><th>Result</th></tr></thead>
+      <thead><tr><th>Matchup</th><th>Model pick</th><th>Projected margin</th><th>DraftKings moneyline</th><th>Result</th></tr></thead>
       <tbody>{rows.map(([id, item]) => <tr key={id}>
-        <td>{item.matchup}</td><td>{item.team}{item.backtested && <small>Backtested</small>}</td>
+        <td>{item.matchup}</td><td>{item.team}{item.backtested && <small>Backtested</small>}</td><td>{item.margin == null ? "—" : item.margin.toFixed(1)}</td>
         <td>{Date.now() < Date.parse(item.date) ? <form onSubmit={event => saveOdds(event, id)}>
           <input name="price" aria-label={`DraftKings odds for ${item.team}`} placeholder="+120 or -135"
             defaultValue={item.odds} onChange={event => event.target.setCustomValidity('')} />

@@ -227,7 +227,8 @@ function backtest(data) {
       const winner = away.points > home.points ? away : home
       return [game.id, {
         week: `${data.year} Week ${week}`, date: game.date, team: game.winner.abbr,
-        matchup: `${game.away.abbr} @ ${game.home.abbr}`, odds: '', backtested: true,
+        matchup: `${game.away.abbr} @ ${game.home.abbr}`, odds: '', backtested: true, margin: game.margin,
+        teams: `${game.away.name} ${game.home.name}`,
         result: away.points === home.points ? 'Push' : winner.id === game.winner.id ? 'Win' : 'Loss',
       }]
     })
