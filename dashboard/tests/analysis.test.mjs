@@ -1,0 +1,13 @@
+import test from 'node:test'
+import assert from 'node:assert/strict'
+import {valueFor,statFor,lineComparison,breakEven,buildCandidates} from '../src/props/analysis.js'
+const stat=(projection=1,baseline=1)=>({projection,baseline,sample:6,defense:{adjusted:true,factor:1.1,sample:4}})
+const player={id:'1',position:'RB',name:'Test RB',status:'Active',unavailable:false,stale:false,
+ logs:Array.from({length:6},(_,i)=>({rushTD:i===4?1:0,recTD:i===5?1:0,passTD:4,carries:i<3?10:15,targets:4,rushYds:50,recYds:30,rec:3,passYds:0})),
+ stats:{rushTD:stat(.4,.3),recTD:stat(.2,.15),passYds:stat(0,0),rushYds:stat(60,50),rec:stat(3,3),recYds:stat(35,30)}}
+test('Scored touchdowns combine rush+receiving and exclude passing',()=>{assert.equal(valueFor({rushTD:1,recTD:2,passTD:7},'totalTD'),3);assert.equal(valueFor({rushTD:1,recTD:null},'totalTD'),null)})
+test('Combined projection sums complete component projections and needs joint sample',()=>{const s=statFor(player,'totalTD',3,4);assert(Math.abs(s.projection-.6)<1e-10);assert.equal(s.sample,6);const short={...player,logs:player.logs.slice(0,2)};assert.equal(statFor(short,'totalTD').projection,null);const missing={...player,stats:{...player.stats,recTD:stat(null)}};assert.equal(statFor(missing,'totalTD').projection,null)})
+test('Manual line comparison handles touchdowns, pushes, and unavailable players',()=>{const c=lineComparison(player,'totalTD',.5,3,4);assert.equal(c.over,2);assert.equal(c.n,4);assert.equal(lineComparison(player,'rec',3,3,4).push,4);assert.equal(lineComparison(player,'rec','',3,4),null);assert.equal(lineComparison({...player,unavailable:true},'rec',3,3,4).projection,null)})
+test('American odds break-even handles positive, negative, and invalid odds',()=>{assert.equal(breakEven('+100'),.5);assert.equal(breakEven('-100'),.5);assert(Math.abs(breakEven('-110')-110/210)<1e-10);assert.equal(breakEven('99'),null);assert.equal(breakEven(''),null);assert.equal(breakEven('junk'),null)})
+test('Shortlist excludes stale, unavailable and tiny samples without predicting a player is due',()=>{assert.equal(buildCandidates([{...player,stale:true}],3,4).length,0);assert.equal(buildCandidates([{...player,unavailable:true}],3,4).length,0);assert.equal(buildCandidates([{...player,logs:player.logs.slice(0,2)}],3,4).length,0);const picks=buildCandidates([player],3,4);assert(picks.some(p=>p.badges.includes('Rising workload')));assert(picks.some(p=>p.key==='totalTD'));assert(!picks.some(p=>p.key==='passYds'))})
+test('TD log ranges remain descriptive and zero values stay in the sample',()=>{const s=statFor(player,'totalTD',3,4);assert.equal(s.min,0);assert.equal(s.max,1);assert.equal(lineComparison(player,'totalTD',0,3,4).push,2)})

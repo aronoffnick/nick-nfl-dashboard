@@ -11,3 +11,4 @@
   margin: .45rem 0;
 }
 .pick-accuracy-row progress { width: 100%; }
+.matchup-groups th{font-size:.85rem;color:#b7dfc4;background:#1b3027;padding-top:14px;padding-bottom:14px}.matchup-groups th:nth-child(2),.matchup-groups th:last-child{background:#1a2630;color:#b0c1ce}.table-wrap:has(.matchup-groups) td:nth-child(6),.table-wrap:has(.matchup-groups) tr:nth-child(2) th:nth-child(6),.table-wrap:has(.matchup-groups) td:nth-child(7),.table-wrap:has(.matchup-groups) tr:nth-child(2) th:nth-child(7){border-left:2px solid #3c535f}.table-wrap:has(.matchup-groups) td:nth-child(12){border-left:2px solid #3c535f}

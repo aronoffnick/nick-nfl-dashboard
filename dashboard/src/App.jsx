@@ -347,21 +347,20 @@ export default function App() {
     </section>
     <div className="table-note">Yards per game · #1 = most yards on offense / fewest allowed on defense · click column headings to sort</div>
     {result && <div className="table-wrap"><table>
-      <thead>{view === 'matchups' ? <tr>
-        <th>{header('Away pass D', 'away.passD')}</th><th>{header('Away rush D', 'away.rushD')}</th>
-        <th>{header('Away team', 'name')}</th><th>{header('Kickoff ET', 'date')}</th><th>Home team</th>
-        <th>{header('Home pass D', 'home.passD')}</th><th>{header('Home rush D', 'home.rushD')}</th>
-        <th>{header('Away pass O', 'away.passO')}</th><th>{header('Away rush O', 'away.rushO')}</th>
-        <th>{header('Home pass O', 'home.passO')}</th><th>{header('Home rush O', 'home.rushO')}</th>
-        <th>{header('Model pick / margin', 'margin')}</th>
-      </tr> : <tr><th>{header('Team', 'name')}</th>{metrics.map(([k, name]) => <th key={k}>{header(name, k)}</th>)}<th>Points / game</th><th>Allowed / game</th></tr>}</thead>
+      <thead>{view === 'matchups' ? <>
+        <tr className="matchup-groups"><th colSpan={5} scope="colgroup">Away team · offense & defense</th><th scope="col">Game</th><th colSpan={5} scope="colgroup">Home team · offense & defense</th><th scope="col">Prediction</th></tr>
+        <tr><th>{header('Away team', 'name')}</th>
+        {metrics.map(([k,name])=><th key={'away'+k}>{header('Away '+name.toLowerCase(),'away.'+k)}</th>)}
+        <th>{header('Kickoff ET','date')}</th><th>Home team</th>
+        {metrics.map(([k,name])=><th key={'home'+k}>{header('Home '+name.toLowerCase(),'home.'+k)}</th>)}
+        <th>{header('Model pick / margin','margin')}</th></tr>
+      </> : <tr><th>{header('Team', 'name')}</th>{metrics.map(([k, name]) => <th key={k}>{header(name, k)}</th>)}<th>Points / game</th><th>Allowed / game</th></tr>}</thead>
       <tbody>{rows.map(row => view === 'matchups' ? <tr key={row.id}>
-        {['passD', 'rushD'].map(k => <td key={k}><Rank value={row.away.ranks[k]} /><small>{fmt(row.away.display[k])} yd</small></td>)}
         <td><Team team={row.away} /></td>
+        {metrics.map(([k])=><td key={'away'+k}><Rank value={row.away.ranks[k]} /><small>{fmt(row.away.display[k])} yd</small></td>)}
         <td className="date">{kickoff(row.date)}<small>{row.neutral ? 'Neutral site' : row.status}</small></td>
         <td><Team team={row.home} /></td>
-        {['passD', 'rushD'].map(k => <td key={k}><Rank value={row.home.ranks[k]} /><small>{fmt(row.home.display[k])} yd</small></td>)}
-        {[['away', 'passO'], ['away', 'rushO'], ['home', 'passO'], ['home', 'rushO']].map(([s, k]) => <td key={s + k}><Rank value={row[s].ranks[k]} /><small>{fmt(row[s].display[k])} yd</small></td>)}
+        {metrics.map(([k])=><td key={'home'+k}><Rank value={row.home.ranks[k]} /><small>{fmt(row.home.display[k])} yd</small></td>)}
         <td><button className="pick" onClick={() => setSelected(row.id)}>{row.margin < .05 ? 'Toss-up' : `${row.winner.abbr} by ${fmt(row.margin)}`}<small>Explore matchup →</small></button></td>
       </tr> : <tr key={row.id}><td><Team team={row} /></td>{metrics.map(([k]) => <td key={k}><Rank value={row.ranks[k]} /><small>{fmt(row.display[k])} yd</small></td>)}<td>{fmt(row.ppg)}</td><td>{fmt(row.papg)}</td></tr>)}</tbody>
     </table>{!rows.length && <p className="notice">No teams or games match these filters.</p>}</div>}
