@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import './App.css'
 import PickTracker from './PickTracker.jsx'
+import WeeklySGPs from './props/WeeklySGPs.jsx'
 import MatchupExplorer from './props/MatchupExplorer.jsx'
 import { parsePlayers } from './props/model.js'
 
@@ -364,6 +365,7 @@ export default function App() {
         <td><button className="pick" onClick={() => setSelected(row.id)}>{row.margin < .05 ? 'Toss-up' : `${row.winner.abbr} by ${fmt(row.margin)}`}<small>Explore matchup →</small></button></td>
       </tr> : <tr key={row.id}><td><Team team={row} /></td>{metrics.map(([k]) => <td key={k}><Rank value={row.ranks[k]} /><small>{fmt(row.display[k])} yd</small></td>)}<td>{fmt(row.ppg)}</td><td>{fmt(row.papg)}</td></tr>)}</tbody>
     </table>{!rows.length && <p className="notice">No teams or games match these filters.</p>}</div>}
+    <WeeklySGPs data={data} matchups={result?.matchups} halfLife={halfLife} onOpen={setSelected} />
     <PickTracker data={data} matchups={trackedPicks} historicalPicks={historicalPicks} props={props} saveProp={saveProp} />
     <section className="method">
       <div><p className="eyebrow">MODEL SETTINGS</p><h2>Recent games count more.</h2>

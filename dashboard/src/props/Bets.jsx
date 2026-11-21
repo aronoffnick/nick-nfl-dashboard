@@ -1,5 +1,7 @@
 import { useMemo, useState } from 'react'
 import { projectTeam, valid } from './model.js'
+import { sameGameFavorite } from './sgp.js'
+import { SGPCard } from './WeeklySGPs.jsx'
 import { buildCandidates, metricLabel, lineComparison, breakEven, valueFor } from './analysis.js'
 const f=(n,key='')=>valid(n)?n.toFixed(key==='totalTD'?2:1):'—'
 function Candidate({item,data,matchup,saveProp,halfLife,lookback}){
@@ -32,10 +34,12 @@ export default function Bets({data,matchup,roster,halfLife,window,saveProp}){
   const [expanded,setExpanded]=useState(false)
   const players=useMemo(()=>[[matchup.away,matchup.home],[matchup.home,matchup.away]].flatMap(([team,opponent])=>projectTeam(data,team,opponent,roster,halfLife,window).map(p=>({...p,team,opponent}))),[data,matchup,roster,halfLife,window])
   const candidates=useMemo(()=>buildCandidates(players,halfLife,window),[players,halfLife,window])
+  const favorite=useMemo(()=>sameGameFavorite(data,matchup,roster,halfLife,window,Date.now(),players),[data,matchup,roster,halfLife,window,players])
   const visible=expanded?candidates:candidates.slice(0,12)
   const rising=candidates.find(c=>c.badges.includes('Rising workload')),favorable=candidates.find(c=>c.badges.includes('Favorable matchup'))
   const td=candidates.filter(c=>c.key==='totalTD').sort((a,b)=>b.stat.projection-a.stat.projection)[0]
   return <section aria-label="Bets"><div className="prop-section-title"><h3>Matchup research shortlist</h3><span>Ranked statistical signals · not price-qualified bets</span></div>
+    <div className="bet-sgp"><h3>Favorite 2-leg SGP for this game</h3>{favorite.pair?<SGPCard pair={favorite.pair} matchup={matchup}/>:<p className="prop-warning">No automatic SGP: {favorite.reason}</p>}</div>
     <div className="bet-summary"><div><small>TEAM LEAN</small><strong>{matchup.margin<.05?'Toss-up':`${matchup.winner.abbr} by ${matchup.margin.toFixed(1)}`}</strong><p>Recent team model; no confirmed starting-QB adjustment.</p></div>
       {[["RISING WORKLOAD",rising],["MATCHUP SUPPORT",favorable],["TD INVOLVEMENT",td]].map(([name,pick])=><div key={name}><small>{name}</small><strong>{pick?.player.name||'No qualifying signal'}</strong><p>{pick?`${metricLabel(pick.key)} · projection ${f(pick.stat.projection,pick.key)}`:'Insufficient data or signal.'}</p></div>)}
     </div>
