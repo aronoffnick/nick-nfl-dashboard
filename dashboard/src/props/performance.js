@@ -36,3 +36,11 @@ export function groupCandidates(candidates){
   for(const item of candidates){const id=`${item.player.team.id}:${item.player.id}`;if(!grouped.has(id))grouped.set(id,{id,player:item.player,items:[],score:item.score});grouped.get(id).items.push(item);grouped.get(id).score=Math.max(grouped.get(id).score,item.score)}
   return [...grouped.values()].sort((a,b)=>b.score-a.score||a.player.name.localeCompare(b.player.name))
 }
+// Rank by the strongest single relevant benchmark, never an invented joint probability.
+export function rankPlayerGroups(groups,halfLife=3,lookback=4){
+  return groups.map(group=>{
+    const support=relevantMetrics(group.player).map(([key])=>({key,...performance(group.player,key,halfLife,lookback)}))
+      .filter(s=>s.weightedRate!=null).sort((a,b)=>b.weightedRate-a.weightedRate||b.n-a.n)
+    return {...group,bestSupport:support[0]||null}
+  }).sort((a,b)=>(b.bestSupport?.weightedRate??-1)-(a.bestSupport?.weightedRate??-1)||(b.bestSupport?.n??0)-(a.bestSupport?.n??0)||b.score-a.score||a.player.name.localeCompare(b.player.name))
+}

@@ -46,11 +46,11 @@ function Projections({players,data,matchup,halfLife,lookback,saveProp}){
     <PerformanceLegend/>
     <label className="projections-sort">Order players <select value={sort} onChange={e=>setSort(e.target.value)}><option value="team">Team, then player</option><option value="name">Player name</option><option value="support">Strongest recent big-game support</option></select></label>
     <p className="prop-help">White marker = model projection · dashed marker = big-game benchmark. QB cards show passing and rushing roles; receiving stats appear for players with receiving usage. TD scored combines rushing and receiving TDs. Questionable or stale roles are not color-rated; out/doubtful projections are withheld.</p>
-    <div className="player-card-grid">{sorted.map(p=><article className="player-research-card" key={`${p.team.id}:${p.id}`} aria-label={`${p.name} projections`}>
-      <header><div><h4>{p.name}</h4><p>{p.team.abbr} · {p.position} · {p.injury||p.status}</p><small>{p.logs.length} recorded appearances{p.stale?' · absent latest offensive box score':''}</small></div><span className="prop-team-tag">{p.team.abbr}</span></header>
+    <div className="player-card-grid">{sorted.map(p=><article className="player-research-card player-row" key={`${p.team.id}:${p.id}`} aria-label={`${p.name} projections`}>
+      <header><div><h4>{p.name}</h4><p>{p.team.abbr} · {p.position} · {p.injury||p.status}</p><small>{p.logs.length} recorded appearances{p.stale?' · absent latest offensive box score':''}</small></div>      <button className="prop-action" aria-expanded={chosen===`${p.team.id}:${p.id}`} onClick={()=>setChosen(chosen===`${p.team.id}:${p.id}`?null:`${p.team.id}:${p.id}`)}>View {p.name} game log and line comparison</button> </header>
       {(p.unavailable||p.stale)&&<p className="prop-warning">{p.unavailable?'Unavailable or doubtful: projection withheld.':'Absent from the latest offensive box score: recent role needs review.'}</p>}
-      <div className="player-metrics">{relevantMetrics(p).map(([key])=><Performance key={key} player={p} metric={key} halfLife={halfLife} lookback={lookback}/>)}</div>
-      <button className="prop-action" aria-expanded={chosen===`${p.team.id}:${p.id}`} onClick={()=>setChosen(chosen===`${p.team.id}:${p.id}`?null:`${p.team.id}:${p.id}`)}>View {p.name} game log and line comparison</button>
+      <div className="player-metrics" style={{'--metric-count':relevantMetrics(p).length}}>{relevantMetrics(p).map(([key])=><Performance key={key} player={p} metric={key} halfLife={halfLife} lookback={lookback}/>)}</div>
+
     </article>)}</div>
     {!players.length&&<p className="prop-warning">No eligible current-roster players have usable recent box scores.</p>}
     {selected&&<div ref={evidence}><PlayerDetail key={`${selected.team.id}:${selected.id}`} player={selected} data={data} matchup={matchup} halfLife={halfLife} lookback={lookback} saveProp={saveProp}/></div>}
