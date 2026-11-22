@@ -3,21 +3,24 @@ import { getRosters } from './data.js'
 import { valid, historyFor, sides, positionOf, projectTeam, defenseProfile, historicalComparison } from './model.js'
 import { DISPLAY_METRICS, statFor, valueFor, metricLabel, lineComparison } from './analysis.js'
 import Bets from './Bets.jsx'
+import Performance, { PerformanceLegend } from './Performance.jsx'
+import { relevantMetrics, performance } from './performance.js'
 import './props.css'
 const format=(n,key='')=>valid(n)?n.toFixed(key==='totalTD'||key.endsWith('TD')?2:1):'—'
 const date=d=>new Date(d).toLocaleDateString('en-US',{timeZone:'America/New_York',month:'short',day:'numeric'})
 
 function PlayerDetail({player,data,matchup,saveProp,halfLife,lookback}){
-  const [metric,setMetric]=useState('recYds')
+  const metrics=relevantMetrics(player)
+  const [metric,setMetric]=useState(metrics[0][0])
   const [line,setLine]=useState('')
   const [message,setMessage]=useState('')
   const comparison=lineComparison(player,metric,line,halfLife,lookback)
   return <section className="prop-comparison"><h3>{player.name} · evidence & game log</h3>
-    <div className="table-wrap"><table><thead><tr><th>Statistic</th><th>Weighted baseline</th><th>Matchup adjustment</th><th>Projection</th><th>Appearances</th></tr></thead><tbody>{DISPLAY_METRICS.map(([key,name])=>{
+    <div className="table-wrap"><table><thead><tr><th>Statistic</th><th>Weighted baseline</th><th>Matchup adjustment</th><th>Projection</th><th>Appearances</th></tr></thead><tbody>{metrics.map(([key,name])=>{
       const s=statFor(player,key,halfLife,lookback)
       return <tr key={key}><td>{name}</td><td>{format(s.baseline,key)}</td><td>{s.defense.adjusted?`${s.defense.factor>=1?'+':''}${((s.defense.factor-1)*100).toFixed(1)}%`:'Neutral · insufficient baseline'}</td><td>{player.unavailable?'Withheld':format(s.projection,key)}</td><td>{s.sample}</td></tr>
     })}</tbody></table></div>
-    <h4>Compare a prop line</h4><div className="prop-metric-buttons" aria-label="Comparison statistic">{DISPLAY_METRICS.map(([key,name])=><button key={key} aria-pressed={metric===key} onClick={()=>{setMetric(key);setLine('');setMessage('')}}>{name}</button>)}</div>
+    <h4>Compare a prop line</h4><div className="prop-metric-buttons" aria-label="Comparison statistic">{metrics.map(([key,name])=><button key={key} aria-pressed={metric===key} onClick={()=>{setMetric(key);setLine('');setMessage('')}}>{name}</button>)}</div>
     <label>Your {metricLabel(metric)} line <input type="number" min="0" step="0.5" value={line} placeholder="Enter your sportsbook line" onChange={e=>setLine(e.target.value)}/></label>
     {comparison&&<p>{valid(comparison.projection)?<>Projection <b>{format(comparison.projection,metric)}</b> · difference from line <b>{format(comparison.delta,metric)}</b> · </>:null}Over this line in <b>{comparison.over}/{comparison.n}</b> recent recorded appearances{comparison.push?` (${comparison.push} pushes)`:''}. Historical frequency is not a forecast probability.</p>}
     {comparison&&valid(comparison.delta)&&comparison.delta!==0&&!matchup.started&&<button className="prop-action" onClick={()=>{
@@ -27,29 +30,30 @@ function PlayerDetail({player,data,matchup,saveProp,halfLife,lookback}){
       try{saveProp(`${matchup.id}:${player.id}:${metric}`,{week:`${data.year} Week ${data.week}`,date:matchup.date,player:player.name,position:player.position,team:player.team.abbr,teamName:player.team.name,metric:metricLabel(metric),line:Number(line),pick,result:'Pending'});setMessage('Saved to Weekly picks.')}catch{setMessage('This browser could not save the pick.')}
     }}>Track model pick</button>}
     {message&&<p role="status">{message}</p>}
-    <h4>Recorded appearances</h4><div className="table-wrap"><table><thead><tr><th>Date</th><th>Opponent</th>{DISPLAY_METRICS.map(([key,name])=><th key={key}>{name}</th>)}</tr></thead><tbody>{[...player.logs].reverse().map(log=><tr key={log.gameId}><td>{date(log.date)}</td><td>{log.opponent}</td>{DISPLAY_METRICS.map(([key])=><td key={key}>{format(valueFor(log,key),key)}</td>)}</tr>)}</tbody></table></div>
+    <h4>Recorded appearances</h4><div className="table-wrap"><table><thead><tr><th>Date</th><th>Opponent</th>{metrics.map(([key,name])=><th key={key}>{name}</th>)}</tr></thead><tbody>{[...player.logs].reverse().map(log=><tr key={log.gameId}><td>{date(log.date)}</td><td>{log.opponent}</td>{metrics.map(([key])=><td key={key}>{format(valueFor(log,key),key)}</td>)}</tr>)}</tbody></table></div>
   </section>
 }
 
 function Projections({players,data,matchup,halfLife,lookback,saveProp}){
-  const [sort,setSort]=useState({key:'recYds',asc:false})
-  const [chosen,setChosen]=useState(null)
+  const [sort,setSort]=useState('team'),[chosen,setChosen]=useState(null)
   const selected=players.find(p=>`${p.team.id}:${p.id}`===chosen)
-  const sorted=[...players].sort((a,b)=>{
-    const av=a.unavailable?null:statFor(a,sort.key,halfLife,lookback).projection
-    const bv=b.unavailable?null:statFor(b,sort.key,halfLife,lookback).projection
-    if(!valid(av))return valid(bv)?1:0
-    if(!valid(bv))return -1
-    return (av-bv)*(sort.asc?1:-1)
-  })
-  return <section><div className="prop-section-title"><h3>Player projections · both teams</h3><span>All core stats together · click a stat heading to sort</span></div>
-    <div className="table-wrap"><table><thead><tr><th>Player</th><th>Team</th>{DISPLAY_METRICS.map(([key,name])=><th key={key}><button className="sort" onClick={()=>setSort({key,asc:sort.key===key?!sort.asc:false})}>{name} {sort.key===key?(sort.asc?'↑':'↓'):'↕'}</button></th>)}<th>Sample</th></tr></thead><tbody>{sorted.map(p=><tr key={`${p.team.id}:${p.id}`}>
-      <td><button className="prop-name" onClick={()=>setChosen(`${p.team.id}:${p.id}`)}>{p.name}</button><small>{p.injury||p.status}{p.stale?' · absent latest offensive box score':''}</small></td><td><span className="prop-team-tag">{p.team.abbr}</span></td>
-      {DISPLAY_METRICS.map(([key])=><td key={key} className="prop-projection">{p.unavailable?'Withheld':format(statFor(p,key,halfLife,lookback).projection,key)}</td>)}<td>{p.logs.length}<small>Recorded appearances</small></td>
-    </tr>)}</tbody></table></div>
-    <p className="prop-help">TD scored combines rushing and receiving TDs; passing TDs remain separate. Expected TD counts are rates, not scoring probabilities. Projections assume the player plays a comparable role. Click a name for baselines, adjustments, recent games and line comparison.</p>
+  const evidence=useRef(null)
+  useEffect(()=>{if(chosen)evidence.current?.scrollIntoView({behavior:'smooth',block:'start'})},[chosen])
+  const strength=p=>Math.max(-1,...relevantMetrics(p).map(([key])=>performance(p,key,halfLife,lookback).weightedRate??-1))
+  const sorted=[...players].sort((a,b)=>sort==='support'?strength(b)-strength(a)||a.name.localeCompare(b.name):sort==='name'?a.name.localeCompare(b.name):a.team.abbr.localeCompare(b.team.abbr)||a.name.localeCompare(b.name))
+  return <section aria-label="Player projections"><div className="prop-section-title"><h3>Player projections · both teams</h3><span>One player · relevant stats together</span></div>
+    {matchup.started&&<p className="prop-warning">Game started or finished. These projections are pregame baselines using prior weeks, not live forecasts.</p>}
+    <PerformanceLegend/>
+    <label className="projections-sort">Order players <select value={sort} onChange={e=>setSort(e.target.value)}><option value="team">Team, then player</option><option value="name">Player name</option><option value="support">Strongest recent big-game support</option></select></label>
+    <p className="prop-help">White marker = model projection · dashed marker = big-game benchmark. QB cards show passing and rushing roles; receiving stats appear for players with receiving usage. TD scored combines rushing and receiving TDs. Questionable or stale roles are not color-rated; out/doubtful projections are withheld.</p>
+    <div className="player-card-grid">{sorted.map(p=><article className="player-research-card" key={`${p.team.id}:${p.id}`} aria-label={`${p.name} projections`}>
+      <header><div><h4>{p.name}</h4><p>{p.team.abbr} · {p.position} · {p.injury||p.status}</p><small>{p.logs.length} recorded appearances{p.stale?' · absent latest offensive box score':''}</small></div><span className="prop-team-tag">{p.team.abbr}</span></header>
+      {(p.unavailable||p.stale)&&<p className="prop-warning">{p.unavailable?'Unavailable or doubtful: projection withheld.':'Absent from the latest offensive box score: recent role needs review.'}</p>}
+      <div className="player-metrics">{relevantMetrics(p).map(([key])=><Performance key={key} player={p} metric={key} halfLife={halfLife} lookback={lookback}/>)}</div>
+      <button className="prop-action" aria-expanded={chosen===`${p.team.id}:${p.id}`} onClick={()=>setChosen(chosen===`${p.team.id}:${p.id}`?null:`${p.team.id}:${p.id}`)}>View {p.name} game log and line comparison</button>
+    </article>)}</div>
     {!players.length&&<p className="prop-warning">No eligible current-roster players have usable recent box scores.</p>}
-    {selected&&<PlayerDetail key={`${selected.team.id}:${selected.id}`} player={selected} data={data} matchup={matchup} halfLife={halfLife} lookback={lookback} saveProp={saveProp}/>}
+    {selected&&<div ref={evidence}><PlayerDetail key={`${selected.team.id}:${selected.id}`} player={selected} data={data} matchup={matchup} halfLife={halfLife} lookback={lookback} saveProp={saveProp}/></div>}
   </section>
 }
 

@@ -31,12 +31,12 @@ export function buildCandidates(players,halfLife,lookback){
   const picks=[]
   for(const p of players){
     if(p.unavailable||p.stale||p.logs.length<3)continue
-    for(const key of ['passYds','rushYds','rec','recYds','totalTD']){
-      if(key==='passYds'&&p.position!=='QB')continue
+    for(const key of ['passYds','passTD','rushYds','rec','recYds','totalTD']){
+      if(['passYds','passTD'].includes(key)&&p.position!=='QB')continue
       const s=statFor(p,key,halfLife,lookback)
-      const minimum={passYds:75,rushYds:10,rec:1,recYds:10,totalTD:.1}[key]
+      const minimum={passYds:75,passTD:.1,rushYds:10,rec:1,recYds:10,totalTD:.1}[key]
       if(!valid(s.projection)||s.projection<minimum)continue
-      const usageKey=key==='passYds'?'passAtt':key==='rushYds'?'carries':key==='totalTD'&&['RB','FB','QB'].includes(p.position)?'carries':'targets'
+      const usageKey=['passYds','passTD'].includes(key)?'passAtt':key==='rushYds'?'carries':key==='totalTD'&&['RB','FB','QB'].includes(p.position)?'carries':'targets'
       const recent=p.logs.slice(-3),prior=p.logs.slice(-6,-3)
       const now=average(recent,usageKey),before=prior.length===3?average(prior,usageKey):null
       const trend=valid(now)&&valid(before)&&before>0?(now-before)/before:null
