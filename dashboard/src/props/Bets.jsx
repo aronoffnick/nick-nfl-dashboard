@@ -19,7 +19,7 @@ function Candidate({item,data,matchup,saveProp,halfLife,lookback}){
     try{saveProp(`${matchup.id}:${p.id}:${item.key}`,{week:`${data.year} Week ${data.week}`,date:matchup.date,player:p.name,position:p.position,team:p.team.abbr,teamName:p.team.name,metric:metricLabel(item.key),line:Number(line),odds:odds.trim(),projection:item.stat.projection,pick,result:'Pending',recordedAt:new Date().toISOString()});setMessage('Saved to Weekly picks.')}catch{setMessage('This browser could not save the pick.')}
   }
   return <div className="player-stat-detail">
-    <Performance player={p} metric={item.key} halfLife={halfLife} lookback={lookback}/>
+    <Performance player={p} metric={item.key} halfLife={halfLife} lookback={lookback}>
     <div className="bet-inputs"><label>Your sportsbook line<input type="number" min="0" step=".5" placeholder={item.key.endsWith('TD')?'0.5':'e.g. 64.5'} value={line} onChange={e=>setLine(e.target.value)}/></label><label>American odds (optional)<input placeholder="-110 or +120" value={odds} onChange={e=>setOdds(e.target.value)}/></label></div>
       {c&&<p>Model minus line: <b>{f(c.delta,item.key)}</b> · historical overs: <b>{c.over}/{c.n}</b>{c.push?` · pushes: ${c.push}`:''}.</p>}
       {odds.trim()!==''&&<p>{price==null?'Enter valid American odds such as -110 or +120.':`Price break-even: ${(price*100).toFixed(1)}%. This is the sportsbook's break-even requirement, not the model's win probability.`}</p>}
@@ -32,6 +32,7 @@ function Candidate({item,data,matchup,saveProp,halfLife,lookback}){
     <div className="bet-thresholds">{thresholds.map(t=><span key={t}><b>{t}+</b> in {recent.filter(v=>v>=t).length}/{recent.length}</span>)}</div>
       <p className="prop-help">Thresholds describe recorded appearances, including recorded zeros—not forecast hit rates. No calibrated win probability or expected value is available.</p>
     </details>
+    </Performance>
   </div>
 }
 export default function Bets({data,matchup,roster,halfLife,window,saveProp}){
@@ -47,7 +48,7 @@ export default function Bets({data,matchup,roster,halfLife,window,saveProp}){
     <p className="prop-help">Higher recent support does not imply value at any sportsbook price. An output dip with steady usage is a research flag, not evidence a player is due. Expected TD counts are rates; total TDs combine rushing and receiving.</p>
     {matchup.started&&<p className="prop-warning">Game started or finished. These are pregame baselines, not live recommendations; new pick tracking is disabled.</p>}
     <div className="player-card-grid">{visible.map((group,index)=><article className="player-research-card player-row bet-player-row" key={group.id} aria-label={`${group.player.name} bets`}>
-      <header><div><small className="player-rank">FAVORITE #{index+1}</small><h4>{group.player.name}</h4><p>{group.player.team.abbr} · {group.player.position} · {group.player.injury||group.player.status}</p><small>{group.player.logs.length} recorded appearances · {group.items.length} stat signals</small><p className="row-best-support">{group.bestSupport?<>Strongest: <b>{metricLabel(group.bestSupport.key)}</b><br/>{Math.round(group.bestSupport.weightedRate*100)}% recent weighted frequency<br/>{group.bestSupport.hits}/{group.bestSupport.n} reached {group.bestSupport.threshold}+</>:<>Not rated · availability or sample concern</>}</p></div></header>
+      <header><div><small className="player-rank">FAVORITE #{index+1}</small><h4>{group.player.name}</h4><p>{group.player.team.abbr} · {group.player.position} · {group.player.injury||group.player.status}</p><small>{group.player.logs.length} recorded appearances · {group.items.length} stat signals</small><p className="row-best-support">{group.bestSupport?<>Strongest: <b>{metricLabel(group.bestSupport.key)}</b><br/>{Math.round(group.bestSupport.weightedRate*100)}% recent weighted frequency</>:<>Not rated · availability or sample concern</>}</p></div></header>
       <div className="player-metrics" style={{'--metric-count':relevantMetrics(group.player).length}}>{relevantMetrics(group.player).map(([key])=>{
         const item=group.items.find(i=>i.key===key)
         return item?<Candidate key={key} item={item} data={data} matchup={matchup} saveProp={saveProp} halfLife={halfLife} lookback={window}/>:<Performance key={key} player={group.player} metric={key} halfLife={halfLife} lookback={window}/>
