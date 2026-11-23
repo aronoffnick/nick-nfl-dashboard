@@ -1,63 +1,85 @@
-import { useMemo, useState } from 'react'
-import { projectTeam, valid } from './model.js'
-import { sameGameFavorite } from './sgp.js'
-import { SGPCard } from './WeeklySGPs.jsx'
-import PlayerFilters from './PlayerFilters.jsx'
-import {matchesPlayer,selectedMetrics} from './filters.js'
-import Performance, { PerformanceLegend } from './Performance.jsx'
-import { relevantMetrics, groupCandidates, rankPlayerGroups } from './performance.js'
-import { buildCandidates, metricLabel, lineComparison, breakEven, valueFor } from './analysis.js'
-const f=(n,key='')=>valid(n)?n.toFixed(key.endsWith('TD')?2:1):'—'
-function Candidate({item,data,matchup,saveProp,halfLife,lookback}){
-  const [line,setLine]=useState(''),[odds,setOdds]=useState(''),[message,setMessage]=useState('')
-  const p=item.player,c=lineComparison(p,item.key,line,halfLife,lookback),price=breakEven(odds)
-  const recent=p.logs.slice(-lookback).map(l=>valueFor(l,item.key)).filter(valid)
-  const thresholds=item.key.endsWith('TD')?[1,2,3]:item.key==='rec'?[3,5,7]:item.key==='passYds'?[200,250,300]:[25,50,75,100]
-  function track(){
-    if(Date.now()>=Date.parse(matchup.date)){setMessage('Kickoff has passed.');return}
-    if(!saveProp){setMessage('Pick tracking unavailable.');return}
-    if(odds.trim()!==''&&price==null){setMessage('Correct the odds or leave them blank.');return}
-    const pick=c.delta>0?'Over':'Under'
-    try{saveProp(`${matchup.id}:${p.id}:${item.key}`,{week:`${data.year} Week ${data.week}`,date:matchup.date,player:p.name,position:p.position,team:p.team.abbr,teamName:p.team.name,metric:metricLabel(item.key),line:Number(line),odds:odds.trim(),projection:item.stat.projection,pick,result:'Pending',recordedAt:new Date().toISOString()});setMessage('Saved to Weekly picks.')}catch{setMessage('This browser could not save the pick.')}
-  }
-  return <div className="player-stat-detail">
-    <Performance player={p} metric={item.key} halfLife={halfLife} lookback={lookback}>
-    <div className="bet-inputs"><label>Your sportsbook line<input type="number" min="0" step=".5" placeholder={item.key.endsWith('TD')?'0.5':'e.g. 64.5'} value={line} onChange={e=>setLine(e.target.value)}/></label><label>American odds (optional)<input placeholder="-110 or +120" value={odds} onChange={e=>setOdds(e.target.value)}/></label></div>
-      {c&&<p>Model minus line: <b>{f(c.delta,item.key)}</b> · historical overs: <b>{c.over}/{c.n}</b>{c.push?` · pushes: ${c.push}`:''}.</p>}
-      {odds.trim()!==''&&<p>{price==null?'Enter valid American odds such as -110 or +120.':`Price break-even: ${(price*100).toFixed(1)}%. This is the sportsbook's break-even requirement, not the model's win probability.`}</p>}
-      {c&&valid(c.delta)&&c.delta!==0&&!matchup.started&&<button className="prop-action" onClick={track}>Track model pick</button>}
-      {message&&<p role="status">{message}</p>}
-    <details><summary>{metricLabel(item.key)} · supporting evidence</summary>
-    <div className="bet-badges">{item.badges.map(b=><span key={b}>{b}</span>)}{item.risk&&<span className="bet-risk">Check availability</span>}</div>
-    <p>Weighted baseline <b>{f(item.stat.baseline,item.key)}</b> · opponent adjustment <b>{item.stat.defense.adjusted?`${item.stat.defense.factor>=1?'+':''}${((item.stat.defense.factor-1)*100).toFixed(1)}%`:'Neutral'}</b></p>
-    <ul>{item.reasons.map(r=><li key={r}>{r}</li>)}</ul>
-    <div className="bet-thresholds">{thresholds.map(t=><span key={t}><b>{t}+</b> in {recent.filter(v=>v>=t).length}/{recent.length}</span>)}</div>
-      <p className="prop-help">Thresholds describe recorded appearances, including recorded zeros—not forecast hit rates. No calibrated win probability or expected value is available.</p>
-    </details>
-    </Performance>
-  </div>
+import { projectTeam, valid, historyFor, sides, historicalComparison, METRICS, positionOf } from './model.js'
+
+function average(games, key) {
+  if (!games.every(game => valid(game[key]))) return null
+  return games.reduce((sum, game) => sum + game[key], 0) / games.length
 }
-export default function Bets({data,matchup,roster,halfLife,window,saveProp,filters,setFilters}){
-  const players=useMemo(()=>[[matchup.away,matchup.home],[matchup.home,matchup.away]].flatMap(([team,opponent])=>projectTeam(data,team,opponent,roster,halfLife,window).map(p=>({...p,team,opponent}))),[data,matchup,roster,halfLife,window])
-  const candidates=useMemo(()=>buildCandidates(players,halfLife,window).filter(item=>relevantMetrics(item.player).some(([key])=>key===item.key)),[players,halfLife,window])
-  const groups=useMemo(()=>rankPlayerGroups(groupCandidates(candidates).filter(g=>matchesPlayer(g.player,filters,halfLife,window)),halfLife,window,filters.stats),[candidates,halfLife,window,filters])
-  const favorite=useMemo(()=>sameGameFavorite(data,matchup,roster,halfLife,window,Date.now(),players),[data,matchup,roster,halfLife,window,players])
-  const visible=groups
-  return <section aria-label="Bets"><div className="prop-section-title"><h3>Matchup research shortlist</h3><span>Favorites first · strongest supported stat</span></div>
-    <div className="bet-sgp"><h3>Favorite 2-leg SGP for this game</h3>{favorite.pair?<SGPCard pair={favorite.pair} matchup={matchup}/>:<p className="prop-warning">No automatic SGP: {favorite.reason}</p>}</div>
-    <p className="prop-help">Team lean: <strong>{matchup.margin<.05?'Toss-up':`${matchup.winner.abbr} by ${matchup.margin.toFixed(1)}`}</strong> · no confirmed starting-QB adjustment. Each player appears once below, with their relevant stat signals and line comparisons together. Rows rank by the highest recent weighted benchmark frequency across the selected relevant stats, highest first. Ties favor more observations, then the research signal. This is historical support, not a combined win probability; odds do not affect this ordering.</p>
-    <PlayerFilters matchup={matchup} filters={filters} onChange={setFilters}/>
-    <PerformanceLegend/>
-    <p className="prop-help">Higher recent support does not imply value at any sportsbook price. An output dip with steady usage is a research flag, not evidence a player is due. Expected TD counts are rates; total TDs combine rushing and receiving.</p>
-    {matchup.started&&<p className="prop-warning">Game started or finished. These are pregame baselines, not live recommendations; new pick tracking is disabled.</p>}
-    <div className="player-card-grid">{visible.map((group,index)=><article className="player-research-card player-row bet-player-row" key={group.id} aria-label={`${group.player.name} bets`}>
-      <header><div><small className="player-rank">FAVORITE #{index+1}</small><h4>{group.player.name}</h4><p>{group.player.team.abbr} · {group.player.position} · {group.player.injury||group.player.status}</p><small>{group.player.logs.length} recorded appearances · {group.items.length} stat signals</small><p className="row-best-support">{group.bestSupport?<>Strongest: <b>{metricLabel(group.bestSupport.key)}</b><br/>{Math.round(group.bestSupport.weightedRate*100)}% recent weighted frequency</>:<>Not rated · availability or sample concern</>}</p></div></header>
-      <div className="player-metrics" style={{'--metric-count':selectedMetrics(group.player,filters).length}}>{selectedMetrics(group.player,filters).map(([key])=>{
-        const item=group.items.find(i=>i.key===key)
-        return item?<Candidate key={key} item={item} data={data} matchup={matchup} saveProp={saveProp} halfLife={halfLife} lookback={window}/>:<Performance key={key} player={group.player} metric={key} halfLife={halfLife} lookback={window}/>
-      })}</div>
-    </article>)}</div>
-    {!groups.length&&<p className="prop-warning">No eligible players match these filters. Three appearances and a recent offensive role are required.</p>}
-    <p className="prop-help">Enter the actual sportsbook line and optional price inside a card to compare and track it before kickoff. No sportsbook feed is connected. Projection differences alone do not establish a profitable bet. Picks are saved in this browser and prop results are graded manually.</p>
+
+function candidates(players) {
+  const momentum = []
+  const bounceBack = []
+  for (const player of players) {
+    if (player.unavailable || player.stale || player.logs.length < 6) continue
+    const recent = player.logs.slice(-3)
+    const prior = player.logs.slice(-6, -3)
+    const markets = {
+      QB: [['passAtt', 'passYds', 'passing yards', 'attempts']],
+      RB: [['carries', 'rushYds', 'rushing yards', 'carries']],
+      FB: [['carries', 'rushYds', 'rushing yards', 'carries']],
+      WR: [['targets', 'recYds', 'receiving yards', 'targets']],
+      TE: [['targets', 'recYds', 'receiving yards', 'targets']],
+    }
+    for (const [usage, stat, market, unit] of markets[player.position]) {
+      const before = average(prior, usage)
+      const now = average(recent, usage)
+      const projection = player.stats[stat].projection
+      if (!valid(before) || !valid(now) || now < 4 || !valid(projection)) continue
+      const workload = `${now.toFixed(1)} ${unit} per game over the last three, versus ${before.toFixed(1)} in the previous three.`
+      const name = `${player.name} · ${market}`
+      if (now - before >= 2 && now >= before * 1.2) {
+        momentum.push({ name, reason: workload, score: now - before })
+      }
+      const yards = average(recent, stat)
+      const oldYards = average(prior, stat)
+      if (now >= before * 0.9 && valid(yards) && valid(oldYards) && oldYards > 0 && yards <= oldYards * 0.75) {
+        bounceBack.push({ name, reason: `Yards fell from ${oldYards.toFixed(1)} to ${yards.toFixed(1)} per game. ${workload}`, score: 1 - yards / oldYards })
+      }
+      const touchdown = game => valid(game.rushTD) && valid(game.recTD) ? game.rushTD + game.recTD : null
+      const priorScores = prior.map(touchdown)
+      if (player.position !== 'QB' && now >= before * 0.9 && recent.every(game => touchdown(game) === 0) &&
+          priorScores.every(valid) && priorScores.some(total => total > 0)) {
+        bounceBack.push({ name: `${player.name} · anytime touchdown`, reason: `No touchdowns in the last three appearances. ${workload}`, score: priorScores.filter(total => total > 0).length / 3 })
+      }
+    }
+  }
+  return [momentum, bounceBack].map(group => group.sort((a, b) => b.score - a.score)[0])
+}
+
+export default function Bets({ data, matchup, roster, halfLife, window }) {
+  const { away, home, winner, margin } = matchup
+  const players = [
+    ...projectTeam(data, away, home, roster, halfLife, window),
+    ...projectTeam(data, home, away, roster, halfLife, window),
+  ]
+  const [momentum, bounceBack] = candidates(players)
+  const breakouts = [away, home].flatMap(defense => historyFor(data, defense.id).slice(-window).flatMap(game => {
+    const [, opponent] = sides(game, defense.id)
+    return (opponent.playerBox?.players || []).flatMap(player => METRICS
+      .filter(([key]) => !key.endsWith('TD'))
+      .flatMap(([key, stat]) => {
+        const baseline = historicalComparison(data, opponent.id, player, key, game.id, halfLife)
+        const actual = player[key]
+        if (!valid(baseline) || baseline <= 0 || !valid(actual) || actual < baseline * 1.2) return []
+        return [{ defense: defense.abbr, date: game.date, player: player.name, position: positionOf(player, roster), stat, actual, baseline, excess: actual / baseline - 1 }]
+      }))
+  })).sort((a, b) => b.excess - a.excess).slice(0, 8)
+  return <section aria-label="Bets">
+    <p className="prop-help">Candidates based on recent workload and box scores. Compare with the book’s line and price before betting.</p>
+    <div className="prop-section-title"><h3>Breakout scale · recent opponent results</h3><span>Historical signal, not a forecast probability</span></div>
+    <p className="prop-help">Scale is the percentage above a player’s own weighted baseline before that game. A signal qualifies at +20% or higher with at least three earlier appearances; touchdown counts are excluded.</p>
+    {breakouts.length ? <div className="table-wrap"><table><thead><tr><th>Defense</th><th>Opponent player</th><th>Stat</th><th>Actual</th><th>Prior baseline</th><th>Breakout scale</th></tr></thead>
+      <tbody>{breakouts.map((item, index) => <tr key={`${item.date}-${item.player}-${item.stat}-${index}`}>
+        <td>{item.defense}<small>{new Date(item.date).toLocaleDateString('en-US',{timeZone:'America/New_York',month:'short',day:'numeric'})}</small></td>
+        <td>{item.player}<small>{item.position || 'Position unknown'}</small></td><td>{item.stat}</td><td>{item.actual}</td><td>{item.baseline.toFixed(1)}</td><td className="prop-positive">+{(item.excess * 100).toFixed(0)}%</td>
+      </tr>)}</tbody></table></div> : <p className="prop-warning">No recent opponent performances meet the breakout threshold. The table uses the last {window} games against each defense.</p>}
+    <div className="table-wrap"><table>
+      <thead><tr><th>Category</th><th>Candidate</th><th>Why it stands out</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Best Bet</th><td>Pass</td><td>{margin < 0.05 ? 'Team projection is a toss-up.' : `Team lean: ${winner.abbr} by ${margin.toFixed(1)}.`} Sportsbook prices are unavailable.</td></tr>
+        {[['Momentum', momentum], ['Bounce-Back', bounceBack]].map(([label, pick]) =>
+          <tr key={label}><th scope="row">{label}</th><td>{pick?.name ?? 'Pass'}</td><td>{pick?.reason ?? 'No qualifying candidate.'}</td></tr>
+        )}
+      </tbody>
+    </table></div>
   </section>
 }
