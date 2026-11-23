@@ -40,7 +40,7 @@ function Candidate({item,data,matchup,saveProp,halfLife,lookback}){
 export default function Bets({data,matchup,roster,halfLife,window,saveProp,filters,setFilters}){
   const players=useMemo(()=>[[matchup.away,matchup.home],[matchup.home,matchup.away]].flatMap(([team,opponent])=>projectTeam(data,team,opponent,roster,halfLife,window).map(p=>({...p,team,opponent}))),[data,matchup,roster,halfLife,window])
   const candidates=useMemo(()=>buildCandidates(players,halfLife,window).filter(item=>relevantMetrics(item.player).some(([key])=>key===item.key)),[players,halfLife,window])
-  const groups=useMemo(()=>rankPlayerGroups(groupCandidates(candidates).filter(g=>matchesPlayer(g.player,filters)),halfLife,window,filters.stats),[candidates,halfLife,window,filters])
+  const groups=useMemo(()=>rankPlayerGroups(groupCandidates(candidates).filter(g=>matchesPlayer(g.player,filters,halfLife,window)),halfLife,window,filters.stats),[candidates,halfLife,window,filters])
   const favorite=useMemo(()=>sameGameFavorite(data,matchup,roster,halfLife,window,Date.now(),players),[data,matchup,roster,halfLife,window,players])
   const visible=groups
   return <section aria-label="Bets"><div className="prop-section-title"><h3>Matchup research shortlist</h3><span>Favorites first · strongest supported stat</span></div>

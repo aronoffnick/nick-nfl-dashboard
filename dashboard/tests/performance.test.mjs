@@ -17,3 +17,4 @@ test('Favorite ordering follows strongest supported relevant stat rather than re
  const rows=rankPlayerGroups([{player:low,score:99},{player:flagged,score:100},{player:high,score:0}],3,4)
  assert.deepEqual(rows.map(r=>r.player.id),['high','low','flag']);assert.equal(rows[0].bestSupport.key,'recYds');assert.equal(rows[0].bestSupport.weightedRate,1);assert.equal(rows[2].bestSupport,null)
 })
+test('2+ touchdown frequency counts combined rushing and receiving, excluding passing TD',()=>{const p=make('RB');p.logs=[{rushTD:1,recTD:1,passTD:9},{rushTD:1,recTD:0},{rushTD:0,recTD:2},{rushTD:0,recTD:null}];const r=performance(p,'totalTD',3,4,2);assert.equal(r.threshold,2);assert.equal(r.n,3);assert.equal(r.hits,2);assert(r.weightedRate>0&&r.weightedRate<1);assert.equal(performance({...p,status:'Questionable'},'totalTD',3,4,2).weightedRate,null)})

@@ -18,8 +18,8 @@ export function weightedQuantile(rows,q){
   for(const row of sorted){sum+=row.weight;if(sum>=total*q)return row.value}
   return sorted.at(-1)?.value??null
 }
-export function performance(p,key,halfLife=3,lookback=4){
-  const stat=statFor(p,key,halfLife,lookback),raw=p.logs.slice(-lookback),threshold=bigGameThreshold(p,key)
+export function performance(p,key,halfLife=3,lookback=4,benchmark=null){
+  const stat=statFor(p,key,halfLife,lookback),raw=p.logs.slice(-lookback),threshold=benchmark??bigGameThreshold(p,key)
   const rows=raw.flatMap((log,i)=>{const value=valueFor(log,key);return valid(value)?[{value,weight:2**(-(raw.length-1-i)/halfLife)}]:[]})
   const hits=rows.filter(r=>r.value>=threshold),n=rows.length
   const blocked=p.unavailable||p.stale||/questionable|day.to.day/i.test(`${p.status} ${p.injury}`)

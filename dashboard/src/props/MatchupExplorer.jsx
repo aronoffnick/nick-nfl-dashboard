@@ -38,7 +38,7 @@ function PlayerDetail({player,data,matchup,saveProp,halfLife,lookback}){
 
 function Projections({players,data,matchup,halfLife,lookback,saveProp,filters,setFilters}){
   const [sort,setSort]=useState('recYds'),[chosen,setChosen]=useState(null)
-  const filtered=players.filter(p=>matchesPlayer(p,filters))
+  const filtered=players.filter(p=>matchesPlayer(p,filters,halfLife,lookback))
   const selected=filtered.find(p=>`${p.team.id}:${p.id}`===chosen)
   const evidence=useRef(null)
   useEffect(()=>{if(chosen)evidence.current?.scrollIntoView({behavior:'smooth',block:'start'})},[chosen])
