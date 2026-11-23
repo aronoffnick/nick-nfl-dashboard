@@ -21,7 +21,7 @@ function answerFor(question, { matchup, players, halfLife, lookback, inDepth }) 
       key, label, projection: player.unavailable ? null : statFor(player, key, halfLife, lookback).projection,
       support: performance(player, key, halfLife, lookback),
     })).filter(row => row.projection != null || row.support.n > 0)
-    const lines = rows.map(row => `${row.label}: ${fmt(row.projection, row.key)} projected; ${row.support.label.toLowerCase()} at ${row.support.threshold}+ (${row.support.n} valid recent appearances${row.support.weightedRate == null ? '' : `, ${Math.round(row.support.weightedRate * 100)}% recent weighted frequency`}).`).slice(0, inDepth ? 6 : 3)
+    const lines = rows.map(row => `${row.label}: ${fmt(row.projection, row.key)} projected; ${row.support.label} at ${row.support.threshold}+ (${row.support.n} valid recent appearances${row.support.weightedRate == null ? '' : `, ${Math.round(row.support.weightedRate * 100)}% recent weighted frequency`}).`).slice(0, inDepth ? 6 : 3)
     const availability = player.unavailable ? `The projection is withheld because the roster marks ${player.name} unavailable.` : `${player.name} is listed ${player.injury || player.status}; roster status can lag.`
     return [
       `${player.name} (${player.team.abbr}, ${player.position}): ${availability}`,
@@ -36,7 +36,7 @@ function answerFor(question, { matchup, players, halfLife, lookback, inDepth }) 
       return compared.map(p => {
         const rows = relevantMetrics(p).map(([key, label]) => ({ key, label, projection: p.unavailable ? null : statFor(p, key, halfLife, lookback).projection, support: performance(p, key, halfLife, lookback) }))
         const top = rows.filter(r => valid(r.projection)).sort((a, b) => b.projection - a.projection).slice(0, inDepth ? 4 : 2)
-        return `${p.name} (${p.team.abbr}): ${top.map(r => `${r.label} ${fmt(r.projection, r.key)} projected; ${r.support.label.toLowerCase()}`).join('; ') || 'No usable projections'}.`
+        return `${p.name} (${p.team.abbr}): ${top.map(r => `${r.label} ${fmt(r.projection, r.key)} projected; ${r.support.label}`).join('; ') || 'No usable projections'}.`
       }).concat('These are different statistics and roles, so compare each player within the same market. Historical support is not a forecast probability.')
     }
   }
@@ -91,10 +91,10 @@ function answerFor(question, { matchup, players, halfLife, lookback, inDepth }) 
     .sort((a, b) => (b.support.weightedRate ?? -1) - (a.support.weightedRate ?? -1) || b.value - a.value).slice(0, inDepth ? 5 : 3)
 
   return [
-    `${possessive(target.name)} path starts with beating the dashboard’s projected score of ${fmt(target === matchup.away ? matchup.awayPoints : matchup.homePoints)}. The model currently has ${matchup.winner.name} by ${fmt(matchup.margin)}.`,
+    `The path for ${target.name} starts with beating the dashboard’s projected score of ${fmt(target === matchup.away ? matchup.awayPoints : matchup.homePoints)}. The model currently has ${matchup.winner.name} by ${fmt(matchup.margin)}.`,
     `${edges[0].label} is the more promising statistical route in the dashboard’s current ranking view: ${target.abbr} is #${edges[0].rank} in that offense, while ${opponent.abbr} is #${edges[0].defenseRank} in that defense. ${target.abbr} averages ${fmt(edges[0].yards)} yards in the recent weighted view.`,
-    `Key ${target.abbr} contributors from the player projections: ${own.slice(0, inDepth ? 5 : 3).map(x => `${x.p.name} ${x.label.toLowerCase()} ${fmt(x.value, x.key)} (${x.support.label.toLowerCase()})`).join('; ') || 'no qualifying player projections'}.`,
-    `The defensive challenge is containing ${possessive(opponent.name)} projected threats: ${threats.slice(0, inDepth ? 4 : 2).map(x => `${x.p.name} ${x.label.toLowerCase()} ${fmt(x.value, x.key)}`).join('; ') || 'the opponent’s offense'}.`,
+    `Key ${target.abbr} contributors from the player projections: ${own.slice(0, inDepth ? 5 : 3).map(x => `${x.p.name} ${x.label} ${fmt(x.value, x.key)} (${x.support.label})`).join('; ') || 'no qualifying player projections'}.`,
+    `The defensive challenge is containing ${opponent.name}: ${threats.slice(0, inDepth ? 4 : 2).map(x => `${x.p.name} ${x.label} ${fmt(x.value, x.key)}`).join('; ') || 'the opponent’s offense'}.`,
     ...(inDepth ? [`Practical game plan: use the stronger ground/pass matchup to stay ahead of the chains, protect the ball, and make the opponent finish drives rather than give up explosive plays. To turn the model’s lean around, ${target.name} likely needs a turnover or red-zone edge and to outperform its current score projection.`, 'Projections use prior current-season appearances and opponent-position adjustments. Status can lag; no confirmed quarterback, injury-driven usage, or weather adjustment is included.'] : ['This is a data-based game plan, not a certainty. Player support frequencies are historical and are not calibrated win probabilities.']),
   ]
 }
