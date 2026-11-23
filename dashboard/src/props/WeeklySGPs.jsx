@@ -5,7 +5,7 @@ import './sgp.css'
 const kickoff=d=>new Date(d).toLocaleString('en-US',{timeZone:'America/New_York',weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})
 export function SGPCard({pair,matchup,rank,onOpen}){
   return <article className="sgp-card"><header><div><small>{rank?`WEEKLY FAVORITE ${rank}`:'MATCHUP FAVORITE'}</small><h3>{matchup.away.abbr} at {matchup.home.abbr}</h3></div><span>{kickoff(matchup.date)} ET</span></header>
-    <ol>{pair.legs.map(leg=><li key={leg.id}><strong>{leg.text}</strong><div><span>Model: {leg.projection.toFixed(leg.key==='totalTD'?2:1)}</span><span>Reached in {leg.hits}/{leg.n} recent appearances</span></div></li>)}</ol>
+    <ol>{pair.legs.map(leg=><li key={leg.id}><strong>{leg.text}</strong><div><span>Model: {leg.projection.toFixed(leg.key==='totalTD'?2:1)}</span><span>Reached in {leg.hits}/{leg.n} recent appearances</span></div>{leg.signals?.length>0&&<small className="sgp-signals">Signals: {leg.signals.join(' · ')}</small>}</li>)}</ol>
     <p>{pair.dependence} Historical hit counts are per leg; no combined win probability is estimated.</p>
     {onOpen&&<button onClick={()=>onOpen(matchup.id)}>Open matchup analysis</button>}
     <small className="sgp-price">Suggested milestones · sportsbook availability, combined odds and value unverified</small>

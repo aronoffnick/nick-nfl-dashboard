@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { getRosters } from './data.js'
 import { METRICS, valid, weighted, historyFor, sides, positionOf, projectTeam, defenseProfile, historicalComparison } from './model.js'
 import Bets, {breakoutRating,ratingLevel} from './Bets.jsx'
+import Performance, {PerformanceLegend} from './Performance.jsx'
 import './props.css'
 const format=(n,key='')=>valid(n)?n.toFixed(key.endsWith('TD')?2:1):'—'
 const date=d=>new Date(d).toLocaleDateString('en-US',{timeZone:'America/New_York',month:'short',day:'numeric'})
@@ -85,24 +86,21 @@ function PlayerProjections({matchup,saveProp,data,teams,roster,halfLife,window,p
   const over=validLine?sample.filter(value=>value>Number(line)).length:0
   const pushes=validLine?sample.filter(value=>value===Number(line)).length:0
   function choosePlayer(player,key){setChosen(`${player.team.id}:${player.id}`);setLineMetric(key);setLine('');setTrackMessage('')}
-  return <section><div className="prop-section-title"><h3>Player projections · both teams</h3><span>Role-specific stats · strongest projection first</span></div>
-    <p className="prop-help">Breakout preview: red = low, yellow = moderate, green = high historical support. It is a directional index, not a probability.</p>
+  return <section><div className="prop-section-title"><h3>Player projections · both teams</h3><span>One full-width row per player · highest projection first</span></div>
+    <PerformanceLegend/>
     <div className="projection-sort"><label>Order by <select value={activeSortKey} onChange={event=>setSortKey(event.target.value)}>{sortableKeys.map(key=><option key={key} value={key}>{projectionStatLabel[key]}</option>)}</select></label><button className="prop-action" onClick={()=>setAscending(value=>!value)}>{ascending?'Lowest first':'Highest first'}</button></div>
-    <div className="projection-board">{players.map(player=>{
-      const metrics=projectionStats(player.position,categories),usageKey=player.position==='QB'?'passAtt':['RB','FB'].includes(player.position)?'carries':'targets',usage=weighted(player.logs,usageKey,halfLife)
-      const metricCells=metrics.map(key=>{const stat=player.stats[key==='totalTD'?'rushTD':key],s=stat||{},projection=projectedValue(player,key),values=player.logs.slice(-window).map(log=>logValue(log,key,player.position)).filter(valid),low=values.length?Math.min(...values):null,high=values.length?Math.max(...values):null
-        const defense=key==='totalTD'?null:s.defense
-        return <button className="projection-stat-cell" key={key} onClick={()=>choosePlayer(player,key)} aria-label={`Compare ${player.name} ${projectionStatLabel[key]} line`}><b>{projectionStatLabel[key]}</b><strong>{player.unavailable?'Withheld':format(projection,key)}</strong><small>Observed {valid(low)?`${format(low,key)}–${format(high,key)}`:'range unavailable'}</small><small>{key==='totalTD'?'Combined rush + receiving TDs':defense?.adjusted?`Matchup ${defense.factor>=1?'+':''}${((defense.factor-1)*100).toFixed(0)}%`:s.limited?'Projection needs 3 appearances':'Neutral / no adjustment'}</small></button>
-      })
-      const breakout=breakoutRating(player),level=ratingLevel(breakout)
-      return <article className="projection-player-row" key={`${player.team.id}:${player.id}`} style={{'--projection-metric-count':metrics.length}}>
-        <div className="projection-player-identity"><button className={`prop-name ${chosen===`${player.team.id}:${player.id}`?'selected':''}`} onClick={()=>choosePlayer(player,metrics[0])}>{player.name}</button><small>{player.team.abbr} · {player.position} · {player.status}{player.injury?` · ${player.injury}`:''}</small><small>{format(usage)} {usageKey==='passAtt'?'attempts':usageKey} / appearance</small></div>
-        <div className="projection-stat-columns">{metricCells}</div>
-        <div className={`projection-preview-cell breakout-preview-cell breakout-${level}`} aria-label={breakout==null?'Breakout potential not rated':`${level} breakout potential`}><small>Breakout preview</small><div className="breakout-mini-scale"><span/><span/><span/></div><b>{breakout==null?'Not rated':level==='moderate'?'Moderate':level[0].toUpperCase()+level.slice(1)}</b></div>
+    <div className="player-card-grid">{players.map(player=>{
+      const metrics=projectionStats(player.position,categories).map(key=>[key,projectionStatLabel[key]])
+      return <article className="player-research-card player-row" key={`${player.team.id}:${player.id}`} aria-label={`${player.name} projections`}>
+        <header><div><h4>{player.name}</h4><p>{player.team.abbr} · {player.position} · {player.injury||player.status}</p><small>{player.logs.length} recorded appearances</small>
+          <div className={`projection-breakout-preview breakout-${ratingLevel(breakoutRating(player))}`}><span>Breakout preview</span><b>{ratingLevel(breakoutRating(player))==='unknown'?'Not rated':ratingLevel(breakoutRating(player))==='moderate'?'Moderate':ratingLevel(breakoutRating(player))[0].toUpperCase()+ratingLevel(breakoutRating(player)).slice(1)}</b></div>
+        </div><button className="prop-action" aria-label={`View ${player.name} game log and line comparison`} aria-expanded={chosen===`${player.team.id}:${player.id}`} onClick={()=>choosePlayer(player,metrics[0]?.[0])}>Game log &amp; lines</button></header>
+        {player.unavailable&&<p className="prop-warning">Unavailable or doubtful: projection withheld.</p>}
+        <div className="player-metrics" style={{'--metric-count':metrics.length}}>{metrics.map(([key])=><div className="player-stat-detail" key={key} onClick={()=>choosePlayer(player,key)}><Performance player={player} metric={key} halfLife={halfLife} lookback={window}/></div>)}</div>
       </article>
     })}</div>
     {!players.length&&<p className="prop-warning">No players match the selected team, position, and stat filters.</p>}
-    <p className="prop-help">QB rows show passing yards, passing TDs, rushing yards, and rushing TDs. RB rows show rushing yards, receptions, receiving yards, and combined rushing/receiving TDs. WR/TE rows show receptions, receiving yards, and combined TDs. Stat columns are filtered with the checkboxes above. Click any stat to compare a manual prop line. The breakout preview is a directional composite, not a probability.</p>
+    <p className="prop-help">QB rows show passing yards, passing TDs, rushing yards, and rushing TDs. RB rows show rushing yards, receptions, receiving yards, and combined rushing/receiving TDs. WR/TE rows show receptions, receiving yards, and combined TDs. Expand the colored support headline for recent hit frequency and benchmark details. Recent middle-range values and big-game benchmark numbers are labeled on each scale.</p>
     {selected&&<div className="prop-comparison"><h3>{selected.name} · {projectionStatLabel[lineMetric]}</h3>
       <label>Your prop line <input type="number" min="0" step="0.5" placeholder="Enter a line, e.g. 64.5" value={line} onChange={event=>setLine(event.target.value)}/></label>
       {validLine&&!selected.unavailable&&valid(selectedStat)&&selectedStat!==Number(line)&&!matchup.started&&<button onClick={()=>{

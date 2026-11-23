@@ -12,12 +12,23 @@ export function sgpLegs(players,halfLife=3){
       if(!valid(s?.projection)||s.projection<=0)continue
       const observations=p.logs.slice(-6).map(l=>valueFor(l,key)).filter(valid)
       if(observations.length<5)continue
+      const usageKey=['passYds','passTD'].includes(key)?'passAtt':key==='rushYds'?'carries':key==='totalTD'&&['RB','FB','QB'].includes(p.position)?'carries':'targets'
+      const recentUsage=p.logs.slice(-3).map(g=>g[usageKey]).filter(valid),priorUsage=p.logs.slice(-6,-3).map(g=>g[usageKey]).filter(valid)
+      const usageAvg=recentUsage.length===3?recentUsage.reduce((a,b)=>a+b,0)/3:null,priorAvg=priorUsage.length===3?priorUsage.reduce((a,b)=>a+b,0)/3:null
+      const recentStat=p.logs.slice(-3).map(g=>valueFor(g,key)).filter(valid),priorStat=p.logs.slice(-6,-3).map(g=>valueFor(g,key)).filter(valid)
+      const statAvg=recentStat.length===3?recentStat.reduce((a,b)=>a+b,0)/3:null,priorStatAvg=priorStat.length===3?priorStat.reduce((a,b)=>a+b,0)/3:null
+      const signals=[usageAvg!=null&&priorAvg>0&&usageAvg>=priorAvg*1.15?'Rising workload':null,
+        s.defense.adjusted&&s.defense.factor>=1.05?'Favorable matchup':null,
+        statAvg!=null&&priorStatAvg>0&&statAvg>=priorStatAvg*1.15?'Momentum':null,
+        statAvg!=null&&priorStatAvg>0&&usageAvg!=null&&priorAvg>0&&usageAvg>=priorAvg*.9&&statAvg<=priorStatAvg*.8?'Bounce back':null,
+        key==='totalTD'&&observations.some(n=>n>=1)?'TD involvement':null].filter(Boolean)
+      if(!signals.length)continue
       const choices=thresholds.map(threshold=>{
         const hits=observations.filter(n=>n>=threshold).length
         const rate=hits/observations.length,cushion=(s.projection-threshold)/threshold
         if(rate<2/3||cushion<.2)return null
-        const signal=rate*.65+Math.min(cushion,1)*.2+observations.length/6*.1+(s.defense.adjusted&&s.defense.factor>1?.05:0)
-        return {id:`${p.team.id}:${p.id}:${key}`,player:p,key,label:metricLabel(key),threshold,hits,n:observations.length,projection:s.projection,baseline:s.baseline,signal,
+        const signal=rate*.55+Math.min(cushion,1)*.15+observations.length/6*.1+Math.min(signals.length,3)*.05+(s.defense.adjusted&&s.defense.factor>1?.05:0)
+        return {id:`${p.team.id}:${p.id}:${key}`,player:p,key,label:metricLabel(key),threshold,hits,n:observations.length,projection:s.projection,baseline:s.baseline,signal,signals,
           text:`${p.name}: ${threshold}+ ${key==='totalTD'?'TD scored':metricLabel(key).toLowerCase()}`}
       }).filter(Boolean)
       // Retain the highest milestone satisfying both the historical and projection checks.
