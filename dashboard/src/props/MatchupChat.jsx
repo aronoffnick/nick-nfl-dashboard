@@ -1,10 +1,12 @@
 import { useMemo, useState } from 'react'
-import { DISPLAY_METRICS, metricLabel, statFor } from './analysis.js'
+import { statFor } from './analysis.js'
 import { performance, relevantMetrics } from './performance.js'
 import { valid } from './model.js'
 import './chat.css'
 
 const fmt = (n, key) => valid(n) ? n.toFixed(key?.endsWith('TD') ? 2 : 1) : '—'
+const possessive = name => name.endsWith('s') ? `${name}'` : `${name}'s`
+const mentions = (text, term) => ` ${text.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim()} `.includes(` ${term.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim()} `)
 
 function answerFor(question, { matchup, players, halfLife, lookback, inDepth }) {
   const q = question.trim().toLowerCase()
@@ -12,9 +14,9 @@ function answerFor(question, { matchup, players, halfLife, lookback, inDepth }) 
   const names = players.map(p => p.name).sort((a, b) => b.length - a.length)
   const mentioned = names.filter(name => q.includes(name.toLowerCase()))
   const player = mentioned.length ? players.find(p => p.name === mentioned[0]) : null
-  const chosenTeam = sides.find(t => q.includes(t.name.toLowerCase()) || q.includes(t.abbr.toLowerCase()))
+  const chosenTeam = sides.find(t => [t.name, t.abbr, ...[t.name.split(' ')[0], t.name.split(' ').at(-1)]].some(term => mentions(q, term)))
 
-  if (player) {
+  if (player && !(mentioned.length > 1 || /compare|versus|\bvs\b|better/.test(q))) {
     const rows = relevantMetrics(player).map(([key, label]) => ({
       key, label, projection: player.unavailable ? null : statFor(player, key, halfLife, lookback).projection,
       support: performance(player, key, halfLife, lookback),
@@ -61,7 +63,7 @@ function answerFor(question, { matchup, players, halfLife, lookback, inDepth }) 
       { name: 'Rush defense', rank: opponent.ranks.rushD, yards: opponent.recent.rushD },
     ].sort((a, b) => b.rank - a.rank)
     return [
-      `${opponent.name}'s clearest team-level vulnerability in this dashboard snapshot is ${weaknesses[0].name.toLowerCase()}: rank #${weaknesses[0].rank}, allowing ${fmt(weaknesses[0].yards)} yards per game on the recent weighted view.`,
+      `${possessive(opponent.name)} clearest team-level vulnerability in this dashboard snapshot is ${weaknesses[0].name.toLowerCase()}: rank #${weaknesses[0].rank}, allowing ${fmt(weaknesses[0].yards)} yards per game on the recent weighted view.`,
       `The other side: ${weaknesses[1].name.toLowerCase()} ranks #${weaknesses[1].rank} (${fmt(weaknesses[1].yards)} yards allowed). Lower defensive rank means fewer yards allowed.`,
       ...(inDepth ? ['These are team totals, not player-position prop lines. The matchup explorer’s Defense trends tab breaks recent opponent production down by position and statistic.'] : []),
     ]
@@ -89,16 +91,16 @@ function answerFor(question, { matchup, players, halfLife, lookback, inDepth }) 
     .sort((a, b) => (b.support.weightedRate ?? -1) - (a.support.weightedRate ?? -1) || b.value - a.value).slice(0, inDepth ? 5 : 3)
 
   return [
-    `${target.name}'s path starts with beating the dashboard’s projected score of ${fmt(target === matchup.away ? matchup.awayPoints : matchup.homePoints)}. The model currently has ${matchup.winner.name} by ${fmt(matchup.margin)}.`,
-    `${edges[0].label} is the more promising statistical route: ${target.name} is ranked #${edges[0].rank} in that offense, while ${opponent.name} ranks #${edges[0].defenseRank} in that defense; ${target.name} averages ${fmt(edges[0].yards)} yards in the recent weighted view.`,
+    `${possessive(target.name)} path starts with beating the dashboard’s projected score of ${fmt(target === matchup.away ? matchup.awayPoints : matchup.homePoints)}. The model currently has ${matchup.winner.name} by ${fmt(matchup.margin)}.`,
+    `${edges[0].label} is the more promising statistical route in the dashboard’s current ranking view: ${target.abbr} is #${edges[0].rank} in that offense, while ${opponent.abbr} is #${edges[0].defenseRank} in that defense. ${target.abbr} averages ${fmt(edges[0].yards)} yards in the recent weighted view.`,
     `Key ${target.abbr} contributors from the player projections: ${own.slice(0, inDepth ? 5 : 3).map(x => `${x.p.name} ${x.label.toLowerCase()} ${fmt(x.value, x.key)} (${x.support.label.toLowerCase()})`).join('; ') || 'no qualifying player projections'}.`,
-    `The defensive challenge is containing ${opponent.name}'s projected threats: ${threats.slice(0, inDepth ? 4 : 2).map(x => `${x.p.name} ${x.label.toLowerCase()} ${fmt(x.value, x.key)}`).join('; ') || 'the opponent’s offense'}.`,
+    `The defensive challenge is containing ${possessive(opponent.name)} projected threats: ${threats.slice(0, inDepth ? 4 : 2).map(x => `${x.p.name} ${x.label.toLowerCase()} ${fmt(x.value, x.key)}`).join('; ') || 'the opponent’s offense'}.`,
     ...(inDepth ? [`Practical game plan: use the stronger ground/pass matchup to stay ahead of the chains, protect the ball, and make the opponent finish drives rather than give up explosive plays. To turn the model’s lean around, ${target.name} likely needs a turnover or red-zone edge and to outperform its current score projection.`, 'Projections use prior current-season appearances and opponent-position adjustments. Status can lag; no confirmed quarterback, injury-driven usage, or weather adjustment is included.'] : ['This is a data-based game plan, not a certainty. Player support frequencies are historical and are not calibrated win probabilities.']),
   ]
 }
 
 const suggestions = matchup => [
-  `${matchup.home.name}'s path to victory?`,
+  `${possessive(matchup.home.name)} path to victory?`,
   `Where is ${matchup.away.name} vulnerable?`,
   'Who has the strongest big-game support?',
   'Explain the projected margin',
