@@ -19,11 +19,8 @@ function projectionFor(player,key){
   return scores.every(valid)?scores.reduce((sum,value)=>sum+value,0):null
 }
 function metricsFor(player){
-  const metrics=player.position==='QB'?['passYds','passTD','rushYds','rushTD']:
-    ['WR','TE'].includes(player.position)?['rec','recYds','recTD']:['rushYds','rushTD','rec','recYds','recTD']
-  const result=metrics.filter(key=>valid(projectionFor(player,key))&&projectionFor(player,key)>0)
-  if(valid(projectionFor(player,'totalTD'))&&projectionFor(player,'totalTD')>0)result.push('totalTD')
-  return result
+  return player.position==='QB'?['passYds','passTD','rushYds','rushTD']:
+    ['WR','TE'].includes(player.position)?['rec','recYds','totalTD']:['rushYds','rec','recYds','totalTD']
 }
 export function breakoutRating(player){
   if(player.unavailable||player.stale||player.logs.length<6)return null
@@ -72,7 +69,7 @@ function PlayerRow({player,matchup,window,index,selectedGroups}){
     <section className="breakout-score-cell"><h5>Breakout index</h5><BreakoutGauge score={score}/><small>Directional composite · not a probability</small></section>
     <section className="breakout-usage-cell"><h5>Recent opportunity</h5><strong>{valid(recent)?`${recent.toFixed(1)} ${usageKey==='passAtt'?'attempts':usageKey}`:'—'}</strong><small>Last 3 appearances{valid(prior)?` · prior 3: ${prior.toFixed(1)}`:''}</small><p>{valid(recent)&&valid(prior)&&prior>0?`${recent>=prior?'↑':'↓'} ${Math.abs((recent/prior-1)*100).toFixed(0)}% vs prior 3`:'Trend unavailable'}</p></section>
     <section className="breakout-matchup-cell"><h5>Matchup context</h5><strong>{valid(factor)?`${factor>=1?'+':''}${((factor-1)*100).toFixed(0)}%`:'Neutral'}</strong><small>Recent ${player.position} defense adjustment</small><p>Team model: {teamWon?'favored':isPassAhead?'underdog':'near even'}{matchup.margin>=.05?` by ${matchup.margin.toFixed(1)}`:''}</p></section>
-    <section className="breakout-projection-cell"><h5>Projected stats</h5>{metrics.map(key=>{const range=observedRange(player,key,window),projection=projectionFor(player,key);return <div className="breakout-stat-chip" key={key}><b>{statLabels[key]}</b><strong>{player.unavailable?'Withheld':projection.toFixed(key.endsWith('TD')?2:1)}</strong><small>Recent {window}: {valid(range.low)?`${range.low}–${range.high}`:'range unavailable'}</small>{key==='totalTD'&&<small>2+ TDs: {tdValues.filter(value=>value>=2).length}/{tdValues.length} recent</small>}</div>})}</section>
+    <section className="breakout-projection-cell"><h5>Projected stats</h5>{metrics.map(key=>{const range=observedRange(player,key,window),projection=projectionFor(player,key);return <div className="breakout-stat-chip" key={key}><b>{statLabels[key]}</b><strong>{player.unavailable?'Withheld':valid(projection)?projection.toFixed(key.endsWith('TD')?2:1):'—'}</strong><small>Recent {window}: {valid(range.low)?`${range.low}–${range.high}`:'range unavailable'}</small>{key==='totalTD'&&<small>2+ TDs: {tdValues.filter(value=>value>=2).length}/{tdValues.length} recent</small>}</div>})}</section>
     <details className="breakout-disclosure"><summary><span className={`breakout-headline breakout-${level}`}>{level==='high'?'Higher breakout support':level==='moderate'?'Moderate breakout support':level==='low'?'Lower breakout support':'Breakout support not rated'}</span><span className="support-chevron" aria-hidden="true"/></summary>
       <div className="breakout-expanded"><p><b>Yardage reference:</b> model projection is the current baseline. The recent low / middle / high values below are observed results, not forecast percentiles.</p>
         <div className="breakout-tier-grid">{allStats.filter(key=>['passYds','rushYds','recYds','totalTD'].includes(key)).map(key=>{const r=tierFor(key),projection=projectionFor(player,key);return <div key={key}><b>{statLabels[key]}</b><span>Recent low <strong>{valid(r.low)?r.low:'—'}</strong> · middle <strong>{valid(r.median)?r.median:'—'}</strong> · high <strong>{valid(r.high)?r.high:'—'}</strong></span>{valid(projection)&&<span>Model baseline <strong>{projection.toFixed(1)}</strong></span>}<small>{r.n} recorded appearances</small></div>})}</div>

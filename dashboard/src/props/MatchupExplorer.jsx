@@ -1,14 +1,14 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { getRosters } from './data.js'
 import { METRICS, valid, weighted, historyFor, sides, positionOf, projectTeam, defenseProfile, historicalComparison } from './model.js'
-import Bets from './Bets.jsx'
-import {breakoutRating,ratingLevel} from './Bets.jsx'
+import Bets, {breakoutRating,ratingLevel} from './Bets.jsx'
 import './props.css'
 const format=(n,key='')=>valid(n)?n.toFixed(key.endsWith('TD')?2:1):'—'
 const date=d=>new Date(d).toLocaleDateString('en-US',{timeZone:'America/New_York',month:'short',day:'numeric'})
 const positions=['QB','RB','FB','WR','TE']
-const statsFor=p=>p==='QB'?['passYds','passTD','rushYds','rushTD']:p==='WR'||p==='TE'?['rec','recYds','recTD']:['rushYds','rushTD','rec','recYds','recTD']
-const label=k=>METRICS.find(([key])=>key===k)?.[1]||k
+const statsFor=p=>p==='QB'?['passYds','passTD','rushYds','rushTD']:['RB','FB'].includes(p)?['rushYds','rec','recYds','totalTD']:p==='WR'||p==='TE'?['rec','recYds','totalTD']:[]
+const label=k=>k==='totalTD'?'TDs':METRICS.find(([key])=>key===k)?.[1]||k
+const boxStat=(p,k)=>k==='totalTD'?(valid(p.rushTD)&&valid(p.recTD)?p.rushTD+p.recTD:null):p[k]
 
 function Historical({data,defense,roster,window,position,halfLife,metric}){
   const games=historyFor(data,defense.id).slice(-window).reverse()
@@ -27,9 +27,9 @@ function Historical({data,defense,roster,window,position,halfLife,metric}){
               .sort((a,b)=>(b[metric]||0)-(a[metric]||0))
             if(!group.length)return null
             return <section className="prop-position" key={pos}><strong>{pos==='?'?'Unknown position':pos}</strong><div>{group.map(p=><div className="prop-player-line" key={p.id}><b>{p.name}</b><span>{statsFor(pos).map(k=>{
-              const baseline=historicalComparison(data,opponent.id,p,k,g.id,halfLife)
-              const highlight=!k.endsWith('TD')&&valid(baseline)&&baseline>0&&p[k]>=baseline*1.2
-              return <span key={k} className={highlight?'prop-breakout':''} title={valid(baseline)?`Earlier weighted average: ${format(baseline,k)}`:'Insufficient earlier appearances for comparison'}>{label(k)} <b>{valid(p[k])?String(p[k]):'—'}</b>{highlight&&<b className="prop-breakout-label">BREAKOUT +{((p[k]/baseline-1)*100).toFixed(0)}%</b>}</span>
+              const baseline=k==='totalTD'?['rushTD','recTD'].map(stat=>historicalComparison(data,opponent.id,p,stat,g.id,halfLife)).every(valid)?['rushTD','recTD'].reduce((sum,stat)=>sum+historicalComparison(data,opponent.id,p,stat,g.id,halfLife),0):null:historicalComparison(data,opponent.id,p,k,g.id,halfLife)
+              const value=boxStat(p,k),highlight=!k.toLowerCase().includes('td')&&valid(baseline)&&baseline>0&&value>=baseline*1.2
+              return <span key={k} className={highlight?'prop-breakout':''} title={valid(baseline)?`Earlier weighted average: ${format(baseline,k)}`:'Insufficient earlier appearances for comparison'}>{label(k)} <b>{valid(value)?String(value):'—'}</b>{highlight&&<b className="prop-breakout-label">BREAKOUT +{((value/baseline-1)*100).toFixed(0)}%</b>}</span>
             })}</span></div>)}</div></section>
           })}
         </>}
@@ -50,60 +50,69 @@ function PositionDefense({data,defense,roster,halfLife,window,position,metric}){
   </section>
 }
 
-function PlayerProjections({matchup,saveProp,data,team,opponent,roster,halfLife,window,position,metric}){
-  const [trackMessage, setTrackMessage] = useState('')
-  const [chosen,setChosen]=useState('')
-  const [line,setLine]=useState('')
-  const [ascending,setAscending]=useState(false)
-  const projections=useMemo(()=>projectTeam(data,team,opponent,roster,halfLife,window),[data,team,opponent,roster,halfLife,window])
-  const players=projections.filter(p=>position==='all'||p.position===position)
-    .sort((a,b)=>{
-      const av=a.stats[metric].projection,bv=b.stats[metric].projection
-      if(!valid(av))return valid(bv)?1:0
-      if(!valid(bv))return -1
-      return (av-bv)*(ascending?1:-1)
-    })
-  const selected=projections.find(p=>p.id===chosen)
-  const selectedStat=selected?.stats[metric]
+const projectionGroups={Passing:['passYds','passTD'],Rushing:['rushYds','rushTD'],Receiving:['rec','recYds'],TDs:['passTD','rushTD','totalTD']}
+const projectionStatLabel={passYds:'Passing yards',passTD:'Passing TDs',rushYds:'Rushing yards',rushTD:'Rushing TDs',rec:'Receptions',recYds:'Receiving yards',totalTD:'TDs'}
+const projectionStatCategory={passYds:['Passing'],passTD:['Passing','TDs'],rushYds:['Rushing'],rushTD:['Rushing','TDs'],rec:['Receiving'],recYds:['Receiving'],totalTD:['TDs']}
+function projectionStats(position,categories){
+  const keys=position==='QB'?['passYds','passTD','rushYds','rushTD']:['RB','FB'].includes(position)?['rushYds','rec','recYds','totalTD']:['WR','TE'].includes(position)?['rec','recYds','totalTD']:[]
+  return keys.filter(key=>projectionStatCategory[key].some(category=>categories.includes(category)))
+}
+function projectedValue(player,key){
+  if(key!=='totalTD')return player.stats[key]?.projection
+  const rush=player.stats.rushTD?.projection,rec=player.stats.recTD?.projection
+  return valid(rush)&&valid(rec)?rush+rec:null
+}
+function logValue(log,key,position){
+  if(key!=='totalTD')return log[key]
+  const keys=position==='QB'?['rushTD']:['rushTD','recTD']
+  return keys.every(k=>valid(log[k]))?keys.reduce((sum,k)=>sum+log[k],0):null
+}
+function ProjectionFilters({title,items,selected,onToggle}){
+  return <fieldset className="projection-filter-group"><legend>{title}</legend>{items.map(([key,name])=><label key={key}><input type="checkbox" checked={selected.includes(key)} onChange={()=>onToggle(key)}/>{name}</label>)}</fieldset>
+}
+function PlayerProjections({matchup,saveProp,data,teams,roster,halfLife,window,positions,categories}){
+  const [chosen,setChosen]=useState(''),[line,setLine]=useState(''),[lineMetric,setLineMetric]=useState(''),[trackMessage,setTrackMessage]=useState(''),[sortKey,setSortKey]=useState('recYds'),[ascending,setAscending]=useState(false)
+  const sortableKeys=[...new Set(Object.entries(projectionGroups).filter(([group])=>categories.includes(group)).flatMap(([,keys])=>keys))]
+  const activeSortKey=sortableKeys.includes(sortKey)?sortKey:sortableKeys[0]||'recYds'
+  const players=useMemo(()=>teams.flatMap(({team,opponent})=>projectTeam(data,team,opponent,roster,halfLife,window).map(player=>({...player,team,opponent})))
+    .filter(player=>positions.includes(player.position)&&projectionStats(player.position,categories).length>0)
+    .sort((a,b)=>{const av=projectedValue(a,activeSortKey),bv=projectedValue(b,activeSortKey);if(!valid(av))return valid(bv)?1:a.name.localeCompare(b.name);if(!valid(bv))return -1;return (av-bv)*(ascending?1:-1)||a.name.localeCompare(b.name)}),[teams,data,roster,halfLife,window,positions,categories,activeSortKey,ascending])
+  const selected=players.find(player=>`${player.team.id}:${player.id}`===chosen)
+  const selectedMetrics=selected?projectionStats(selected.position,categories):[]
   const validLine=line.trim()!==''&&Number.isFinite(Number(line))&&Number(line)>=0
-  const sample=selected?.lastFour.filter(l=>valid(l[metric]))||[]
-  const over=validLine?sample.filter(l=>l[metric]>Number(line)).length:0
-  const pushes=validLine?sample.filter(l=>l[metric]===Number(line)).length:0
-  return <section><div className="prop-section-title"><h3>{team.abbr} player projections vs {opponent.abbr}</h3><span>Conditional on playing a comparable role</span></div>
-    <div className="table-wrap"><table><thead><tr><th>Player / position</th><th>Recent usage</th><th>Weighted baseline</th><th>Matchup adj.</th><th><button className="sort" onClick={()=>setAscending(!ascending)}>Projected {label(metric)} {ascending?'↑':'↓'}</button></th><th>Recent observed range</th><th>Appearances</th><th>Breakout preview</th></tr></thead><tbody>
-      {players.map(p=>{
-        const s=p.stats[metric]
-        const usageKey=p.position==='QB'?'passAtt':metric.startsWith('rush')?'carries':'targets'
-        const usage=weighted(p.logs,usageKey,halfLife)
-        const breakout=breakoutRating(p),level=ratingLevel(breakout)
-        return <tr key={p.id}><td><button className={`prop-name ${chosen===p.id?'selected':''}`} onClick={()=>setChosen(p.id)}>{p.name}</button><small>{p.position} · {p.status}{p.injury?` · ${p.injury}`:''}{p.stale?' · absent latest offensive box score':''}</small></td>
-          <td>{format(usage)}<small>{usageKey==='passAtt'?'pass attempts':usageKey==='carries'?'carries':'targets'} / appearance</small></td>
-          <td>{format(s.baseline,metric)}</td><td>{s.defense.adjusted?`${s.defense.factor>=1?'+':''}${((s.defense.factor-1)*100).toFixed(1)}%`:'Neutral'}<small>{s.defense.sample} usable opponent games</small></td>
-          <td className="prop-projection">{p.unavailable?'Withheld':format(s.projection,metric)}<small>{p.unavailable?'Unavailable / doubtful roster designation':p.limited?'Need 3 appearances':label(metric)}</small></td>
-          <td>{valid(s.min)?`${format(s.min,metric)}–${format(s.max,metric)}`:'—'}<small>Last {window} recorded appearances</small></td><td>{s.sample}<small>{p.logs.length<5?'Small sample':'Current-team box scores'}</small></td><td><div className={`breakout-preview-cell breakout-${level}`} aria-label={breakout==null?'Breakout potential not rated':`${level} breakout potential` }><div className="breakout-mini-scale"><span/><span/><span/></div><b>{breakout==null?'Not rated':level==='moderate'?'Moderate':level[0].toUpperCase()+level.slice(1)}</b></div></td></tr>
-      })}
-    </tbody></table></div>
-    {!players.length&&<p className="prop-warning">No resolved current-roster players match this position and recent participation filter.</p>}
-    <p className="prop-help">Click a player's name for their game log and a manual prop-line comparison. Players must appear in an offensive box score in one of the team's last two games. Missing appearances are not silently counted as zero. No snap-count or starter confirmation is available.</p>
-    {selected&&<div className="prop-comparison"><h3>{selected.name} · {label(metric)}</h3>
-      <label>Your prop line <input type="number" min="0" step="0.5" placeholder="Enter a line, e.g. 64.5" value={line} onChange={e=>setLine(e.target.value)}/></label>
-      {validLine && !selected.unavailable && valid(selectedStat.projection) &&
-        selectedStat.projection !== Number(line) && !matchup.started &&
-        <button onClick={() => {
-          if (Date.now() >= Date.parse(matchup.date)) return setTrackMessage('Kickoff has passed.')
-          const pick = selectedStat.projection > Number(line) ? 'Over' : 'Under'
-          try {
-            saveProp(`${matchup.id}:${selected.id}:${metric}`, {
-              week: `${data.year} Week ${data.week}`, date: matchup.date, player: selected.name,
-              position: selected.position, team: team.abbr, teamName: team.name,
-              metric: label(metric), line: Number(line), pick, result: 'Pending',
-            })
-            setTrackMessage(`Saved ${selected.name} ${pick.toLowerCase()} ${line} for ${label(metric)}.`)
-          } catch { setTrackMessage('This browser could not save the prop.') }
-        }}>Track model pick</button>}
-      {trackMessage && <p role="status">{trackMessage}</p>}
-      {validLine&&<p>{!selected.unavailable&&valid(selectedStat.projection)?<>Projection <b>{format(selectedStat.projection,metric)}</b> · Difference from your line <b>{(selectedStat.projection-Number(line)).toFixed(1)}</b> · </>:null}Over your line in <b>{over}/{sample.length}</b> recent recorded appearances{pushes?` (${pushes} pushes)`:''}. Historical frequency is not a forecast probability.</p>}
-      <div className="table-wrap"><table><thead><tr><th>Date</th><th>Opponent</th>{METRICS.map(([k,l])=><th key={k}>{l}</th>)}</tr></thead><tbody>{[...selected.logs].reverse().map(l=><tr key={l.gameId}><td>{date(l.date)}</td><td>{l.opponent}</td>{METRICS.map(([k])=><td key={k}>{format(l[k],k)}</td>)}</tr>)}</tbody></table></div>
+  const selectedStat=selected&&lineMetric?projectedValue(selected,lineMetric):null
+  const sample=selected?.logs.slice(-window).map(log=>logValue(log,lineMetric,selected.position)).filter(valid)||[]
+  const over=validLine?sample.filter(value=>value>Number(line)).length:0
+  const pushes=validLine?sample.filter(value=>value===Number(line)).length:0
+  function choosePlayer(player,key){setChosen(`${player.team.id}:${player.id}`);setLineMetric(key);setLine('');setTrackMessage('')}
+  return <section><div className="prop-section-title"><h3>Player projections · both teams</h3><span>Role-specific stats · strongest projection first</span></div>
+    <p className="prop-help">Breakout preview: red = low, yellow = moderate, green = high historical support. It is a directional index, not a probability.</p>
+    <div className="projection-sort"><label>Order by <select value={activeSortKey} onChange={event=>setSortKey(event.target.value)}>{sortableKeys.map(key=><option key={key} value={key}>{projectionStatLabel[key]}</option>)}</select></label><button className="prop-action" onClick={()=>setAscending(value=>!value)}>{ascending?'Lowest first':'Highest first'}</button></div>
+    <div className="projection-board">{players.map(player=>{
+      const metrics=projectionStats(player.position,categories),usageKey=player.position==='QB'?'passAtt':['RB','FB'].includes(player.position)?'carries':'targets',usage=weighted(player.logs,usageKey,halfLife)
+      const metricCells=metrics.map(key=>{const stat=player.stats[key==='totalTD'?'rushTD':key],s=stat||{},projection=projectedValue(player,key),values=player.logs.slice(-window).map(log=>logValue(log,key,player.position)).filter(valid),low=values.length?Math.min(...values):null,high=values.length?Math.max(...values):null
+        const defense=key==='totalTD'?null:s.defense
+        return <button className="projection-stat-cell" key={key} onClick={()=>choosePlayer(player,key)} aria-label={`Compare ${player.name} ${projectionStatLabel[key]} line`}><b>{projectionStatLabel[key]}</b><strong>{player.unavailable?'Withheld':format(projection,key)}</strong><small>Observed {valid(low)?`${format(low,key)}–${format(high,key)}`:'range unavailable'}</small><small>{key==='totalTD'?'Combined rush + receiving TDs':defense?.adjusted?`Matchup ${defense.factor>=1?'+':''}${((defense.factor-1)*100).toFixed(0)}%`:s.limited?'Projection needs 3 appearances':'Neutral / no adjustment'}</small></button>
+      })
+      const breakout=breakoutRating(player),level=ratingLevel(breakout)
+      return <article className="projection-player-row" key={`${player.team.id}:${player.id}`} style={{'--projection-metric-count':metrics.length}}>
+        <div className="projection-player-identity"><button className={`prop-name ${chosen===`${player.team.id}:${player.id}`?'selected':''}`} onClick={()=>choosePlayer(player,metrics[0])}>{player.name}</button><small>{player.team.abbr} · {player.position} · {player.status}{player.injury?` · ${player.injury}`:''}</small><small>{format(usage)} {usageKey==='passAtt'?'attempts':usageKey} / appearance</small></div>
+        <div className="projection-stat-columns">{metricCells}</div>
+        <div className={`projection-preview-cell breakout-preview-cell breakout-${level}`} aria-label={breakout==null?'Breakout potential not rated':`${level} breakout potential`}><small>Breakout preview</small><div className="breakout-mini-scale"><span/><span/><span/></div><b>{breakout==null?'Not rated':level==='moderate'?'Moderate':level[0].toUpperCase()+level.slice(1)}</b></div>
+      </article>
+    })}</div>
+    {!players.length&&<p className="prop-warning">No players match the selected team, position, and stat filters.</p>}
+    <p className="prop-help">QB rows show passing yards, passing TDs, rushing yards, and rushing TDs. RB rows show rushing yards, receptions, receiving yards, and combined rushing/receiving TDs. WR/TE rows show receptions, receiving yards, and combined TDs. Stat columns are filtered with the checkboxes above. Click any stat to compare a manual prop line. The breakout preview is a directional composite, not a probability.</p>
+    {selected&&<div className="prop-comparison"><h3>{selected.name} · {projectionStatLabel[lineMetric]}</h3>
+      <label>Your prop line <input type="number" min="0" step="0.5" placeholder="Enter a line, e.g. 64.5" value={line} onChange={event=>setLine(event.target.value)}/></label>
+      {validLine&&!selected.unavailable&&valid(selectedStat)&&selectedStat!==Number(line)&&!matchup.started&&<button onClick={()=>{
+        if(Date.now()>=Date.parse(matchup.date))return setTrackMessage('Kickoff has passed.')
+        const pick=selectedStat>Number(line)?'Over':'Under'
+        try{saveProp(`${matchup.id}:${selected.id}:${lineMetric}`,{week:`${data.year} Week ${data.week}`,date:matchup.date,player:selected.name,position:selected.position,team:selected.team.abbr,teamName:selected.team.name,metric:projectionStatLabel[lineMetric],line:Number(line),pick,result:'Pending'});setTrackMessage(`Saved ${selected.name} ${pick.toLowerCase()} ${line}.`)}catch{setTrackMessage('This browser could not save the prop.')}
+      }}>Track model pick</button>}
+      {trackMessage&&<p role="status">{trackMessage}</p>}
+      {validLine&&<p>{valid(selectedStat)?<>Projection <b>{format(selectedStat,lineMetric)}</b> · difference from line <b>{format(selectedStat-Number(line),lineMetric)}</b> · </>:null}Over this line in <b>{over}/{sample.length}</b> recent appearances{pushes?` (${pushes} pushes)`:''}. Historical frequency is not a probability.</p>}
+      <div className="table-wrap"><table><thead><tr><th>Date</th><th>Opponent</th>{selectedMetrics.map(key=><th key={key}>{projectionStatLabel[key]}</th>)}</tr></thead><tbody>{[...selected.logs].reverse().map(log=><tr key={log.gameId}><td>{date(log.date)}</td><td>{log.opponent}</td>{selectedMetrics.map(key=><td key={key}>{format(logValue(log,key,selected.position),key)}</td>)}</tr>)}</tbody></table></div>
     </div>}
   </section>
 }
@@ -117,9 +126,13 @@ export default function MatchupExplorer({saveProp,data,matchup,halfLife,advantag
   const [position,setPosition]=useState('all')
   const [metric,setMetric]=useState('recYds')
   const [window,setWindow]=useState(4)
+  const [projectionTeams,setProjectionTeams]=useState([matchup.away.id,matchup.home.id])
+  const [projectionPositions,setProjectionPositions]=useState(positions)
+  const [projectionCategories,setProjectionCategories]=useState(Object.keys(projectionGroups))
   const dialog=useRef(null)
   const offense=offenseId===matchup.away.id?matchup.away:matchup.home
   const defense=offenseId===matchup.away.id?matchup.home:matchup.away
+  const toggle=(setter,current,key)=>setter(current.includes(key)?current.filter(value=>value!==key):[...current,key])
   async function load(force=false){
     setError('');setMessage('Loading player positions…')
     try{setRosters(await getRosters(data,setMessage,force))}catch(e){setError(e.message)}
@@ -147,7 +160,14 @@ export default function MatchupExplorer({saveProp,data,matchup,halfLife,advantag
     <header className="prop-header"><div><p className="eyebrow">MATCHUP LAB · WEEK {data.week} · {date(matchup.date)}</p><h2 id="prop-title">{matchup.away.name} <span>at</span> {matchup.home.name}</h2></div><button className="close" onClick={onClose}>Close ✕</button></header>
     <div className="prop-score"><div><small>TEAM MODEL</small><b>{matchup.margin<.05?'Toss-up':`${matchup.winner.abbr} by ${format(matchup.margin)}`}</b></div><div><small>PROJECTED SCORE</small><b>{matchup.away.abbr} {format(matchup.awayPoints)} · {matchup.home.abbr} {format(matchup.homePoints)}</b></div><div><small>VENUE</small><b>{matchup.neutral?'Neutral · no home boost':`Home advantage +${advantage.toFixed(1)}`}</b></div></div>
     <nav className="prop-tabs" aria-label="Matchup analytics">{[['projections','Player projections'],['defense','Defense vs position'],['history','Recent opponents'],['bets','Bets']].map(([id,name])=><button key={id} aria-pressed={tab===id} className={tab===id?'active':''} onClick={()=>setTab(id)}>{name}</button>)}</nav>
-    {tab!=='bets'&&<><div className="prop-controls">
+    {tab==='projections'&&<div className="projection-filters" aria-label="Player projection filters">
+      <ProjectionFilters title="Teams" items={[[matchup.away.id,matchup.away.name],[matchup.home.id,matchup.home.name]]} selected={projectionTeams} onToggle={key=>toggle(setProjectionTeams,projectionTeams,key)}/>
+      <ProjectionFilters title="Positions" items={positions.map(value=>[value,value])} selected={projectionPositions} onToggle={key=>toggle(setProjectionPositions,projectionPositions,key)}/>
+      <ProjectionFilters title="Stat categories" items={Object.keys(projectionGroups).map(key=>[key,key])} selected={projectionCategories} onToggle={key=>toggle(setProjectionCategories,projectionCategories,key)}/>
+      <div className="projection-window"><strong>Recent games</strong>{[[4,'Last 4'],[6,'Last 6'],[18,'Season']].map(([value,name])=><button key={value} aria-pressed={window===value} onClick={()=>setWindow(value)}>{name}</button>)}</div>
+      <button className="prop-action" onClick={()=>{setProjectionTeams([matchup.away.id,matchup.home.id]);setProjectionPositions(positions);setProjectionCategories(Object.keys(projectionGroups))}}>Reset filters</button>
+    </div>}
+    {(tab==='defense'||tab==='history')&&<><div className="prop-controls">
       <label>Offense to analyze<select value={offenseId} onChange={e=>setOffenseId(e.target.value)}><option value={matchup.away.id}>{matchup.away.name}</option><option value={matchup.home.id}>{matchup.home.name}</option></select></label>
       <label>Position<select value={position} onChange={e=>setPosition(e.target.value)}><option value="all">All skill positions</option>{positions.map(p=><option key={p}>{p}</option>)}</select></label>
       <label>Stat<select value={metric} onChange={e=>setMetric(e.target.value)}>{METRICS.map(([k,l])=><option key={k} value={k}>{l}</option>)}</select></label>
@@ -158,7 +178,7 @@ export default function MatchupExplorer({saveProp,data,matchup,halfLife,advantag
     {error&&<p role="alert" className="prop-warning">{error} <button onClick={()=>load(true)}>Retry</button></p>}
     {rosters&&<>
       {rosters.failed.length>0&&<p className="prop-warning">{rosters.failed.length} team rosters unavailable. Unknown positions are labeled; incomplete position groups are excluded from adjustments. <button onClick={()=>load(true)}>Retry rosters</button></p>}
-      {tab==='projections'&&<PlayerProjections matchup={matchup} saveProp={saveProp} key={offense.id} data={data} team={offense} opponent={defense} roster={rosters.roster} halfLife={halfLife} window={window} position={position} metric={metric}/>}
+      {tab==='projections'&&<PlayerProjections matchup={matchup} saveProp={saveProp} data={data} teams={[[matchup.away,matchup.home],[matchup.home,matchup.away]].filter(([team])=>projectionTeams.includes(team.id)).map(([team,opponent])=>({team,opponent}))} roster={rosters.roster} halfLife={halfLife} window={window} positions={projectionPositions} categories={projectionCategories}/>}
       {tab==='defense'&&<PositionDefense data={data} defense={defense} roster={rosters.roster} halfLife={halfLife} window={window} position={position} metric={metric}/>}
       {tab==='bets'&&<Bets data={data} matchup={matchup} roster={rosters.roster} halfLife={halfLife} window={window}/>}
       {tab==='history'&&<Historical data={data} defense={defense} roster={rosters.roster} halfLife={halfLife} window={window} position={position} metric={metric}/>}

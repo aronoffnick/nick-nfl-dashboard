@@ -62,3 +62,36 @@
 .breakout-gauge.breakout-moderate .breakout-gauge-scale span:nth-child(2){box-shadow:0 0 10px #ffe278}
 .breakout-gauge.breakout-low .breakout-gauge-scale span:nth-child(1){box-shadow:0 0 10px #fa7373}
 .breakout-gauge.breakout-high>b{color:#9fe2b4}.breakout-gauge.breakout-moderate>b{color:#f1d36d}.breakout-gauge.breakout-low>b{color:#ef9f8b}
+
+/* Compact checkbox controls and role-specific player projections */
+.projection-filters{display:flex;align-items:flex-start;gap:14px;flex-wrap:wrap;padding:14px;border:1px solid #3b5261;border-radius:9px;margin:16px 0;background:#111e28}
+.projection-filter-group{display:flex;gap:8px 13px;flex-wrap:wrap;border:0;margin:0;padding:0;flex:1 1 180px}
+.projection-filter-group legend,.projection-window strong{font-size:.82rem;font-weight:700;color:#c5dfd1;margin-bottom:7px}
+.projection-filter-group label{display:flex;align-items:center;gap:6px;color:#c6d7e2;font-size:.82rem;white-space:nowrap}
+.projection-filter-group input{accent-color:#a5e6bd;width:15px;height:15px}
+.projection-window{display:flex;align-items:center;gap:6px;flex-wrap:wrap;flex:1 1 180px}
+.projection-window strong{width:100%}
+.projection-window button{background:#1b2b35;color:#c6d7e2;border:1px solid #3d5663;border-radius:5px;padding:7px 10px;font-size:.8rem}
+.projection-window button[aria-pressed=true]{background:#a5e6bd;color:#14251c;border-color:#a5e6bd;font-weight:700}
+.projection-sort{display:flex;gap:9px;align-items:center;margin:14px 0;color:#b5c5ce;font-size:.85rem}
+.projection-sort select{background:#13232f;color:#e4edf2;border:1px solid #506777;border-radius:6px;padding:8px;font:inherit}
+.projection-board{display:flex;flex-direction:column;gap:10px;overflow-x:auto}
+.projection-player-row{display:grid;grid-template-columns:170px minmax(0,1fr) 125px;align-items:stretch;min-width:780px;border:1px solid #385064;border-radius:9px;background:#14222d;overflow:hidden}
+.projection-player-identity{padding:12px;border-right:1px solid #334956;display:flex;flex-direction:column;gap:6px}
+.projection-player-identity small{font-size:.75rem;color:#aebfcc;line-height:1.45}
+.projection-player-identity .prop-name{font-size:.92rem;text-align:left}
+.projection-stat-columns{display:grid;grid-template-columns:repeat(var(--projection-metric-count),minmax(122px,1fr));overflow-x:auto}
+.projection-stat-cell{display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:5px;text-align:left;padding:11px;border:0;border-right:1px solid #334956;background:transparent;color:#e4edf2;cursor:pointer}
+.projection-stat-cell:hover,.projection-stat-cell:focus-visible{background:#1b3039}
+.projection-stat-cell>b{font-size:.75rem;color:#b5cbd6}
+.projection-stat-cell>strong{font-size:1.1rem;color:#c5f0d3;font-variant-numeric:tabular-nums}
+.projection-stat-cell>small{font-size:.69rem;color:#9fb3bf;line-height:1.4}
+.projection-preview-cell{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px;border-left:1px solid #334956;text-align:center}
+.projection-preview-cell>small{color:#b7c8d2;font-size:.68rem;text-transform:uppercase;letter-spacing:.04em}
+.projection-preview-cell>b{font-size:.77rem}
+.projection-preview-cell.breakout-high>b{color:#9fe2b4}.projection-preview-cell.breakout-moderate>b{color:#f1d36d}.projection-preview-cell.breakout-low>b{color:#ef9f8b}
+@media(max-width:720px){.projection-filter-group{flex-basis:100%}.projection-player-row{min-width:800px}.projection-sort{flex-wrap:wrap}}
+.projection-preview-cell.breakout-high,.projection-preview-cell.breakout-moderate,.projection-preview-cell.breakout-low{background:transparent!important;color:inherit!important}
+.projection-preview-cell.breakout-high .breakout-mini-scale span:nth-child(3),.breakout-preview-cell.breakout-high .breakout-mini-scale span:nth-child(3){box-shadow:0 0 8px #53ed97}
+.projection-preview-cell.breakout-moderate .breakout-mini-scale span:nth-child(2),.breakout-preview-cell.breakout-moderate .breakout-mini-scale span:nth-child(2){box-shadow:0 0 8px #ffe278}
+.projection-preview-cell.breakout-low .breakout-mini-scale span:nth-child(1),.breakout-preview-cell.breakout-low .breakout-mini-scale span:nth-child(1){box-shadow:0 0 8px #fa7373}
