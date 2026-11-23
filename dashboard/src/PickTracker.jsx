@@ -38,6 +38,11 @@ export default function PickTracker({ data, matchups, historicalPicks, props, sa
         next[game.id] = {
           ...record,
           result: away.points === home.points ? 'Push' : winner.id === record.teamId ? 'Win' : 'Loss',
+          finalScore: `${game.away.abbr} ${away.points}–${game.home.abbr} ${home.points}`,
+          marginResult: (() => {
+            const actualPickedMargin = record.teamId === away.id ? away.points - home.points : home.points - away.points
+            return actualPickedMargin === record.margin ? 'Push' : actualPickedMargin > record.margin ? 'Covered' : 'Missed'
+          })(),
         }
       }
       return next
@@ -155,7 +160,7 @@ export default function PickTracker({ data, matchups, historicalPicks, props, sa
       {teamNames.map(name => accuracy(name, decided.map(([, item]) => item).filter(item => item.team === name)))}
     </details>
     {rows.length ? <div className="table-wrap"><table>
-      <thead><tr><th>Matchup</th><th>Model pick</th><th>Projected margin</th><th>DraftKings moneyline</th><th>Result</th></tr></thead>
+      <thead><tr><th>Matchup</th><th>Model pick</th><th>Projected margin</th><th>DraftKings moneyline</th><th>Final score</th><th>Outright</th><th>Margin result</th></tr></thead>
       <tbody>{rows.map(([id, item]) => <tr key={id}>
         <td>{item.matchup}</td><td>{item.team}{item.backtested && <small>Backtested</small>}</td><td>{item.margin == null ? "—" : item.margin.toFixed(1)}</td>
         <td>{Date.now() < Date.parse(item.date) ? <form onSubmit={event => saveOdds(event, id)}>
@@ -164,7 +169,7 @@ export default function PickTracker({ data, matchups, historicalPicks, props, sa
           <button type="submit">Save price</button>
           {item.odds && <small>Saved {item.odds}</small>}
         </form> : item.odds || 'Unavailable'}</td>
-        <td>{item.result}</td>
+        <td>{item.finalScore || '—'}</td><td>{item.result}</td><td>{item.marginResult || '—'}</td>
       </tr>)}</tbody>
     </table></div> : <p>No saved picks match these filters.</p>}
     </>}

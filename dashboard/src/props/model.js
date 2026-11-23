@@ -135,7 +135,8 @@ export function projectTeam(data, team, opponent, roster, halfLife, window=4) {
       const defense = profiles.get(profileKey)
       const sample = logs.filter(l => valid(l[key])).length
       const values = logs.slice(-window).map(l=>l[key]).filter(valid)
-      stats[key] = { baseline, projection:sample >= 3 && valid(baseline) ? Math.max(0,baseline*defense.factor) : null,
+      const rawProjection = sample >= 3 && valid(baseline) ? Math.max(0,baseline*defense.factor) : null
+      stats[key] = { baseline, projection:valid(rawProjection) ? Math.round(rawProjection * 2) / 2 : null,
         sample, defense, min:values.length ? Math.min(...values):null, max:values.length ? Math.max(...values):null }
     }
     const unavailable = /inactive|injured|reserve|suspended|retired|out|doubtful/i.test(`${player.status} ${player.injury}`)
