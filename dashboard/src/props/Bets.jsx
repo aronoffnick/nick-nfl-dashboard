@@ -2,6 +2,8 @@ import { useMemo, useState } from 'react'
 import { projectTeam, valid } from './model.js'
 import { sameGameFavorite } from './sgp.js'
 import { SGPCard } from './WeeklySGPs.jsx'
+import PlayerFilters from './PlayerFilters.jsx'
+import {matchesPlayer,selectedMetrics} from './filters.js'
 import Performance, { PerformanceLegend } from './Performance.jsx'
 import { relevantMetrics, groupCandidates, rankPlayerGroups } from './performance.js'
 import { buildCandidates, metricLabel, lineComparison, breakEven, valueFor } from './analysis.js'
@@ -35,26 +37,27 @@ function Candidate({item,data,matchup,saveProp,halfLife,lookback}){
     </Performance>
   </div>
 }
-export default function Bets({data,matchup,roster,halfLife,window,saveProp}){
+export default function Bets({data,matchup,roster,halfLife,window,saveProp,filters,setFilters}){
   const players=useMemo(()=>[[matchup.away,matchup.home],[matchup.home,matchup.away]].flatMap(([team,opponent])=>projectTeam(data,team,opponent,roster,halfLife,window).map(p=>({...p,team,opponent}))),[data,matchup,roster,halfLife,window])
   const candidates=useMemo(()=>buildCandidates(players,halfLife,window).filter(item=>relevantMetrics(item.player).some(([key])=>key===item.key)),[players,halfLife,window])
-  const groups=useMemo(()=>rankPlayerGroups(groupCandidates(candidates),halfLife,window),[candidates,halfLife,window])
+  const groups=useMemo(()=>rankPlayerGroups(groupCandidates(candidates).filter(g=>matchesPlayer(g.player,filters)),halfLife,window,filters.stats),[candidates,halfLife,window,filters])
   const favorite=useMemo(()=>sameGameFavorite(data,matchup,roster,halfLife,window,Date.now(),players),[data,matchup,roster,halfLife,window,players])
   const visible=groups
   return <section aria-label="Bets"><div className="prop-section-title"><h3>Matchup research shortlist</h3><span>Favorites first · strongest supported stat</span></div>
     <div className="bet-sgp"><h3>Favorite 2-leg SGP for this game</h3>{favorite.pair?<SGPCard pair={favorite.pair} matchup={matchup}/>:<p className="prop-warning">No automatic SGP: {favorite.reason}</p>}</div>
-    <p className="prop-help">Team lean: <strong>{matchup.margin<.05?'Toss-up':`${matchup.winner.abbr} by ${matchup.margin.toFixed(1)}`}</strong> · no confirmed starting-QB adjustment. Each player appears once below, with their relevant stat signals and line comparisons together. Rows rank by the highest recent weighted benchmark frequency across any relevant stat, highest first. Ties favor more observations, then the research signal. This is historical support, not a combined win probability; odds do not affect this ordering.</p>
+    <p className="prop-help">Team lean: <strong>{matchup.margin<.05?'Toss-up':`${matchup.winner.abbr} by ${matchup.margin.toFixed(1)}`}</strong> · no confirmed starting-QB adjustment. Each player appears once below, with their relevant stat signals and line comparisons together. Rows rank by the highest recent weighted benchmark frequency across the selected relevant stats, highest first. Ties favor more observations, then the research signal. This is historical support, not a combined win probability; odds do not affect this ordering.</p>
+    <PlayerFilters matchup={matchup} filters={filters} onChange={setFilters}/>
     <PerformanceLegend/>
     <p className="prop-help">Higher recent support does not imply value at any sportsbook price. An output dip with steady usage is a research flag, not evidence a player is due. Expected TD counts are rates; total TDs combine rushing and receiving.</p>
     {matchup.started&&<p className="prop-warning">Game started or finished. These are pregame baselines, not live recommendations; new pick tracking is disabled.</p>}
     <div className="player-card-grid">{visible.map((group,index)=><article className="player-research-card player-row bet-player-row" key={group.id} aria-label={`${group.player.name} bets`}>
       <header><div><small className="player-rank">FAVORITE #{index+1}</small><h4>{group.player.name}</h4><p>{group.player.team.abbr} · {group.player.position} · {group.player.injury||group.player.status}</p><small>{group.player.logs.length} recorded appearances · {group.items.length} stat signals</small><p className="row-best-support">{group.bestSupport?<>Strongest: <b>{metricLabel(group.bestSupport.key)}</b><br/>{Math.round(group.bestSupport.weightedRate*100)}% recent weighted frequency</>:<>Not rated · availability or sample concern</>}</p></div></header>
-      <div className="player-metrics" style={{'--metric-count':relevantMetrics(group.player).length}}>{relevantMetrics(group.player).map(([key])=>{
+      <div className="player-metrics" style={{'--metric-count':selectedMetrics(group.player,filters).length}}>{selectedMetrics(group.player,filters).map(([key])=>{
         const item=group.items.find(i=>i.key===key)
         return item?<Candidate key={key} item={item} data={data} matchup={matchup} saveProp={saveProp} halfLife={halfLife} lookback={window}/>:<Performance key={key} player={group.player} metric={key} halfLife={halfLife} lookback={window}/>
       })}</div>
     </article>)}</div>
-    {!groups.length&&<p className="prop-warning">No eligible candidates. Three recorded appearances and a current recent offensive role are required; stale and unavailable players are excluded.</p>}
+    {!groups.length&&<p className="prop-warning">No eligible players match these filters. Three appearances and a recent offensive role are required.</p>}
     <p className="prop-help">Enter the actual sportsbook line and optional price inside a card to compare and track it before kickoff. No sportsbook feed is connected. Projection differences alone do not establish a profitable bet. Picks are saved in this browser and prop results are graded manually.</p>
   </section>
 }

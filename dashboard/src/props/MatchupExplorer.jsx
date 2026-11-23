@@ -3,6 +3,8 @@ import { getRosters } from './data.js'
 import { valid, historyFor, sides, positionOf, projectTeam, defenseProfile, historicalComparison } from './model.js'
 import { DISPLAY_METRICS, statFor, valueFor, metricLabel, lineComparison } from './analysis.js'
 import Bets from './Bets.jsx'
+import PlayerFilters, {defaultFilters} from './PlayerFilters.jsx'
+import {matchesPlayer,selectedMetrics,projectedOrder} from './filters.js'
 import Performance, { PerformanceLegend } from './Performance.jsx'
 import { relevantMetrics, performance } from './performance.js'
 import './props.css'
@@ -34,25 +36,29 @@ function PlayerDetail({player,data,matchup,saveProp,halfLife,lookback}){
   </section>
 }
 
-function Projections({players,data,matchup,halfLife,lookback,saveProp}){
-  const [sort,setSort]=useState('team'),[chosen,setChosen]=useState(null)
-  const selected=players.find(p=>`${p.team.id}:${p.id}`===chosen)
+function Projections({players,data,matchup,halfLife,lookback,saveProp,filters,setFilters}){
+  const [sort,setSort]=useState('recYds'),[chosen,setChosen]=useState(null)
+  const filtered=players.filter(p=>matchesPlayer(p,filters))
+  const selected=filtered.find(p=>`${p.team.id}:${p.id}`===chosen)
   const evidence=useRef(null)
   useEffect(()=>{if(chosen)evidence.current?.scrollIntoView({behavior:'smooth',block:'start'})},[chosen])
-  const strength=p=>Math.max(-1,...relevantMetrics(p).map(([key])=>performance(p,key,halfLife,lookback).weightedRate??-1))
-  const sorted=[...players].sort((a,b)=>sort==='support'?strength(b)-strength(a)||a.name.localeCompare(b.name):sort==='name'?a.name.localeCompare(b.name):a.team.abbr.localeCompare(b.team.abbr)||a.name.localeCompare(b.name))
+  const strength=p=>Math.max(-1,...selectedMetrics(p,filters).map(([key])=>performance(p,key,halfLife,lookback).weightedRate??-1))
+  const metricKeys=DISPLAY_METRICS.map(([key])=>key)
+  const activeSort=metricKeys.includes(sort)&&!filters.stats.includes(sort)?filters.stats[0]||sort:sort
+  const sorted=metricKeys.includes(activeSort)?projectedOrder(filtered,activeSort,halfLife,lookback):[...filtered].sort((a,b)=>sort==='support'?strength(b)-strength(a)||a.name.localeCompare(b.name):sort==='name'?a.name.localeCompare(b.name):a.team.abbr.localeCompare(b.team.abbr)||a.name.localeCompare(b.name))
   return <section aria-label="Player projections"><div className="prop-section-title"><h3>Player projections · both teams</h3><span>One player · relevant stats together</span></div>
     {matchup.started&&<p className="prop-warning">Game started or finished. These projections are pregame baselines using prior weeks, not live forecasts.</p>}
+    <PlayerFilters matchup={matchup} filters={filters} onChange={setFilters}/>
     <PerformanceLegend/>
-    <label className="projections-sort">Order players <select value={sort} onChange={e=>setSort(e.target.value)}><option value="team">Team, then player</option><option value="name">Player name</option><option value="support">Strongest recent big-game support</option></select></label>
+    <label className="projections-sort">Order players <select value={activeSort} onChange={e=>setSort(e.target.value)}>{DISPLAY_METRICS.map(([key,name])=><option key={key} value={key}>Highest projected: {name}</option>)}<option value="team">Team, then player</option><option value="name">Player name</option><option value="support">Strongest recent big-game support</option></select></label>
     <p className="prop-help">White marker = model projection · dashed marker = big-game benchmark. QB cards show passing and rushing roles; receiving stats appear for players with receiving usage. TD scored combines rushing and receiving TDs. Questionable or stale roles are not color-rated; out/doubtful projections are withheld.</p>
     <div className="player-card-grid">{sorted.map(p=><article className="player-research-card player-row" key={`${p.team.id}:${p.id}`} aria-label={`${p.name} projections`}>
       <header><div><h4>{p.name}</h4><p>{p.team.abbr} · {p.position} · {p.injury||p.status}</p><small>{p.logs.length} recorded appearances{p.stale?' · absent latest offensive box score':''}</small></div>      <button className="prop-action" aria-label={`View ${p.name} game log and line comparison`} aria-expanded={chosen===`${p.team.id}:${p.id}`} onClick={()=>setChosen(chosen===`${p.team.id}:${p.id}`?null:`${p.team.id}:${p.id}`)}>Game log &amp; lines</button> </header>
       {(p.unavailable||p.stale)&&<p className="prop-warning">{p.unavailable?'Unavailable or doubtful: projection withheld.':'Absent from the latest offensive box score: recent role needs review.'}</p>}
-      <div className="player-metrics" style={{'--metric-count':relevantMetrics(p).length}}>{relevantMetrics(p).map(([key])=><Performance key={key} player={p} metric={key} halfLife={halfLife} lookback={lookback}/>)}</div>
+      <div className="player-metrics" style={{'--metric-count':selectedMetrics(p,filters).length}}>{selectedMetrics(p,filters).map(([key])=><Performance key={key} player={p} metric={key} halfLife={halfLife} lookback={lookback}/>)}</div>
 
     </article>)}</div>
-    {!players.length&&<p className="prop-warning">No eligible current-roster players have usable recent box scores.</p>}
+    {!sorted.length&&<p className="prop-warning">No players match the selected filters.</p>}
     {selected&&<div ref={evidence}><PlayerDetail key={`${selected.team.id}:${selected.id}`} player={selected} data={data} matchup={matchup} halfLife={halfLife} lookback={lookback} saveProp={saveProp}/></div>}
   </section>
 }
@@ -89,6 +95,7 @@ function Defense({data,team,roster,halfLife,lookback}){
 export default function MatchupExplorer({saveProp,data,matchup,halfLife,advantage,onClose}){
   const [rosters,setRosters]=useState(null),[error,setError]=useState(''),[message,setMessage]=useState('Loading player positions…')
   const [tab,setTab]=useState('projections'),[lookback,setLookback]=useState(4)
+  const [filters,setFilters]=useState(()=>defaultFilters(matchup))
   const dialog=useRef(null)
   async function load(force=false){setError('');try{setRosters(await getRosters(data,setMessage,force))}catch(e){setError(e.message)}}
   useEffect(()=>{load()},[data.year])
@@ -110,10 +117,10 @@ export default function MatchupExplorer({saveProp,data,matchup,halfLife,advantag
     <div className="prop-lookback"><span>Recent opponent / game-log window</span><div className="prop-metric-buttons">{[[4,'Last 4'],[6,'Last 6'],[18,'Season']].map(([n,name])=><button key={n} aria-pressed={lookback===n} onClick={()=>setLookback(n)}>{name}</button>)}</div><small>Player EMA uses all recorded appearances · {halfLife}-game half-life</small></div>
     {!rosters&&!error&&<p role="status" className="notice">{message}</p>}{error&&<p role="alert" className="prop-warning">{error} <button onClick={()=>load(true)}>Retry</button></p>}
     {rosters&&<>{rosters.failed.length>0&&<p className="prop-warning">{rosters.failed.length} rosters unavailable; incomplete position totals use neutral adjustments. <button onClick={()=>load(true)}>Retry rosters</button></p>}
-      {tab==='projections'&&<Projections players={players} data={data} matchup={matchup} halfLife={halfLife} lookback={lookback} saveProp={saveProp}/>}
+      {tab==='projections'&&<Projections filters={filters} setFilters={setFilters} players={players} data={data} matchup={matchup} halfLife={halfLife} lookback={lookback} saveProp={saveProp}/>}
       {tab==='history'&&<><p className="prop-help">Both defenses shown together. Green yardage/reception values were at least 20% above the player's average in three or more earlier appearances.</p>{[matchup.away,matchup.home].map(team=><History key={team.id} data={data} team={team} roster={rosters.roster} lookback={lookback} halfLife={halfLife}/>)}</>}
       {tab==='defense'&&<>{[matchup.away,matchup.home].map(team=><Defense key={team.id} data={data} team={team} roster={rosters.roster} lookback={lookback} halfLife={halfLife}/>)}<p className="prop-help">Position-group totals per opponent game. Adjustments compare opponents' usual output, shrink small samples and cap changes at ±25%.</p></>}
-      {tab==='bets'&&<Bets data={data} matchup={matchup} roster={rosters.roster} halfLife={halfLife} window={lookback} saveProp={saveProp}/>}
+      {tab==='bets'&&<Bets filters={filters} setFilters={setFilters} data={data} matchup={matchup} roster={rosters.roster} halfLife={halfLife} window={lookback} saveProp={saveProp}/>}
     </>}
     <details className="prop-method"><summary>Team offense vs defense estimates</summary><div className="table-wrap"><table><thead><tr><th>Offense</th><th>Net pass yards</th><th>Rush yards</th></tr></thead><tbody>{[[matchup.away,matchup.home],[matchup.home,matchup.away]].map(([o,d])=><tr key={o.id}><td>{o.abbr} vs {d.abbr}</td><td>{format((o.recent.passO+d.recent.passD)/2)}</td><td>{format((o.recent.rushO+d.recent.rushD)/2)}</td></tr>)}</tbody></table></div></details>
     <details className="prop-method"><summary>Projection method, sources & limitations</summary>
