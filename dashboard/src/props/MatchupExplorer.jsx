@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { getRosters } from './data.js'
 import { METRICS, valid, weighted, historyFor, sides, positionOf, projectTeam, defenseProfile, historicalComparison } from './model.js'
 import Bets from './Bets.jsx'
+import {breakoutRating,ratingLevel} from './Bets.jsx'
 import './props.css'
 const format=(n,key='')=>valid(n)?n.toFixed(key.endsWith('TD')?2:1):'—'
 const date=d=>new Date(d).toLocaleDateString('en-US',{timeZone:'America/New_York',month:'short',day:'numeric'})
@@ -69,16 +70,17 @@ function PlayerProjections({matchup,saveProp,data,team,opponent,roster,halfLife,
   const over=validLine?sample.filter(l=>l[metric]>Number(line)).length:0
   const pushes=validLine?sample.filter(l=>l[metric]===Number(line)).length:0
   return <section><div className="prop-section-title"><h3>{team.abbr} player projections vs {opponent.abbr}</h3><span>Conditional on playing a comparable role</span></div>
-    <div className="table-wrap"><table><thead><tr><th>Player / position</th><th>Recent usage</th><th>Weighted baseline</th><th>Matchup adj.</th><th><button className="sort" onClick={()=>setAscending(!ascending)}>Projected {label(metric)} {ascending?'↑':'↓'}</button></th><th>Recent observed range</th><th>Appearances</th></tr></thead><tbody>
+    <div className="table-wrap"><table><thead><tr><th>Player / position</th><th>Recent usage</th><th>Weighted baseline</th><th>Matchup adj.</th><th><button className="sort" onClick={()=>setAscending(!ascending)}>Projected {label(metric)} {ascending?'↑':'↓'}</button></th><th>Recent observed range</th><th>Appearances</th><th>Breakout preview</th></tr></thead><tbody>
       {players.map(p=>{
         const s=p.stats[metric]
         const usageKey=p.position==='QB'?'passAtt':metric.startsWith('rush')?'carries':'targets'
         const usage=weighted(p.logs,usageKey,halfLife)
+        const breakout=breakoutRating(p),level=ratingLevel(breakout)
         return <tr key={p.id}><td><button className={`prop-name ${chosen===p.id?'selected':''}`} onClick={()=>setChosen(p.id)}>{p.name}</button><small>{p.position} · {p.status}{p.injury?` · ${p.injury}`:''}{p.stale?' · absent latest offensive box score':''}</small></td>
           <td>{format(usage)}<small>{usageKey==='passAtt'?'pass attempts':usageKey==='carries'?'carries':'targets'} / appearance</small></td>
           <td>{format(s.baseline,metric)}</td><td>{s.defense.adjusted?`${s.defense.factor>=1?'+':''}${((s.defense.factor-1)*100).toFixed(1)}%`:'Neutral'}<small>{s.defense.sample} usable opponent games</small></td>
           <td className="prop-projection">{p.unavailable?'Withheld':format(s.projection,metric)}<small>{p.unavailable?'Unavailable / doubtful roster designation':p.limited?'Need 3 appearances':label(metric)}</small></td>
-          <td>{valid(s.min)?`${format(s.min,metric)}–${format(s.max,metric)}`:'—'}<small>Last {window} recorded appearances</small></td><td>{s.sample}<small>{p.logs.length<5?'Small sample':'Current-team box scores'}</small></td></tr>
+          <td>{valid(s.min)?`${format(s.min,metric)}–${format(s.max,metric)}`:'—'}<small>Last {window} recorded appearances</small></td><td>{s.sample}<small>{p.logs.length<5?'Small sample':'Current-team box scores'}</small></td><td><div className={`breakout-preview-cell breakout-${level}`} aria-label={breakout==null?'Breakout potential not rated':`${level} breakout potential` }><div className="breakout-mini-scale"><span/><span/><span/></div><b>{breakout==null?'Not rated':level==='moderate'?'Moderate':level[0].toUpperCase()+level.slice(1)}</b></div></td></tr>
       })}
     </tbody></table></div>
     {!players.length&&<p className="prop-warning">No resolved current-roster players match this position and recent participation filter.</p>}
