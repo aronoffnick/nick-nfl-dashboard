@@ -226,11 +226,14 @@ function backtest(data) {
       const final = finals.get(game.id)
       const { away, home } = final
       const winner = away.points > home.points ? away : home
+      const actualPickedMargin = game.winner.id === away.id ? away.points - home.points : home.points - away.points
       return [game.id, {
         week: `${data.year} Week ${week}`, date: game.date, team: game.winner.abbr,
         matchup: `${game.away.abbr} @ ${game.home.abbr}`, odds: '', backtested: true, margin: game.margin,
         teams: `${game.away.name} ${game.home.name}`,
         result: away.points === home.points ? 'Push' : winner.id === game.winner.id ? 'Win' : 'Loss',
+        finalScore: `${game.away.abbr} ${away.points}–${game.home.abbr} ${home.points}`,
+        marginResult: actualPickedMargin === game.margin ? 'Push' : actualPickedMargin > game.margin ? 'Covered' : 'Missed',
       }]
     })
   })
