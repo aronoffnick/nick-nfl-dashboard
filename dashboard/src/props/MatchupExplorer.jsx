@@ -3,6 +3,7 @@ import { getRosters } from './data.js'
 import { valid, historyFor, sides, positionOf, projectTeam, defenseProfile, historicalComparison } from './model.js'
 import { DISPLAY_METRICS, statFor, valueFor, metricLabel, lineComparison } from './analysis.js'
 import Bets from './Bets.jsx'
+import MatchupChat from './MatchupChat.jsx'
 import PlayerFilters, {defaultFilters} from './PlayerFilters.jsx'
 import {matchesPlayer,selectedMetrics,projectedOrder} from './filters.js'
 import Performance, { PerformanceLegend } from './Performance.jsx'
@@ -113,7 +114,7 @@ export default function MatchupExplorer({saveProp,data,matchup,halfLife,advantag
   return <div className="overlay prop-overlay" onClick={onClose}><section ref={dialog} className="prop-modal" role="dialog" aria-modal="true" aria-labelledby="prop-title" onClick={e=>e.stopPropagation()}>
     <header className="prop-header"><div><p className="eyebrow">MATCHUP LAB · WEEK {data.week} · {date(matchup.date)}</p><h2 id="prop-title">{matchup.away.name} <span>at</span> {matchup.home.name}</h2></div><button className="close" onClick={onClose}>Close ✕</button></header>
     <div className="prop-score"><div><small>TEAM MODEL</small><b>{matchup.margin<.05?'Toss-up':`${matchup.winner.abbr} by ${format(matchup.margin)}`}</b></div><div><small>PROJECTED SCORE</small><b>{matchup.away.abbr} {format(matchup.awayPoints)} · {matchup.home.abbr} {format(matchup.homePoints)}</b></div><div><small>VENUE</small><b>{matchup.neutral?'Neutral · no home boost':`Home advantage +${advantage.toFixed(1)}`}</b></div></div>
-    <nav className="prop-tabs" aria-label="Matchup analytics">{[['projections','Player projections'],['defense','Defense trends'],['history','Recent opponents'],['bets','Bets']].map(([id,name])=><button key={id} aria-pressed={tab===id} className={tab===id?'active':''} onClick={()=>setTab(id)}>{name}</button>)}</nav>
+    <nav className="prop-tabs" aria-label="Matchup analytics">{[['projections','Player projections'],['defense','Defense trends'],['history','Recent opponents'],['bets','Bets'],['chat','Ask matchup']].map(([id,name])=><button key={id} aria-pressed={tab===id} className={tab===id?'active':''} onClick={()=>setTab(id)}>{name}</button>)}</nav>
     <div className="prop-lookback"><span>Recent opponent / game-log window</span><div className="prop-metric-buttons">{[[4,'Last 4'],[6,'Last 6'],[18,'Season']].map(([n,name])=><button key={n} aria-pressed={lookback===n} onClick={()=>setLookback(n)}>{name}</button>)}</div><small>Player EMA uses all recorded appearances · {halfLife}-game half-life</small></div>
     {!rosters&&!error&&<p role="status" className="notice">{message}</p>}{error&&<p role="alert" className="prop-warning">{error} <button onClick={()=>load(true)}>Retry</button></p>}
     {rosters&&<>{rosters.failed.length>0&&<p className="prop-warning">{rosters.failed.length} rosters unavailable; incomplete position totals use neutral adjustments. <button onClick={()=>load(true)}>Retry rosters</button></p>}
@@ -121,6 +122,7 @@ export default function MatchupExplorer({saveProp,data,matchup,halfLife,advantag
       {tab==='history'&&<><p className="prop-help">Both defenses shown together. Green yardage/reception values were at least 20% above the player's average in three or more earlier appearances.</p>{[matchup.away,matchup.home].map(team=><History key={team.id} data={data} team={team} roster={rosters.roster} lookback={lookback} halfLife={halfLife}/>)}</>}
       {tab==='defense'&&<>{[matchup.away,matchup.home].map(team=><Defense key={team.id} data={data} team={team} roster={rosters.roster} lookback={lookback} halfLife={halfLife}/>)}<p className="prop-help">Position-group totals per opponent game. Adjustments compare opponents' usual output, shrink small samples and cap changes at ±25%.</p></>}
       {tab==='bets'&&<Bets filters={filters} setFilters={setFilters} data={data} matchup={matchup} roster={rosters.roster} halfLife={halfLife} window={lookback} saveProp={saveProp}/>}
+      {tab==='chat'&&<MatchupChat matchup={matchup} players={players} halfLife={halfLife} lookback={lookback}/>}
     </>}
     <details className="prop-method"><summary>Team offense vs defense estimates</summary><div className="table-wrap"><table><thead><tr><th>Offense</th><th>Net pass yards</th><th>Rush yards</th></tr></thead><tbody>{[[matchup.away,matchup.home],[matchup.home,matchup.away]].map(([o,d])=><tr key={o.id}><td>{o.abbr} vs {d.abbr}</td><td>{format((o.recent.passO+d.recent.passD)/2)}</td><td>{format((o.recent.rushO+d.recent.rushD)/2)}</td></tr>)}</tbody></table></div></details>
     <details className="prop-method"><summary>Projection method, sources & limitations</summary>
