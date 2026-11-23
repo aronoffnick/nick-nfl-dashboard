@@ -1,4 +1,5 @@
-import { projectTeam, valid, historyFor, sides, historicalComparison, METRICS, positionOf } from './model.js'
+import { useState } from 'react'
+import { projectTeam, valid } from './model.js'
 
 function average(games, key) {
   if (!games.every(game => valid(game[key]))) return null
@@ -45,33 +46,65 @@ function candidates(players) {
   return [momentum, bounceBack].map(group => group.sort((a, b) => b.score - a.score)[0])
 }
 
+const clamp = (value, min, max) => Math.max(min, Math.min(max, value))
+const numberStats = player => player.position === 'QB'
+  ? ['passYds', 'passTD', 'rushYds', 'rushTD']
+  : player.position === 'WR' || player.position === 'TE'
+    ? ['recYds', 'rec', 'recTD']
+    : ['rushYds', 'recYds', 'carries', 'rec', 'rushTD', 'recTD']
+const statLabels = { passYds:'Pass yd', passTD:'Pass TD', rushYds:'Rush yd', rushTD:'Rush TD', recYds:'Rec yd', rec:'Rec', recTD:'Rec TD' }
+
+function breakoutRating(player) {
+  const usageKey = player.position === 'QB' ? 'passAtt' : ['RB','FB'].includes(player.position) ? 'carries' : 'targets'
+  const recent = average(player.logs.slice(-3), usageKey)
+  const prior = average(player.logs.slice(-6, -3), usageKey)
+  const trend = valid(recent) && valid(prior) && prior > 0 ? clamp(50 + 125 * (recent / prior - 1), 0, 100) : 50
+  const mainStat = player.position === 'QB' ? 'passYds' : ['RB','FB'].includes(player.position) ? 'rushYds' : 'recYds'
+  const factor = player.stats[mainStat].defense.factor
+  const matchup = valid(factor) ? clamp((factor - 0.75) / 0.5 * 100, 0, 100) : 50
+  const reliability = clamp(player.stats[mainStat].sample / 8 * 100, 0, 100)
+  return Math.round(trend * 0.4 + matchup * 0.35 + reliability * 0.25)
+}
+
+function recentRange(player, key, window) {
+  const values = player.logs.slice(-window).map(game => game[key]).filter(valid)
+  return values.length ? `${Math.min(...values)}–${Math.max(...values)}` : '—'
+}
+
 export default function Bets({ data, matchup, roster, halfLife, window }) {
   const { away, home, winner, margin } = matchup
+  const [projectionFilter, setProjectionFilter] = useState('favorites')
   const players = [
-    ...projectTeam(data, away, home, roster, halfLife, window),
-    ...projectTeam(data, home, away, roster, halfLife, window),
-  ]
+    ...projectTeam(data, away, home, roster, halfLife, window).map(player => ({ ...player, offense:away })),
+    ...projectTeam(data, home, away, roster, halfLife, window).map(player => ({ ...player, offense:home })),
+  ].map(player => ({ ...player, breakoutScore:breakoutRating(player) }))
   const [momentum, bounceBack] = candidates(players)
-  const breakouts = [away, home].flatMap(defense => historyFor(data, defense.id).slice(-window).flatMap(game => {
-    const [, opponent] = sides(game, defense.id)
-    return (opponent.playerBox?.players || []).flatMap(player => METRICS
-      .filter(([key]) => !key.endsWith('TD'))
-      .flatMap(([key, stat]) => {
-        const baseline = historicalComparison(data, opponent.id, player, key, game.id, halfLife)
-        const actual = player[key]
-        if (!valid(baseline) || baseline <= 0 || !valid(actual) || actual < baseline * 1.2) return []
-        return [{ defense: defense.abbr, date: game.date, player: player.name, position: positionOf(player, roster), stat, actual, baseline, excess: actual / baseline - 1 }]
-      }))
-  })).sort((a, b) => b.excess - a.excess).slice(0, 8)
+  const ranked = [...players].sort((a,b) => b.breakoutScore - a.breakoutScore)
+  const visible = ranked.filter(player => projectionFilter === 'all' || player.breakoutScore >= 65)
   return <section aria-label="Bets">
-    <p className="prop-help">Candidates based on recent workload and box scores. Compare with the book’s line and price before betting.</p>
-    <div className="prop-section-title"><h3>Breakout scale · recent opponent results</h3><span>Historical signal, not a forecast probability</span></div>
-    <p className="prop-help">Scale is the percentage above a player’s own weighted baseline before that game. A signal qualifies at +20% or higher with at least three earlier appearances; touchdown counts are excluded.</p>
-    {breakouts.length ? <div className="table-wrap"><table><thead><tr><th>Defense</th><th>Opponent player</th><th>Stat</th><th>Actual</th><th>Prior baseline</th><th>Breakout scale</th></tr></thead>
-      <tbody>{breakouts.map((item, index) => <tr key={`${item.date}-${item.player}-${item.stat}-${index}`}>
-        <td>{item.defense}<small>{new Date(item.date).toLocaleDateString('en-US',{timeZone:'America/New_York',month:'short',day:'numeric'})}</small></td>
-        <td>{item.player}<small>{item.position || 'Position unknown'}</small></td><td>{item.stat}</td><td>{item.actual}</td><td>{item.baseline.toFixed(1)}</td><td className="prop-positive">+{(item.excess * 100).toFixed(0)}%</td>
-      </tr>)}</tbody></table></div> : <p className="prop-warning">No recent opponent performances meet the breakout threshold. The table uses the last {window} games against each defense.</p>}
+    <p className="prop-help">Player projections and a directional breakout composite built from recent role trend (40%), matchup adjustment (35%), and sample reliability (25%). It is a ranking aid, not a probability or betting guarantee.</p>
+    <div className="prop-section-title"><h3>Player projections & breakout potential</h3><span>Green = high · yellow = moderate · red = lower</span></div>
+    <label className="prop-filter">Show players<select value={projectionFilter} onChange={event=>setProjectionFilter(event.target.value)}><option value="favorites">Favorites · score 65+</option><option value="all">All projections</option></select></label>
+    <div className="table-wrap"><table><thead><tr><th>Player</th><th>Composite</th><th>Projected markets</th><th>Recent range</th><th>Breakout angles</th></tr></thead>
+      <tbody>{visible.map(player=>{
+        const markets=numberStats(player).filter(key=>valid(player.stats[key]?.projection))
+        const angles=markets.filter(key=>player.breakoutScore>=70&&['passYds','rushYds','recYds','rec'].includes(key))
+        const tdKeys=player.position==='QB'?['passTD','rushTD']:['rushTD','recTD']
+        const tdProjection=tdKeys.reduce((sum,key)=>sum+(player.stats[key]?.projection||0),0)
+        const tdValues=player.logs.slice(-window).map(game=>tdKeys.every(key=>valid(game[key]))?tdKeys.reduce((sum,key)=>sum+game[key],0):null).filter(valid)
+        const multipleTD=tdValues.some(value=>value>=2)
+        const level=player.breakoutScore>=70?'high':player.breakoutScore>=45?'moderate':'low'
+        return <tr key={`${player.offense.id}-${player.id}`}>
+          <td>{player.name}<small>{player.offense.abbr} · {player.position}</small></td>
+          <td><span className={`breakout-score breakout-${level}`}>{player.breakoutScore}/100 · {level==='high'?'High':level==='moderate'?'Moderate':'Lower'}</span></td>
+          <td>{markets.map(key=><span className="projection-chip" key={key}>{statLabels[key]} {player.stats[key].projection.toFixed(1)}</span>)}</td>
+          <td>{markets.filter(key=>['passYds','rushYds','recYds','rec'].includes(key)).map(key=><span className="projection-chip" key={key}>{statLabels[key]} {recentRange(player,key,window)}</span>)}</td>
+          <td>{player.breakoutScore>=70?angles.map(key=><span className="projection-chip" key={key}>{statLabels[key]} upside: {recentRange(player,key,window)}</span>):'No high breakout signal'}{tdProjection>=0.75&&<span className="projection-chip">TD projection {tdProjection.toFixed(1)} / game{multipleTD?` · recent ${window}-game range includes 2+ TDs`:''}</span>}</td>
+        </tr>
+      })}</tbody></table></div>
+    {!visible.length&&<p className="prop-warning">No players meet the Favorites threshold. Choose All projections to see every eligible player.</p>}
+    <p className="prop-help">Recent ranges show actual minimum–maximum results in the selected lookback, not a predicted confidence interval. “2+ TD” notes a recent ceiling game; it does not estimate the chance of multiple touchdowns.</p>
+    <div className="prop-section-title"><h3>Other bet notes</h3><span>Compare with sportsbook lines and prices</span></div>
     <div className="table-wrap"><table>
       <thead><tr><th>Category</th><th>Candidate</th><th>Why it stands out</th></tr></thead>
       <tbody>
