@@ -70,7 +70,7 @@ function wrRoleSimilarity(a,b){
   if(a.side&&b.side){score+=(a.side===b.side?1:0)*.08;weight+=.08}
   return weight?score/weight:null
 }
-function closestPlayer(candidates,theme,pos){
+export function closestPlayer(candidates,theme,pos){
   if(!candidates.length)return null
   const referenceUsage=mean(theme.hitPlayers.map(row=>row.usage))
   const referenceWrRoles=pos==='WR'?theme.hitPlayers.map(row=>wrLookup.get(row.player.name.trim().toLowerCase())).filter(Boolean):[]
@@ -109,26 +109,28 @@ function FlyerTheme({theme,index,offenses,roster,halfLife,window}){
     </div>
   </article>
 }
+export function buildFlyerThemes(data,matchup,roster,halfLife,window){
+  const offenses=[{offense:matchup.away,defense:matchup.home},{offense:matchup.home,defense:matchup.away}]
+  const rows=[]
+  for(const side of offenses){
+    const games=recentDefenseGames(data,side.defense,window,matchup)
+    const currentPlayers=projectTeam(data,side.offense,side.defense,roster,halfLife,window)
+    for(const position of Object.keys(THRESHOLDS))for(const spec of THRESHOLDS[position])for(const tier of ['Safe','Breakout']){
+      const threshold=tier==='Safe'?spec.safe:spec.breakout
+      const result=rateForTheme(games,side.defense,position,spec,threshold,roster)
+      if(result.n<2||result.hits===0)continue
+      rows.push({...result,position,spec,tier,threshold,defense:side.defense,offense:side.offense,data,
+        candidates:currentPlayers.filter(p=>posMatch(p,position,roster)&&!p.unavailable&&!p.stale)})
+    }
+  }
+  return rows.sort((a,b)=>(b.rate??-1)-(a.rate??-1)||b.hits-a.hits|| (a.tier==='Safe'?-1:1)||a.position.localeCompare(b.position)||a.spec.title.localeCompare(b.spec.title))
+}
 export default function Flyers({data,matchup,roster,halfLife,window}){
   const [teamFilter,setTeamFilter]=useState('all')
   const [positionFilter,setPositionFilter]=useState('all')
   const [tierFilter,setTierFilter]=useState('all')
   const offenses=[{offense:matchup.away,defense:matchup.home},{offense:matchup.home,defense:matchup.away}]
-  const themes=useMemo(()=>{
-    const rows=[]
-    for(const side of offenses){
-      const games=recentDefenseGames(data,side.defense,window,matchup)
-      const currentPlayers=projectTeam(data,side.offense,side.defense,roster,halfLife,window)
-      for(const position of Object.keys(THRESHOLDS))for(const spec of THRESHOLDS[position])for(const tier of ['Safe','Breakout']){
-        const threshold=tier==='Safe'?spec.safe:spec.breakout
-        const result=rateForTheme(games,side.defense,position,spec,threshold,roster)
-        if(result.n<2||result.hits===0)continue
-        rows.push({...result,position,spec,tier,threshold,defense:side.defense,offense:side.offense,data,
-          candidates:currentPlayers.filter(p=>posMatch(p,position,roster)&&!p.unavailable&&!p.stale)})
-      }
-    }
-    return rows.sort((a,b)=>(b.rate??-1)-(a.rate??-1)||b.hits-a.hits|| (a.tier==='Safe'?-1:1)||a.position.localeCompare(b.position)||a.spec.title.localeCompare(b.spec.title))
-  },[data,matchup,roster,halfLife,window])
+  const themes=useMemo(()=>buildFlyerThemes(data,matchup,roster,halfLife,window),[data,matchup,roster,halfLife,window])
   const teams=[...new Map(offenses.map(side=>[side.offense.id,side.offense])).values()]
   const filtered=themes.filter(theme=>(teamFilter==='all'||theme.offense.id===teamFilter)&&
     (positionFilter==='all'||theme.position===positionFilter)&&(tierFilter==='all'||theme.tier===tierFilter))

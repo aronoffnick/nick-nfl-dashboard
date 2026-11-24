@@ -37,7 +37,7 @@ export function breakoutRating(player){
   return Math.round(trend*.4+matchup*.35+reliability*.25)
 }
 export function ratingLevel(score){return score==null?'unknown':score>=70?'high':score>=45?'moderate':'low'}
-function betSignalScore(player){
+export function betSignalScore(player){
   const usageKey=player.position==='QB'?'passAtt':['RB','FB'].includes(player.position)?'carries':'targets'
   const now=average(player.logs.slice(-3),usageKey),before=average(player.logs.slice(-6,-3),usageKey)
   const stat=player.position==='QB'?'passYds':['RB','FB'].includes(player.position)?'rushYds':'recYds'
