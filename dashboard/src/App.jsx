@@ -62,7 +62,7 @@ function competition(event) {
 
 async function loadData(progress) {
   progress('Finding the current NFL week…')
-  const schedule = await get('scoreboard?limit=100')
+  let schedule = await get('scoreboard?limit=100')
   YEAR = Number(schedule.season?.year)
   WEEK = Number(schedule.week?.number)
   if (Number(schedule.season?.type) !== 2 ||
@@ -71,6 +71,21 @@ async function loadData(progress) {
       WEEK < 1 || WEEK > 18 ||
       !schedule.events?.length) {
     throw new Error('ESPN is not currently returning an active regular-season week. This model supports regular-season games only.')
+  }
+  const currentWeekComplete = schedule.events.every(event => {
+    try { return Boolean(competition(event).c.status?.type?.completed) }
+    catch { return false }
+  })
+  if (currentWeekComplete && WEEK < 18) {
+    progress(`Week ${WEEK} is complete. Checking Week ${WEEK + 1}…`)
+    const nextWeek = await get(`scoreboard?dates=${YEAR}&seasontype=2&week=${WEEK + 1}&limit=100`)
+    if (Number(nextWeek.season?.year) === YEAR &&
+        Number(nextWeek.season?.type) === 2 &&
+        Number(nextWeek.week?.number) === WEEK + 1 &&
+        nextWeek.events?.length) {
+      schedule = nextWeek
+      WEEK += 1
+    }
   }
   if (WEEK === 1) {
     throw new Error('Week 1 has no prior games in this season. Predictions will begin once Week 1 is complete and ESPN advances to Week 2.')
