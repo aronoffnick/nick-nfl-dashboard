@@ -128,12 +128,11 @@ export function buildFlyerThemes(data,matchup,roster,halfLife,window){
 export default function Flyers({data,matchup,roster,halfLife,window}){
   const [teamFilter,setTeamFilter]=useState('all')
   const [positionFilter,setPositionFilter]=useState('all')
-  const [tierFilter,setTierFilter]=useState('all')
   const offenses=[{offense:matchup.away,defense:matchup.home},{offense:matchup.home,defense:matchup.away}]
   const themes=useMemo(()=>buildFlyerThemes(data,matchup,roster,halfLife,window),[data,matchup,roster,halfLife,window])
   const teams=[...new Map(offenses.map(side=>[side.offense.id,side.offense])).values()]
-  const filtered=themes.filter(theme=>(teamFilter==='all'||theme.offense.id===teamFilter)&&
-    (positionFilter==='all'||theme.position===positionFilter)&&(tierFilter==='all'||theme.tier===tierFilter))
+  const filtered=themes.filter(theme=>theme.tier==='Breakout'&&(teamFilter==='all'||theme.offense.id===teamFilter)&&
+    (positionFilter==='all'||theme.position===positionFilter))
   const favorites=useMemo(()=>{
     const picks=new Map()
     for(const theme of themes.filter(row=>row.tier==='Breakout')){
@@ -157,15 +156,14 @@ export default function Flyers({data,matchup,roster,halfLife,window}){
 
   return <section className="flyers-section" aria-label="Flyers threshold themes">
     <div className="prop-section-title"><h3>Flyers · most common opponent themes</h3><span>Position + stat + threshold · ranked by recent hit rate</span></div>
-    <p className="prop-help">Each row shows how often a player at that position crossed the listed line in the defense’s recent games, then identifies the closest-role player on the upcoming offense. “Safe” and “Breakout” are the threshold bands from your sheet; the hit rate is historical evidence, not a forecast probability. QB “TDs” means rushing TDs; other positions’ TDs combine rushing and receiving.</p>
+    <p className="prop-help">Each row shows how often a player at that position crossed the <b>Breakout</b> line in the defense’s recent games, then identifies the closest-role player on the upcoming offense. Safe thresholds are retained as background support for the PARLAYS overlap range. The hit rate is historical evidence, not a forecast probability. QB “TDs” means rushing TDs; other positions’ TDs combine rushing and receiving.</p>
     <div className="flyers-filters" aria-label="Filter Flyers themes">
       <label>Team<select value={teamFilter} onChange={event=>setTeamFilter(event.target.value)}><option value="all">All teams</option>{teams.map(team=><option key={team.id} value={team.id}>{team.name}</option>)}</select></label>
       <label>Position<select value={positionFilter} onChange={event=>setPositionFilter(event.target.value)}><option value="all">All positions</option>{Object.keys(THRESHOLDS).map(pos=><option key={pos} value={pos}>{roleName(pos)}</option>)}</select></label>
-      <label>Type<select value={tierFilter} onChange={event=>setTierFilter(event.target.value)}><option value="all">Safe + Breakout</option><option value="Safe">Safe</option><option value="Breakout">Breakout</option></select></label>
-      <button type="button" onClick={()=>{setTeamFilter('all');setPositionFilter('all');setTierFilter('all')}}>Reset</button>
+      <button type="button" onClick={()=>{setTeamFilter('all');setPositionFilter('all')}}>Reset</button>
     </div>
-    <div className="flyers-legend"><span className="flyer-safe-swatch">Safe · teal</span><span className="flyer-breakout-swatch">Breakout · green</span><span>Ranked by recent threshold hit rate</span></div>
-    {tierFilter==='Safe'?null:<section className="flyer-favorites" aria-label="Top three breakout upside candidates">
+    <div className="flyers-legend"><span className="flyer-breakout-swatch">Breakout · green</span><span>Safe thresholds remain as background support for PARLAYS overlap ranges</span></div>
+    <section className="flyer-favorites" aria-label="Top three breakout upside candidates">
       <div className="flyer-favorites-heading"><div><span>TOP THREE</span><h4>Breakout Upside Favorites</h4></div><small>Highest combined matchup rate, model projection, and prior single-game ceiling</small></div>
       {!favorites.length?<p className="prop-warning">No breakout candidate currently has a reliable projection for these filters.</p>:<ol className="flyer-favorites-list">{favorites.map(({player,theme,baseline,projection,multiple,peakMultiple,recentPeak},index)=><li key={`${player.id}:${theme.spec.key}`}>
         <span className="flyer-favorite-rank">0{index+1}</span>
@@ -174,7 +172,7 @@ export default function Flyers({data,matchup,roster,halfLife,window}){
         <div><strong>{fmt(recentPeak)} peak</strong><small>{peakMultiple.toFixed(2)}× baseline · {Math.round(theme.rate*100)}% opponent breakout rate</small></div>
       </li>)}</ol>}
       <p className="flyer-favorites-note">A 1.5× or 2× label is not assigned unless the player’s actual model projection reaches that multiple. The current matchup adjustment is capped at 1.25× baseline, so larger multiples would require a separate ceiling model.</p>
-    </section>}
+    </section>
     {!items.length?<p className="prop-warning">No themes match these filters.</p>:<div className="flyers-board">{items.map((theme,index)=><FlyerTheme key={`${theme.defense.id}:${theme.position}:${theme.spec.key}:${theme.tier}`} theme={theme} index={index} offenses={offenses} roster={roster} halfLife={halfLife} window={window}/>)}</div>}
     <details className="prop-method"><summary>Threshold rules and data sources</summary>
       <p>Thresholds come from your supplied reference: QB pass yards 260/300, pass TDs 2/3, rush yards 20/35, rushing TDs 1/2; RB rush yards 90/110, receptions 4/6, receiving yards 15/25, total TDs 1/2; WR receptions 6/8, receiving yards 90/110, total TDs 1/2; TE receptions 5/7, receiving yards 40/60, total TDs 1/2. “Safe” and “Breakout” list first and second values respectively.</p>
