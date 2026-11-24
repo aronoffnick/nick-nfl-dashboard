@@ -153,22 +153,6 @@ export default function Flyers({data,matchup,roster,halfLife,window}){
   },[themes,teamFilter,positionFilter,halfLife])
   const items=filtered.map((theme,index)=>({...theme,index}))
 
-  const offenses=[{offense:matchup.away,defense:matchup.home},{offense:matchup.home,defense:matchup.away}]
-  const themes=useMemo(()=>{
-    const rows=[]
-    for(const side of offenses){
-      const games=recentDefenseGames(data,side.defense,window,matchup)
-      const currentPlayers=projectTeam(data,side.offense,side.defense,roster,halfLife,window)
-      for(const position of Object.keys(THRESHOLDS))for(const spec of THRESHOLDS[position])for(const tier of ['Safe','Breakout']){
-        const threshold=tier==='Safe'?spec.safe:spec.breakout
-        const result=rateForTheme(games,side.defense,position,spec,threshold,roster)
-        if(result.n<2||result.hits===0)continue
-        rows.push({...result,position,spec,tier,threshold,defense:side.defense,offense:side.offense,data,
-          candidates:currentPlayers.filter(p=>posMatch(p,position,roster)&&!p.unavailable&&!p.stale)})
-      }
-    }
-    return rows.sort((a,b)=>(b.rate??-1)-(a.rate??-1)||b.hits-a.hits|| (a.tier==='Safe'?-1:1)||a.position.localeCompare(b.position)||a.spec.title.localeCompare(b.spec.title))
-  },[data,matchup,roster,halfLife,window])
   return <section className="flyers-section" aria-label="Flyers threshold themes">
     <div className="prop-section-title"><h3>Flyers · most common opponent themes</h3><span>Position + stat + threshold · ranked by recent hit rate</span></div>
     <p className="prop-help">Each row shows how often a player at that position crossed the listed line in the defense’s recent games, then identifies the closest-role player on the upcoming offense. “Safe” and “Breakout” are the threshold bands from your sheet; the hit rate is historical evidence, not a forecast probability. QB “TDs” means rushing TDs; other positions’ TDs combine rushing and receiving.</p>
