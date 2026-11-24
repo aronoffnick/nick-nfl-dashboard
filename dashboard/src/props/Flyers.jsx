@@ -179,7 +179,7 @@ export default function Flyers({data,matchup,roster,halfLife,window}){
       <button type="button" onClick={()=>{setTeamFilter('all');setPositionFilter('all');setTierFilter('all')}}>Reset</button>
     </div>
     <div className="flyers-legend"><span className="flyer-safe-swatch">Safe · teal</span><span className="flyer-breakout-swatch">Breakout · green</span><span>Ranked by recent threshold hit rate</span></div>
-    <section className="flyer-favorites" aria-label="Top three breakout upside candidates">
+    {tierFilter==='Safe'?null:<section className="flyer-favorites" aria-label="Top three breakout upside candidates">
       <div className="flyer-favorites-heading"><div><span>TOP THREE</span><h4>Breakout Upside Favorites</h4></div><small>Highest combined matchup rate, model projection, and prior single-game ceiling</small></div>
       {!favorites.length?<p className="prop-warning">No breakout candidate currently has a reliable projection for these filters.</p>:<ol className="flyer-favorites-list">{favorites.map(({player,theme,baseline,projection,multiple,peakMultiple,recentPeak},index)=><li key={`${player.id}:${theme.spec.key}`}>
         <span className="flyer-favorite-rank">0{index+1}</span>
@@ -188,7 +188,7 @@ export default function Flyers({data,matchup,roster,halfLife,window}){
         <div><strong>{fmt(recentPeak)} peak</strong><small>{peakMultiple.toFixed(2)}× baseline · {Math.round(theme.rate*100)}% opponent breakout rate</small></div>
       </li>)}</ol>}
       <p className="flyer-favorites-note">A 1.5× or 2× label is not assigned unless the player’s actual model projection reaches that multiple. The current matchup adjustment is capped at 1.25× baseline, so larger multiples would require a separate ceiling model.</p>
-    </section>
+    </section>}
     {!items.length?<p className="prop-warning">No themes match these filters.</p>:<div className="flyers-board">{items.map((theme,index)=><FlyerTheme key={`${theme.defense.id}:${theme.position}:${theme.spec.key}:${theme.tier}`} theme={theme} index={index} offenses={offenses} roster={roster} halfLife={halfLife} window={window}/>)}</div>}
     <details className="prop-method"><summary>Threshold rules and data sources</summary>
       <p>Thresholds come from your supplied reference: QB pass yards 260/300, pass TDs 2/3, rush yards 20/35, rushing TDs 1/2; RB rush yards 90/110, receptions 4/6, receiving yards 15/25, total TDs 1/2; WR receptions 6/8, receiving yards 90/110, total TDs 1/2; TE receptions 5/7, receiving yards 40/60, total TDs 1/2. “Safe” and “Breakout” list first and second values respectively.</p>
