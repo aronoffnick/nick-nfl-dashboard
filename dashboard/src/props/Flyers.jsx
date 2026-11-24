@@ -1,4 +1,4 @@
-import {useMemo} from 'react'
+import {useMemo,useState} from 'react'
 import {historyFor,sides,positionOf,projectTeam,valid,weighted} from './model.js'
 import wrStarterRows from './wr-starters-week12.json'
 import './flyers.css'
@@ -32,6 +32,16 @@ const fmt=n=>Number.isInteger(n)?String(n):Number(n).toFixed(1)
 const roleName=p=>p==='RB'?'RB/FB':p
 function posMatch(player,pos,roster){const actual=positionOf(player,roster);return actual===pos||(pos==='RB'&&actual==='FB')}
 function boxValue(player,key){return key==='totalTD'?(valid(player.rushTD)&&valid(player.recTD)?player.rushTD+player.recTD:null):player[key]}
+function projectionFor(player,key){
+  if(key==='totalTD'){
+    const rush=player.stats.rushTD?.projection,rec=player.stats.recTD?.projection
+    return valid(rush)&&valid(rec)?rush+rec:null
+  }
+  return player.stats[key]?.projection
+}
+function baselineFor(player,key,halfLife){
+  return key==='totalTD'?weighted(player.logs.map(log=>({...log,totalTD:boxValue(log,'totalTD')})),'totalTD',halfLife):weighted(player.logs,key,halfLife)
+}
 function gameEligible(side,spec){return !!side.playerBox&&spec.group.every(group=>side.playerBox.available.includes(group))}
 function mean(values){const validValues=values.filter(valid);return validValues.length?validValues.reduce((a,b)=>a+b,0)/validValues.length:null}
 function recentDefenseGames(data,defense,window,matchup){return historyFor(data,defense.id).filter(g=>new Date(g.date)<new Date(matchup.date)).slice(-window)}
@@ -100,6 +110,9 @@ function FlyerTheme({theme,index,offenses,roster,halfLife,window}){
   </article>
 }
 export default function Flyers({data,matchup,roster,halfLife,window}){
+  const [teamFilter,setTeamFilter]=useState('all')
+  const [positionFilter,setPositionFilter]=useState('all')
+  const [tierFilter,setTierFilter]=useState('all')
   const offenses=[{offense:matchup.away,defense:matchup.home},{offense:matchup.home,defense:matchup.away}]
   const themes=useMemo(()=>{
     const rows=[]
@@ -116,12 +129,67 @@ export default function Flyers({data,matchup,roster,halfLife,window}){
     }
     return rows.sort((a,b)=>(b.rate??-1)-(a.rate??-1)||b.hits-a.hits|| (a.tier==='Safe'?-1:1)||a.position.localeCompare(b.position)||a.spec.title.localeCompare(b.spec.title))
   },[data,matchup,roster,halfLife,window])
-  const items=themes.map((theme,index)=>({...theme,index}))
+  const teams=[...new Map(offenses.map(side=>[side.offense.id,side.offense])).values()]
+  const filtered=themes.filter(theme=>(teamFilter==='all'||theme.offense.id===teamFilter)&&
+    (positionFilter==='all'||theme.position===positionFilter)&&(tierFilter==='all'||theme.tier===tierFilter))
+  const favorites=useMemo(()=>{
+    const picks=new Map()
+    for(const theme of themes.filter(row=>row.tier==='Breakout')){
+      if((teamFilter!=='all'&&theme.offense.id!==teamFilter)||(positionFilter!=='all'&&theme.position!==positionFilter))continue
+      for(const player of theme.candidates){
+        const baseline=baselineFor(player,theme.spec.key,halfLife)
+        const projection=projectionFor(player,theme.spec.key)
+        if(!valid(baseline)||baseline<=0||!valid(projection))continue
+        const multiple=projection/baseline
+        const recentPeak=Math.max(...player.logs.map(log=>boxValue(log,theme.spec.key)).filter(valid),0)
+        const peakMultiple=recentPeak/baseline
+        const key=`${player.id}:${theme.spec.key}`
+        const row={player,theme,baseline,projection,multiple,peakMultiple,recentPeak,
+          score:(multiple*theme.rate)+(Math.min(peakMultiple,3)*.15)+(theme.rate*.25)}
+        if(!picks.has(key)||picks.get(key).score<row.score)picks.set(key,row)
+      }
+    }
+    return [...picks.values()].sort((a,b)=>b.score-a.score||b.peakMultiple-a.peakMultiple).slice(0,3)
+  },[themes,teamFilter,positionFilter,halfLife])
+  const items=filtered.map((theme,index)=>({...theme,index}))
+
+  const offenses=[{offense:matchup.away,defense:matchup.home},{offense:matchup.home,defense:matchup.away}]
+  const themes=useMemo(()=>{
+    const rows=[]
+    for(const side of offenses){
+      const games=recentDefenseGames(data,side.defense,window,matchup)
+      const currentPlayers=projectTeam(data,side.offense,side.defense,roster,halfLife,window)
+      for(const position of Object.keys(THRESHOLDS))for(const spec of THRESHOLDS[position])for(const tier of ['Safe','Breakout']){
+        const threshold=tier==='Safe'?spec.safe:spec.breakout
+        const result=rateForTheme(games,side.defense,position,spec,threshold,roster)
+        if(result.n<2||result.hits===0)continue
+        rows.push({...result,position,spec,tier,threshold,defense:side.defense,offense:side.offense,data,
+          candidates:currentPlayers.filter(p=>posMatch(p,position,roster)&&!p.unavailable&&!p.stale)})
+      }
+    }
+    return rows.sort((a,b)=>(b.rate??-1)-(a.rate??-1)||b.hits-a.hits|| (a.tier==='Safe'?-1:1)||a.position.localeCompare(b.position)||a.spec.title.localeCompare(b.spec.title))
+  },[data,matchup,roster,halfLife,window])
   return <section className="flyers-section" aria-label="Flyers threshold themes">
     <div className="prop-section-title"><h3>Flyers · most common opponent themes</h3><span>Position + stat + threshold · ranked by recent hit rate</span></div>
     <p className="prop-help">Each row shows how often a player at that position crossed the listed line in the defense’s recent games, then identifies the closest-role player on the upcoming offense. “Safe” and “Breakout” are the threshold bands from your sheet; the hit rate is historical evidence, not a forecast probability. QB “TDs” means rushing TDs; other positions’ TDs combine rushing and receiving.</p>
-    <div className="flyers-legend"><span className="flyer-safe-swatch">Safe · teal</span><span className="flyer-breakout-swatch">Breakout · green</span><span>Ranked by most frequent threshold crossed</span></div>
-    {!items.length?<p className="prop-warning">No position/stat threshold had enough usable recent opponent data to rank yet.</p>:<div className="flyers-board">{items.map((theme,index)=><FlyerTheme key={`${theme.defense.id}:${theme.position}:${theme.spec.key}:${theme.tier}`} theme={theme} index={index} offenses={offenses} roster={roster} halfLife={halfLife} window={window}/>)}</div>}
+    <div className="flyers-filters" aria-label="Filter Flyers themes">
+      <label>Team<select value={teamFilter} onChange={event=>setTeamFilter(event.target.value)}><option value="all">All teams</option>{teams.map(team=><option key={team.id} value={team.id}>{team.name}</option>)}</select></label>
+      <label>Position<select value={positionFilter} onChange={event=>setPositionFilter(event.target.value)}><option value="all">All positions</option>{Object.keys(THRESHOLDS).map(pos=><option key={pos} value={pos}>{roleName(pos)}</option>)}</select></label>
+      <label>Type<select value={tierFilter} onChange={event=>setTierFilter(event.target.value)}><option value="all">Safe + Breakout</option><option value="Safe">Safe</option><option value="Breakout">Breakout</option></select></label>
+      <button type="button" onClick={()=>{setTeamFilter('all');setPositionFilter('all');setTierFilter('all')}}>Reset</button>
+    </div>
+    <div className="flyers-legend"><span className="flyer-safe-swatch">Safe · teal</span><span className="flyer-breakout-swatch">Breakout · green</span><span>Ranked by recent threshold hit rate</span></div>
+    <section className="flyer-favorites" aria-label="Top three breakout upside candidates">
+      <div className="flyer-favorites-heading"><div><span>TOP THREE</span><h4>Breakout Upside Favorites</h4></div><small>Highest combined matchup rate, model projection, and prior single-game ceiling</small></div>
+      {!favorites.length?<p className="prop-warning">No breakout candidate currently has a reliable projection for these filters.</p>:<ol className="flyer-favorites-list">{favorites.map(({player,theme,baseline,projection,multiple,peakMultiple,recentPeak},index)=><li key={`${player.id}:${theme.spec.key}`}>
+        <span className="flyer-favorite-rank">0{index+1}</span>
+        <div><b>{player.name}</b><small>{theme.offense.abbr} · {roleName(theme.position)} · {theme.spec.title}</small></div>
+        <div><strong>{fmt(projection)} {theme.spec.title.toLowerCase()}</strong><small>Projection · {multiple.toFixed(2)}× weighted baseline</small></div>
+        <div><strong>{fmt(recentPeak)} peak</strong><small>{peakMultiple.toFixed(2)}× baseline · {Math.round(theme.rate*100)}% opponent breakout rate</small></div>
+      </li>)}</ol>}
+      <p className="flyer-favorites-note">A 1.5× or 2× label is not assigned unless the player’s actual model projection reaches that multiple. The current matchup adjustment is capped at 1.25× baseline, so larger multiples would require a separate ceiling model.</p>
+    </section>
+    {!items.length?<p className="prop-warning">No themes match these filters.</p>:<div className="flyers-board">{items.map((theme,index)=><FlyerTheme key={`${theme.defense.id}:${theme.position}:${theme.spec.key}:${theme.tier}`} theme={theme} index={index} offenses={offenses} roster={roster} halfLife={halfLife} window={window}/>)}</div>}
     <details className="prop-method"><summary>Threshold rules and data sources</summary>
       <p>Thresholds come from your supplied reference: QB pass yards 260/300, pass TDs 2/3, rush yards 20/35, rushing TDs 1/2; RB rush yards 90/110, receptions 4/6, receiving yards 15/25, total TDs 1/2; WR receptions 6/8, receiving yards 90/110, total TDs 1/2; TE receptions 5/7, receiving yards 40/60, total TDs 1/2. “Safe” and “Breakout” list first and second values respectively.</p>
       <p>For each game, the position group counts as crossing when at least one player at that position reaches the threshold. Hit rates use only recent games with complete box-score categories and position data. A theme enters the ranking with at least two usable games and one crossing; all qualifying themes are shown, ordered by percentage and hit count. Closest player selection uses current-team recent workload compared with the workloads of historical players who crossed the threshold. WR role matching also consults the supplied Ourlads-derived Week 12 sheet (slot/depth/alignment fields marked inferred in that source); it is a supplemental role hint, not tracking data.</p>
