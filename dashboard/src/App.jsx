@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import './App.css'
 import PickTracker from './PickTracker.jsx'
+import WeeklyGames from './WeeklyGames.jsx'
 import MatchupExplorer from './props/MatchupExplorer.jsx'
 import { parsePlayers } from './props/model.js'
 
@@ -339,6 +340,7 @@ export default function App() {
     </section>
     {busy && <p role="status" className="notice">{message} First load may take a few minutes.</p>}
     {error && <div role="alert" className="error"><strong>Data could not be validated.</strong><p>{error}</p><button onClick={refresh}>Retry data load</button></div>}
+    {result&&<WeeklyGames matchups={result.matchups} onOpen={setSelected}/>}
     <section className="controls">
       <div className="tabs">
         <button className={view === 'matchups' ? 'active' : ''} onClick={() => { setView('matchups'); setSort({ key: 'date', ascending: true }) }}>Matchups</button>
