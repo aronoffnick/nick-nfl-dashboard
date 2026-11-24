@@ -38,7 +38,7 @@ export default function PickTracker({ data, matchups, historicalPicks, props, sa
         next[game.id] = {
           ...record,
           result: away.points === home.points ? 'Push' : winner.id === record.teamId ? 'Win' : 'Loss',
-          finalScore: `${game.away.abbr} ${away.points}–${game.home.abbr} ${home.points}`,
+          finalScore: `${away.abbr || game.away?.abbr || 'Away'} ${away.points}–${home.abbr || game.home?.abbr || 'Home'} ${home.points}`,
           marginResult: (() => {
             const actualPickedMargin = record.teamId === away.id ? away.points - home.points : home.points - away.points
             return actualPickedMargin === record.margin ? 'Push' : actualPickedMargin > record.margin ? 'Covered' : 'Missed'
@@ -109,6 +109,7 @@ export default function PickTracker({ data, matchups, historicalPicks, props, sa
       <button aria-pressed={showProps} onClick={() => setShowProps(true)}>Player props</button>
     </div>
     <p>One moneyline pick per game. Open the dashboard before kickoff to save picks on this browser. Enter DraftKings prices before kickoff. Backtests use prior box scores and the default model settings. Week 1 has no same-season history.</p>
+    <p><small>Audit note: generated Bets, SGP and FLYERS cards are live views and are not archived automatically. Only saved game picks and manually tracked player props persist in this browser.</small></p>
     {storageError && <p role="alert">This browser could not save the pick history.</p>}
     <div className="controls">
       <label>Week<select value={selectedWeek} onChange={event => setWeek(event.target.value)}>
