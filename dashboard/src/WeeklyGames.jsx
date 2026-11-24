@@ -65,16 +65,18 @@ function GameCard({game,index,onOpen}){
 }
 
 export default function WeeklyGames({matchups,onOpen}){
-  const featured=useMemo(()=>{
-    const available=(matchups||[]).filter(game=>!game.started&&Number.isFinite(game.margin)&&game.margin>=.5)
+  const {featured,showingCompleted}=useMemo(()=>{
+    const eligible=(matchups||[]).filter(game=>Number.isFinite(game.margin)&&game.margin>=.5)
+    const upcoming=eligible.filter(game=>!game.started)
+    const available=upcoming.length?upcoming:eligible
     const ranked=[...available].sort((a,b)=>featureScore(b)-featureScore(a))
     const upsets=ranked.filter(game=>classify(game)==='upset').slice(0,2)
     const favorites=ranked.filter(game=>classify(game)!=='upset').slice(0,Math.max(3,5-upsets.length))
-    return [...favorites,...upsets].slice(0,5)
+    return {featured:[...favorites,...upsets].slice(0,5),showingCompleted:upcoming.length===0&&eligible.length>0}
   },[matchups])
   if(!featured.length)return null
   return <section className="weekly-games" aria-label="Favorite games of the week">
-    <div className="weekly-games-heading"><div><p className="eyebrow">GAMES TO WATCH</p><h2>Model favorites this week.</h2></div><p>Top projected matchups, plus record-based upset possibilities.</p></div>
+    <div className="weekly-games-heading"><div><p className="eyebrow">GAMES TO WATCH</p><h2>Model favorites this week.</h2></div><p>{showingCompleted?'ESPN has not advanced to the next week yet, so these are the current week’s original model selections.':'Top projected matchups, plus record-based upset possibilities.'}</p></div>
     <div className="weekly-games-grid">{featured.map((game,index)=><GameCard key={game.id} game={game} index={index} onOpen={onOpen}/>)}</div>
   </section>
 }
