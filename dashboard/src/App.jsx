@@ -402,7 +402,7 @@ export default function App() {
     </section>
     <footer><strong>Sources & validation</strong><p>Schedule, scores and team box scores: <a href="https://www.espn.com/nfl/scoreboard" target="_blank" rel="noreferrer">ESPN</a>, fetched through its public Site API. Passing = net passing yards, including sack losses. Defense = the opponent's yards. Rankings cover all 32 teams, with equal values sharing a rank.</p>
       <p>Only completed {data?.year || 'current-season'} regular-season games from earlier weeks, before the first kickoff of Week {data?.week || '—'}, enter the model. All required box scores and 32-team coverage must pass validation before results display.</p>
-      <p>Last fetched: {data ? kickoff(data.updated) + ' ET' : 'Not yet loaded'} · Schedule and rankings refresh on opening and every 30 minutes while open. Completed box scores are cached for 24 hours. The current week follows ESPN's season/week designation; this is a pregame model and excludes the current week's results.</p>
+      <p>Last fetched: {data ? kickoff(data.updated) + ' ET' : 'Not yet loaded'} · Schedule and rankings refresh on opening and every 30 minutes while open. Completed box scores are cached for 24 hours. After every current-week game is final, the dashboard advances to ESPN's next valid schedule; this is a pregame model and excludes the displayed week's results.</p>
     </footer>
     {detail && <MatchupExplorer key={detail.id} data={data} matchup={detail} saveProp={saveProp} halfLife={halfLife} advantage={advantage} onClose={() => setSelected(null)} />}
   </main>
