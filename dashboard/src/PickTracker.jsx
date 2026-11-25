@@ -2,6 +2,13 @@ import { useEffect, useState } from 'react'
 
 const storageKey = 'nfl-moneyline-picks-v1'
 
+function StatsBlock({ title, children }) {
+  return <details className="pick-accuracy">
+    <summary><span className="pick-chevron" aria-hidden="true" />{title}</summary>
+    {children}
+  </details>
+}
+
 export default function PickTracker({ data, matchups, historicalPicks, props, saveProp }) {
   const currentWeek = data ? `${data.year} Week ${data.week}` : ''
   const [records, setRecords] = useState(() => {
@@ -123,11 +130,11 @@ export default function PickTracker({ data, matchups, historicalPicks, props, sa
     </div>
     {showProps ? <>
       <p>Save a pick from Player projections before kickoff. After the game, record its settlement here.</p>
-      <div className="pick-accuracy">
+      <StatsBlock key="player-prop-accuracy" title="Player prop accuracy">
         {accuracy('All player props', propRows.map(([, item]) => item))}
         {['QB', 'RB', 'FB', 'WR', 'TE'].map(position =>
           accuracy(position, propRows.map(([, item]) => item).filter(item => item.position === position)))}
-      </div>
+      </StatsBlock>
       {gradeError && <p role="alert">{gradeError}</p>}
       <ul>{propRows.filter(([, item]) => filter === 'All results' || filter === item.result).map(([id, item]) =>
         <li key={id}>{item.player} ({item.team} {item.position}) · {item.pick} {item.line} {item.metric} · {item.week}
@@ -141,8 +148,7 @@ export default function PickTracker({ data, matchups, historicalPicks, props, sa
         </li>)}</ul>
     </> : <>
     <p>{count('Win')} wins · {count('Loss')} losses · {count('Push')} pushes · {count('Pending')} pending</p>
-    <div className="pick-accuracy">
-      <h3>Winner accuracy by projected margin</h3>
+    <StatsBlock key="winner-accuracy" title="Winner accuracy by projected margin">
       {marginBands.map(([label, includes]) => {
         const sample = decided.filter(([, item]) => includes(item.margin))
         const hits = sample.filter(([, item]) => item.result === 'Win').length
@@ -156,10 +162,10 @@ export default function PickTracker({ data, matchups, historicalPicks, props, sa
         </div>
       })}
       <small>Hits are correct outright winners. Pushes and pending games are excluded.</small>
-    </div>
-    <details className="pick-accuracy"><summary>Accuracy by picked team</summary>
+    </StatsBlock>
+    <StatsBlock key="team-accuracy" title="Accuracy by picked team">
       {teamNames.map(name => accuracy(name, decided.map(([, item]) => item).filter(item => item.team === name)))}
-    </details>
+    </StatsBlock>
     {rows.length ? <div className="table-wrap"><table>
       <thead><tr><th>Matchup</th><th>Model pick</th><th>Projected margin</th><th>DraftKings moneyline</th><th>Final score</th><th>Outright</th><th>Margin result</th></tr></thead>
       <tbody>{rows.map(([id, item]) => <tr key={id}>
