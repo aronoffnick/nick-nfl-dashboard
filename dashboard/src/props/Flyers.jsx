@@ -2,6 +2,8 @@ import {useMemo,useState} from 'react'
 import {historyFor,sides,positionOf,projectTeam,valid,weighted} from './model.js'
 import {breakoutRating,ratingLevel} from './breakout.js'
 import {betSignalScore} from './Bets.jsx'
+import BreakoutScale from './BreakoutScale.jsx'
+import Performance from './Performance.jsx'
 import {rbStarter} from './roleData.js'
 import RoleTags from './RoleTags.jsx'
 import wrStarterRows from './wr-starters-week12.json'
@@ -110,7 +112,7 @@ function BreakoutIndexChip({player}){
   if(score==null)return <span className="breakout-index-chip breakout-unknown">Breakout index —</span>
   return <span className={`breakout-index-chip breakout-${ratingLevel(score)}`}>Breakout index {score}</span>
 }
-function BreakoutCard({player, index, window}){
+function BreakoutCard({player, index, window, halfLife}){
   const score = breakoutRating(player)
   const level = ratingLevel(score)
   const isRunner = ['RB','FB'].includes(player.position)
@@ -119,23 +121,21 @@ function BreakoutCard({player, index, window}){
   const usage = player.position === 'QB' ? 'passAtt' : isRunner ? 'carries' : 'targets'
   const usageLabel = player.position === 'QB' ? 'attempts' : isRunner ? 'carries' : 'targets'
   const logs = player.logs.slice(-window)
-  const yards = logs.map(game=>game[stat]).filter(valid).sort((a,b)=>a-b)
-  const strongerGames = yards.slice(Math.floor(yards.length / 2))
-  const low = strongerGames[0], high = strongerGames.at(-1)
+  const metrics = player.position === 'QB' ? ['passYds','passTD','rushYds','totalTD'] :
+    isRunner ? ['rushYds','rec','recYds','totalTD'] : ['rec','recYds','totalTD']
   const recentUsage = mean(logs.slice(-3).map(game=>game[usage]))
   const factor = player.stats[stat]?.defense?.factor
   const supportLabel = {high:'Higher breakout support',moderate:'Moderate breakout support',low:'Lower breakout support',unknown:'Breakout support not rated'}[level]
-  return <li>
-    <span className="flyer-favorite-rank">#{index+1}</span>
-    <div>
-      <div className="flyers-player-name"><b>{player.name}</b><BreakoutIndexChip player={player}/></div>
-      <RoleTags player={player}/>
-      <small>{player.offense.abbr} · {player.position}</small>
-    </div>
-    <div>
-      <b>If he breaks out</b>
-      <div>{yards.length>=4?`${low===high?fmt(high):`${fmt(low)}–${fmt(high)}`} ${statLabel}`:'Limited data for an upside range'}</div>
-      {yards.length>=4&&<small>Upper half of {yards.length} recent games</small>}
+  return <li style={{display:'block',padding:0}}>
+    <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(min(180px,100%),1fr))'}}>
+      <div style={{padding:'12px'}}>
+        <small>Breakout Watch #{index+1}</small>
+        <b>{player.name}</b>
+        <BreakoutScale score={score}/>
+        <RoleTags player={player}/>
+        <small>{player.offense.abbr} · {player.position}</small>
+      </div>
+      {metrics.map(metric=><Performance key={metric} player={player} metric={metric} halfLife={halfLife} lookback={window}/>)}
     </div>
     <details className="prop-method">
       <summary>{supportLabel}</summary>
@@ -208,7 +208,7 @@ export default function Flyers({data,matchup,roster,halfLife,window}){
       <div className="flyer-favorites-heading"><h4>Player Breakout Outlook</h4></div>
       {!visible.length?<p className="prop-warning">No breakout candidates match these filters.</p>:
         <ol className="flyer-favorites-list">{visible.map((player,index)=>
-          <BreakoutCard key={`${player.offense.id}:${player.id}`} player={player} index={index} window={window}/>
+          <BreakoutCard key={`${player.offense.id}:${player.id}`} player={player} index={index} window={window} halfLife={halfLife}/>
         )}</ol>}
     </section>
     {!items.length?<p className="prop-warning">No themes match these filters.</p>:<div className="flyers-board">{items.map((theme,index)=><FlyerTheme key={`${theme.defense.id}:${theme.position}:${theme.spec.key}:${theme.tier}`} theme={theme} index={index} offenses={offenses} roster={roster} halfLife={halfLife} window={window}/>)}</div>}
