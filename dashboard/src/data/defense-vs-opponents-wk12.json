@@ -1,0 +1,1605 @@
+{
+ "source": "wk12-matchups all-players.csv + td-projections.csv (2026 Weeks 1-11; factor = allowed / league average, shrunk)",
+ "defenses": {
+  "ARI": {
+   "QB": {
+    "pprAllowedPerGame": 21.17,
+    "leaguePprPerGame": 16.55,
+    "pprFactor": 1.139,
+    "rushYdsFactor": 0.989,
+    "rushYdsAllowedPerGame": 15.4,
+    "recYdsFactor": null,
+    "recYdsAllowedPerGame": null,
+    "passYdsFactor": 1.015,
+    "passYdsAllowedPerGame": 240.8,
+    "tdFactor": 1.266
+   },
+   "RB": {
+    "pprAllowedPerGame": 22.54,
+    "leaguePprPerGame": 22.0,
+    "pprFactor": 1.012,
+    "rushYdsFactor": 1.099,
+    "rushYdsAllowedPerGame": 110.9,
+    "recYdsFactor": 1.021,
+    "recYdsAllowedPerGame": 33.5,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.955
+   },
+   "TE": {
+    "pprAllowedPerGame": 17.38,
+    "leaguePprPerGame": 13.45,
+    "pprFactor": 1.146,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 1.006,
+    "recYdsAllowedPerGame": 54.4,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 1.655
+   },
+   "WR": {
+    "pprAllowedPerGame": 32.69,
+    "leaguePprPerGame": 31.95,
+    "pprFactor": 1.012,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 1.018,
+    "recYdsAllowedPerGame": 152.9,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 1.144
+   }
+  },
+  "ATL": {
+   "QB": {
+    "pprAllowedPerGame": 18.96,
+    "leaguePprPerGame": 16.55,
+    "pprFactor": 1.073,
+    "rushYdsFactor": 0.717,
+    "rushYdsAllowedPerGame": 6.8,
+    "recYdsFactor": null,
+    "recYdsAllowedPerGame": null,
+    "passYdsFactor": 1.039,
+    "passYdsAllowedPerGame": 251.9,
+    "tdFactor": 1.062
+   },
+   "RB": {
+    "pprAllowedPerGame": 25.68,
+    "leaguePprPerGame": 22.0,
+    "pprFactor": 1.084,
+    "rushYdsFactor": 1.088,
+    "rushYdsAllowedPerGame": 108.9,
+    "recYdsFactor": 1.043,
+    "recYdsAllowedPerGame": 34.9,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 1.168
+   },
+   "TE": {
+    "pprAllowedPerGame": 12.5,
+    "leaguePprPerGame": 13.45,
+    "pprFactor": 0.965,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 0.975,
+    "recYdsAllowedPerGame": 51.0,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.923
+   },
+   "WR": {
+    "pprAllowedPerGame": 35.43,
+    "leaguePprPerGame": 31.95,
+    "pprFactor": 1.054,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 1.059,
+    "recYdsAllowedPerGame": 164.9,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 1.045
+   }
+  },
+  "BAL": {
+   "QB": {
+    "pprAllowedPerGame": 17.29,
+    "leaguePprPerGame": 16.55,
+    "pprFactor": 1.022,
+    "rushYdsFactor": 1.073,
+    "rushYdsAllowedPerGame": 18.0,
+    "recYdsFactor": null,
+    "recYdsAllowedPerGame": null,
+    "passYdsFactor": 0.998,
+    "passYdsAllowedPerGame": 232.7,
+    "tdFactor": 1.266
+   },
+   "RB": {
+    "pprAllowedPerGame": 20.96,
+    "leaguePprPerGame": 22.0,
+    "pprFactor": 0.976,
+    "rushYdsFactor": 0.986,
+    "rushYdsAllowedPerGame": 90.0,
+    "recYdsFactor": 0.749,
+    "recYdsAllowedPerGame": 16.0,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 1.107
+   },
+   "TE": {
+    "pprAllowedPerGame": 14.06,
+    "leaguePprPerGame": 13.45,
+    "pprFactor": 1.023,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 1.005,
+    "recYdsAllowedPerGame": 54.3,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 1.174
+   },
+   "WR": {
+    "pprAllowedPerGame": 32.13,
+    "leaguePprPerGame": 31.95,
+    "pprFactor": 1.003,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 1.051,
+    "recYdsAllowedPerGame": 162.5,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.896
+   }
+  },
+  "BUF": {
+   "QB": {
+    "pprAllowedPerGame": 14.35,
+    "leaguePprPerGame": 16.55,
+    "pprFactor": 0.933,
+    "rushYdsFactor": 0.917,
+    "rushYdsAllowedPerGame": 13.1,
+    "recYdsFactor": null,
+    "recYdsAllowedPerGame": null,
+    "passYdsFactor": 1.015,
+    "passYdsAllowedPerGame": 240.9,
+    "tdFactor": 0.5
+   },
+   "RB": {
+    "pprAllowedPerGame": 22.79,
+    "leaguePprPerGame": 22.0,
+    "pprFactor": 1.018,
+    "rushYdsFactor": 0.922,
+    "rushYdsAllowedPerGame": 78.1,
+    "recYdsFactor": 1.072,
+    "recYdsAllowedPerGame": 36.8,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 1.056
+   },
+   "TE": {
+    "pprAllowedPerGame": 11.62,
+    "leaguePprPerGame": 13.45,
+    "pprFactor": 0.932,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 1.023,
+    "recYdsAllowedPerGame": 56.2,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.606
+   },
+   "WR": {
+    "pprAllowedPerGame": 32.21,
+    "leaguePprPerGame": 31.95,
+    "pprFactor": 1.004,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 0.989,
+    "recYdsAllowedPerGame": 144.4,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 1.1
+   }
+  },
+  "CAR": {
+   "QB": {
+    "pprAllowedPerGame": 15.73,
+    "leaguePprPerGame": 16.55,
+    "pprFactor": 0.975,
+    "rushYdsFactor": 1.067,
+    "rushYdsAllowedPerGame": 17.8,
+    "recYdsFactor": null,
+    "recYdsAllowedPerGame": null,
+    "passYdsFactor": 0.978,
+    "passYdsAllowedPerGame": 223.7,
+    "tdFactor": 1.062
+   },
+   "RB": {
+    "pprAllowedPerGame": 28.2,
+    "leaguePprPerGame": 22.0,
+    "pprFactor": 1.141,
+    "rushYdsFactor": 1.078,
+    "rushYdsAllowedPerGame": 107.1,
+    "recYdsFactor": 0.98,
+    "recYdsAllowedPerGame": 30.9,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 1.39
+   },
+   "TE": {
+    "pprAllowedPerGame": 12.11,
+    "leaguePprPerGame": 13.45,
+    "pprFactor": 0.95,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 0.91,
+    "recYdsAllowedPerGame": 44.1,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 1.029
+   },
+   "WR": {
+    "pprAllowedPerGame": 32.31,
+    "leaguePprPerGame": 31.95,
+    "pprFactor": 1.006,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 1.004,
+    "recYdsAllowedPerGame": 148.7,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.882
+   }
+  },
+  "CHI": {
+   "QB": {
+    "pprAllowedPerGame": 17.47,
+    "leaguePprPerGame": 16.55,
+    "pprFactor": 1.028,
+    "rushYdsFactor": 0.978,
+    "rushYdsAllowedPerGame": 15.0,
+    "recYdsFactor": null,
+    "recYdsAllowedPerGame": null,
+    "passYdsFactor": 1.001,
+    "passYdsAllowedPerGame": 234.2,
+    "tdFactor": 1.343
+   },
+   "RB": {
+    "pprAllowedPerGame": 20.03,
+    "leaguePprPerGame": 22.0,
+    "pprFactor": 0.955,
+    "rushYdsFactor": 0.916,
+    "rushYdsAllowedPerGame": 77.1,
+    "recYdsFactor": 1.063,
+    "recYdsAllowedPerGame": 36.2,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.945
+   },
+   "TE": {
+    "pprAllowedPerGame": 10.81,
+    "leaguePprPerGame": 13.45,
+    "pprFactor": 0.902,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 0.936,
+    "recYdsAllowedPerGame": 46.9,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.818
+   },
+   "WR": {
+    "pprAllowedPerGame": 30.68,
+    "leaguePprPerGame": 31.95,
+    "pprFactor": 0.98,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 1.012,
+    "recYdsAllowedPerGame": 151.1,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.936
+   }
+  },
+  "CIN": {
+   "QB": {
+    "pprAllowedPerGame": 17.18,
+    "leaguePprPerGame": 16.55,
+    "pprFactor": 1.019,
+    "rushYdsFactor": 1.484,
+    "rushYdsAllowedPerGame": 30.9,
+    "recYdsFactor": null,
+    "recYdsAllowedPerGame": null,
+    "passYdsFactor": 1.018,
+    "passYdsAllowedPerGame": 242.3,
+    "tdFactor": 1.062
+   },
+   "RB": {
+    "pprAllowedPerGame": 20.76,
+    "leaguePprPerGame": 22.0,
+    "pprFactor": 0.972,
+    "rushYdsFactor": 0.978,
+    "rushYdsAllowedPerGame": 88.6,
+    "recYdsFactor": 0.997,
+    "recYdsAllowedPerGame": 32.0,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.889
+   },
+   "TE": {
+    "pprAllowedPerGame": 15.12,
+    "leaguePprPerGame": 13.45,
+    "pprFactor": 1.062,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 1.199,
+    "recYdsAllowedPerGame": 75.1,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.712
+   },
+   "WR": {
+    "pprAllowedPerGame": 30.21,
+    "leaguePprPerGame": 31.95,
+    "pprFactor": 0.973,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 0.958,
+    "recYdsAllowedPerGame": 135.2,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.991
+   }
+  },
+  "CLE": {
+   "QB": {
+    "pprAllowedPerGame": 14.77,
+    "leaguePprPerGame": 16.55,
+    "pprFactor": 0.946,
+    "rushYdsFactor": 0.946,
+    "rushYdsAllowedPerGame": 14.0,
+    "recYdsFactor": null,
+    "recYdsAllowedPerGame": null,
+    "passYdsFactor": 0.969,
+    "passYdsAllowedPerGame": 219.3,
+    "tdFactor": 0.5
+   },
+   "RB": {
+    "pprAllowedPerGame": 20.43,
+    "leaguePprPerGame": 22.0,
+    "pprFactor": 0.964,
+    "rushYdsFactor": 1.096,
+    "rushYdsAllowedPerGame": 110.4,
+    "recYdsFactor": 0.794,
+    "recYdsAllowedPerGame": 18.9,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.889
+   },
+   "TE": {
+    "pprAllowedPerGame": 14.12,
+    "leaguePprPerGame": 13.45,
+    "pprFactor": 1.025,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 0.994,
+    "recYdsAllowedPerGame": 53.1,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 1.241
+   },
+   "WR": {
+    "pprAllowedPerGame": 31.1,
+    "leaguePprPerGame": 31.95,
+    "pprFactor": 0.987,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 0.996,
+    "recYdsAllowedPerGame": 146.5,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.991
+   }
+  },
+  "DAL": {
+   "QB": {
+    "pprAllowedPerGame": 20.49,
+    "leaguePprPerGame": 16.55,
+    "pprFactor": 1.119,
+    "rushYdsFactor": 1.27,
+    "rushYdsAllowedPerGame": 24.2,
+    "recYdsFactor": null,
+    "recYdsAllowedPerGame": null,
+    "passYdsFactor": 1.038,
+    "passYdsAllowedPerGame": 251.8,
+    "tdFactor": 1.011
+   },
+   "RB": {
+    "pprAllowedPerGame": 27.84,
+    "leaguePprPerGame": 22.0,
+    "pprFactor": 1.133,
+    "rushYdsFactor": 1.113,
+    "rushYdsAllowedPerGame": 113.5,
+    "recYdsFactor": 1.098,
+    "recYdsAllowedPerGame": 38.5,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 1.309
+   },
+   "TE": {
+    "pprAllowedPerGame": 12.41,
+    "leaguePprPerGame": 13.45,
+    "pprFactor": 0.961,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 0.961,
+    "recYdsAllowedPerGame": 49.5,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.885
+   },
+   "WR": {
+    "pprAllowedPerGame": 37.22,
+    "leaguePprPerGame": 31.95,
+    "pprFactor": 1.082,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 1.055,
+    "recYdsAllowedPerGame": 163.8,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 1.194
+   }
+  },
+  "DEN": {
+   "QB": {
+    "pprAllowedPerGame": 17.47,
+    "leaguePprPerGame": 16.55,
+    "pprFactor": 1.028,
+    "rushYdsFactor": 1.14,
+    "rushYdsAllowedPerGame": 20.1,
+    "recYdsFactor": null,
+    "recYdsAllowedPerGame": null,
+    "passYdsFactor": 1.038,
+    "passYdsAllowedPerGame": 251.6,
+    "tdFactor": 0.781
+   },
+   "RB": {
+    "pprAllowedPerGame": 24.41,
+    "leaguePprPerGame": 22.0,
+    "pprFactor": 1.055,
+    "rushYdsFactor": 1.043,
+    "rushYdsAllowedPerGame": 100.5,
+    "recYdsFactor": 1.224,
+    "recYdsAllowedPerGame": 46.6,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.945
+   },
+   "TE": {
+    "pprAllowedPerGame": 18.32,
+    "leaguePprPerGame": 13.45,
+    "pprFactor": 1.181,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 1.153,
+    "recYdsAllowedPerGame": 70.2,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 1.347
+   },
+   "WR": {
+    "pprAllowedPerGame": 28.06,
+    "leaguePprPerGame": 31.95,
+    "pprFactor": 0.939,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 0.947,
+    "recYdsAllowedPerGame": 132.0,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.827
+   }
+  },
+  "DET": {
+   "QB": {
+    "pprAllowedPerGame": 20.67,
+    "leaguePprPerGame": 16.55,
+    "pprFactor": 1.124,
+    "rushYdsFactor": 1.197,
+    "rushYdsAllowedPerGame": 21.9,
+    "recYdsFactor": null,
+    "recYdsAllowedPerGame": null,
+    "passYdsFactor": 1.041,
+    "passYdsAllowedPerGame": 252.8,
+    "tdFactor": 1.062
+   },
+   "RB": {
+    "pprAllowedPerGame": 18.62,
+    "leaguePprPerGame": 22.0,
+    "pprFactor": 0.923,
+    "rushYdsFactor": 0.874,
+    "rushYdsAllowedPerGame": 69.3,
+    "recYdsFactor": 1.011,
+    "recYdsAllowedPerGame": 32.9,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.889
+   },
+   "TE": {
+    "pprAllowedPerGame": 20.8,
+    "leaguePprPerGame": 13.45,
+    "pprFactor": 1.273,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 1.189,
+    "recYdsAllowedPerGame": 74.0,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 1.664
+   },
+   "WR": {
+    "pprAllowedPerGame": 33.2,
+    "leaguePprPerGame": 31.95,
+    "pprFactor": 1.019,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 1.01,
+    "recYdsAllowedPerGame": 150.5,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.936
+   }
+  },
+  "GB": {
+   "QB": {
+    "pprAllowedPerGame": 13.57,
+    "leaguePprPerGame": 16.55,
+    "pprFactor": 0.91,
+    "rushYdsFactor": 0.879,
+    "rushYdsAllowedPerGame": 11.9,
+    "recYdsFactor": null,
+    "recYdsAllowedPerGame": null,
+    "passYdsFactor": 0.991,
+    "passYdsAllowedPerGame": 229.4,
+    "tdFactor": 0.5
+   },
+   "RB": {
+    "pprAllowedPerGame": 24.88,
+    "leaguePprPerGame": 22.0,
+    "pprFactor": 1.065,
+    "rushYdsFactor": 1.01,
+    "rushYdsAllowedPerGame": 94.5,
+    "recYdsFactor": 1.002,
+    "recYdsAllowedPerGame": 32.3,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 1.279
+   },
+   "TE": {
+    "pprAllowedPerGame": 10.12,
+    "leaguePprPerGame": 13.45,
+    "pprFactor": 0.876,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 0.883,
+    "recYdsAllowedPerGame": 41.2,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.818
+   },
+   "WR": {
+    "pprAllowedPerGame": 36.25,
+    "leaguePprPerGame": 31.95,
+    "pprFactor": 1.067,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 1.028,
+    "recYdsAllowedPerGame": 155.9,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 1.045
+   }
+  },
+  "HOU": {
+   "QB": {
+    "pprAllowedPerGame": 16.78,
+    "leaguePprPerGame": 16.55,
+    "pprFactor": 1.007,
+    "rushYdsFactor": 0.86,
+    "rushYdsAllowedPerGame": 11.3,
+    "recYdsFactor": null,
+    "recYdsAllowedPerGame": null,
+    "passYdsFactor": 1.037,
+    "passYdsAllowedPerGame": 251.2,
+    "tdFactor": 1.624
+   },
+   "RB": {
+    "pprAllowedPerGame": 21.03,
+    "leaguePprPerGame": 22.0,
+    "pprFactor": 0.978,
+    "rushYdsFactor": 0.951,
+    "rushYdsAllowedPerGame": 83.5,
+    "recYdsFactor": 0.917,
+    "recYdsAllowedPerGame": 26.8,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 1.001
+   },
+   "TE": {
+    "pprAllowedPerGame": 9.98,
+    "leaguePprPerGame": 13.45,
+    "pprFactor": 0.871,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 0.949,
+    "recYdsAllowedPerGame": 48.3,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.606
+   },
+   "WR": {
+    "pprAllowedPerGame": 34.1,
+    "leaguePprPerGame": 31.95,
+    "pprFactor": 1.034,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 1.076,
+    "recYdsAllowedPerGame": 170.2,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.991
+   }
+  },
+  "IND": {
+   "QB": {
+    "pprAllowedPerGame": 17.9,
+    "leaguePprPerGame": 16.55,
+    "pprFactor": 1.041,
+    "rushYdsFactor": 1.108,
+    "rushYdsAllowedPerGame": 19.1,
+    "recYdsFactor": null,
+    "recYdsAllowedPerGame": null,
+    "passYdsFactor": 0.995,
+    "passYdsAllowedPerGame": 231.6,
+    "tdFactor": 1.011
+   },
+   "RB": {
+    "pprAllowedPerGame": 24.55,
+    "leaguePprPerGame": 22.0,
+    "pprFactor": 1.058,
+    "rushYdsFactor": 1.098,
+    "rushYdsAllowedPerGame": 110.8,
+    "recYdsFactor": 1.123,
+    "recYdsAllowedPerGame": 40.1,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 1.006
+   },
+   "TE": {
+    "pprAllowedPerGame": 13.37,
+    "leaguePprPerGame": 13.45,
+    "pprFactor": 0.997,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 0.923,
+    "recYdsAllowedPerGame": 45.5,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 1.27
+   },
+   "WR": {
+    "pprAllowedPerGame": 30.65,
+    "leaguePprPerGame": 31.95,
+    "pprFactor": 0.98,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 1.001,
+    "recYdsAllowedPerGame": 148.0,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.996
+   }
+  },
+  "JAX": {
+   "QB": {
+    "pprAllowedPerGame": 13.97,
+    "leaguePprPerGame": 16.55,
+    "pprFactor": 0.922,
+    "rushYdsFactor": 1.067,
+    "rushYdsAllowedPerGame": 17.8,
+    "recYdsFactor": null,
+    "recYdsAllowedPerGame": null,
+    "passYdsFactor": 0.991,
+    "passYdsAllowedPerGame": 229.8,
+    "tdFactor": 1.062
+   },
+   "RB": {
+    "pprAllowedPerGame": 17.69,
+    "leaguePprPerGame": 22.0,
+    "pprFactor": 0.902,
+    "rushYdsFactor": 0.849,
+    "rushYdsAllowedPerGame": 64.6,
+    "recYdsFactor": 1.035,
+    "recYdsAllowedPerGame": 34.4,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.778
+   },
+   "TE": {
+    "pprAllowedPerGame": 10.64,
+    "leaguePprPerGame": 13.45,
+    "pprFactor": 0.896,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 0.819,
+    "recYdsAllowedPerGame": 34.3,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 1.029
+   },
+   "WR": {
+    "pprAllowedPerGame": 32.09,
+    "leaguePprPerGame": 31.95,
+    "pprFactor": 1.002,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 1.049,
+    "recYdsAllowedPerGame": 162.2,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.773
+   }
+  },
+  "KC": {
+   "QB": {
+    "pprAllowedPerGame": 12.19,
+    "leaguePprPerGame": 16.55,
+    "pprFactor": 0.868,
+    "rushYdsFactor": 1.0,
+    "rushYdsAllowedPerGame": 15.7,
+    "recYdsFactor": null,
+    "recYdsAllowedPerGame": null,
+    "passYdsFactor": 0.971,
+    "passYdsAllowedPerGame": 220.5,
+    "tdFactor": 0.5
+   },
+   "RB": {
+    "pprAllowedPerGame": 18.33,
+    "leaguePprPerGame": 22.0,
+    "pprFactor": 0.917,
+    "rushYdsFactor": 0.888,
+    "rushYdsAllowedPerGame": 71.9,
+    "recYdsFactor": 1.035,
+    "recYdsAllowedPerGame": 34.4,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.834
+   },
+   "TE": {
+    "pprAllowedPerGame": 16.27,
+    "leaguePprPerGame": 13.45,
+    "pprFactor": 1.105,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 1.101,
+    "recYdsAllowedPerGame": 64.6,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 1.029
+   },
+   "WR": {
+    "pprAllowedPerGame": 24.38,
+    "leaguePprPerGame": 31.95,
+    "pprFactor": 0.882,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 0.905,
+    "recYdsAllowedPerGame": 119.6,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.664
+   }
+  },
+  "LAR": {
+   "QB": {
+    "pprAllowedPerGame": 14.27,
+    "leaguePprPerGame": 16.55,
+    "pprFactor": 0.931,
+    "rushYdsFactor": 1.188,
+    "rushYdsAllowedPerGame": 21.6,
+    "recYdsFactor": null,
+    "recYdsAllowedPerGame": null,
+    "passYdsFactor": 0.923,
+    "passYdsAllowedPerGame": 197.7,
+    "tdFactor": 1.062
+   },
+   "RB": {
+    "pprAllowedPerGame": 17.48,
+    "leaguePprPerGame": 22.0,
+    "pprFactor": 0.897,
+    "rushYdsFactor": 0.892,
+    "rushYdsAllowedPerGame": 72.6,
+    "recYdsFactor": 1.109,
+    "recYdsAllowedPerGame": 39.2,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.667
+   },
+   "TE": {
+    "pprAllowedPerGame": 10.81,
+    "leaguePprPerGame": 13.45,
+    "pprFactor": 0.902,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 0.938,
+    "recYdsAllowedPerGame": 47.1,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.606
+   },
+   "WR": {
+    "pprAllowedPerGame": 25.89,
+    "leaguePprPerGame": 31.95,
+    "pprFactor": 0.905,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 0.877,
+    "recYdsAllowedPerGame": 111.3,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.991
+   }
+  },
+  "LAC": {
+   "QB": {
+    "pprAllowedPerGame": 16.08,
+    "leaguePprPerGame": 16.55,
+    "pprFactor": 0.986,
+    "rushYdsFactor": 0.796,
+    "rushYdsAllowedPerGame": 9.3,
+    "recYdsFactor": null,
+    "recYdsAllowedPerGame": null,
+    "passYdsFactor": 1.005,
+    "passYdsAllowedPerGame": 236.1,
+    "tdFactor": 1.062
+   },
+   "RB": {
+    "pprAllowedPerGame": 23.64,
+    "leaguePprPerGame": 22.0,
+    "pprFactor": 1.037,
+    "rushYdsFactor": 1.048,
+    "rushYdsAllowedPerGame": 101.5,
+    "recYdsFactor": 0.872,
+    "recYdsAllowedPerGame": 23.9,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 1.168
+   },
+   "TE": {
+    "pprAllowedPerGame": 11.13,
+    "leaguePprPerGame": 13.45,
+    "pprFactor": 0.914,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 1.042,
+    "recYdsAllowedPerGame": 58.3,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.606
+   },
+   "WR": {
+    "pprAllowedPerGame": 35.23,
+    "leaguePprPerGame": 31.95,
+    "pprFactor": 1.051,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 1.021,
+    "recYdsAllowedPerGame": 153.8,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 1.263
+   }
+  },
+  "LV": {
+   "QB": {
+    "pprAllowedPerGame": 19.16,
+    "leaguePprPerGame": 16.55,
+    "pprFactor": 1.079,
+    "rushYdsFactor": 0.981,
+    "rushYdsAllowedPerGame": 15.1,
+    "recYdsFactor": null,
+    "recYdsAllowedPerGame": null,
+    "passYdsFactor": 1.025,
+    "passYdsAllowedPerGame": 245.7,
+    "tdFactor": 1.266
+   },
+   "RB": {
+    "pprAllowedPerGame": 26.29,
+    "leaguePprPerGame": 22.0,
+    "pprFactor": 1.098,
+    "rushYdsFactor": 1.201,
+    "rushYdsAllowedPerGame": 129.9,
+    "recYdsFactor": 0.942,
+    "recYdsAllowedPerGame": 28.5,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 1.208
+   },
+   "TE": {
+    "pprAllowedPerGame": 16.55,
+    "leaguePprPerGame": 13.45,
+    "pprFactor": 1.116,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 1.008,
+    "recYdsAllowedPerGame": 54.6,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 1.366
+   },
+   "WR": {
+    "pprAllowedPerGame": 33.35,
+    "leaguePprPerGame": 31.95,
+    "pprFactor": 1.022,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 1.051,
+    "recYdsAllowedPerGame": 162.6,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 1.144
+   }
+  },
+  "MIA": {
+   "QB": {
+    "pprAllowedPerGame": 16.26,
+    "leaguePprPerGame": 16.55,
+    "pprFactor": 0.991,
+    "rushYdsFactor": 0.713,
+    "rushYdsAllowedPerGame": 6.7,
+    "recYdsFactor": null,
+    "recYdsAllowedPerGame": null,
+    "passYdsFactor": 0.97,
+    "passYdsAllowedPerGame": 219.8,
+    "tdFactor": 1.062
+   },
+   "RB": {
+    "pprAllowedPerGame": 25.01,
+    "leaguePprPerGame": 22.0,
+    "pprFactor": 1.068,
+    "rushYdsFactor": 1.085,
+    "rushYdsAllowedPerGame": 108.3,
+    "recYdsFactor": 1.041,
+    "recYdsAllowedPerGame": 34.8,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 1.056
+   },
+   "TE": {
+    "pprAllowedPerGame": 15.45,
+    "leaguePprPerGame": 13.45,
+    "pprFactor": 1.074,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 1.042,
+    "recYdsAllowedPerGame": 58.2,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 1.135
+   },
+   "WR": {
+    "pprAllowedPerGame": 26.7,
+    "leaguePprPerGame": 31.95,
+    "pprFactor": 0.918,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 0.934,
+    "recYdsAllowedPerGame": 128.2,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.882
+   }
+  },
+  "MIN": {
+   "QB": {
+    "pprAllowedPerGame": 10.04,
+    "leaguePprPerGame": 16.55,
+    "pprFactor": 0.803,
+    "rushYdsFactor": 0.796,
+    "rushYdsAllowedPerGame": 9.3,
+    "recYdsFactor": null,
+    "recYdsAllowedPerGame": null,
+    "passYdsFactor": 0.923,
+    "passYdsAllowedPerGame": 197.8,
+    "tdFactor": 0.5
+   },
+   "RB": {
+    "pprAllowedPerGame": 18.14,
+    "leaguePprPerGame": 22.0,
+    "pprFactor": 0.912,
+    "rushYdsFactor": 1.013,
+    "rushYdsAllowedPerGame": 95.1,
+    "recYdsFactor": 0.831,
+    "recYdsAllowedPerGame": 21.3,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.834
+   },
+   "TE": {
+    "pprAllowedPerGame": 9.68,
+    "leaguePprPerGame": 13.45,
+    "pprFactor": 0.86,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 0.906,
+    "recYdsAllowedPerGame": 43.6,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.818
+   },
+   "WR": {
+    "pprAllowedPerGame": 27.77,
+    "leaguePprPerGame": 31.95,
+    "pprFactor": 0.935,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 0.946,
+    "recYdsAllowedPerGame": 131.6,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.827
+   }
+  },
+  "NE": {
+   "QB": {
+    "pprAllowedPerGame": 17.72,
+    "leaguePprPerGame": 16.55,
+    "pprFactor": 1.035,
+    "rushYdsFactor": 0.774,
+    "rushYdsAllowedPerGame": 8.6,
+    "recYdsFactor": null,
+    "recYdsAllowedPerGame": null,
+    "passYdsFactor": 1.049,
+    "passYdsAllowedPerGame": 256.6,
+    "tdFactor": 1.062
+   },
+   "RB": {
+    "pprAllowedPerGame": 22.08,
+    "leaguePprPerGame": 22.0,
+    "pprFactor": 1.002,
+    "rushYdsFactor": 1.009,
+    "rushYdsAllowedPerGame": 94.3,
+    "recYdsFactor": 1.083,
+    "recYdsAllowedPerGame": 37.5,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.945
+   },
+   "TE": {
+    "pprAllowedPerGame": 10.27,
+    "leaguePprPerGame": 13.45,
+    "pprFactor": 0.882,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 0.916,
+    "recYdsAllowedPerGame": 44.7,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.712
+   },
+   "WR": {
+    "pprAllowedPerGame": 39.06,
+    "leaguePprPerGame": 31.95,
+    "pprFactor": 1.111,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 1.091,
+    "recYdsAllowedPerGame": 174.4,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 1.318
+   }
+  },
+  "NO": {
+   "QB": {
+    "pprAllowedPerGame": 16.54,
+    "leaguePprPerGame": 16.55,
+    "pprFactor": 1.0,
+    "rushYdsFactor": 1.022,
+    "rushYdsAllowedPerGame": 16.4,
+    "recYdsFactor": null,
+    "recYdsAllowedPerGame": null,
+    "passYdsFactor": 1.019,
+    "passYdsAllowedPerGame": 242.6,
+    "tdFactor": 0.5
+   },
+   "RB": {
+    "pprAllowedPerGame": 27.92,
+    "leaguePprPerGame": 22.0,
+    "pprFactor": 1.135,
+    "rushYdsFactor": 1.095,
+    "rushYdsAllowedPerGame": 110.2,
+    "recYdsFactor": 1.106,
+    "recYdsAllowedPerGame": 39.0,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 1.334
+   },
+   "TE": {
+    "pprAllowedPerGame": 15.91,
+    "leaguePprPerGame": 13.45,
+    "pprFactor": 1.092,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 1.096,
+    "recYdsAllowedPerGame": 64.1,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 1.135
+   },
+   "WR": {
+    "pprAllowedPerGame": 28.43,
+    "leaguePprPerGame": 31.95,
+    "pprFactor": 0.945,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 0.972,
+    "recYdsAllowedPerGame": 139.5,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.882
+   }
+  },
+  "NYG": {
+   "QB": {
+    "pprAllowedPerGame": 18.37,
+    "leaguePprPerGame": 16.55,
+    "pprFactor": 1.055,
+    "rushYdsFactor": 1.363,
+    "rushYdsAllowedPerGame": 27.1,
+    "recYdsFactor": null,
+    "recYdsAllowedPerGame": null,
+    "passYdsFactor": 0.941,
+    "passYdsAllowedPerGame": 206.4,
+    "tdFactor": 1.343
+   },
+   "RB": {
+    "pprAllowedPerGame": 18.34,
+    "leaguePprPerGame": 22.0,
+    "pprFactor": 0.917,
+    "rushYdsFactor": 0.973,
+    "rushYdsAllowedPerGame": 87.7,
+    "recYdsFactor": 0.853,
+    "recYdsAllowedPerGame": 22.7,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.889
+   },
+   "TE": {
+    "pprAllowedPerGame": 12.15,
+    "leaguePprPerGame": 13.45,
+    "pprFactor": 0.952,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 0.914,
+    "recYdsAllowedPerGame": 44.5,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.818
+   },
+   "WR": {
+    "pprAllowedPerGame": 32.53,
+    "leaguePprPerGame": 31.95,
+    "pprFactor": 1.009,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 0.97,
+    "recYdsAllowedPerGame": 138.9,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 1.154
+   }
+  },
+  "NYJ": {
+   "QB": {
+    "pprAllowedPerGame": 18.44,
+    "leaguePprPerGame": 16.55,
+    "pprFactor": 1.057,
+    "rushYdsFactor": 1.004,
+    "rushYdsAllowedPerGame": 15.8,
+    "recYdsFactor": null,
+    "recYdsAllowedPerGame": null,
+    "passYdsFactor": 0.935,
+    "passYdsAllowedPerGame": 203.3,
+    "tdFactor": 1.777
+   },
+   "RB": {
+    "pprAllowedPerGame": 24.1,
+    "leaguePprPerGame": 22.0,
+    "pprFactor": 1.048,
+    "rushYdsFactor": 1.13,
+    "rushYdsAllowedPerGame": 116.6,
+    "recYdsFactor": 0.907,
+    "recYdsAllowedPerGame": 26.2,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 1.107
+   },
+   "TE": {
+    "pprAllowedPerGame": 13.38,
+    "leaguePprPerGame": 13.45,
+    "pprFactor": 0.998,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 1.059,
+    "recYdsAllowedPerGame": 60.1,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.885
+   },
+   "WR": {
+    "pprAllowedPerGame": 28.27,
+    "leaguePprPerGame": 31.95,
+    "pprFactor": 0.942,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 0.896,
+    "recYdsAllowedPerGame": 117.0,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 1.095
+   }
+  },
+  "PHI": {
+   "QB": {
+    "pprAllowedPerGame": 18.29,
+    "leaguePprPerGame": 16.55,
+    "pprFactor": 1.052,
+    "rushYdsFactor": 1.067,
+    "rushYdsAllowedPerGame": 17.8,
+    "recYdsFactor": null,
+    "recYdsAllowedPerGame": null,
+    "passYdsFactor": 1.008,
+    "passYdsAllowedPerGame": 237.7,
+    "tdFactor": 1.343
+   },
+   "RB": {
+    "pprAllowedPerGame": 19.2,
+    "leaguePprPerGame": 22.0,
+    "pprFactor": 0.936,
+    "rushYdsFactor": 1.052,
+    "rushYdsAllowedPerGame": 102.3,
+    "recYdsFactor": 0.775,
+    "recYdsAllowedPerGame": 17.7,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.834
+   },
+   "TE": {
+    "pprAllowedPerGame": 10.69,
+    "leaguePprPerGame": 13.45,
+    "pprFactor": 0.897,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 0.916,
+    "recYdsAllowedPerGame": 44.7,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.818
+   },
+   "WR": {
+    "pprAllowedPerGame": 37.59,
+    "leaguePprPerGame": 31.95,
+    "pprFactor": 1.088,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 1.091,
+    "recYdsAllowedPerGame": 174.4,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 1.154
+   }
+  },
+  "PIT": {
+   "QB": {
+    "pprAllowedPerGame": 13.6,
+    "leaguePprPerGame": 16.55,
+    "pprFactor": 0.911,
+    "rushYdsFactor": 0.879,
+    "rushYdsAllowedPerGame": 11.9,
+    "recYdsFactor": null,
+    "recYdsAllowedPerGame": null,
+    "passYdsFactor": 1.032,
+    "passYdsAllowedPerGame": 248.6,
+    "tdFactor": 0.5
+   },
+   "RB": {
+    "pprAllowedPerGame": 21.93,
+    "leaguePprPerGame": 22.0,
+    "pprFactor": 0.998,
+    "rushYdsFactor": 0.885,
+    "rushYdsAllowedPerGame": 71.4,
+    "recYdsFactor": 1.182,
+    "recYdsAllowedPerGame": 43.9,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.945
+   },
+   "TE": {
+    "pprAllowedPerGame": 12.03,
+    "leaguePprPerGame": 13.45,
+    "pprFactor": 0.947,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 0.986,
+    "recYdsAllowedPerGame": 52.2,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.923
+   },
+   "WR": {
+    "pprAllowedPerGame": 30.74,
+    "leaguePprPerGame": 31.95,
+    "pprFactor": 0.981,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 1.018,
+    "recYdsAllowedPerGame": 152.8,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.773
+   }
+  },
+  "SEA": {
+   "QB": {
+    "pprAllowedPerGame": 10.79,
+    "leaguePprPerGame": 16.55,
+    "pprFactor": 0.826,
+    "rushYdsFactor": 0.99,
+    "rushYdsAllowedPerGame": 15.4,
+    "recYdsFactor": null,
+    "recYdsAllowedPerGame": null,
+    "passYdsFactor": 0.855,
+    "passYdsAllowedPerGame": 166.2,
+    "tdFactor": 0.781
+   },
+   "RB": {
+    "pprAllowedPerGame": 19.84,
+    "leaguePprPerGame": 22.0,
+    "pprFactor": 0.951,
+    "rushYdsFactor": 0.862,
+    "rushYdsAllowedPerGame": 67.0,
+    "recYdsFactor": 0.957,
+    "recYdsAllowedPerGame": 29.4,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 1.001
+   },
+   "TE": {
+    "pprAllowedPerGame": 10.8,
+    "leaguePprPerGame": 13.45,
+    "pprFactor": 0.902,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 0.896,
+    "recYdsAllowedPerGame": 42.6,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.712
+   },
+   "WR": {
+    "pprAllowedPerGame": 21.75,
+    "leaguePprPerGame": 31.95,
+    "pprFactor": 0.84,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 0.817,
+    "recYdsAllowedPerGame": 93.6,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.773
+   }
+  },
+  "SF": {
+   "QB": {
+    "pprAllowedPerGame": 16.25,
+    "leaguePprPerGame": 16.55,
+    "pprFactor": 0.991,
+    "rushYdsFactor": 0.656,
+    "rushYdsAllowedPerGame": 4.9,
+    "recYdsFactor": null,
+    "recYdsAllowedPerGame": null,
+    "passYdsFactor": 1.011,
+    "passYdsAllowedPerGame": 239.0,
+    "tdFactor": 1.062
+   },
+   "RB": {
+    "pprAllowedPerGame": 19.83,
+    "leaguePprPerGame": 22.0,
+    "pprFactor": 0.951,
+    "rushYdsFactor": 0.889,
+    "rushYdsAllowedPerGame": 72.0,
+    "recYdsFactor": 1.095,
+    "recYdsAllowedPerGame": 38.3,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.778
+   },
+   "TE": {
+    "pprAllowedPerGame": 12.86,
+    "leaguePprPerGame": 13.45,
+    "pprFactor": 0.978,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 1.013,
+    "recYdsAllowedPerGame": 55.1,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.818
+   },
+   "WR": {
+    "pprAllowedPerGame": 33.99,
+    "leaguePprPerGame": 31.95,
+    "pprFactor": 1.032,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 0.995,
+    "recYdsAllowedPerGame": 146.1,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 1.1
+   }
+  },
+  "TB": {
+   "QB": {
+    "pprAllowedPerGame": 12.61,
+    "leaguePprPerGame": 16.55,
+    "pprFactor": 0.881,
+    "rushYdsFactor": 0.86,
+    "rushYdsAllowedPerGame": 11.3,
+    "recYdsFactor": null,
+    "recYdsAllowedPerGame": null,
+    "passYdsFactor": 0.996,
+    "passYdsAllowedPerGame": 231.9,
+    "tdFactor": 0.5
+   },
+   "RB": {
+    "pprAllowedPerGame": 17.04,
+    "leaguePprPerGame": 22.0,
+    "pprFactor": 0.887,
+    "rushYdsFactor": 0.875,
+    "rushYdsAllowedPerGame": 69.5,
+    "recYdsFactor": 0.949,
+    "recYdsAllowedPerGame": 28.9,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.778
+   },
+   "TE": {
+    "pprAllowedPerGame": 15.01,
+    "leaguePprPerGame": 13.45,
+    "pprFactor": 1.058,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 1.103,
+    "recYdsAllowedPerGame": 64.8,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 1.029
+   },
+   "WR": {
+    "pprAllowedPerGame": 30.82,
+    "leaguePprPerGame": 31.95,
+    "pprFactor": 0.982,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 0.968,
+    "recYdsAllowedPerGame": 138.2,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.991
+   }
+  },
+  "TEN": {
+   "QB": {
+    "pprAllowedPerGame": 20.97,
+    "leaguePprPerGame": 16.55,
+    "pprFactor": 1.133,
+    "rushYdsFactor": 1.051,
+    "rushYdsAllowedPerGame": 17.3,
+    "recYdsFactor": null,
+    "recYdsAllowedPerGame": null,
+    "passYdsFactor": 1.111,
+    "passYdsAllowedPerGame": 285.9,
+    "tdFactor": 1.624
+   },
+   "RB": {
+    "pprAllowedPerGame": 22.25,
+    "leaguePprPerGame": 22.0,
+    "pprFactor": 1.006,
+    "rushYdsFactor": 1.035,
+    "rushYdsAllowedPerGame": 99.1,
+    "recYdsFactor": 1.019,
+    "recYdsAllowedPerGame": 33.4,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 1.001
+   },
+   "TE": {
+    "pprAllowedPerGame": 12.96,
+    "leaguePprPerGame": 13.45,
+    "pprFactor": 0.982,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 0.894,
+    "recYdsAllowedPerGame": 42.3,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 1.241
+   },
+   "WR": {
+    "pprAllowedPerGame": 44.77,
+    "leaguePprPerGame": 31.95,
+    "pprFactor": 1.201,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 1.207,
+    "recYdsAllowedPerGame": 208.6,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 1.154
+   }
+  },
+  "WAS": {
+   "QB": {
+    "pprAllowedPerGame": 18.87,
+    "leaguePprPerGame": 16.55,
+    "pprFactor": 1.07,
+    "rushYdsFactor": 1.124,
+    "rushYdsAllowedPerGame": 19.6,
+    "recYdsFactor": null,
+    "recYdsAllowedPerGame": null,
+    "passYdsFactor": 1.062,
+    "passYdsAllowedPerGame": 262.7,
+    "tdFactor": 0.781
+   },
+   "RB": {
+    "pprAllowedPerGame": 20.7,
+    "leaguePprPerGame": 22.0,
+    "pprFactor": 0.97,
+    "rushYdsFactor": 0.903,
+    "rushYdsAllowedPerGame": 74.6,
+    "recYdsFactor": 1.128,
+    "recYdsAllowedPerGame": 40.4,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 0.945
+   },
+   "TE": {
+    "pprAllowedPerGame": 20.36,
+    "leaguePprPerGame": 13.45,
+    "pprFactor": 1.257,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 1.248,
+    "recYdsAllowedPerGame": 80.4,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 1.453
+   },
+   "WR": {
+    "pprAllowedPerGame": 32.6,
+    "leaguePprPerGame": 31.95,
+    "pprFactor": 1.01,
+    "rushYdsFactor": null,
+    "rushYdsAllowedPerGame": null,
+    "recYdsFactor": 0.982,
+    "recYdsAllowedPerGame": 142.3,
+    "passYdsFactor": null,
+    "passYdsAllowedPerGame": null,
+    "tdFactor": 1.045
+   }
+  }
+ }
+}
