@@ -29,7 +29,7 @@ function minimumLine(statKey) {
   return statKey === 'rec' ? 1 : 5
 }
 function isTouchdown(statKey) {
-  return /td$/i.test(statKey)
+  return /td/i.test(statKey)
 }
 /** Lines are whole numbers or halves, matching the numbers printed on the cards. */
 export function roundPropLine(value) {
@@ -48,8 +48,9 @@ export function raisedBreakoutLine(threshold, scatter) {
   const raised = line > threshold
   return {line, note:raised ? 'Line raised to scatter proj' : null, raised, scatter:rounded}
 }
-/** Compare one parlay line with the scatter projection. A pass may raise the line to the live projection; it never lowers it. */
+/** Compare one parlay line with the scatter projection. Touchdown legs are not checked. A pass may raise the line to the live projection; it never lowers it. */
 export function decideScatterLine({line, statKey, projection, liveProjection}) {
+  if (isTouchdown(statKey)) return {action:'skip', kind:'skipped', line, projection, mark:'Scatter check skipped (TD leg)'}
   if (projection == null) return {action:'keep', kind:'no-data', line, mark:'No scatter data'}
   if (projection >= line) {
     const live = roundPropLine(liveProjection)
@@ -60,7 +61,6 @@ export function decideScatterLine({line, statKey, projection, liveProjection}) {
     }
     return {action:'keep', kind:'pass', line, projection, mark:`Scatter check ✓ (proj ${formatScatter(projection)})`}
   }
-  if (isTouchdown(statKey)) return {action:'remove', kind:'removed', from:line, line, projection, mark:`Removed by scatter check: TD line is ${line}+ and cannot go lower`}
   const lowered = Math.floor(projection)
   if (lowered < minimumLine(statKey)) return {action:'remove', kind:'removed', from:line, line:lowered, projection, mark:`Removed by scatter check: ${line}+ would drop below ${minimumLine(statKey)}`}
   return {action:'lower', kind:'changed', from:line, line:lowered, projection, mark:`Lowered by scatter check: ${line}+ -> ${lowered}+`}

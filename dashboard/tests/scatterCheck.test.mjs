@@ -40,10 +40,21 @@ test('Kyren breakout receiving yards rises from 25 to the scatter projection 40'
   assert.equal(raisedBreakoutLine(25, null).note, 'No scatter data')
 })
 
-test('totalTD reads the scatter td projection', () => {
-  assert.equal(scatterProjection(games, {awayAbbr:'GB', homeAbbr:'LAR', playerName:'Kyren Williams', statKey:'totalTD'}), 0.86)
-  const decision = decideScatterLine({line:1, statKey:'totalTD', projection:0.86})
-  assert.equal(decision.action, 'remove')
+test('Corum 1+ rush+rec TDs is kept and skipped even when scatter is under 1', () => {
+  const decision = decideScatterLine({line:1, statKey:'totalTD', projection:0.45, liveProjection:0.8})
+  assert.equal(decision.action, 'skip')
+  assert.equal(decision.kind, 'skipped')
+  assert.equal(decision.line, 1)
+  assert.equal(decision.mark, 'Scatter check skipped (TD leg)')
+})
+
+test('Stafford 2+ pass TDs is skipped instead of marked no scatter data', () => {
+  assert.equal(scatterProjection(games, {awayAbbr:'GB', homeAbbr:'LAR', playerName:'Matthew Stafford', statKey:'passTD'}), null)
+  const decision = decideScatterLine({line:2, statKey:'passTD', projection:null, liveProjection:2.5})
+  assert.equal(decision.action, 'skip')
+  assert.equal(decision.line, 2)
+  assert.equal(decision.mark, 'Scatter check skipped (TD leg)')
+  assert.equal(decideScatterLine({line:1, statKey:'rushTD', projection:2}).action, 'skip')
 })
 
 test('a line above the scatter projection drops to the whole number at or below it', () => {
@@ -60,7 +71,6 @@ test('yards below 5 and receptions below 1 are removed instead of lowered', () =
 })
 
 test('unmapped stats and missing players stay unmarked as no scatter data', () => {
-  assert.equal(scatterProjection(games, {awayAbbr:'GB', homeAbbr:'LAR', playerName:'Matthew Stafford', statKey:'passTD'}), null)
-  assert.equal(decideScatterLine({line:2, statKey:'passTD', projection:null}).mark, 'No scatter data')
   assert.equal(scatterProjection(games, {awayAbbr:'WSH', homeAbbr:'NYG', playerName:'Nobody', statKey:'rec'}), null)
+  assert.equal(decideScatterLine({line:15, statKey:'recYds', projection:null}).mark, 'No scatter data')
 })

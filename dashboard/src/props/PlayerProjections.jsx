@@ -6,6 +6,7 @@ import Performance from './Performance.jsx'
 import RoleTags from './RoleTags.jsx'
 import { roleTags } from './roleData.js'
 import { roleDecision } from './roleEligibility.js'
+import { roleBookForWeek } from '../data/weekFiles.js'
 
 const format=(n,key='')=>valid(n)?n.toFixed(key.endsWith('TD')?2:1):'—'
 const date=d=>new Date(d).toLocaleDateString('en-US',{timeZone:'America/New_York',month:'short',day:'numeric'})
@@ -69,7 +70,7 @@ function ProjectionCard({player,matchup,slots,chosen,onOpen,halfLife,window}){
   const ahead=!favored&&matchup.margin>=4
   const open=chosen===`${player.team.id}:${player.id}`
   const first=slots.find(Boolean)
-  const tags=roleTags(player)
+  const tags=roleTags(player,player.week)
   return <article className="projection-outlook-card" aria-label={`${player.name} projections`}>
     <div className="projection-row">
       <div className="breakout-player-identity">
@@ -82,7 +83,7 @@ function ProjectionCard({player,matchup,slots,chosen,onOpen,halfLife,window}){
     </div>
     <details className="projection-context">
       <summary>Role, recent opportunity, and matchup context<span className="support-chevron" aria-hidden="true"/></summary>
-      <div className="projection-role"><h5>Role</h5>{player.gate?.flag?<p className="role-flag">{player.gate.flag}</p>:null}{player.gate?.note?<p className="role-note">{player.gate.note}</p>:null}{tags.length?<RoleTags player={player}/>:<p>—</p>}</div>
+      <div className="projection-role"><h5>Role</h5>{player.gate?.flag?<p className="role-flag">{player.gate.flag}</p>:null}{player.gate?.note?<p className="role-note">{player.gate.note}</p>:null}{tags.length?<RoleTags player={player} week={player.week}/>:<p>—</p>}</div>
       {player.unavailable&&<p className="projection-withheld">Projection withheld</p>}
       <div className="projection-context-body">
         <section className="breakout-usage-cell"><h5>Recent opportunity</h5>
@@ -106,7 +107,7 @@ export default function PlayerProjections({matchup,saveProp,data,teams,roster,ha
   const activeSortKey=sortableKeys.includes(sortKey)?sortKey:sortableKeys[0]||'recYds'
   const players=useMemo(()=>dedupePlayers(teams.flatMap(({team,opponent})=>projectTeam(data,team,opponent,roster,halfLife,window).map(player=>({...player,team,opponent}))))
     .filter(player=>positions.includes(player.position)&&slotsFor(player,categories).some(Boolean))
-    .map(player=>({...player,gate:roleDecision(player)}))
+    .map(player=>({...player,week:data.week,gate:roleDecision(player,{book:roleBookForWeek(data.week)})}))
     .sort((a,b)=>{const av=projectedValue(a,activeSortKey),bv=projectedValue(b,activeSortKey);if(!valid(av))return valid(bv)?1:a.name.localeCompare(b.name);if(!valid(bv))return -1;return (av-bv)*(ascending?1:-1)||a.name.localeCompare(b.name)}),[teams,data,roster,halfLife,window,positions,categories,activeSortKey,ascending])
   const hiddenCount=players.filter(player=>!player.gate.eligible).length
   const visible=roleOnly?players.filter(player=>player.gate.eligible):players
