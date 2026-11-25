@@ -1,0 +1,2074 @@
+[
+  {
+    "team": "ARI",
+    "name": "Tyler Allgeier",
+    "sheetName": "Tyler Allgeier",
+    "depth": "RB1",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Early-down lead",
+    "secondary": [
+      "pass-catching"
+    ],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "ARI",
+    "name": "Bam Knight",
+    "sheetName": "Bam Knight",
+    "depth": "RB2",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Change-of-pace",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "ARI",
+    "name": "Evan Hull",
+    "sheetName": "Evan Hull",
+    "depth": "RB3",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Depth / minimal use",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "ATL",
+    "name": "Bijan Robinson",
+    "sheetName": "Bijan Robinson",
+    "depth": "RB1",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Workhorse",
+    "secondary": [
+      "pass-catching"
+    ],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "Skipped IR/Out ahead of this back: Brian Robinson Jr., Trey Sermon"
+  },
+  {
+    "team": "ATL",
+    "name": "Khalil Herbert",
+    "sheetName": "Khalil Herbert",
+    "depth": "RB2",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Uncertain",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag",
+      "primary"
+    ],
+    "depthNote": "Skipped IR/Out ahead of this back: Brian Robinson Jr., Trey Sermon"
+  },
+  {
+    "team": "BAL",
+    "name": "Derrick Henry",
+    "sheetName": "Derrick Henry",
+    "depth": "RB1",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Workhorse",
+    "secondary": [
+      "pass-catching"
+    ],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Questionable",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "BAL",
+    "name": "Justice Hill",
+    "sheetName": "Justice Hill",
+    "depth": "RB2",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Change-of-pace",
+    "secondary": [
+      "pass-catching"
+    ],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "BAL",
+    "name": "Rasheen Ali",
+    "sheetName": "Rasheen Ali",
+    "depth": "RB3",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Depth / minimal use",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "BUF",
+    "name": "James Cook III",
+    "sheetName": "James Cook III",
+    "depth": "RB1",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Workhorse",
+    "secondary": [
+      "pass-catching"
+    ],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "BUF",
+    "name": "Ty Johnson",
+    "sheetName": "Ty Johnson",
+    "depth": "RB2",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Depth / minimal use",
+    "secondary": [
+      "pass-catching"
+    ],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "BUF",
+    "name": "Ray Davis",
+    "sheetName": "Ray Davis",
+    "depth": "RB3",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Depth / minimal use",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "CAR",
+    "name": "Chuba Hubbard",
+    "sheetName": "Chuba Hubbard",
+    "depth": "RB1",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Workhorse",
+    "secondary": [
+      "pass-catching"
+    ],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "CAR",
+    "name": "Trevor Etienne",
+    "sheetName": "Trevor Etienne",
+    "depth": "RB2",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Depth / minimal use",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "CAR",
+    "name": "Anthony Tyus III",
+    "sheetName": "Anthony Tyus III",
+    "depth": "RB3",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Depth / minimal use",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "CHI",
+    "name": "D'Andre Swift",
+    "sheetName": "D'Andre Swift",
+    "depth": "RB1",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Workhorse",
+    "secondary": [
+      "pass-catching"
+    ],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "CHI",
+    "name": "Kyle Monangai",
+    "sheetName": "Kyle Monangai",
+    "depth": "RB2",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Change-of-pace",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "CHI",
+    "name": "Salvon Ahmed",
+    "sheetName": "Salvon Ahmed",
+    "depth": "RB3",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Depth / minimal use",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "CIN",
+    "name": "Chase Brown",
+    "sheetName": "Chase Brown",
+    "depth": "RB1",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Workhorse",
+    "secondary": [
+      "pass-catching"
+    ],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "CIN",
+    "name": "Samaje Perine",
+    "sheetName": "Samaje Perine",
+    "depth": "RB2",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Change-of-pace",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "CIN",
+    "name": "Tahj Brooks",
+    "sheetName": "Tahj Brooks",
+    "depth": "RB3",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Depth / minimal use",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "CLE",
+    "name": "Quinshon Judkins",
+    "sheetName": "Quinshon Judkins",
+    "depth": "RB1",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Workhorse",
+    "secondary": [
+      "pass-catching"
+    ],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "CLE",
+    "name": "Dylan Sampson",
+    "sheetName": "Dylan Sampson",
+    "depth": "RB2",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Depth / minimal use",
+    "secondary": [
+      "pass-catching"
+    ],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "CLE",
+    "name": "Jaleel McLaughlin",
+    "sheetName": "Jaleel McLaughlin",
+    "depth": "RB3",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Depth / minimal use",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "DAL",
+    "name": "Javonte Williams",
+    "sheetName": "Javonte Williams",
+    "depth": "RB1",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Workhorse",
+    "secondary": [
+      "pass-catching"
+    ],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "Skipped IR/Out ahead of this back: Tyler Goodson, Malik Davis"
+  },
+  {
+    "team": "DAL",
+    "name": "Jashaun Corbin",
+    "sheetName": "Jashaun Corbin",
+    "depth": "RB2",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Uncertain",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag",
+      "primary"
+    ],
+    "depthNote": "Skipped IR/Out ahead of this back: Tyler Goodson, Malik Davis"
+  },
+  {
+    "team": "DEN",
+    "name": "Jonah Coleman",
+    "sheetName": "Jonah Coleman",
+    "depth": "RB1",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Uncertain",
+    "secondary": [
+      "pass-catching"
+    ],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag",
+      "primary"
+    ],
+    "depthNote": "Skipped IR/Out ahead of this back: J.K. Dobbins, Tyler Badie, RJ Harvey"
+  },
+  {
+    "team": "DET",
+    "name": "Jahmyr Gibbs",
+    "sheetName": "Jahmyr Gibbs",
+    "depth": "RB1",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Workhorse",
+    "secondary": [
+      "pass-catching"
+    ],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "DET",
+    "name": "Sione Vaki",
+    "sheetName": "Sione Vaki",
+    "depth": "RB2",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Depth / minimal use",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "DET",
+    "name": "Jacob Saylors",
+    "sheetName": "Jacob Saylors",
+    "depth": "RB3",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Depth / minimal use",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "GB",
+    "name": "Josh Jacobs",
+    "sheetName": "Josh Jacobs",
+    "depth": "RB1",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Change-of-pace",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Questionable",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "GB",
+    "name": "Kaleb Johnson",
+    "sheetName": "Kaleb Johnson",
+    "depth": "RB2",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Change-of-pace",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "GB",
+    "name": "MarShawn Lloyd",
+    "sheetName": "MarShawn Lloyd",
+    "depth": "RB3",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Change-of-pace",
+    "secondary": [
+      "pass-catching"
+    ],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "HOU",
+    "name": "David Montgomery",
+    "sheetName": "David Montgomery",
+    "depth": "RB1",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Early-down lead",
+    "secondary": [
+      "pass-catching"
+    ],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "HOU",
+    "name": "Woody Marks",
+    "sheetName": "Woody Marks",
+    "depth": "RB2",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Early-down (committee)",
+    "secondary": [
+      "pass-catching"
+    ],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Questionable",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "HOU",
+    "name": "Emari Demercado",
+    "sheetName": "Emari Demercado",
+    "depth": "RB3",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Depth / minimal use",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "IND",
+    "name": "Jonathan Taylor",
+    "sheetName": "Jonathan Taylor",
+    "depth": "RB1",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Workhorse",
+    "secondary": [
+      "pass-catching"
+    ],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "Skipped IR/Out ahead of this back: Seth McGowan"
+  },
+  {
+    "team": "IND",
+    "name": "DJ Giddens",
+    "sheetName": "DJ Giddens",
+    "depth": "RB2",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Uncertain",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag",
+      "primary"
+    ],
+    "depthNote": "Skipped IR/Out ahead of this back: Seth McGowan"
+  },
+  {
+    "team": "JAX",
+    "name": "Bhayshul Tuten",
+    "sheetName": "Bhayshul Tuten",
+    "depth": "RB1",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Workhorse",
+    "secondary": [
+      "pass-catching"
+    ],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Questionable",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "JAX",
+    "name": "Chris Rodriguez Jr.",
+    "sheetName": "Chris Rodriguez Jr.",
+    "depth": "RB2",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Change-of-pace",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "JAX",
+    "name": "LeQuint Allen Jr.",
+    "sheetName": "LeQuint Allen Jr.",
+    "depth": "RB3",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Depth / minimal use",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "KC",
+    "name": "Emmett Johnson",
+    "sheetName": "Emmett Johnson",
+    "depth": "RB1",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Uncertain",
+    "secondary": [
+      "pass-catching"
+    ],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag",
+      "primary"
+    ],
+    "depthNote": "Skipped IR/Out ahead of this back: Kenneth Walker III, Brashard Smith"
+  },
+  {
+    "team": "KC",
+    "name": "Jaydn Ott",
+    "sheetName": "Jaydn Ott",
+    "depth": "RB2",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Uncertain",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag",
+      "primary"
+    ],
+    "depthNote": "Skipped IR/Out ahead of this back: Kenneth Walker III, Brashard Smith"
+  },
+  {
+    "team": "LV",
+    "name": "Ashton Jeanty",
+    "sheetName": "Ashton Jeanty",
+    "depth": "RB1",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Workhorse",
+    "secondary": [
+      "pass-catching"
+    ],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "LV",
+    "name": "Mike Washington Jr.",
+    "sheetName": "Mike Washington Jr.",
+    "depth": "RB2",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Early-down (committee)",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "LV",
+    "name": "Dylan Laube",
+    "sheetName": "Dylan Laube",
+    "depth": "RB3",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Depth / minimal use",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "LAC",
+    "name": "Omarion Hampton",
+    "sheetName": "Omarion Hampton",
+    "depth": "RB1",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Workhorse",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "LAC",
+    "name": "Keaton Mitchell",
+    "sheetName": "Keaton Mitchell",
+    "depth": "RB2",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Change-of-pace",
+    "secondary": [
+      "pass-catching"
+    ],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Questionable",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "LAC",
+    "name": "Kimani Vidal",
+    "sheetName": "Kimani Vidal",
+    "depth": "RB3",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Change-of-pace",
+    "secondary": [
+      "pass-catching"
+    ],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "LAR",
+    "name": "Kyren Williams",
+    "sheetName": "Kyren Williams",
+    "depth": "RB1",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Early-down lead",
+    "secondary": [
+      "pass-catching"
+    ],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "LAR",
+    "name": "Blake Corum",
+    "sheetName": "Blake Corum",
+    "depth": "RB2",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Early-down (committee)",
+    "secondary": [
+      "pass-catching"
+    ],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "LAR",
+    "name": "Ronnie Rivers",
+    "sheetName": "Ronnie Rivers",
+    "depth": "RB3",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Depth / minimal use",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "MIA",
+    "name": "Ollie Gordon II",
+    "sheetName": "Ollie Gordon II",
+    "depth": "RB1",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Workhorse",
+    "secondary": [
+      "pass-catching"
+    ],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "MIA",
+    "name": "Jaylen Wright",
+    "sheetName": "Jaylen Wright",
+    "depth": "RB2",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Depth / minimal use",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "MIA",
+    "name": "Kaytron Allen",
+    "sheetName": "Kaytron Allen",
+    "depth": "RB3",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Depth / minimal use",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "MIN",
+    "name": "Jordan Mason",
+    "sheetName": "Jordan Mason",
+    "depth": "RB1",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Change-of-pace",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "MIN",
+    "name": "Aaron Jones Sr.",
+    "sheetName": "Aaron Jones Sr.",
+    "depth": "RB2",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Workhorse",
+    "secondary": [
+      "pass-catching"
+    ],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "MIN",
+    "name": "DeeJay Dallas",
+    "sheetName": "DeeJay Dallas",
+    "depth": "RB3",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Depth / minimal use",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "NE",
+    "name": "Rhamondre Stevenson",
+    "sheetName": "Rhamondre Stevenson",
+    "depth": "RB1",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Early-down lead",
+    "secondary": [
+      "pass-catching"
+    ],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "NE",
+    "name": "Corey Kiner",
+    "sheetName": "Corey Kiner",
+    "depth": "RB2",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Change-of-pace",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "NE",
+    "name": "Lan Larison",
+    "sheetName": "Lan Larison",
+    "depth": "RB3",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Depth / minimal use",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "NO",
+    "name": "Travis Etienne Jr.",
+    "sheetName": "Travis Etienne Jr.",
+    "depth": "RB1",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Change-of-pace",
+    "secondary": [
+      "pass-catching"
+    ],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "NO",
+    "name": "CJ Donaldson",
+    "sheetName": "CJ Donaldson",
+    "depth": "RB2",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Depth / minimal use",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "NO",
+    "name": "Alvin Kamara",
+    "sheetName": "Alvin Kamara",
+    "depth": "RB3",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Change-of-pace",
+    "secondary": [
+      "pass-catching"
+    ],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "NYG",
+    "name": "Cam Skattebo",
+    "sheetName": "Cam Skattebo",
+    "depth": "RB1",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Workhorse",
+    "secondary": [
+      "pass-catching"
+    ],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "NYG",
+    "name": "Devin Singletary",
+    "sheetName": "Devin Singletary",
+    "depth": "RB2",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Change-of-pace",
+    "secondary": [
+      "pass-catching"
+    ],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "NYG",
+    "name": "Greg Desrosiers Jr.",
+    "sheetName": "Greg Desrosiers Jr.",
+    "depth": "RB3",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Depth / minimal use",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "NYJ",
+    "name": "Breece Hall",
+    "sheetName": "Breece Hall",
+    "depth": "RB1",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Early-down lead",
+    "secondary": [
+      "pass-catching"
+    ],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "NYJ",
+    "name": "Braelon Allen",
+    "sheetName": "Braelon Allen",
+    "depth": "RB2",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Workhorse",
+    "secondary": [
+      "pass-catching"
+    ],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "NYJ",
+    "name": "Isaiah Davis",
+    "sheetName": "Isaiah Davis",
+    "depth": "RB3",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Depth / minimal use",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "PHI",
+    "name": "Saquon Barkley",
+    "sheetName": "Saquon Barkley",
+    "depth": "RB1",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Early-down lead",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "PHI",
+    "name": "Will Shipley",
+    "sheetName": "Will Shipley",
+    "depth": "RB2",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Depth / minimal use",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "PHI",
+    "name": "Jaydon Blue",
+    "sheetName": "Jaydon Blue",
+    "depth": "RB3",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Depth / minimal use",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "PIT",
+    "name": "Jaylen Warren",
+    "sheetName": "Jaylen Warren",
+    "depth": "RB1",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Workhorse",
+    "secondary": [
+      "pass-catching"
+    ],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "PIT",
+    "name": "Rico Dowdle",
+    "sheetName": "Rico Dowdle",
+    "depth": "RB2",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Change-of-pace",
+    "secondary": [
+      "pass-catching"
+    ],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "PIT",
+    "name": "Lew Nichols",
+    "sheetName": "Lew Nichols",
+    "depth": "RB3",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Depth / minimal use",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "SF",
+    "name": "Christian McCaffrey",
+    "sheetName": "Christian McCaffrey",
+    "depth": "RB1",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Workhorse",
+    "secondary": [
+      "pass-catching"
+    ],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "SF",
+    "name": "Kaelon Black",
+    "sheetName": "Kaelon Black",
+    "depth": "RB2",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Early-down (committee)",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "SF",
+    "name": "Jordan James",
+    "sheetName": "Jordan James",
+    "depth": "RB3",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Depth / minimal use",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "SEA",
+    "name": "Zach Charbonnet",
+    "sheetName": "Zach Charbonnet",
+    "depth": "RB1",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Change-of-pace",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "SEA",
+    "name": "Jadarian Price",
+    "sheetName": "Jadarian Price",
+    "depth": "RB2",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Change-of-pace",
+    "secondary": [
+      "pass-catching"
+    ],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "SEA",
+    "name": "Emanuel Wilson",
+    "sheetName": "Emanuel Wilson",
+    "depth": "RB3",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Early-down (committee)",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "TB",
+    "name": "Bucky Irving",
+    "sheetName": "Bucky Irving",
+    "depth": "RB1",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Workhorse",
+    "secondary": [
+      "pass-catching"
+    ],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "TB",
+    "name": "Kenny Gainwell",
+    "sheetName": "Kenny Gainwell",
+    "depth": "RB2",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Change-of-pace",
+    "secondary": [
+      "pass-catching"
+    ],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "TB",
+    "name": "Sean Tucker",
+    "sheetName": "Sean Tucker",
+    "depth": "RB3",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Depth / minimal use",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "TEN",
+    "name": "Tony Pollard",
+    "sheetName": "Tony Pollard",
+    "depth": "RB1",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Workhorse",
+    "secondary": [
+      "pass-catching"
+    ],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "TEN",
+    "name": "Julius Chestnut",
+    "sheetName": "Julius Chestnut",
+    "depth": "RB2",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Depth / minimal use",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": false,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "TEN",
+    "name": "Nicholas Singleton",
+    "sheetName": "Nicholas Singleton",
+    "depth": "RB3",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Depth / minimal use",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "WAS",
+    "name": "Jacory Croskey-Merritt",
+    "sheetName": "Jacory Croskey-Merritt",
+    "depth": "RB1",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Early-down lead",
+    "secondary": [],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "WAS",
+    "name": "Rachaad White",
+    "sheetName": "Rachaad White",
+    "depth": "RB2",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Change-of-pace",
+    "secondary": [
+      "pass-catching"
+    ],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  },
+  {
+    "team": "WAS",
+    "name": "Austin Ekeler",
+    "sheetName": "Austin Ekeler",
+    "depth": "RB3",
+    "depthSrc": "ESPN depth chart",
+    "primary": "Change-of-pace",
+    "secondary": [
+      "pass-catching"
+    ],
+    "glRole": "uncertain",
+    "glLabel": "GL role uncertain",
+    "glDetail": "ESPN box scores do not include inside-5 carries.",
+    "injury": "Active",
+    "out": false,
+    "statsMatched": true,
+    "scatter": true,
+    "uncertain": [
+      "glRole",
+      "inside5",
+      "3rd-down tag"
+    ],
+    "depthNote": "ESPN rb list"
+  }
+]

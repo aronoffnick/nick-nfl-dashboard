@@ -1,0 +1,1442 @@
+[
+  {
+    "team": "Arizona Cardinals",
+    "name": "Simi Fehoko",
+    "rank": "WR1",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr1"
+  },
+  {
+    "team": "Arizona Cardinals",
+    "name": "Harrison Wallace III",
+    "rank": "WR2",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr2"
+  },
+  {
+    "team": "Arizona Cardinals",
+    "name": "Reggie Virgil",
+    "rank": "WR3",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr3"
+  },
+  {
+    "team": "Atlanta Falcons",
+    "name": "Drake London",
+    "rank": "WR1",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr1"
+  },
+  {
+    "team": "Atlanta Falcons",
+    "name": "Jahan Dotson",
+    "rank": "WR2",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Questionable",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr2"
+  },
+  {
+    "team": "Atlanta Falcons",
+    "name": "Olamide Zaccheaus",
+    "rank": "WR3",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr3"
+  },
+  {
+    "team": "Baltimore Ravens",
+    "name": "Zay Flowers",
+    "rank": "WR1",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Questionable",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr1"
+  },
+  {
+    "team": "Baltimore Ravens",
+    "name": "Rashod Bateman",
+    "rank": "WR2",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Questionable",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr2"
+  },
+  {
+    "team": "Baltimore Ravens",
+    "name": "Ja'Kobi Lane",
+    "rank": "WR3",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr3"
+  },
+  {
+    "team": "Buffalo Bills",
+    "name": "DJ Moore",
+    "rank": "WR1",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr1"
+  },
+  {
+    "team": "Buffalo Bills",
+    "name": "Khalil Shakir",
+    "rank": "WR2",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr2"
+  },
+  {
+    "team": "Buffalo Bills",
+    "name": "Keon Coleman",
+    "rank": "WR3",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr3"
+  },
+  {
+    "team": "Carolina Panthers",
+    "name": "Tetairoa McMillan",
+    "rank": "WR1",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Questionable",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr1"
+  },
+  {
+    "team": "Carolina Panthers",
+    "name": "Jalen Coker",
+    "rank": "WR2",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr2"
+  },
+  {
+    "team": "Carolina Panthers",
+    "name": "John Metchie III",
+    "rank": "WR3",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr3"
+  },
+  {
+    "team": "Chicago Bears",
+    "name": "Luther Burden III",
+    "rank": "WR1",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr1"
+  },
+  {
+    "team": "Chicago Bears",
+    "name": "Rome Odunze",
+    "rank": "WR2",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr2"
+  },
+  {
+    "team": "Chicago Bears",
+    "name": "Kalif Raymond",
+    "rank": "WR3",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr3"
+  },
+  {
+    "team": "Cincinnati Bengals",
+    "name": "Ja'Marr Chase",
+    "rank": "WR1",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr1"
+  },
+  {
+    "team": "Cincinnati Bengals",
+    "name": "Tee Higgins",
+    "rank": "WR2",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr2"
+  },
+  {
+    "team": "Cincinnati Bengals",
+    "name": "Dohnte Meyers",
+    "rank": "WR3",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr3"
+  },
+  {
+    "team": "Cleveland Browns",
+    "name": "Denzel Boston",
+    "rank": "WR1",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Questionable",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr1"
+  },
+  {
+    "team": "Cleveland Browns",
+    "name": "KC Concepcion",
+    "rank": "WR2",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr2"
+  },
+  {
+    "team": "Cleveland Browns",
+    "name": "Jerry Jeudy",
+    "rank": "WR3",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr3"
+  },
+  {
+    "team": "Dallas Cowboys",
+    "name": "CeeDee Lamb",
+    "rank": "WR1",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr1"
+  },
+  {
+    "team": "Dallas Cowboys",
+    "name": "George Pickens",
+    "rank": "WR2",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr2"
+  },
+  {
+    "team": "Dallas Cowboys",
+    "name": "Ryan Flournoy",
+    "rank": "WR3",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr3"
+  },
+  {
+    "team": "Denver Broncos",
+    "name": "Jaylen Waddle",
+    "rank": "WR1",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr1"
+  },
+  {
+    "team": "Denver Broncos",
+    "name": "Courtland Sutton",
+    "rank": "WR2",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr2"
+  },
+  {
+    "team": "Denver Broncos",
+    "name": "Pat Bryant",
+    "rank": "WR3",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr3"
+  },
+  {
+    "team": "Detroit Lions",
+    "name": "Amon-Ra St. Brown",
+    "rank": "WR1",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr1"
+  },
+  {
+    "team": "Detroit Lions",
+    "name": "Jameson Williams",
+    "rank": "WR2",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr2"
+  },
+  {
+    "team": "Detroit Lions",
+    "name": "Isaac TeSlaa",
+    "rank": "WR3",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr3"
+  },
+  {
+    "team": "Green Bay Packers",
+    "name": "Christian Watson",
+    "rank": "WR1",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr1"
+  },
+  {
+    "team": "Green Bay Packers",
+    "name": "Matthew Golden",
+    "rank": "WR2",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr2"
+  },
+  {
+    "team": "Green Bay Packers",
+    "name": "Savion Williams",
+    "rank": "WR3",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr3"
+  },
+  {
+    "team": "Houston Texans",
+    "name": "Nico Collins",
+    "rank": "WR1",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr1"
+  },
+  {
+    "team": "Houston Texans",
+    "name": "Xavier Hutchinson",
+    "rank": "WR2",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr2"
+  },
+  {
+    "team": "Houston Texans",
+    "name": "Kayshon Boutte",
+    "rank": "WR3",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Questionable",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr3"
+  },
+  {
+    "team": "Indianapolis Colts",
+    "name": "Laquon Treadwell",
+    "rank": "WR1",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr1"
+  },
+  {
+    "team": "Indianapolis Colts",
+    "name": "Deion Burks",
+    "rank": "WR2",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr2"
+  },
+  {
+    "team": "Indianapolis Colts",
+    "name": "Anthony Gould",
+    "rank": "WR3",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr3"
+  },
+  {
+    "team": "Jacksonville Jaguars",
+    "name": "Parker Washington",
+    "rank": "WR1",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr1"
+  },
+  {
+    "team": "Jacksonville Jaguars",
+    "name": "Jakobi Meyers",
+    "rank": "WR2",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Questionable",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr2"
+  },
+  {
+    "team": "Jacksonville Jaguars",
+    "name": "Brian Thomas Jr.",
+    "rank": "WR3",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr3"
+  },
+  {
+    "team": "Kansas City Chiefs",
+    "name": "Rashee Rice",
+    "rank": "WR1",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr1"
+  },
+  {
+    "team": "Kansas City Chiefs",
+    "name": "Xavier Worthy",
+    "rank": "WR2",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr2"
+  },
+  {
+    "team": "Kansas City Chiefs",
+    "name": "Josh Downs",
+    "rank": "WR3",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr3"
+  },
+  {
+    "team": "Las Vegas Raiders",
+    "name": "Tre Tucker",
+    "rank": "WR1",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr1"
+  },
+  {
+    "team": "Las Vegas Raiders",
+    "name": "Jalen Nailor",
+    "rank": "WR2",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr2"
+  },
+  {
+    "team": "Las Vegas Raiders",
+    "name": "Jack Bech",
+    "rank": "WR3",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr3"
+  },
+  {
+    "team": "Los Angeles Chargers",
+    "name": "Ladd McConkey",
+    "rank": "WR1",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr1"
+  },
+  {
+    "team": "Los Angeles Chargers",
+    "name": "Quentin Johnston",
+    "rank": "WR2",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr2"
+  },
+  {
+    "team": "Los Angeles Chargers",
+    "name": "Tre' Harris",
+    "rank": "WR3",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr3"
+  },
+  {
+    "team": "Los Angeles Rams",
+    "name": "Konata Mumpfield",
+    "rank": "WR1",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr1"
+  },
+  {
+    "team": "Los Angeles Rams",
+    "name": "CJ Daniels",
+    "rank": "WR2",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr2"
+  },
+  {
+    "team": "Los Angeles Rams",
+    "name": "Tutu Atwell",
+    "rank": "WR3",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr3"
+  },
+  {
+    "team": "Miami Dolphins",
+    "name": "Malik Washington",
+    "rank": "WR1",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr1"
+  },
+  {
+    "team": "Miami Dolphins",
+    "name": "Caleb Douglas",
+    "rank": "WR2",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr2"
+  },
+  {
+    "team": "Miami Dolphins",
+    "name": "Chris Bell",
+    "rank": "WR3",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr3"
+  },
+  {
+    "team": "Minnesota Vikings",
+    "name": "Justin Jefferson",
+    "rank": "WR1",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr1"
+  },
+  {
+    "team": "Minnesota Vikings",
+    "name": "Jordan Addison",
+    "rank": "WR2",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Doubtful",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr2"
+  },
+  {
+    "team": "Minnesota Vikings",
+    "name": "Jauan Jennings",
+    "rank": "WR3",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr3"
+  },
+  {
+    "team": "New England Patriots",
+    "name": "A.J. Brown",
+    "rank": "WR1",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Doubtful",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr1"
+  },
+  {
+    "team": "New England Patriots",
+    "name": "Mack Hollins",
+    "rank": "WR2",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr2"
+  },
+  {
+    "team": "New England Patriots",
+    "name": "DeMario Douglas",
+    "rank": "WR3",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr3"
+  },
+  {
+    "team": "New Orleans Saints",
+    "name": "Chris Olave",
+    "rank": "WR1",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr1"
+  },
+  {
+    "team": "New Orleans Saints",
+    "name": "Jordyn Tyson",
+    "rank": "WR2",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr2"
+  },
+  {
+    "team": "New Orleans Saints",
+    "name": "Devaughn Vele",
+    "rank": "WR3",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr3"
+  },
+  {
+    "team": "New York Giants",
+    "name": "Malik Nabers",
+    "rank": "WR1",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr1"
+  },
+  {
+    "team": "New York Giants",
+    "name": "Malachi Fields",
+    "rank": "WR2",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr2"
+  },
+  {
+    "team": "New York Giants",
+    "name": "Darnell Mooney",
+    "rank": "WR3",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr3"
+  },
+  {
+    "team": "New York Jets",
+    "name": "Garrett Wilson",
+    "rank": "WR1",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr1"
+  },
+  {
+    "team": "New York Jets",
+    "name": "Adonai Mitchell",
+    "rank": "WR2",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr2"
+  },
+  {
+    "team": "New York Jets",
+    "name": "Omar Cooper Jr.",
+    "rank": "WR3",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Questionable",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr3"
+  },
+  {
+    "team": "Philadelphia Eagles",
+    "name": "DeVonta Smith",
+    "rank": "WR1",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr1"
+  },
+  {
+    "team": "Philadelphia Eagles",
+    "name": "Darius Cooper",
+    "rank": "WR2",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr2"
+  },
+  {
+    "team": "Philadelphia Eagles",
+    "name": "Makai Lemon",
+    "rank": "WR3",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr3"
+  },
+  {
+    "team": "Pittsburgh Steelers",
+    "name": "DK Metcalf",
+    "rank": "WR1",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr1"
+  },
+  {
+    "team": "Pittsburgh Steelers",
+    "name": "Germie Bernard",
+    "rank": "WR2",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr2"
+  },
+  {
+    "team": "Pittsburgh Steelers",
+    "name": "Roman Wilson",
+    "rank": "WR3",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr3"
+  },
+  {
+    "team": "San Francisco 49ers",
+    "name": "Mike Evans",
+    "rank": "WR1",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Questionable",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr1"
+  },
+  {
+    "team": "San Francisco 49ers",
+    "name": "Deebo Samuel Sr.",
+    "rank": "WR2",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr2"
+  },
+  {
+    "team": "San Francisco 49ers",
+    "name": "Keenan Allen",
+    "rank": "WR3",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr3"
+  },
+  {
+    "team": "Seattle Seahawks",
+    "name": "Jaxon Smith-Njigba",
+    "rank": "WR1",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr1"
+  },
+  {
+    "team": "Seattle Seahawks",
+    "name": "Rashid Shaheed",
+    "rank": "WR2",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr2"
+  },
+  {
+    "team": "Seattle Seahawks",
+    "name": "Cooper Kupp",
+    "rank": "WR3",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr3"
+  },
+  {
+    "team": "Tampa Bay Buccaneers",
+    "name": "Emeka Egbuka",
+    "rank": "WR1",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr1"
+  },
+  {
+    "team": "Tampa Bay Buccaneers",
+    "name": "Chris Godwin Jr.",
+    "rank": "WR2",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr2"
+  },
+  {
+    "team": "Tampa Bay Buccaneers",
+    "name": "Ted Hurst III",
+    "rank": "WR3",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr3"
+  },
+  {
+    "team": "Tennessee Titans",
+    "name": "Carnell Tate",
+    "rank": "WR1",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr1"
+  },
+  {
+    "team": "Tennessee Titans",
+    "name": "Chimere Dike",
+    "rank": "WR2",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr2"
+  },
+  {
+    "team": "Tennessee Titans",
+    "name": "Elic Ayomanor",
+    "rank": "WR3",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr3"
+  },
+  {
+    "team": "Washington Commanders",
+    "name": "Stefon Diggs",
+    "rank": "WR1",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Questionable",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr1"
+  },
+  {
+    "team": "Washington Commanders",
+    "name": "Antonio Williams",
+    "rank": "WR2",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Active",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr2"
+  },
+  {
+    "team": "Washington Commanders",
+    "name": "Treylon Burks",
+    "rank": "WR3",
+    "slot": null,
+    "alignment": "Uncertain",
+    "side": "Uncertain",
+    "injury": "Questionable",
+    "uncertain": [
+      "slot",
+      "alignment",
+      "side"
+    ],
+    "depthNote": "ESPN wr3"
+  }
+]
