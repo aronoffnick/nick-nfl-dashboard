@@ -25,3 +25,9 @@
 .pick-accuracy[open]>summary .pick-chevron{transform:rotate(45deg)}
 .pick-accuracy>summary:focus-visible{outline:2px solid #b2e7c8;outline-offset:3px}
 .pick-accuracy[open]>summary{margin-bottom:8px}
+.landing-more{margin:28px 0 8px;border-top:1px solid #29323b}
+.landing-more>summary{display:flex;align-items:center;gap:10px;width:100%;padding:16px 2px;cursor:pointer;list-style:none;font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700;color:#e8edf1}
+.landing-more>summary::-webkit-details-marker{display:none}
+.landing-more>summary::marker{content:none}
+.landing-more[open]>summary .pick-chevron{transform:rotate(45deg)}
+.landing-more>summary:focus-visible{outline:2px solid #b2e7c8;outline-offset:3px}
