@@ -1,11 +1,10 @@
 import {useMemo,useState} from 'react'
 import {historyFor,sides,positionOf,projectTeam,valid,weighted} from './model.js'
 import {breakoutRating,ratingLevel} from './breakout.js'
-import {betSignalScore} from './Bets.jsx'
 import BreakoutScale from './BreakoutScale.jsx'
-import Performance from './Performance.jsx'
 import {rbStarter} from './roleData.js'
 import RoleTags from './RoleTags.jsx'
+import {StatScale} from './Performance.jsx'
 import wrStarterRows from './wr-starters-week12.json'
 import './flyers.css'
 
@@ -38,6 +37,16 @@ const fmt=n=>Number.isInteger(n)?String(n):Number(n).toFixed(1)
 const roleName=p=>p==='RB'?'RB/FB':p
 function posMatch(player,pos,roster){const actual=positionOf(player,roster);return actual===pos||(pos==='RB'&&actual==='FB')}
 function boxValue(player,key){return key==='totalTD'?(valid(player.rushTD)&&valid(player.recTD)?player.rushTD+player.recTD:null):player[key]}
+function projectionFor(player,key){
+  if(key==='totalTD'){
+    const rush=player.stats.rushTD?.projection,rec=player.stats.recTD?.projection
+    return valid(rush)&&valid(rec)?rush+rec:null
+  }
+  return player.stats[key]?.projection
+}
+function baselineFor(player,key,halfLife){
+  return key==='totalTD'?weighted(player.logs.map(log=>({...log,totalTD:boxValue(log,'totalTD')})),'totalTD',halfLife):weighted(player.logs,key,halfLife)
+}
 function gameEligible(side,spec){return !!side.playerBox&&spec.group.every(group=>side.playerBox.available.includes(group))}
 function mean(values){const validValues=values.filter(valid);return validValues.length?validValues.reduce((a,b)=>a+b,0)/validValues.length:null}
 function recentDefenseGames(data,defense,window,matchup){return historyFor(data,defense.id).filter(g=>new Date(g.date)<new Date(matchup.date)).slice(-window)}
@@ -112,37 +121,8 @@ function BreakoutIndexChip({player}){
   if(score==null)return <span className="breakout-index-chip breakout-unknown">Breakout index —</span>
   return <span className={`breakout-index-chip breakout-${ratingLevel(score)}`}>Breakout index {score}</span>
 }
-function BreakoutCard({player, index, window, halfLife}){
-  const score = breakoutRating(player)
-  const level = ratingLevel(score)
-  const isRunner = ['RB','FB'].includes(player.position)
-  const stat = player.position === 'QB' ? 'passYds' : isRunner ? 'rushYds' : 'recYds'
-  const statLabel = player.position === 'QB' ? 'passing yards' : isRunner ? 'rushing yards' : 'receiving yards'
-  const usage = player.position === 'QB' ? 'passAtt' : isRunner ? 'carries' : 'targets'
-  const usageLabel = player.position === 'QB' ? 'attempts' : isRunner ? 'carries' : 'targets'
-  const logs = player.logs.slice(-window)
-  const metrics = player.position === 'QB' ? ['passYds','passTD','rushYds','totalTD'] :
-    isRunner ? ['rushYds','rec','recYds','totalTD'] : ['rec','recYds','totalTD']
-  const recentUsage = mean(logs.slice(-3).map(game=>game[usage]))
-  const factor = player.stats[stat]?.defense?.factor
-  const supportLabel = {high:'Higher breakout support',moderate:'Moderate breakout support',low:'Lower breakout support',unknown:'Breakout support not rated'}[level]
-  return <li style={{display:'block',padding:0}}>
-    <div style={{display:'grid',gridTemplateColumns:'repeat(auto-fit,minmax(min(180px,100%),1fr))'}}>
-      <div style={{padding:'12px'}}>
-        <small>Breakout Watch #{index+1}</small>
-        <b>{player.name}</b>
-        <BreakoutScale score={score}/>
-        <RoleTags player={player}/>
-        <small>{player.offense.abbr} · {player.position}</small>
-      </div>
-      {metrics.map(metric=><Performance key={metric} player={player} metric={metric} halfLife={halfLife} lookback={window}/>)}
-    </div>
-    <details className="prop-method">
-      <summary>{supportLabel}</summary>
-      <p><b>Recent Opportunity</b> {valid(recentUsage)?`${recentUsage.toFixed(1)} ${usageLabel} per game over the latest ${Math.min(logs.length,3)} appearances`:'Limited usage data'}</p>
-      <p><b>Matchup Context</b> {player.opponent.name} · {valid(factor)?`${((factor-1)*100).toFixed(0)}% model adjustment for ${statLabel}`:'Limited defensive data'}</p>
-    </details>
-  </li>
+function BreakoutIndexScale({player}){
+  return <BreakoutScale score={breakoutRating(player)} className="flyer-breakout-scale"/>
 }
 function FlyerTheme({theme,index,offenses,roster,halfLife,window}){
   const pos=theme.position
@@ -184,15 +164,25 @@ export default function Flyers({data,matchup,roster,halfLife,window}){
   const teams=[...new Map(offenses.map(side=>[side.offense.id,side.offense])).values()]
   const filtered=themes.filter(theme=>theme.tier==='Breakout'&&(teamFilter==='all'||theme.offense.id===teamFilter)&&
     (positionFilter==='all'||theme.position===positionFilter))
-  const candidates=useMemo(()=>[
-    [matchup.away,matchup.home],[matchup.home,matchup.away]
-  ].flatMap(([offense,opponent])=>projectTeam(data,offense,opponent,roster,halfLife,window)
-    .filter(player=>!player.unavailable&&!player.stale&&['QB','RB','FB','WR','TE'].includes(player.position))
-    .map(player=>({...player,offense,opponent,signal:betSignalScore(player),indexScore:breakoutRating(player)}))
-  ).sort((a,b)=>b.signal-a.signal||(b.indexScore??-1)-(a.indexScore??-1)||a.name.localeCompare(b.name)),
-  [data,matchup,roster,halfLife,window])
-  const visible=candidates.filter(player=>(teamFilter==='all'||player.offense.id===teamFilter)&&
-    (positionFilter==='all'||player.position===positionFilter||(positionFilter==='RB'&&player.position==='FB')))
+  const favorites=useMemo(()=>{
+    const picks=new Map()
+    for(const theme of themes.filter(row=>row.tier==='Breakout')){
+      if((teamFilter!=='all'&&theme.offense.id!==teamFilter)||(positionFilter!=='all'&&theme.position!==positionFilter))continue
+      for(const player of theme.candidates){
+        const baseline=baselineFor(player,theme.spec.key,halfLife)
+        const projection=projectionFor(player,theme.spec.key)
+        if(!valid(baseline)||baseline<=0||!valid(projection))continue
+        const multiple=projection/baseline
+        const recentPeak=Math.max(...player.logs.map(log=>boxValue(log,theme.spec.key)).filter(valid),0)
+        const peakMultiple=recentPeak/baseline
+        const key=`${player.id}:${theme.spec.key}`
+        const row={player,theme,baseline,projection,multiple,peakMultiple,recentPeak,
+          score:(multiple*theme.rate)+(Math.min(peakMultiple,3)*.15)+(theme.rate*.25)}
+        if(!picks.has(key)||picks.get(key).score<row.score)picks.set(key,row)
+      }
+    }
+    return [...picks.values()].sort((a,b)=>b.score-a.score||b.peakMultiple-a.peakMultiple).slice(0,3)
+  },[themes,teamFilter,positionFilter,halfLife])
   const items=filtered.map((theme,index)=>({...theme,index}))
 
   return <section className="flyers-section" aria-label="Flyers threshold themes">
@@ -204,12 +194,17 @@ export default function Flyers({data,matchup,roster,halfLife,window}){
       <button type="button" onClick={()=>{setTeamFilter('all');setPositionFilter('all')}}>Reset</button>
     </div>
     <div className="flyers-legend"><span className="flyer-breakout-swatch">Breakout · green</span><span>Safe thresholds remain as background support for PARLAYS overlap ranges</span></div>
-    <section className="flyer-favorites" aria-label="Player breakout outlook">
-      <div className="flyer-favorites-heading"><h4>Player Breakout Outlook</h4></div>
-      {!visible.length?<p className="prop-warning">No breakout candidates match these filters.</p>:
-        <ol className="flyer-favorites-list">{visible.map((player,index)=>
-          <BreakoutCard key={`${player.offense.id}:${player.id}`} player={player} index={index} window={window} halfLife={halfLife}/>
-        )}</ol>}
+    <section className="flyer-favorites" aria-label="Top three breakout upside candidates">
+      <div className="flyer-favorites-heading"><div><span>TOP THREE</span><h4>Breakout Upside Favorites</h4></div><small>Highest combined matchup rate, model projection, and prior single-game ceiling</small></div>
+      {!favorites.length?<p className="prop-warning">No breakout candidate currently has a reliable projection for these filters.</p>:<ol className="flyer-favorites-list">{favorites.map(({player,theme,baseline,projection,multiple,peakMultiple,recentPeak},index)=><li key={`${player.id}:${theme.spec.key}`}>
+        <span className="flyer-favorite-rank">0{index+1}</span>
+        <div><b>{player.name}</b><RoleTags player={player}/><small>{theme.offense.abbr} · {roleName(theme.position)} · {theme.spec.title}</small></div>
+        <BreakoutIndexScale player={player}/>
+        <div><strong>{fmt(projection)} {theme.spec.title.toLowerCase()}</strong><small>Projection · {multiple.toFixed(2)}× weighted baseline</small></div>
+        <StatScale player={player} metric={theme.spec.key} halfLife={halfLife} lookback={window} baseline={baseline}/>
+        <div><strong>{fmt(recentPeak)} peak</strong><small>{peakMultiple.toFixed(2)}× baseline · {Math.round(theme.rate*100)}% opponent breakout rate</small></div>
+      </li>)}</ol>}
+      <p className="flyer-favorites-note">A 1.5× or 2× label is not assigned unless the player’s actual model projection reaches that multiple. The current matchup adjustment is capped at 1.25× baseline, so larger multiples would require a separate ceiling model.</p>
     </section>
     {!items.length?<p className="prop-warning">No themes match these filters.</p>:<div className="flyers-board">{items.map((theme,index)=><FlyerTheme key={`${theme.defense.id}:${theme.position}:${theme.spec.key}:${theme.tier}`} theme={theme} index={index} offenses={offenses} roster={roster} halfLife={halfLife} window={window}/>)}</div>}
     <details className="prop-method"><summary>Threshold rules and data sources</summary>
