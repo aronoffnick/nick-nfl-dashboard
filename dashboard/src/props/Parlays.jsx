@@ -3,7 +3,6 @@ import {valid} from './model.js'
 import {betSignalScore} from './Bets.jsx'
 import {breakoutRating} from './breakout.js'
 import {buildFlyerThemes} from './Flyers.jsx'
-import PlayerProjections, {projectionGroups} from './PlayerProjections.jsx'
 import './parlays.css'
 
 const fmt=(value,key)=>valid(value)?value.toFixed(key.toLowerCase().includes('td')?2:1):'—'
@@ -72,14 +71,12 @@ function Leg({leg}){
   return <li><div><span className="parlay-team">{leg.theme.offense.abbr} · {leg.player.position}</span><strong>{leg.player.name} · {leg.theme.threshold}+ {leg.theme.spec.title.toLowerCase()}</strong></div>
     <div className="parlay-leg-evidence"><span><b>{leg.concentration}/100</b> overlap</span><span>Safe defense: {leg.theme.hits}/{leg.theme.n} ({Math.round(leg.theme.rate*100)}%)</span><span>Player recent: {leg.playerHits}/{leg.playerN} ({Math.round(leg.playerRate*100)}%)</span><span>Player Projection: {fmt(leg.projection,leg.theme.spec.key)}</span><span>Bets index: {leg.betsIndex}/100</span></div></li>
 }
-const projectionPositions=['QB','RB','FB','WR','TE']
-export default function Parlays({data,matchup,roster,halfLife,window,saveProp}){
+export default function Parlays({data,matchup,roster,halfLife,window}){
   const legs=useMemo(()=>buildFlyerThemes(data,matchup,roster,halfLife,window)
     .filter(theme=>theme.tier==='Safe')
     .flatMap(theme=>theme.candidates.map(player=>safeOverlapLeg(theme,player,window)).filter(Boolean))
     .sort((a,b)=>b.concentration-a.concentration||b.theme.rate-a.theme.rate),[data,matchup,roster,halfLife,window])
   const parlays=useMemo(()=>buildParlays(legs),[legs])
-  const projectionTeams=[[matchup.away,matchup.home],[matchup.home,matchup.away]].map(([team,opponent])=>({team,opponent}))
   return <><section className="parlays-section" aria-label="Parlays from Bets and Safe Flyers overlap">
     <div className="prop-section-title"><h3>PARLAYS · highest Safe overlap</h3><span>Bets signals + FLYERS Safe history</span></div>
     <p className="prop-help">Breakout candidates are excluded. FLYERS <b>Safe</b> history narrows the eligible position and stat; the player number comes directly from the same model used in <b>Player Projections</b>. A leg is removed unless that projection reaches the Safe target and the player reached it at least once in three or more recent appearances. Legs are ranked by 40% opponent Safe rate, 30% Bets strength, 15% projection coverage, and 15% the player’s recent Safe hit rate. The score measures model agreement, not a guaranteed win probability.</p>
@@ -94,6 +91,5 @@ export default function Parlays({data,matchup,roster,halfLife,window,saveProp}){
     </section>
     <details className="prop-method"><summary>Parlay rules and limitations</summary><p>PARLAYS uses FLYERS Safe results only as a position/stat and opponent-history screen. Player projections are read from the same projectTeam output displayed in Player Projections. A candidate needs at least three valid recent observations, one or more personal hits at the Safe target, a projection at or above that target, and a positive Bets-tab signal. FLYERS Breakout candidates do not enter this calculation. Each parlay requires a different player for every leg. The five target structures are two 3-leg parlays, two 2-leg parlays, and one 4-leg parlay. Combinations are ranked 65% by their weakest leg and 35% by their average overlap so one strong leg cannot conceal a weak one. Adding legs lowers joint win likelihood. The model does not fetch live sportsbook prices or estimate expected value.</p></details>
   </section>
-  <div className="parlays-projections"><PlayerProjections matchup={matchup} saveProp={saveProp} data={data} teams={projectionTeams} roster={roster} halfLife={halfLife} window={window} positions={projectionPositions} categories={Object.keys(projectionGroups)}/></div>
   </>
 }
