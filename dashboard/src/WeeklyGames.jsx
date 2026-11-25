@@ -34,10 +34,9 @@ function marginLabel(margin){
   const text=margin.toFixed(1)
   return text.endsWith('.0')?text.slice(0,-2):text
 }
-function chipText(game,upset){
-  if(game.margin<.05)return upset?'Upset: Toss-up':'Toss-up'
-  const text=`${teamLabel(game.winner)} by ${marginLabel(game.margin)}`
-  return upset?`Upset: ${text}`:text
+function chipText(game){
+  if(game.margin<.05)return `${teamLabel(game.winner)} (Toss-up)`
+  return `${teamLabel(game.winner)} (${marginLabel(game.margin)})`
 }
 
 export default function WeeklyGames({matchups,onOpen}){
@@ -54,8 +53,12 @@ export default function WeeklyGames({matchups,onOpen}){
   if(!chips.length)return null
   return <div className="model-picks-row" role="region" aria-label="Model favorites and possible upsets">
     {chips.map(({game,upset})=>{
-      const text=chipText(game,upset)
-      return <button key={game.id} type="button" className={upset?'model-pick model-pick-upset':'model-pick'} onClick={()=>onOpen(game.id)}>{text}</button>
+      const logo=game.winner?.logo
+      return <button key={game.id} type="button" className={upset?'model-pick model-pick-upset':'model-pick'} onClick={()=>onOpen(game.id)}>
+        {logo?<img src={logo} alt="" onError={event=>event.currentTarget.remove()}/>:null}
+        <span>{chipText(game)}</span>
+        {upset?<span>(upset)</span>:null}
+      </button>
     })}
   </div>
 }
