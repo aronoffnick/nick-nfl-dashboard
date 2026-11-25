@@ -4,6 +4,7 @@ import { breakoutRating } from './breakout.js'
 import BreakoutScale from './BreakoutScale.jsx'
 import Performance from './Performance.jsx'
 import RoleTags from './RoleTags.jsx'
+import { roleTags } from './roleData.js'
 
 const format=(n,key='')=>valid(n)?n.toFixed(key.endsWith('TD')?2:1):'—'
 const date=d=>new Date(d).toLocaleDateString('en-US',{timeZone:'America/New_York',month:'short',day:'numeric'})
@@ -67,21 +68,21 @@ function ProjectionCard({player,matchup,slots,chosen,onOpen,halfLife,window}){
   const ahead=!favored&&matchup.margin>=4
   const open=chosen===`${player.team.id}:${player.id}`
   const first=slots.find(Boolean)
+  const tags=roleTags(player)
   return <article className="projection-outlook-card" aria-label={`${player.name} projections`}>
     <div className="projection-row">
       <div className="breakout-player-identity">
         <h4>{player.name}</h4>
-        <RoleTags player={player}/>
         <p>{player.team.abbr} · {player.position} · {player.injury||player.status}</p>
         <small>{player.logs.length} recorded appearances</small>
-        {player.unavailable&&<small className="projection-withheld">Projection withheld</small>}
-        <button className="prop-action" aria-label={`View ${player.name} game log and line comparison`} aria-expanded={open} onClick={()=>onOpen(player,first)}>Game log &amp; lines</button>
       </div>
       <section className="breakout-score-cell"><h5>Breakout index</h5><BreakoutScale score={score}/><small>Directional composite · not a probability</small></section>
       {slots.map((key,index)=>key?<div className="projection-scale-cell" key={key}><Performance player={player} metric={key} halfLife={halfLife} lookback={window} label={fieldLabel[key]}/></div>:<div className="projection-scale-cell projection-scale-empty" key={`empty-${index}`} aria-hidden="true"/>)}
     </div>
     <details className="projection-context">
-      <summary>Recent opportunity and matchup context<span className="support-chevron" aria-hidden="true"/></summary>
+      <summary>Role, recent opportunity, and matchup context<span className="support-chevron" aria-hidden="true"/></summary>
+      <div className="projection-role"><h5>Role</h5>{tags.length?<RoleTags player={player}/>:<p>—</p>}</div>
+      {player.unavailable&&<p className="projection-withheld">Projection withheld</p>}
       <div className="projection-context-body">
         <section className="breakout-usage-cell"><h5>Recent opportunity</h5>
           <strong>{valid(recent)?`${recent.toFixed(1)} ${usageKey==='passAtt'?'pass attempts':usageKey}`:'—'}</strong>
@@ -94,6 +95,7 @@ function ProjectionCard({player,matchup,slots,chosen,onOpen,halfLife,window}){
           <p>Team model: {favored?'favored':ahead?'underdog':'near even'}{matchup.margin>=.05?` by ${matchup.margin.toFixed(1)}`:''}</p>
         </section>
       </div>
+      <button className="prop-action" aria-label={`View ${player.name} game log and line comparison`} aria-expanded={open} onClick={()=>onOpen(player,first)}>Game log &amp; lines</button>
     </details>
   </article>
 }
