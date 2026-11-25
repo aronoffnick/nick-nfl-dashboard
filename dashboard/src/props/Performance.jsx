@@ -29,3 +29,29 @@ export default function Performance({player,metric,halfLife,lookback,children}){
     </details>
   </div>
 }
+export function StatScale({player,metric,halfLife=3,lookback=4,baseline=null}){
+  const r=performance(player,metric,halfLife,lookback)
+  const projection=player.unavailable?null:r.stat?.projection
+  const base=valid(baseline)?baseline:r.stat?.baseline
+  const hasRange=r.low!=null&&r.high!=null
+  const hasProj=valid(projection)
+  const hasBase=valid(base)
+  const min=Math.min(0,hasRange?r.low:0,hasProj?projection:0,hasBase?base:0)
+  const max=Math.max(hasRange?r.high:0,hasProj?projection:0,hasBase?base:0,1)*1.15
+  const point=v=>(v-min)/(max-min)*100
+  const labelStyle=x=>({left:`${x}%`,transform:`translateX(-${x}%)`})
+  const lowPoint=hasRange?point(r.low):null,highPoint=hasRange?point(r.high):null,close=hasRange&&highPoint-lowPoint<22
+  const notes=[!hasProj&&'Projection unavailable',!hasRange&&'Observed range unavailable',!hasBase&&'Baseline unavailable'].filter(Boolean)
+  return <div className={`flyer-stat-scale performance-stat support-${r.level}`}>
+    <div className="performance-scale" role="img" aria-label={[hasRange?`Observed range ${fmt(r.low,metric)} to ${fmt(r.high,metric)}`:null,hasProj?`projection ${fmt(projection,metric)}`:null,hasBase?`baseline ${fmt(base,metric)}`:null,notes.join('; ')].filter(Boolean).join('; ')}>
+      {hasRange&&<>
+        <span className="performance-band" style={{left:`${lowPoint}%`,width:`${Math.max(1,highPoint-lowPoint)}%`}}/>
+        <span className="range-tick" style={{left:`${lowPoint}%`}}/><span className="range-tick" style={{left:`${highPoint}%`}}/>
+        {close?<span className="range-axis-label" style={labelStyle((lowPoint+highPoint)/2)}>{fmt(r.low,metric)}{r.low!==r.high?`–${fmt(r.high,metric)}`:''}</span>:<><span className="range-axis-label" style={labelStyle(lowPoint)}>{fmt(r.low,metric)}</span><span className="range-axis-label" style={labelStyle(highPoint)}>{fmt(r.high,metric)}</span></>}
+      </>}
+      {hasProj&&<><span className="performance-marker" style={{left:`${point(projection)}%`}}/><span className="benchmark-axis-label" style={labelStyle(point(projection))}>{fmt(projection,metric)}</span></>}
+      {hasBase&&<><span className="performance-benchmark flyer-baseline-marker" style={{left:`${point(base)}%`}}/><span className="benchmark-axis-label flyer-baseline-label" style={labelStyle(point(base))}>base {fmt(base,metric)}</span></>}
+    </div>
+    <small className="flyer-scale-readout">{hasProj?`${fmt(projection,metric)} projected`:'Projection unavailable'} · {hasRange?`${fmt(r.low,metric)}–${fmt(r.high,metric)} range`:'Observed range unavailable'} · {hasBase?`${fmt(base,metric)} baseline`:'Baseline unavailable'}</small>
+  </div>
+}

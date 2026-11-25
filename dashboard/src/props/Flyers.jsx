@@ -1,5 +1,10 @@
 import {useMemo,useState} from 'react'
 import {historyFor,sides,positionOf,projectTeam,valid,weighted} from './model.js'
+import {breakoutRating,ratingLevel} from './breakout.js'
+import BreakoutScale from './BreakoutScale.jsx'
+import {rbStarter} from './roleData.js'
+import RoleTags from './RoleTags.jsx'
+import {StatScale} from './Performance.jsx'
 import wrStarterRows from './wr-starters-week12.json'
 import './flyers.css'
 
@@ -70,10 +75,23 @@ function wrRoleSimilarity(a,b){
   if(a.side&&b.side){score+=(a.side===b.side?1:0)*.08;weight+=.08}
   return weight?score/weight:null
 }
+// RB matching uses the Week 12 RB starters sheet: depth label (RB1/RB2/RB3), primary role, goal-line/red-zone role.
+const GL_ORDER={primary:3,shared:2,occasional:1,none:0}
+function rbRoleSimilarity(a,b){
+  if(!a||!b)return null
+  let score=0,weight=0
+  const d=x=>/^RB\d/.test(x||'')?Number(x.replace(/\D/g,'')):null
+  if(d(a.depth)!=null&&d(b.depth)!=null){score+=Math.max(0,1-Math.abs(d(a.depth)-d(b.depth))/2)*.45;weight+=.45}
+  if(a.primary&&b.primary){score+=(a.primary===b.primary?1:0)*.30;weight+=.30}
+  if(a.glRole in GL_ORDER&&b.glRole in GL_ORDER){score+=Math.max(0,1-Math.abs(GL_ORDER[a.glRole]-GL_ORDER[b.glRole])/3)*.25;weight+=.25}
+  return weight?score/weight:null
+}
+const rbEvidence=r=>`${r.depth} · ${r.primary} · ${r.glLabel}`
 export function closestPlayer(candidates,theme,pos){
   if(!candidates.length)return null
   const referenceUsage=mean(theme.hitPlayers.map(row=>row.usage))
   const referenceWrRoles=pos==='WR'?theme.hitPlayers.map(row=>wrLookup.get(row.player.name.trim().toLowerCase())).filter(Boolean):[]
+  const referenceRbRoles=pos==='RB'?theme.hitPlayers.map(row=>rbStarter(row.player.name)).filter(Boolean):[]
   return candidates.map(player=>{
     const usage=weighted(player.logs,theme.spec.usage,3)
     const usageScore=valid(referenceUsage)&&referenceUsage>0&&valid(usage)?Math.max(0,1-Math.abs(usage-referenceUsage)/referenceUsage):valid(usage)?Math.min(usage/10,1):0
@@ -83,6 +101,11 @@ export function closestPlayer(candidates,theme,pos){
       const roleMatches=referenceWrRoles.map(role=>wrRoleSimilarity(playerRole,role)).filter(valid)
       if(roleMatches.length){roleScore=Math.max(...roleMatches);matchedRole=playerRole}
     }
+    if(pos==='RB'){
+      const playerRole=rbStarter(player.name)
+      const roleMatches=referenceRbRoles.map(role=>rbRoleSimilarity(playerRole,role)).filter(valid)
+      if(roleMatches.length){roleScore=Math.max(...roleMatches);matchedRole=playerRole}
+    }
     const similarity=roleScore==null?usageScore:usageScore*.65+roleScore*.35
     return {...player,similarity,usage,role:matchedRole}
   }).sort((a,b)=>b.similarity-a.similarity||b.breakoutScore-a.breakoutScore)[0]
@@ -90,8 +113,16 @@ export function closestPlayer(candidates,theme,pos){
 function CandidateList({theme,pos,side}){
   const closest=closestPlayer(theme.candidates,theme,pos)
   if(!closest)return <p className="flyers-no-player">No current active player with a recent role was identified for this position.</p>
-  const evidence=pos==='WR'&&closest.role?`${closest.role.rank}${closest.role.slot?' · slot':''} · ${closest.role.alignment}/${closest.role.side}`:`Recent ${theme.spec.usage==='passAtt'?'pass attempts':theme.spec.usage} role`
-  return <div className="flyers-match"><b>{closest.name}</b><span>{closest.team?.abbr||side.offense.abbr} · {closest.position}</span><small>Closest role match · {Math.round(closest.similarity*100)}% similarity · {evidence}</small></div>
+  const evidence=pos==='RB'&&closest.role?rbEvidence(closest.role):pos==='WR'&&closest.role?`${closest.role.rank}${closest.role.slot?' · slot':''} · ${closest.role.alignment}/${closest.role.side}`:`Recent ${theme.spec.usage==='passAtt'?'pass attempts':theme.spec.usage} role`
+  return <div className="flyers-match"><div className="flyers-player-name"><b>{closest.name}</b><BreakoutIndexChip player={closest}/></div><span>{closest.team?.abbr||side.offense.abbr} · {closest.position}</span><RoleTags player={{name:closest.name,pos:pos==='RB'?'RB':closest.position}}/><small>Closest role match · {Math.round(closest.similarity*100)}% similarity · {evidence}</small></div>
+}
+function BreakoutIndexChip({player}){
+  const score=breakoutRating(player)
+  if(score==null)return <span className="breakout-index-chip breakout-unknown">Breakout index —</span>
+  return <span className={`breakout-index-chip breakout-${ratingLevel(score)}`}>Breakout index {score}</span>
+}
+function BreakoutIndexScale({player}){
+  return <BreakoutScale score={breakoutRating(player)} className="flyer-breakout-scale"/>
 }
 function FlyerTheme({theme,index,offenses,roster,halfLife,window}){
   const pos=theme.position
@@ -105,7 +136,7 @@ function FlyerTheme({theme,index,offenses,roster,halfLife,window}){
     </div>
     <div className="flyer-similar"><small>MOST SIMILAR UPCOMING PLAYER</small>
       <CandidateList theme={theme} pos={pos} side={offenses.find(s=>s.defense.id===theme.defense.id)}/>
-      <small className="flyer-explainer">Role match uses recent box-score workload; WRs also use the supplied Week 12 starter/slot sheet when a matching name is available.</small>
+      <small className="flyer-explainer">Role match uses recent box-score workload; WRs also use the Week 12 starter/slot sheet; RBs use the Week 12 RB starters sheet (depth label, primary role, goal-line/red-zone role) when a matching name is available.</small>
     </div>
   </article>
 }
@@ -167,8 +198,10 @@ export default function Flyers({data,matchup,roster,halfLife,window}){
       <div className="flyer-favorites-heading"><div><span>TOP THREE</span><h4>Breakout Upside Favorites</h4></div><small>Highest combined matchup rate, model projection, and prior single-game ceiling</small></div>
       {!favorites.length?<p className="prop-warning">No breakout candidate currently has a reliable projection for these filters.</p>:<ol className="flyer-favorites-list">{favorites.map(({player,theme,baseline,projection,multiple,peakMultiple,recentPeak},index)=><li key={`${player.id}:${theme.spec.key}`}>
         <span className="flyer-favorite-rank">0{index+1}</span>
-        <div><b>{player.name}</b><small>{theme.offense.abbr} · {roleName(theme.position)} · {theme.spec.title}</small></div>
+        <div><b>{player.name}</b><RoleTags player={player}/><small>{theme.offense.abbr} · {roleName(theme.position)} · {theme.spec.title}</small></div>
+        <BreakoutIndexScale player={player}/>
         <div><strong>{fmt(projection)} {theme.spec.title.toLowerCase()}</strong><small>Projection · {multiple.toFixed(2)}× weighted baseline</small></div>
+        <StatScale player={player} metric={theme.spec.key} halfLife={halfLife} lookback={window} baseline={baseline}/>
         <div><strong>{fmt(recentPeak)} peak</strong><small>{peakMultiple.toFixed(2)}× baseline · {Math.round(theme.rate*100)}% opponent breakout rate</small></div>
       </li>)}</ol>}
       <p className="flyer-favorites-note">A 1.5× or 2× label is not assigned unless the player’s actual model projection reaches that multiple. The current matchup adjustment is capped at 1.25× baseline, so larger multiples would require a separate ceiling model.</p>
@@ -177,7 +210,7 @@ export default function Flyers({data,matchup,roster,halfLife,window}){
     <details className="prop-method"><summary>Threshold rules and data sources</summary>
       <p>Thresholds come from your supplied reference: QB pass yards 260/300, pass TDs 2/3, rush yards 20/35, rushing TDs 1/2; RB rush yards 90/110, receptions 4/6, receiving yards 15/25, total TDs 1/2; WR receptions 6/8, receiving yards 90/110, total TDs 1/2; TE receptions 5/7, receiving yards 40/60, total TDs 1/2. “Safe” and “Breakout” list first and second values respectively.</p>
       <p>For each game, the position group counts as crossing when at least one player at that position reaches the threshold. Hit rates use only recent games with complete box-score categories and position data. A theme enters the ranking with at least two usable games and one crossing; all qualifying themes are shown, ordered by percentage and hit count. Closest player selection uses current-team recent workload compared with the workloads of historical players who crossed the threshold. WR role matching also consults the supplied Ourlads-derived Week 12 sheet (slot/depth/alignment fields marked inferred in that source); it is a supplemental role hint, not tracking data.</p>
-      <p>Source: ESPN prior-week individual box scores and current roster positions; WR backup cross-reference: user-provided Week 12 WR starters workbook, snapshot Nov 23, 2026. No sportsbook prices, confirmed starters, snap counts, route participation or injury-driven role changes are modeled.</p>
+      <p>Source: ESPN prior-week individual box scores and current roster positions; WR backup cross-reference: user-provided Week 12 WR starters workbook, snapshot Nov 23, 2026. RB role tags use the Week 12 RB starters sheet (depth, primary role, and goal-line role). No sportsbook prices, confirmed starters, snap counts, route participation or injury-driven role changes are modeled.</p>
     </details>
   </section>
 }
