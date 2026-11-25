@@ -40,15 +40,42 @@ export default function ScatterTab({ away, home }) {
  const nice=v=>{const e=Math.pow(10,Math.floor(Math.log10(v))),f=v/e;return (f<=1?1:f<=2?2:f<=5?5:10)*e};
  const step=nice(mx/5),top=Math.ceil(mx/step)*step;
  const X=v=>m.l+(v/top)*(w-m.l-m.r),Y=v=>H-m.b-(v/top)*(H-m.t-m.b);
- const ticks=[];for(let v=0;v<=top+1e-9;v+=step)ticks.push(+v.toFixed(4));
+ const half=step/2
+ const axisTicks=[]
+ for(let i=0,n=Math.round(top/half);i<=n;i++){
+   const value=+(i*half).toFixed(4)
+   const major=i%2===0
+   axisTicks.push({value,major,label:Number.isInteger(value)?String(value):String(+value.toFixed(2))})
+ }
+ const halfFont=8,majorFont=10
+ const showHalfLabel=(tick,axis)=>{
+   const pos=axis==='x'?X(tick.value):Y(tick.value)
+   let nearest=null
+   for(const other of axisTicks)if(other.major){
+     const d=Math.abs((axis==='x'?X(other.value):Y(other.value))-pos)
+     if(!nearest||d<nearest.d)nearest={d,label:other.label}
+   }
+   if(!nearest)return true
+   if(axis==='y')return nearest.d>=halfFont+4
+   const need=(tick.label.length*halfFont*.58+nearest.label.length*majorFont*.58)/2+6
+   const tw=tick.label.length*halfFont*.58
+   return nearest.d>=need&&pos-tw/2>m.l+1&&pos+tw/2<w-2
+ }
  // labels: greedy, highest projection first, skip overlaps
  const placed=[],fs=w<500?10:11;
  const lab=[...pts].sort((a,b)=>b.y-a.y).map(p=>{const txt=p.n.split(' ').slice(-1)[0];const tw=txt.length*fs*0.58,x=X(p.x)+7,y=Y(p.y)+4;
    const bx=x+tw>w-m.r?[X(p.x)-7-tw,y]:[x,y];const box=[bx[0],bx[1]-fs,bx[0]+tw,bx[1]+2];
    if(placed.some(q=>!(box[2]<q[0]||box[0]>q[2]||box[3]<q[1]||box[1]>q[3])))return null;placed.push(box);return h('text',{key:'l'+p.n,x:bx[0],y:bx[1],fontSize:fs,fill:p.noRole?'#6d7c88':'#c9d6df',opacity:p.noRole?0.35:1},txt)}).filter(Boolean);
  const svg=h('svg',{width:w,height:H,role:'img','aria-label':`${team} offense vs ${defAb} defense, ${statLbl}`,style:{display:'block'}},
-   ticks.map(v=>h('g',{key:'t'+v},h('line',{x1:m.l,x2:w-m.r,y1:Y(v),y2:Y(v),stroke:'#24323d'}),h('text',{x:m.l-6,y:Y(v)+4,fontSize:10,fill:'#8b9ba8',textAnchor:'end'},v),
-     h('text',{x:X(v),y:H-m.b+16,fontSize:10,fill:'#8b9ba8',textAnchor:'middle'},v))),
+   axisTicks.filter(t=>!t.major).map(t=>h('g',{key:'h'+t.value},
+     h('line',{x1:m.l,x2:w-m.r,y1:Y(t.value),y2:Y(t.value),stroke:'#3d5568',strokeDasharray:'2 3'}),
+     h('line',{x1:X(t.value),x2:X(t.value),y1:m.t,y2:H-m.b,stroke:'#3d5568',strokeDasharray:'2 3',opacity:.75}),
+     h('line',{x1:m.l-3,x2:m.l,y1:Y(t.value),y2:Y(t.value),stroke:'#6d8090'}),
+     h('line',{x1:X(t.value),x2:X(t.value),y1:H-m.b,y2:H-m.b+3,stroke:'#6d8090'}),
+     showHalfLabel(t,'y')?h('text',{x:m.l-6,y:Y(t.value)+3,fontSize:halfFont,fill:'#667888',textAnchor:'end'},t.label):null,
+     showHalfLabel(t,'x')?h('text',{x:X(t.value),y:H-m.b+15,fontSize:halfFont,fill:'#667888',textAnchor:'middle'},t.label):null)),
+   axisTicks.filter(t=>t.major).map(t=>h('g',{key:'t'+t.value},h('line',{x1:m.l,x2:w-m.r,y1:Y(t.value),y2:Y(t.value),stroke:'#24323d'}),h('text',{x:m.l-6,y:Y(t.value)+4,fontSize:majorFont,fill:'#8b9ba8',textAnchor:'end'},t.label),
+     h('text',{x:X(t.value),y:H-m.b+16,fontSize:majorFont,fill:'#8b9ba8',textAnchor:'middle'},t.label))),
    h('line',{x1:X(0),y1:Y(0),x2:X(top),y2:Y(top),stroke:'#a5e6bd',strokeDasharray:'5 5',opacity:.6}),
    h('text',{x:X(top)-4,y:Y(top)+14,fontSize:10,fill:'#a5e6bd',textAnchor:'end'},'projection = season avg'),
    h('text',{x:(m.l+w-m.r)/2,y:H-6,fontSize:11,fill:'#9cabb7',textAnchor:'middle'},`2026 average per game · ${statLbl}`),

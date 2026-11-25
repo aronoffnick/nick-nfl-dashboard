@@ -47,7 +47,7 @@ export default function WeeklyGames({matchups,onOpen}){
     const available=upcoming.length?upcoming:eligible
     const ranked=[...available].sort((a,b)=>featureScore(b)-featureScore(a))
     const upsets=ranked.filter(game=>classify(game)==='upset').slice(0,2)
-    const favorites=ranked.filter(game=>classify(game)!=='upset')
+    const favorites=ranked.filter(game=>classify(game)!=='upset').slice(0,Math.max(3,5-upsets.length))
     return {favorites,upsets}
   },[matchups])
   const chips=[...favorites.map(game=>({game,upset:false})),...upsets.map(game=>({game,upset:true}))]
