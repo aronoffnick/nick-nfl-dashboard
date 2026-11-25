@@ -1,0 +1,842 @@
+[
+  {
+    "name": "James Cook III",
+    "team": "Buffalo Bills",
+    "targetShare": 0.4,
+    "recentCarryShare": 0.84,
+    "inside5Share": 0.81,
+    "injury": "Active"
+  },
+  {
+    "name": "Ty Johnson",
+    "team": "Buffalo Bills",
+    "targetShare": 0.49,
+    "recentCarryShare": 0.05,
+    "inside5Share": 0.12,
+    "injury": "Active"
+  },
+  {
+    "name": "Ray Davis",
+    "team": "Buffalo Bills",
+    "targetShare": 0.11,
+    "recentCarryShare": 0.11,
+    "inside5Share": 0.06,
+    "injury": "Active"
+  },
+  {
+    "name": "Ollie Gordon II",
+    "team": "Miami Dolphins",
+    "targetShare": 0.43,
+    "recentCarryShare": 0.85,
+    "inside5Share": 0.91,
+    "injury": "Active"
+  },
+  {
+    "name": "Jaylen Wright",
+    "team": "Miami Dolphins",
+    "targetShare": 0.1,
+    "recentCarryShare": 0.13,
+    "inside5Share": 0.0,
+    "injury": "Active"
+  },
+  {
+    "name": "Kaytron Allen",
+    "team": "Miami Dolphins",
+    "targetShare": 0.05,
+    "recentCarryShare": 0.03,
+    "inside5Share": 0.0,
+    "injury": "Active"
+  },
+  {
+    "name": "Rhamondre Stevenson",
+    "team": "New England Patriots",
+    "targetShare": 0.64,
+    "recentCarryShare": 0.52,
+    "inside5Share": 0.75,
+    "injury": "Active"
+  },
+  {
+    "name": "Corey Kiner",
+    "team": "New England Patriots",
+    "targetShare": 0.04,
+    "recentCarryShare": 0.42,
+    "inside5Share": 0.25,
+    "injury": "Active"
+  },
+  {
+    "name": "Lan Larison",
+    "team": "New England Patriots",
+    "targetShare": 0.12,
+    "recentCarryShare": 0.07,
+    "inside5Share": 0.0,
+    "injury": "Active"
+  },
+  {
+    "name": "Breece Hall",
+    "team": "New York Jets",
+    "targetShare": 0.4,
+    "recentCarryShare": 0.44,
+    "inside5Share": 0.44,
+    "injury": "Active"
+  },
+  {
+    "name": "Braelon Allen",
+    "team": "New York Jets",
+    "targetShare": 0.49,
+    "recentCarryShare": 0.5,
+    "inside5Share": 0.44,
+    "injury": "Active"
+  },
+  {
+    "name": "Isaiah Davis",
+    "team": "New York Jets",
+    "targetShare": 0.11,
+    "recentCarryShare": 0.05,
+    "inside5Share": 0.0,
+    "injury": "Active"
+  },
+  {
+    "name": "Derrick Henry",
+    "team": "Baltimore Ravens",
+    "targetShare": 0.38,
+    "recentCarryShare": 0.69,
+    "inside5Share": 1.0,
+    "injury": "Active"
+  },
+  {
+    "name": "Justice Hill",
+    "team": "Baltimore Ravens",
+    "targetShare": 0.62,
+    "recentCarryShare": 0.28,
+    "inside5Share": 0.0,
+    "injury": "Active"
+  },
+  {
+    "name": "Rasheen Ali",
+    "team": "Baltimore Ravens",
+    "targetShare": 0.0,
+    "recentCarryShare": 0.03,
+    "inside5Share": 0.0,
+    "injury": "None listed"
+  },
+  {
+    "name": "Chase Brown",
+    "team": "Cincinnati Bengals",
+    "targetShare": 0.77,
+    "recentCarryShare": 0.55,
+    "inside5Share": 0.67,
+    "injury": "Active"
+  },
+  {
+    "name": "Samaje Perine",
+    "team": "Cincinnati Bengals",
+    "targetShare": 0.23,
+    "recentCarryShare": 0.4,
+    "inside5Share": 0.33,
+    "injury": "Active"
+  },
+  {
+    "name": "Tahj Brooks",
+    "team": "Cincinnati Bengals",
+    "targetShare": 0.0,
+    "recentCarryShare": 0.04,
+    "inside5Share": 0.0,
+    "injury": "None listed"
+  },
+  {
+    "name": "Quinshon Judkins",
+    "team": "Cleveland Browns",
+    "targetShare": 0.4,
+    "recentCarryShare": 0.73,
+    "inside5Share": 0.9,
+    "injury": "Active"
+  },
+  {
+    "name": "Dylan Sampson",
+    "team": "Cleveland Browns",
+    "targetShare": 0.32,
+    "recentCarryShare": 0.27,
+    "inside5Share": 0.0,
+    "injury": "Active"
+  },
+  {
+    "name": "Jaleel McLaughlin",
+    "team": "Cleveland Browns",
+    "targetShare": 0.08,
+    "recentCarryShare": 0.0,
+    "inside5Share": 0.0,
+    "injury": "Active"
+  },
+  {
+    "name": "Jaylen Warren",
+    "team": "Pittsburgh Steelers",
+    "targetShare": 0.63,
+    "recentCarryShare": 0.51,
+    "inside5Share": 0.75,
+    "injury": "Active"
+  },
+  {
+    "name": "Rico Dowdle",
+    "team": "Pittsburgh Steelers",
+    "targetShare": 0.34,
+    "recentCarryShare": 0.38,
+    "inside5Share": 0.25,
+    "injury": "Active"
+  },
+  {
+    "name": "Lew Nichols",
+    "team": "Pittsburgh Steelers",
+    "targetShare": 0.01,
+    "recentCarryShare": 0.09,
+    "inside5Share": 0.0,
+    "injury": "None listed"
+  },
+  {
+    "name": "David Montgomery",
+    "team": "Houston Texans",
+    "targetShare": 0.26,
+    "recentCarryShare": 0.35,
+    "inside5Share": 0.5,
+    "injury": "Active"
+  },
+  {
+    "name": "Woody Marks",
+    "team": "Houston Texans",
+    "targetShare": 0.52,
+    "recentCarryShare": 0.4,
+    "inside5Share": 0.5,
+    "injury": "Questionable (Concussion)"
+  },
+  {
+    "name": "Emari Demercado",
+    "team": "Houston Texans",
+    "targetShare": 0.14,
+    "recentCarryShare": 0.24,
+    "inside5Share": 0.0,
+    "injury": "Active"
+  },
+  {
+    "name": "Jonathan Taylor",
+    "team": "Indianapolis Colts",
+    "targetShare": 0.85,
+    "recentCarryShare": 0.59,
+    "inside5Share": 0.89,
+    "injury": "Active"
+  },
+  {
+    "name": "Seth McGowan",
+    "team": "Indianapolis Colts",
+    "targetShare": 0.13,
+    "recentCarryShare": 0.32,
+    "inside5Share": 0.11,
+    "injury": "Out (Hamstring)"
+  },
+  {
+    "name": "DJ Giddens",
+    "team": "Indianapolis Colts",
+    "targetShare": 0.02,
+    "recentCarryShare": 0.09,
+    "inside5Share": 0.0,
+    "injury": "Active"
+  },
+  {
+    "name": "Bhayshul Tuten",
+    "team": "Jacksonville Jaguars",
+    "targetShare": 0.56,
+    "recentCarryShare": 0.63,
+    "inside5Share": 0.57,
+    "injury": "Questionable (Ankle)"
+  },
+  {
+    "name": "Chris Rodriguez Jr.",
+    "team": "Jacksonville Jaguars",
+    "targetShare": 0.15,
+    "recentCarryShare": 0.24,
+    "inside5Share": 0.43,
+    "injury": "Active"
+  },
+  {
+    "name": "LeQuint Allen Jr.",
+    "team": "Jacksonville Jaguars",
+    "targetShare": 0.22,
+    "recentCarryShare": 0.0,
+    "inside5Share": 0.0,
+    "injury": "Active"
+  },
+  {
+    "name": "Tony Pollard",
+    "team": "Tennessee Titans",
+    "targetShare": 0.61,
+    "recentCarryShare": 0.86,
+    "inside5Share": 1.0,
+    "injury": "Active"
+  },
+  {
+    "name": "Julius Chestnut",
+    "team": "Tennessee Titans",
+    "targetShare": 0.0,
+    "recentCarryShare": 0.0,
+    "inside5Share": 0.0,
+    "injury": "None listed"
+  },
+  {
+    "name": "Nick Singleton",
+    "team": "Tennessee Titans",
+    "targetShare": 0.0,
+    "recentCarryShare": 0.0,
+    "inside5Share": 0.0,
+    "injury": "Active"
+  },
+  {
+    "name": "Jonah Coleman",
+    "team": "Denver Broncos",
+    "targetShare": 0.29,
+    "recentCarryShare": 0.79,
+    "inside5Share": 0.47,
+    "injury": "Active"
+  },
+  {
+    "name": "J.K. Dobbins",
+    "team": "Denver Broncos",
+    "targetShare": 0.15,
+    "recentCarryShare": 0.18,
+    "inside5Share": 0.47,
+    "injury": "Out (Personal)"
+  },
+  {
+    "name": "Tyler Badie",
+    "team": "Denver Broncos",
+    "targetShare": 0.11,
+    "recentCarryShare": 0.0,
+    "inside5Share": 0.0,
+    "injury": "Injured Reserve (Thumb)"
+  },
+  {
+    "name": "Kenneth Walker",
+    "team": "Kansas City Chiefs",
+    "targetShare": 0.56,
+    "recentCarryShare": 0.38,
+    "inside5Share": 0.94,
+    "injury": "Out (Groin)"
+  },
+  {
+    "name": "Emmett Johnson",
+    "team": "Kansas City Chiefs",
+    "targetShare": 0.42,
+    "recentCarryShare": 0.51,
+    "inside5Share": 0.06,
+    "injury": "Active"
+  },
+  {
+    "name": "Jaydn Ott",
+    "team": "Kansas City Chiefs",
+    "targetShare": 0.0,
+    "recentCarryShare": 0.08,
+    "inside5Share": 0.0,
+    "injury": "Active"
+  },
+  {
+    "name": "Ashton Jeanty",
+    "team": "Las Vegas Raiders",
+    "targetShare": 0.82,
+    "recentCarryShare": 0.36,
+    "inside5Share": 0.56,
+    "injury": "Active"
+  },
+  {
+    "name": "Mike Washington Jr.",
+    "team": "Las Vegas Raiders",
+    "targetShare": 0.09,
+    "recentCarryShare": 0.62,
+    "inside5Share": 0.39,
+    "injury": "Active"
+  },
+  {
+    "name": "Dylan Laube",
+    "team": "Las Vegas Raiders",
+    "targetShare": 0.05,
+    "recentCarryShare": 0.0,
+    "inside5Share": 0.06,
+    "injury": "None listed"
+  },
+  {
+    "name": "Connor Heyward",
+    "team": "Las Vegas Raiders",
+    "targetShare": 0.05,
+    "recentCarryShare": 0.01,
+    "inside5Share": 0.0,
+    "injury": "None listed"
+  },
+  {
+    "name": "Omarion Hampton",
+    "team": "Los Angeles Chargers",
+    "targetShare": 0.25,
+    "recentCarryShare": 0.6,
+    "inside5Share": 1.0,
+    "injury": "Active"
+  },
+  {
+    "name": "Kimani Vidal",
+    "team": "Los Angeles Chargers",
+    "targetShare": 0.32,
+    "recentCarryShare": 0.25,
+    "inside5Share": 0.0,
+    "injury": "Active"
+  },
+  {
+    "name": "Keaton Mitchell",
+    "team": "Los Angeles Chargers",
+    "targetShare": 0.37,
+    "recentCarryShare": 0.15,
+    "inside5Share": 0.0,
+    "injury": "Questionable (Knee)"
+  },
+  {
+    "name": "Javonte Williams",
+    "team": "Dallas Cowboys",
+    "targetShare": 0.69,
+    "recentCarryShare": 0.74,
+    "inside5Share": 1.0,
+    "injury": "Active"
+  },
+  {
+    "name": "Tyler Goodson",
+    "team": "Dallas Cowboys",
+    "targetShare": 0.17,
+    "recentCarryShare": 0.18,
+    "inside5Share": 0.0,
+    "injury": "None listed"
+  },
+  {
+    "name": "Malik Davis",
+    "team": "Dallas Cowboys",
+    "targetShare": null,
+    "recentCarryShare": null,
+    "inside5Share": null,
+    "injury": "None listed"
+  },
+  {
+    "name": "Hunter Luepke",
+    "team": "Dallas Cowboys",
+    "targetShare": 0.1,
+    "recentCarryShare": 0.01,
+    "inside5Share": 0.0,
+    "injury": "None listed"
+  },
+  {
+    "name": "Cam Skattebo",
+    "team": "New York Giants",
+    "targetShare": 0.5,
+    "recentCarryShare": 0.55,
+    "inside5Share": 0.5,
+    "injury": "Active"
+  },
+  {
+    "name": "Devin Singletary",
+    "team": "New York Giants",
+    "targetShare": 0.27,
+    "recentCarryShare": 0.4,
+    "inside5Share": 0.1,
+    "injury": "Active"
+  },
+  {
+    "name": "Gregory Desrosiers Jr.",
+    "team": "New York Giants",
+    "targetShare": 0.0,
+    "recentCarryShare": 0.05,
+    "inside5Share": 0.0,
+    "injury": "Active"
+  },
+  {
+    "name": "Tyrone Tracy Jr.",
+    "team": "New York Giants",
+    "targetShare": 0.15,
+    "recentCarryShare": 0.0,
+    "inside5Share": 0.2,
+    "injury": "Injured Reserve (Hamstring)"
+  },
+  {
+    "name": "Saquon Barkley",
+    "team": "Philadelphia Eagles",
+    "targetShare": 0.22,
+    "recentCarryShare": 0.7,
+    "inside5Share": 0.46,
+    "injury": "Active"
+  },
+  {
+    "name": "Will Shipley",
+    "team": "Philadelphia Eagles",
+    "targetShare": 0.16,
+    "recentCarryShare": 0.07,
+    "inside5Share": 0.15,
+    "injury": "Questionable (Illness)"
+  },
+  {
+    "name": "Jaydon Blue",
+    "team": "Philadelphia Eagles",
+    "targetShare": 0.02,
+    "recentCarryShare": 0.0,
+    "inside5Share": 0.0,
+    "injury": "Active"
+  },
+  {
+    "name": "Elijah Mitchell",
+    "team": "Philadelphia Eagles",
+    "targetShare": 0.27,
+    "recentCarryShare": 0.23,
+    "inside5Share": 0.0,
+    "injury": "None listed"
+  },
+  {
+    "name": "Dameon Pierce",
+    "team": "Philadelphia Eagles",
+    "targetShare": 0.22,
+    "recentCarryShare": 0.0,
+    "inside5Share": 0.31,
+    "injury": "None listed"
+  },
+  {
+    "name": "Jacory Croskey-Merritt",
+    "team": "Washington Commanders",
+    "targetShare": 0.2,
+    "recentCarryShare": 0.16,
+    "inside5Share": 0.29,
+    "injury": "Active"
+  },
+  {
+    "name": "Austin Ekeler",
+    "team": "Washington Commanders",
+    "targetShare": 0.31,
+    "recentCarryShare": 0.4,
+    "inside5Share": 0.0,
+    "injury": "Active"
+  },
+  {
+    "name": "Rachaad White",
+    "team": "Washington Commanders",
+    "targetShare": 0.47,
+    "recentCarryShare": 0.36,
+    "inside5Share": 0.43,
+    "injury": "Active"
+  },
+  {
+    "name": "D'Andre Swift",
+    "team": "Chicago Bears",
+    "targetShare": 0.65,
+    "recentCarryShare": 0.68,
+    "inside5Share": 0.66,
+    "injury": "Active"
+  },
+  {
+    "name": "Kyle Monangai",
+    "team": "Chicago Bears",
+    "targetShare": 0.12,
+    "recentCarryShare": 0.11,
+    "inside5Share": 0.21,
+    "injury": "Active"
+  },
+  {
+    "name": "Roschon Johnson",
+    "team": "Chicago Bears",
+    "targetShare": 0.23,
+    "recentCarryShare": 0.07,
+    "inside5Share": 0.14,
+    "injury": "Questionable (Ankle)"
+  },
+  {
+    "name": "Jahmyr Gibbs",
+    "team": "Detroit Lions",
+    "targetShare": 0.85,
+    "recentCarryShare": 0.79,
+    "inside5Share": 0.95,
+    "injury": "Active"
+  },
+  {
+    "name": "Sione Vaki",
+    "team": "Detroit Lions",
+    "targetShare": 0.15,
+    "recentCarryShare": 0.19,
+    "inside5Share": 0.05,
+    "injury": "Active"
+  },
+  {
+    "name": "Jacob Saylors",
+    "team": "Detroit Lions",
+    "targetShare": 0.0,
+    "recentCarryShare": 0.02,
+    "inside5Share": 0.0,
+    "injury": "Active"
+  },
+  {
+    "name": "Josh Jacobs",
+    "team": "Green Bay Packers",
+    "targetShare": 0.24,
+    "recentCarryShare": 0.37,
+    "inside5Share": 0.27,
+    "injury": "Questionable (Finger)"
+  },
+  {
+    "name": "Kaleb Johnson",
+    "team": "Green Bay Packers",
+    "targetShare": 0.06,
+    "recentCarryShare": 0.36,
+    "inside5Share": 0.27,
+    "injury": "Active"
+  },
+  {
+    "name": "MarShawn Lloyd",
+    "team": "Green Bay Packers",
+    "targetShare": 0.37,
+    "recentCarryShare": 0.1,
+    "inside5Share": 0.27,
+    "injury": "Active"
+  },
+  {
+    "name": "Jordan Mason",
+    "team": "Minnesota Vikings",
+    "targetShare": 0.17,
+    "recentCarryShare": 0.58,
+    "inside5Share": 0.25,
+    "injury": "Active"
+  },
+  {
+    "name": "Aaron Jones",
+    "team": "Minnesota Vikings",
+    "targetShare": 0.59,
+    "recentCarryShare": 0.41,
+    "inside5Share": 0.75,
+    "injury": "Active"
+  },
+  {
+    "name": "DeeJay Dallas",
+    "team": "Minnesota Vikings",
+    "targetShare": 0.15,
+    "recentCarryShare": 0.01,
+    "inside5Share": 0.0,
+    "injury": "None listed"
+  },
+  {
+    "name": "Bijan Robinson",
+    "team": "Atlanta Falcons",
+    "targetShare": 0.76,
+    "recentCarryShare": 0.92,
+    "inside5Share": 0.9,
+    "injury": "Active"
+  },
+  {
+    "name": "Khalil Herbert",
+    "team": "Atlanta Falcons",
+    "targetShare": 0.14,
+    "recentCarryShare": 0.08,
+    "inside5Share": 0.0,
+    "injury": "Active"
+  },
+  {
+    "name": "Brian Robinson Jr.",
+    "team": "Atlanta Falcons",
+    "targetShare": 0.1,
+    "recentCarryShare": 0.0,
+    "inside5Share": 0.1,
+    "injury": "None listed"
+  },
+  {
+    "name": "Chuba Hubbard",
+    "team": "Carolina Panthers",
+    "targetShare": 0.78,
+    "recentCarryShare": 0.88,
+    "inside5Share": 1.0,
+    "injury": "Active"
+  },
+  {
+    "name": "Trevor Etienne",
+    "team": "Carolina Panthers",
+    "targetShare": 0.11,
+    "recentCarryShare": 0.12,
+    "inside5Share": 0.0,
+    "injury": "Active"
+  },
+  {
+    "name": "Anthony Tyus III",
+    "team": "Carolina Panthers",
+    "targetShare": 0.0,
+    "recentCarryShare": 0.0,
+    "inside5Share": 0.0,
+    "injury": "None listed"
+  },
+  {
+    "name": "Travis Etienne Jr.",
+    "team": "New Orleans Saints",
+    "targetShare": 0.23,
+    "recentCarryShare": 0.4,
+    "inside5Share": 0.21,
+    "injury": "Active"
+  },
+  {
+    "name": "Alvin Kamara",
+    "team": "New Orleans Saints",
+    "targetShare": 0.46,
+    "recentCarryShare": 0.16,
+    "inside5Share": 0.21,
+    "injury": "Active"
+  },
+  {
+    "name": "CJ Donaldson",
+    "team": "New Orleans Saints",
+    "targetShare": 0.12,
+    "recentCarryShare": 0.02,
+    "inside5Share": 0.07,
+    "injury": "Active"
+  },
+  {
+    "name": "Kendre Miller",
+    "team": "New Orleans Saints",
+    "targetShare": 0.16,
+    "recentCarryShare": 0.0,
+    "inside5Share": 0.36,
+    "injury": "None listed"
+  },
+  {
+    "name": "Audric Estime",
+    "team": "New Orleans Saints",
+    "targetShare": 0.02,
+    "recentCarryShare": 0.4,
+    "inside5Share": 0.14,
+    "injury": "Active"
+  },
+  {
+    "name": "Bucky Irving",
+    "team": "Tampa Bay Buccaneers",
+    "targetShare": 0.55,
+    "recentCarryShare": 0.66,
+    "inside5Share": 0.69,
+    "injury": "Active"
+  },
+  {
+    "name": "Kenny Gainwell",
+    "team": "Tampa Bay Buccaneers",
+    "targetShare": 0.45,
+    "recentCarryShare": 0.34,
+    "inside5Share": 0.08,
+    "injury": "Active"
+  },
+  {
+    "name": "Sean Tucker",
+    "team": "Tampa Bay Buccaneers",
+    "targetShare": 0.0,
+    "recentCarryShare": 0.0,
+    "inside5Share": 0.23,
+    "injury": "Active"
+  },
+  {
+    "name": "Tyler Allgeier",
+    "team": "Arizona Cardinals",
+    "targetShare": 0.49,
+    "recentCarryShare": 0.62,
+    "inside5Share": 0.5,
+    "injury": "Active"
+  },
+  {
+    "name": "Bam Knight",
+    "team": "Arizona Cardinals",
+    "targetShare": 0.23,
+    "recentCarryShare": 0.23,
+    "inside5Share": 0.25,
+    "injury": "Active"
+  },
+  {
+    "name": "Evan Hull",
+    "team": "Arizona Cardinals",
+    "targetShare": 0.02,
+    "recentCarryShare": 0.0,
+    "inside5Share": 0.0,
+    "injury": "None listed"
+  },
+  {
+    "name": "Kyren Williams",
+    "team": "Los Angeles Rams",
+    "targetShare": 0.7,
+    "recentCarryShare": 0.44,
+    "inside5Share": 0.62,
+    "injury": "Active"
+  },
+  {
+    "name": "Blake Corum",
+    "team": "Los Angeles Rams",
+    "targetShare": 0.29,
+    "recentCarryShare": 0.4,
+    "inside5Share": 0.38,
+    "injury": "None listed"
+  },
+  {
+    "name": "Ronnie Rivers",
+    "team": "Los Angeles Rams",
+    "targetShare": 0.01,
+    "recentCarryShare": 0.15,
+    "inside5Share": 0.0,
+    "injury": "Active"
+  },
+  {
+    "name": "Christian McCaffrey",
+    "team": "San Francisco 49ers",
+    "targetShare": 0.69,
+    "recentCarryShare": 0.56,
+    "inside5Share": 0.78,
+    "injury": "Active"
+  },
+  {
+    "name": "Kaelon Black",
+    "team": "San Francisco 49ers",
+    "targetShare": 0.12,
+    "recentCarryShare": 0.36,
+    "inside5Share": 0.17,
+    "injury": "Active"
+  },
+  {
+    "name": "Jordan James",
+    "team": "San Francisco 49ers",
+    "targetShare": 0.01,
+    "recentCarryShare": 0.06,
+    "inside5Share": 0.0,
+    "injury": "Active"
+  },
+  {
+    "name": "Kyle Juszczyk",
+    "team": "San Francisco 49ers",
+    "targetShare": 0.17,
+    "recentCarryShare": 0.01,
+    "inside5Share": 0.06,
+    "injury": "Active"
+  },
+  {
+    "name": "Zach Charbonnet",
+    "team": "Seattle Seahawks",
+    "targetShare": 0.12,
+    "recentCarryShare": 0.59,
+    "inside5Share": 0.0,
+    "injury": "Active"
+  },
+  {
+    "name": "Jadarian Price",
+    "team": "Seattle Seahawks",
+    "targetShare": 0.32,
+    "recentCarryShare": 0.39,
+    "inside5Share": 0.08,
+    "injury": "Active"
+  },
+  {
+    "name": "Emanuel Wilson",
+    "team": "Seattle Seahawks",
+    "targetShare": 0.18,
+    "recentCarryShare": 0.0,
+    "inside5Share": 0.54,
+    "injury": "Active"
+  },
+  {
+    "name": "George Holani",
+    "team": "Seattle Seahawks",
+    "targetShare": 0.3,
+    "recentCarryShare": 0.01,
+    "inside5Share": 0.38,
+    "injury": "Injured Reserve (Knee"
+  }
+]

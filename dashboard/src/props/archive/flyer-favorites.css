@@ -1,0 +1,21 @@
+.flyer-favorites{margin:16px 0 22px;padding:17px 18px;border:1px solid #3c684d;border-radius:10px;background:linear-gradient(120deg,#14291f,#12232b)}
+.flyer-favorites-heading{display:flex;align-items:end;justify-content:space-between;gap:12px;margin-bottom:10px}
+.flyer-favorites-heading span{color:#9fe2b4;font-size:.62rem;font-weight:900;letter-spacing:.12em}
+.flyer-favorites-heading h4{margin:3px 0 0;color:#f1faf4;font-size:1.05rem}
+.flyer-favorites-heading>small{max-width:360px;color:#94aaa0;font-size:.7rem;text-align:right}
+.flyer-favorites-list{display:grid;gap:8px;margin:0;padding:0;list-style:none}
+.flyer-favorites-list li{display:grid;grid-template-columns:34px minmax(148px,1.1fr) minmax(148px,.95fr) minmax(128px,.85fr) minmax(200px,1.3fr) minmax(148px,.95fr);gap:12px;align-items:center;padding:11px 12px;border:1px solid #355344;border-radius:8px;background:#10231b}
+.flyer-favorite-rank{color:#9fe2b4;font-size:.86rem;font-weight:900}
+.flyer-favorites-list b,.flyer-favorites-list strong{display:block;color:#edf7f0;font-size:.82rem}
+.flyer-favorites-list small{display:block;margin-top:3px;color:#9bb0a5;font-size:.68rem}
+.flyer-favorites-note{margin:10px 0 0;color:#81978c;font-size:.66rem;line-height:1.5}
+.flyer-breakout-scale{min-width:0}
+.flyer-favorites-list .breakout-gauge>b{font-size:.72rem;margin:4px 0 0}
+.flyer-favorites-list .breakout-gauge.breakout-high>b{color:#9fe2b4}.flyer-favorites-list .breakout-gauge.breakout-moderate>b{color:#f1d36d}.flyer-favorites-list .breakout-gauge.breakout-low>b{color:#ef9f8b}.flyer-favorites-list .breakout-gauge.breakout-unknown>b{color:#aebfcc}
+.flyer-stat-scale{min-width:0;padding:34px 4px 4px}
+.flyer-stat-scale .performance-scale{margin:8px 2px 20px}
+.flyer-stat-scale .flyer-baseline-label{bottom:auto;top:-16px;color:#9fd0c2}
+.flyer-stat-scale .flyer-scale-readout{display:block;margin-top:18px;color:#c5d5cc;font-size:.66rem;line-height:1.35}
+.role-flag,.role-note{margin-left:6px;font-style:normal;font-weight:800;font-size:.68rem}
+.role-flag{color:#efbd79}.role-note{color:#9aaeb8}
+@media(max-width:760px){.flyer-favorites-heading{align-items:flex-start;flex-direction:column}.flyer-favorites-heading>small{text-align:left}.flyer-favorites-list li{grid-template-columns:28px 1fr;gap:7px 10px}.flyer-favorites-list li>div,.flyer-favorites-list li>.flyer-breakout-scale,.flyer-favorites-list li>.flyer-stat-scale{grid-column:2}}

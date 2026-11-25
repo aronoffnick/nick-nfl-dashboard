@@ -2,7 +2,7 @@ import {useMemo} from 'react'
 import {valid} from './model.js'
 import {betSignalScore} from './Bets.jsx'
 import {breakoutRating} from './breakout.js'
-import {buildFlyerThemes} from './Flyers.jsx'
+import {buildFlyerThemes,rateAtLine} from './Flyers.jsx'
 import scatterWeek from '../data/scatter-wk12.json'
 import {decideScatterLine, scatterProjection} from './scatterCheck.js'
 import './parlays.css'
@@ -35,11 +35,14 @@ function safeOverlapLeg(theme,player,window,scatterGames,awayAbbr,homeAbbr){
   if(observations.length<3)return null
   if(!observations.some(value=>value>=safeLine))return null
   const scatter=scatterProjection(scatterGames,{awayAbbr,homeAbbr,playerName:player.name,statKey:theme.spec.key})
-  const decision=decideScatterLine({line:safeLine,statKey:theme.spec.key,projection:scatter})
+  const decision=decideScatterLine({line:safeLine,statKey:theme.spec.key,projection:scatter,liveProjection:projection})
   const label=`${player.name} · ${safeLine}+ ${theme.spec.title.toLowerCase()}`
   if(decision.action==='remove')return {removed:true,decision,label}
-  const scored=scoreLeg(theme,player,projection,observations,decision.line,betsRaw,betsIndex)
-  return {removed:false,decision,leg:{id:`${theme.offense.id}:${player.id}:${theme.spec.key}`,player,theme,line:decision.line,projection,betsIndex,scatterMark:decision.mark,...scored}}
+  const prior=scoreLeg(theme,player,projection,observations,safeLine,betsRaw,betsIndex)
+  const priorDefense={hits:theme.hits,n:theme.n,rate:theme.rate}
+  const rated={...theme,...rateAtLine(theme,decision.line)}
+  const scored=scoreLeg(rated,player,projection,observations,decision.line,betsRaw,betsIndex)
+  return {removed:false,decision,prior,priorDefense,leg:{id:`${theme.offense.id}:${player.id}:${theme.spec.key}`,player,theme:rated,safeLine,line:decision.line,projection,scatter,betsIndex,scatterMark:decision.mark,scatterFlag:decision.flag||null,prior,priorDefense,...scored}}
 }
 function combinations(items,size,start=0,prefix=[],result=[]){
   if(prefix.length===size){result.push(prefix);return result}
@@ -78,7 +81,7 @@ function buildParlays(legs){
   ]
 }
 function Leg({leg}){
-  return <li><div><span className="parlay-team">{leg.theme.offense.abbr} · {leg.player.position}</span><strong>{leg.player.name} · {leg.line}+ {leg.theme.spec.title.toLowerCase()}</strong></div>
+  return <li><div><span className="parlay-team">{leg.theme.offense.abbr} · {leg.player.position}</span><strong>{leg.player.name} · {leg.line}+ {leg.theme.spec.title.toLowerCase()}</strong>{leg.scatterFlag?<em className="scatter-flag">{leg.scatterFlag}</em>:null}</div>
     <div className="parlay-leg-evidence"><span><b>{leg.concentration}/100</b> overlap</span><span>Safe defense: {leg.theme.hits}/{leg.theme.n} ({Math.round(leg.theme.rate*100)}%)</span><span>Player recent: {leg.playerHits}/{leg.playerN} ({Math.round(leg.playerRate*100)}%)</span><span>Player Projection: {fmt(leg.projection,leg.theme.spec.key)}</span><span>Bets index: {leg.betsIndex}/100</span><small className="scatter-mark">{leg.scatterMark}</small></div></li>
 }
 export default function Parlays({data,matchup,roster,halfLife,window}){
@@ -89,16 +92,17 @@ export default function Parlays({data,matchup,roster,halfLife,window}){
   const parlays=useMemo(()=>buildParlays(legs),[legs])
   const scatterGroups={
     pass:reviewed.filter(item=>item.decision.kind==='pass'),
+    bump:reviewed.filter(item=>item.decision.kind==='bump'),
     changed:reviewed.filter(item=>item.decision.kind==='changed'),
     removed:reviewed.filter(item=>item.decision.kind==='removed'),
     'no-data':reviewed.filter(item=>item.decision.kind==='no-data'),
   }
   return <><section className="parlays-section" aria-label="Parlays from Bets and Safe Flyers overlap">
     <div className="prop-section-title"><h3>PARLAYS · highest Safe overlap</h3><span>Bets signals + FLYERS Safe history</span></div>
-    <p className="prop-help">Breakout candidates are excluded. FLYERS <b>Safe</b> history narrows the eligible position and stat; the player number comes directly from the same model used in <b>Player Projections</b>. A leg is removed unless that projection reaches the Safe target and the player reached it at least once in three or more recent appearances. Each kept leg is then checked against the Week 12 scatter projection for that player and stat. Legs are ranked by 40% opponent Safe rate, 30% Bets strength, 15% projection coverage, and 15% the player’s recent hit rate at the line shown. The score measures model agreement, not a guaranteed win probability.</p>
+    <p className="prop-help">Breakout candidates are excluded. FLYERS <b>Safe</b> history narrows the eligible position and stat; the player number comes directly from the same model used in <b>Player Projections</b>. A leg is removed unless that projection reaches the Safe target and the player reached it at least once in three or more recent appearances. Each kept leg is then checked against the Week 12 scatter projection. When scatter covers the Safe line, the leg moves up to the live projection (rounded to the nearest 0.5) and is never lowered on that pass. Role eligibility runs before this check. Legs are ranked by 40% opponent hit rate at the line shown, 30% Bets strength, 15% projection coverage, and 15% the player’s recent hit rate at that line. The score measures model agreement, not a guaranteed win probability.</p>
     <section className="scatter-check" aria-label="Scatter cross-check">
       <div className="prop-section-title"><h3>Scatter cross-check</h3><span>Week 12 projection vs the Safe line</span></div>
-      {[['pass','Passed'],['changed','Changed'],['removed','Removed'],['no-data','No scatter data']].map(([kind,title])=><div key={kind}><h4>{title}</h4>{scatterGroups[kind].length?<ul>{scatterGroups[kind].map(item=><li key={item.leg?.id||item.label}>{item.leg?`${item.leg.player.name} · ${item.leg.line}+ ${item.leg.theme.spec.title.toLowerCase()}`:item.label} — {item.decision.mark}{item.leg?` · ${item.leg.playerHits}/${item.leg.playerN} · ${item.leg.concentration}/100`:''}</li>)}</ul>:<p>None</p>}</div>)}
+      {[['pass','Passed'],['bump','Bumped'],['changed','Lowered'],['removed','Removed'],['no-data','No scatter data']].map(([kind,title])=><div key={kind}><h4>{title}</h4>{scatterGroups[kind].length?<ul>{scatterGroups[kind].map(item=><li key={item.leg?.id||item.label}>{item.leg?`${item.leg.player.name} · ${item.leg.line}+ ${item.leg.theme.spec.title.toLowerCase()}`:item.label} — {item.decision.mark}{item.leg?` · player ${item.prior.playerHits}/${item.prior.playerN} -> ${item.leg.playerHits}/${item.leg.playerN} · defense ${item.priorDefense.hits}/${item.priorDefense.n} -> ${item.leg.theme.hits}/${item.leg.theme.n} · ${item.leg.concentration}/100`:''}</li>)}</ul>:<p>None</p>}</div>)}
     </section>
     {parlays.length<5&&<p className="prop-warning">Only {parlays.length} of the five requested structures have enough distinct qualifying players. Unsupported parlays are not forced.</p>}
     {!!parlays.length&&<div className="parlay-card-grid">{parlays.map((parlay,index)=><article className={`parlay-card ${parlay.legs.length===4?'parlay-card-wide':''}`} key={parlay.id}>

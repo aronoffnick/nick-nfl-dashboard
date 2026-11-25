@@ -19,3 +19,17 @@ import BreakoutOutlook from './archive/BreakoutOutlook.jsx'
 ```
 
 Delete this folder if the board is not coming back.
+
+## Archived Top Three favorites
+
+`FlyerFavorites.jsx` is the Flyers “Top Three — Breakout Upside Favorites” board: the heading, the three scored rows, and the footnote about 1.5× / 2× labels. `rankBreakoutFavorites` is the scoring function (matchup rate, projection multiple, peak multiple, then the RB rush and touchdown role weights).
+
+Nothing else imported that section. Parlays uses `buildFlyerThemes` and the Safe overlap only. Weekly game favorites and the 2-leg SGP list are separate features and do not read this board.
+
+Re-enable it above the breakout cards:
+
+```jsx
+import FlyerFavorites from './archive/FlyerFavorites.jsx'
+
+<FlyerFavorites data={data} matchup={matchup} roster={roster} halfLife={halfLife} window={window} />
+```

@@ -5,6 +5,7 @@ import BreakoutScale from './BreakoutScale.jsx'
 import Performance from './Performance.jsx'
 import RoleTags from './RoleTags.jsx'
 import { roleTags } from './roleData.js'
+import { roleDecision } from './roleEligibility.js'
 
 const format=(n,key='')=>valid(n)?n.toFixed(key.endsWith('TD')?2:1):'—'
 const date=d=>new Date(d).toLocaleDateString('en-US',{timeZone:'America/New_York',month:'short',day:'numeric'})
@@ -81,7 +82,7 @@ function ProjectionCard({player,matchup,slots,chosen,onOpen,halfLife,window}){
     </div>
     <details className="projection-context">
       <summary>Role, recent opportunity, and matchup context<span className="support-chevron" aria-hidden="true"/></summary>
-      <div className="projection-role"><h5>Role</h5>{tags.length?<RoleTags player={player}/>:<p>—</p>}</div>
+      <div className="projection-role"><h5>Role</h5>{player.gate?.flag?<p className="role-flag">{player.gate.flag}</p>:null}{player.gate?.note?<p className="role-note">{player.gate.note}</p>:null}{tags.length?<RoleTags player={player}/>:<p>—</p>}</div>
       {player.unavailable&&<p className="projection-withheld">Projection withheld</p>}
       <div className="projection-context-body">
         <section className="breakout-usage-cell"><h5>Recent opportunity</h5>
@@ -100,13 +101,16 @@ function ProjectionCard({player,matchup,slots,chosen,onOpen,halfLife,window}){
   </article>
 }
 export default function PlayerProjections({matchup,saveProp,data,teams,roster,halfLife,window,positions,categories}){
-  const [chosen,setChosen]=useState(''),[line,setLine]=useState(''),[lineMetric,setLineMetric]=useState(''),[trackMessage,setTrackMessage]=useState(''),[sortKey,setSortKey]=useState('recYds'),[ascending,setAscending]=useState(false)
+  const [chosen,setChosen]=useState(''),[line,setLine]=useState(''),[lineMetric,setLineMetric]=useState(''),[trackMessage,setTrackMessage]=useState(''),[sortKey,setSortKey]=useState('recYds'),[ascending,setAscending]=useState(false),[roleOnly,setRoleOnly]=useState(true)
   const sortableKeys=fields.map(([key])=>key).filter(key=>categoryAllows(key,categories))
   const activeSortKey=sortableKeys.includes(sortKey)?sortKey:sortableKeys[0]||'recYds'
   const players=useMemo(()=>dedupePlayers(teams.flatMap(({team,opponent})=>projectTeam(data,team,opponent,roster,halfLife,window).map(player=>({...player,team,opponent}))))
     .filter(player=>positions.includes(player.position)&&slotsFor(player,categories).some(Boolean))
+    .map(player=>({...player,gate:roleDecision(player)}))
     .sort((a,b)=>{const av=projectedValue(a,activeSortKey),bv=projectedValue(b,activeSortKey);if(!valid(av))return valid(bv)?1:a.name.localeCompare(b.name);if(!valid(bv))return -1;return (av-bv)*(ascending?1:-1)||a.name.localeCompare(b.name)}),[teams,data,roster,halfLife,window,positions,categories,activeSortKey,ascending])
-  const selected=players.find(player=>`${player.team.id}:${player.id}`===chosen)
+  const hiddenCount=players.filter(player=>!player.gate.eligible).length
+  const visible=roleOnly?players.filter(player=>player.gate.eligible):players
+  const selected=visible.find(player=>`${player.team.id}:${player.id}`===chosen)
   const selectedMetrics=selected?slotsFor(selected,categories).filter(Boolean):[]
   const validLine=line.trim()!==''&&Number.isFinite(Number(line))&&Number(line)>=0
   const selectedStat=selected&&lineMetric?projectedValue(selected,lineMetric):null
@@ -115,9 +119,9 @@ export default function PlayerProjections({matchup,saveProp,data,teams,roster,ha
   const pushes=validLine?sample.filter(value=>value===Number(line)).length:0
   function choosePlayer(player,key){setChosen(`${player.team.id}:${player.id}`);setLineMetric(key||slotsFor(player,categories).find(Boolean)||'');setLine('');setTrackMessage('')}
   return <section><div className="prop-section-title"><h3>Player projections · both teams</h3><span>One row per player · {ascending?'lowest':'highest'} selected stat first</span></div>
-    <div className="projection-sort"><label>Order by <select value={activeSortKey} onChange={event=>setSortKey(event.target.value)}>{sortableKeys.map(key=><option key={key} value={key}>{fieldLabel[key]}</option>)}</select></label><button className="prop-action" onClick={()=>setAscending(value=>!value)}>{ascending?'Lowest first':'Highest first'}</button></div>
-    <div className="projection-card-board">{players.map(player=><ProjectionCard key={player.id} player={player} matchup={matchup} slots={slotsFor(player,categories)} chosen={chosen} halfLife={halfLife} window={window} onOpen={choosePlayer}/>)}</div>
-    {!players.length&&<p className="prop-warning">No players match the selected team, position, and stat filters.</p>}
+    <div className="projection-sort"><label>Order by <select value={activeSortKey} onChange={event=>setSortKey(event.target.value)}>{sortableKeys.map(key=><option key={key} value={key}>{fieldLabel[key]}</option>)}</select></label><button className="prop-action" onClick={()=>setAscending(value=>!value)}>{ascending?'Lowest first':'Highest first'}</button><label className="projection-role-toggle"><input type="checkbox" checked={roleOnly} onChange={event=>setRoleOnly(event.target.checked)}/> Role players only</label>{roleOnly?<span className="projection-hidden-count">{hiddenCount} non-role player{hiddenCount===1?'':'s'} hidden</span>:null}</div>
+    <div className="projection-card-board">{visible.map(player=><ProjectionCard key={player.id} player={player} matchup={matchup} slots={slotsFor(player,categories)} chosen={chosen} halfLife={halfLife} window={window} onOpen={choosePlayer}/>)}</div>
+    {!visible.length&&<p className="prop-warning">No players match the selected team, position, and stat filters.</p>}
     {selected&&<div className="prop-comparison"><h3>{selected.name} · {fieldLabel[lineMetric]||'Game log'}</h3>
       <label>Your prop line <input type="number" min="0" step="0.5" placeholder="Enter a line, e.g. 64.5" value={line} onChange={event=>setLine(event.target.value)}/></label>
       {validLine&&!selected.unavailable&&valid(selectedStat)&&selectedStat!==Number(line)&&!matchup.started&&<button onClick={()=>{

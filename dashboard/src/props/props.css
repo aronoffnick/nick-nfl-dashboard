@@ -89,7 +89,11 @@
 .projection-window strong{width:100%}
 .projection-window button{background:#1b2b35;color:#c6d7e2;border:1px solid #3d5663;border-radius:5px;padding:7px 10px;font-size:.8rem}
 .projection-window button[aria-pressed=true]{background:#a5e6bd;color:#14251c;border-color:#a5e6bd;font-weight:700}
-.projection-sort{display:flex;gap:9px;align-items:center;margin:14px 0;color:#b5c5ce;font-size:.85rem}
+.projection-sort{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin:14px 0;color:#b5c5ce;font-size:.85rem}
+.projection-role-toggle{display:inline-flex;align-items:center;gap:6px;color:#d5e4ee}
+.projection-hidden-count{color:#efbd79;font-size:.78rem}
+.projection-role .role-flag,.projection-role .role-note{margin:0 0 6px;font-style:normal;font-weight:800;font-size:.75rem}
+.projection-role .role-flag{color:#efbd79}.projection-role .role-note{color:#9aaeb8}
 .projection-sort select{background:#13232f;color:#e4edf2;border:1px solid #506777;border-radius:6px;padding:8px;font:inherit}
 .projection-board{display:flex;flex-direction:column;gap:10px;overflow-x:auto}
 .projection-player-row{display:grid;grid-template-columns:170px minmax(0,1fr) 125px;align-items:stretch;min-width:780px;border:1px solid #385064;border-radius:9px;background:#14222d;overflow:hidden}

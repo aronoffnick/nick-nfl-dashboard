@@ -31,10 +31,35 @@ function minimumLine(statKey) {
 function isTouchdown(statKey) {
   return /td$/i.test(statKey)
 }
-/** Compare one parlay line with the scatter projection. Does not change other players' Safe thresholds. */
-export function decideScatterLine({line, statKey, projection}) {
+/** Lines are whole numbers or halves, matching the numbers printed on the cards. */
+export function roundPropLine(value) {
+  if (!Number.isFinite(value)) return null
+  return Math.round(value * 2) / 2
+}
+export function formatLine(value) {
+  if (!Number.isFinite(value)) return '—'
+  return Number.isInteger(value) ? String(value) : String(value)
+}
+/** RB/WR breakout card: max(sheet threshold, scatter projection rounded to 0.5). */
+export function raisedBreakoutLine(threshold, scatter) {
+  if (scatter == null) return {line:threshold, note:'No scatter data', raised:false, scatter:null}
+  const rounded = roundPropLine(scatter)
+  const line = Math.max(threshold, rounded)
+  const raised = line > threshold
+  return {line, note:raised ? 'Line raised to scatter proj' : null, raised, scatter:rounded}
+}
+/** Compare one parlay line with the scatter projection. A pass may raise the line to the live projection; it never lowers it. */
+export function decideScatterLine({line, statKey, projection, liveProjection}) {
   if (projection == null) return {action:'keep', kind:'no-data', line, mark:'No scatter data'}
-  if (projection >= line) return {action:'keep', kind:'pass', line, projection, mark:`Scatter check ✓ (proj ${formatScatter(projection)})`}
+  if (projection >= line) {
+    const live = roundPropLine(liveProjection)
+    if (live != null && live > line) {
+      const above = live > projection
+      const flag = above ? 'live proj above scatter' : null
+      return {action:'bump', kind:'bump', from:line, line:live, projection, flag, mark:`Raised to live projection: ${formatLine(line)}+ -> ${formatLine(live)}+${flag ? ` · ${flag}` : ''}`}
+    }
+    return {action:'keep', kind:'pass', line, projection, mark:`Scatter check ✓ (proj ${formatScatter(projection)})`}
+  }
   if (isTouchdown(statKey)) return {action:'remove', kind:'removed', from:line, line, projection, mark:`Removed by scatter check: TD line is ${line}+ and cannot go lower`}
   const lowered = Math.floor(projection)
   if (lowered < minimumLine(statKey)) return {action:'remove', kind:'removed', from:line, line:lowered, projection, mark:`Removed by scatter check: ${line}+ would drop below ${minimumLine(statKey)}`}

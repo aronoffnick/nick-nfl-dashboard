@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import {decideScatterLine, scatterGameKey, scatterProjection} from '../src/props/scatterCheck.js'
+import {decideScatterLine, raisedBreakoutLine, roundPropLine, scatterGameKey, scatterProjection} from '../src/props/scatterCheck.js'
 
 const games = {
   'GB-LAR': {players:[{n:'Kyren Williams', s:{recYds:[26.7, 40, 1], rushYds:[61.6, 66.4, 1.01], td:[0.7, 0.86, 1.28]}}]},
@@ -12,13 +12,32 @@ test('game key maps WSH to WAS and LA to LAR, matching ScatterTab', () => {
   assert.equal(scatterGameKey('GB', 'LAR'), 'GB-LAR')
 })
 
-test('Kyren receiving yards stays at the Safe line because scatter 40 is above 15', () => {
+test('Kyren receiving yards bumps from the Safe 15 line to the live projection 19 when scatter is 40', () => {
   const projection = scatterProjection(games, {awayAbbr:'GB', homeAbbr:'LAR', playerName:'Kyren Williams', statKey:'recYds'})
   assert.equal(projection, 40)
-  const decision = decideScatterLine({line:15, statKey:'recYds', projection})
-  assert.equal(decision.action, 'keep')
-  assert.equal(decision.line, 15)
-  assert.equal(decision.mark, 'Scatter check ✓ (proj 40)')
+  const decision = decideScatterLine({line:15, statKey:'recYds', projection, liveProjection:19})
+  assert.equal(decision.action, 'bump')
+  assert.equal(decision.line, 19)
+  assert.equal(decision.mark, 'Raised to live projection: 15+ -> 19+')
+  assert.equal(decision.flag, null)
+})
+
+test('a pass never lowers the Safe line, and a live projection above scatter stays with a flag', () => {
+  const kept = decideScatterLine({line:15, statKey:'recYds', projection:40, liveProjection:12.2})
+  assert.equal(kept.action, 'keep')
+  assert.equal(kept.line, 15)
+  const flagged = decideScatterLine({line:15, statKey:'recYds', projection:40, liveProjection:45.2})
+  assert.equal(flagged.line, 45)
+  assert.equal(flagged.flag, 'live proj above scatter')
+  assert.equal(roundPropLine(40.3), 40.5)
+})
+
+test('Kyren breakout receiving yards rises from 25 to the scatter projection 40', () => {
+  const raised = raisedBreakoutLine(25, 40)
+  assert.equal(raised.line, 40)
+  assert.equal(raised.note, 'Line raised to scatter proj')
+  assert.equal(raisedBreakoutLine(25, 20).line, 25)
+  assert.equal(raisedBreakoutLine(25, null).note, 'No scatter data')
 })
 
 test('totalTD reads the scatter td projection', () => {
