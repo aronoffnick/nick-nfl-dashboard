@@ -18,26 +18,37 @@ function teamKey(value) {
 }
 function clamp(value, min, max) { return Math.max(min, Math.min(max, value)) }
 
-const usageByName = new Map(usageRows.map(row => [nameKey(row.name), row]))
-const rbByName = new Map()
-for (const row of rbRows) {
-  const usage = usageByName.get(nameKey(row.name)) || usageByName.get(nameKey(row.sheetName)) || {}
-  const merged = { ...row, targetShare: usage.targetShare ?? null, recentCarryShare: usage.recentCarryShare ?? null, inside5Share: usage.inside5Share ?? null, injury: row.injury || usage.injury || '' }
-  rbByName.set(nameKey(row.name), merged)
-  if (row.sheetName) rbByName.set(nameKey(row.sheetName), merged)
+export function bookFrom(rbSource = [], usageSource = [], wrSource = [], { matched = true, week = null } = {}) {
+  const usageByName = new Map(usageSource.map(row => [nameKey(row.name), row]))
+  const rbByName = new Map()
+  for (const row of rbSource) {
+    const usage = usageByName.get(nameKey(row.name)) || usageByName.get(nameKey(row.sheetName)) || {}
+    const merged = { ...row, targetShare: usage.targetShare ?? null, recentCarryShare: usage.recentCarryShare ?? null, inside5Share: usage.inside5Share ?? null, injury: row.injury || usage.injury || '' }
+    rbByName.set(nameKey(row.name), merged)
+    if (row.sheetName) rbByName.set(nameKey(row.sheetName), merged)
+  }
+  const wrByName = new Map()
+  for (const row of wrSource) {
+    const key = nameKey(row.name)
+    wrByName.set(key, [...(wrByName.get(key) || []), row])
+  }
+  return { matched, week, rbByName, wrByName }
 }
-const wrByName = new Map()
-for (const row of wrRows) {
-  const key = nameKey(row.name)
-  wrByName.set(key, [...(wrByName.get(key) || []), row])
-}
+const defaultBook = bookFrom(rbRows, usageRows, wrRows, { matched: true, week: 12 })
+const activeBook = book => book || defaultBook
 
-export function findRb(name) { return rbByName.get(nameKey(name)) || null }
-export function findWr(name, teamName) {
-  const rows = wrByName.get(nameKey(name)) || []
-  if (!teamName) return rows[0] || null
+export function findRb(name, book = defaultBook) {
+  const rows = activeBook(book)
+  if (!rows.matched) return null
+  return rows.rbByName.get(nameKey(name)) || null
+}
+export function findWr(name, teamName, book = defaultBook) {
+  const rows = activeBook(book)
+  if (!rows.matched) return null
+  const list = rows.wrByName.get(nameKey(name)) || []
+  if (!teamName) return list[0] || null
   const team = teamKey(teamName)
-  return rows.find(row => teamKey(row.team) === team) || null
+  return list.find(row => teamKey(row.team) === team) || null
 }
 
 export function injuryInfo(text) {
@@ -83,31 +94,37 @@ function teamName(player) {
   return typeof team === 'string' ? team : team.name || ''
 }
 
-export function roleDecision(player, { statKey = null } = {}) {
+const noSheet = { eligible: true, weight: 1, flag: null, note: 'No role sheet this week', reason: null, sheet: false }
+export function roleDecision(player, { statKey = null, book = null } = {}) {
+  const rows = activeBook(book)
+  if (!rows.matched) return noSheet
   const position = player.position || player.pos
   if (position === 'QB' || position === 'TE' || (position !== 'RB' && position !== 'FB' && position !== 'WR')) {
-    return { eligible: true, weight: 1, flag: null, note: null, reason: null }
+    return { eligible: true, weight: 1, flag: null, note: null, reason: null, sheet: true }
   }
   if (position === 'WR') {
-    const wr = findWr(player.name, teamName(player))
-    if (!wr || !/^WR[123]$/.test(wr.rank || '')) return { eligible: false, weight: 1, flag: null, note: 'No role', reason: 'Not WR1, WR2, or WR3 for this team on the Week 12 sheet' }
-    return { eligible: true, weight: 1, flag: null, note: null, reason: null, rank: wr.rank }
+    const wr = findWr(player.name, teamName(player), rows)
+    const label = rows.week ? `Week ${rows.week}` : 'this week'
+    if (!wr || !/^WR[123]$/.test(wr.rank || '')) return { eligible: false, weight: 1, flag: null, note: 'No role', reason: `Not WR1, WR2, or WR3 for this team on the ${label} sheet`, sheet: true }
+    return { eligible: true, weight: 1, flag: null, note: null, reason: null, rank: wr.rank, sheet: true }
   }
-  const rb = findRb(player.name)
-  if (!rb) return { eligible: true, weight: 1, flag: null, note: 'No role data', reason: null }
+  const rb = findRb(player.name, rows)
+  if (!rb) return { eligible: true, weight: 1, flag: null, note: 'No role data', reason: null, sheet: true }
   const injury = injuryInfo(rb.injury)
   const flag = injury.state === 'questionable' ? injury.label : null
-  if (injury.state === 'out') return { eligible: false, weight: 1, flag: injury.label, note: null, reason: `${injury.label} excluded` }
-  if (isMinimalRb(rb)) return { eligible: false, weight: 1, flag, note: null, reason: 'Depth / minimal-use role' }
+  if (injury.state === 'out') return { eligible: false, weight: 1, flag: injury.label, note: null, reason: `${injury.label} excluded`, sheet: true }
+  if (isMinimalRb(rb)) return { eligible: false, weight: 1, flag, note: null, reason: 'Depth / minimal-use role', sheet: true }
   if ((statKey === 'rec' || statKey === 'recYds') && !receivingEligible(rb)) {
-    return { eligible: false, weight: 1, flag, note: null, reason: 'Under 25% of team RB targets, with no pass-catching or 3rd-down tag' }
+    return { eligible: false, weight: 1, flag, note: null, reason: 'Under 25% of team RB targets, with no pass-catching or 3rd-down tag', sheet: true }
   }
   const weight = statKey === 'rushYds' ? rushWeight(rb) : statKey === 'totalTD' || statKey === 'rushTD' ? tdWeight(rb) : 1
-  return { eligible: true, weight, flag, note: null, reason: null, carryShare: rb.recentCarryShare ?? null }
+  return { eligible: true, weight, flag, note: null, reason: null, carryShare: rb.recentCarryShare ?? null, sheet: true }
 }
 
-export function scatterNoRole(player) {
-  const decision = roleDecision(player)
+export function scatterNoRole(player, book = null) {
+  const decision = roleDecision(player, { book })
+  if (!decision.sheet) return { dim: false, mark: null, decision }
   const dim = !decision.eligible || decision.note === 'No role data' || decision.note === 'No role'
-  return { dim, mark: dim ? 'No role per Week 12 sheet' : null, decision }
+  const week = activeBook(book).week
+  return { dim, mark: dim ? `No role per ${week ? `Week ${week}` : 'this week'} sheet` : null, decision }
 }

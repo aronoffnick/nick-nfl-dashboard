@@ -54,6 +54,12 @@ test('a WR must be WR1, WR2, or WR3 on his current team', () => {
   assert.equal(roleDecision({ name: 'Christian Watson', position: 'WR', team: { name: 'Los Angeles Rams' } }).eligible, false)
 })
 
+test('a week with no role file does not reuse another week or hide every receiver', () => {
+  const decision = roleDecision({ name: 'Puka Nacua', position: 'WR', team: { name: 'Los Angeles Rams' } }, { book: { matched: false, week: 13 } })
+  assert.equal(decision.eligible, true)
+  assert.equal(decision.note, 'No role sheet this week')
+})
+
 test('suffixes do not block a sheet match, and quarterbacks are unchanged', () => {
   const suffixed = wrRows.find(row => /\b(jr|sr|ii|iii|iv)\b/i.test(row.name))
   const stripped = suffixed.name.replace(/\s+(Jr|Sr|II|III|IV)\.?$/i, '')

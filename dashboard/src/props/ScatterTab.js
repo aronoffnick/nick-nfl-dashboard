@@ -1,16 +1,17 @@
 /* Scatter plot tab (replaces the "Defense vs position" panel in the UI only; the defense calculations still feed projections, Bets, Flyers).
    x = player's 2026 per-game average, y = Week 12 projection vs this defense (wk12-matchups model). Dashed line y = x. */
 import * as R from "react";
-import SCATTER from "../data/scatter-wk12.json";
+import { fileForWeek, roleBookForWeek } from "../data/weekFiles.js";
 import { defenseVs } from "../data/reference.js";
 import { scatterNoRole } from "./roleEligibility.js";
 import "./ScatterTab.css";
 
-export default function ScatterTab({ away, home }) {
+export default function ScatterTab({ away, home, week }) {
  const h=R.createElement,{useState,useRef,useEffect}=R;
  const AB=x=>({WSH:'WAS',LA:'LAR'}[x]||x);
  const key=AB(away.abbr)+'-'+AB(home.abbr);
- const data=SCATTER.games[key];
+ const scatterFile=fileForWeek('scatter',week);
+ const data=scatterFile.data?.games?.[key];
  const [team,setTeam]=useState(AB(away.abbr));
  const [pos,setPos]=useState('All');
  const [stat,setStat]=useState('recYds');
@@ -30,10 +31,10 @@ export default function ScatterTab({ away, home }) {
    btns('Position',POS.map(p=>[p,p]),pos,setPos),
    btns('Stat',STATS,stat,setStat),
    h('div',{className:'projection-window'},h('strong',null,'Role'),h('button',{type:'button','aria-pressed':roleOnly,onClick:()=>{setRoleOnly(v=>!v);setSel(null)}},'Role players only')));
- if(!data) return h('div',{className:'scatter-tab'},controls,h('p',{className:'scatter-empty'},'No Week 12 scatter data for this matchup.'));
+ if(!data) return h('div',{className:'scatter-tab'},controls,h('p',{className:'scatter-empty'},scatterFile.matched?`No Week ${week} scatter data for this matchup.`:`No Week ${week} scatter file. Add scatter-wk${week}.json to plot this week.`));
  const offenseName=teams.find(([abbr])=>abbr===team)?.[1]||'';
  const pts=data.players.filter(p=>p.t===team&&(pos==='All'||p.p===pos)&&p.s[stat]&&p.s[stat][0]!=null&&p.s[stat][1]!=null&&(p.s[stat][0]>0||p.s[stat][1]>0))
-   .map(p=>{const role=scatterNoRole({name:p.n,position:p.p,team:{name:offenseName}});return {...p,x:p.s[stat][0],y:p.s[stat][1],mf:p.s[stat][2],noRole:role.dim,roleMark:role.mark}}).filter(p=>!roleOnly||!p.noRole);
+   .map(p=>{const role=scatterNoRole({name:p.n,position:p.p,team:{name:offenseName}},roleBookForWeek(week));return {...p,x:p.s[stat][0],y:p.s[stat][1],mf:p.s[stat][2],noRole:role.dim,roleMark:role.mark}}).filter(p=>!roleOnly||!p.noRole);
  const nodata=data.players.filter(p=>p.t===team&&(pos==='All'||p.p===pos)&&p.s[stat]&&(p.s[stat][0]==null||p.s[stat][1]==null)).map(p=>p.n);
  const H=Math.round(Math.min(520,Math.max(300,w*0.62))),m={l:52,r:16,t:16,b:44};
  const mx=Math.max(1e-9,...pts.map(p=>Math.max(p.x,p.y)))*1.12;
@@ -79,18 +80,18 @@ export default function ScatterTab({ away, home }) {
    h('line',{x1:X(0),y1:Y(0),x2:X(top),y2:Y(top),stroke:'#a5e6bd',strokeDasharray:'5 5',opacity:.6}),
    h('text',{x:X(top)-4,y:Y(top)+14,fontSize:10,fill:'#a5e6bd',textAnchor:'end'},'projection = season avg'),
    h('text',{x:(m.l+w-m.r)/2,y:H-6,fontSize:11,fill:'#9cabb7',textAnchor:'middle'},`2026 average per game · ${statLbl}`),
-   h('text',{transform:`translate(13,${(m.t+H-m.b)/2}) rotate(-90)`,fontSize:11,fill:'#9cabb7',textAnchor:'middle'},`Week 12 projection vs ${defAb} (estimate)`),
+   h('text',{transform:`translate(13,${(m.t+H-m.b)/2}) rotate(-90)`,fontSize:11,fill:'#9cabb7',textAnchor:'middle'},`Week ${week} projection vs ${defAb} (estimate)`),
    pts.map(p=>h('circle',{key:p.n,cx:X(p.x),cy:Y(p.y),r:sel===p.n?8:6,fill:COL[p.p],stroke:sel===p.n?'#fff':'#0b1015',strokeWidth:1.5,opacity:p.noRole?0.28:0.9,style:{cursor:'pointer'},onClick:()=>setSel(sel===p.n?null:p.n)},h('title',null,`${p.n} (${p.p}) avg ${p.x} · proj ${p.y}${p.roleMark?` · ${p.roleMark}`:''}`))),
    lab);
  const S=pts.find(p=>p.n===sel);
  const legend=h('div',{className:'scatter-legend'},Object.entries(COL).filter(([k])=>pos==='All'||k===pos).map(([k,c])=>h('span',{key:k},h('i',{style:{background:c}}),k)),h('span',null,'Above the dashed line = projected above the player’s own average vs this defense. Tap a dot for details.'));
  const detail=S?h('div',{className:'scatter-detail'},h('b',null,`${S.n} · ${S.p} · ${S.t}`),S.roleMark?h('span',{className:'scatter-norole'},S.roleMark):null,
-   h('span',null,`2026 avg ${S.x.toFixed(dec)} (${S.g} games)`),h('span',null,`Week 12 projection vs ${defAb}: ${S.y.toFixed(dec)}`),
-   h('span',null,`Difference ${(S.y-S.x>=0?'+':'')}${(S.y-S.x).toFixed(dec)}`),(()=>{const d=defenseVs(defAb,S.p);const f=d&&(stat==='passYds'?d.passYdsFactor:stat==='rushYds'?d.rushYdsFactor:stat==='td'?d.tdFactor:stat==='rec'?d.pprFactor:d.recYdsFactor);return f!=null?h('span',null,`${defAb} defense vs ${S.p} factor ×${f.toFixed(2)}`):null})()):null;
+   h('span',null,`2026 avg ${S.x.toFixed(dec)} (${S.g} games)`),h('span',null,`Week ${week} projection vs ${defAb}: ${S.y.toFixed(dec)}`),
+   h('span',null,`Difference ${(S.y-S.x>=0?'+':'')}${(S.y-S.x).toFixed(dec)}`),(()=>{const d=defenseVs(defAb,S.p,week);const f=d&&(stat==='passYds'?d.passYdsFactor:stat==='rushYds'?d.rushYdsFactor:stat==='td'?d.tdFactor:stat==='rec'?d.pprFactor:d.recYdsFactor);return f!=null?h('span',null,`${defAb} defense vs ${S.p} factor ×${f.toFixed(2)}`):null})()):null;
  return h('div',{className:'scatter-tab'},controls,
    h('div',{className:'scatter-card'},h('h4',null,`${team} offense vs ${defAb} defense · ${statLbl}`),
      h('div',{ref,className:'scatter-plot'},pts.length?svg:h('p',{className:'scatter-empty'},`No ${pos==='All'?'':pos+' '}${statLbl.toLowerCase()} data for ${team} in this matchup.`)),
      pts.length?legend:null,detail,
      nodata.length?h('small',{className:'scatter-note'},`Not plotted (no 2026 games or projection): ${nodata.join(', ')}`):null,
-     h('small',{className:'scatter-note'},`Dimmed dots have no Week 12 sheet role. Data: Week 12 matchup model (wk12-matchups), 2026 weeks 1–11. Touchdowns = rushing + receiving TDs (QB passing TDs not included). Estimates only, entertainment only, not betting advice.`)));
+     h('small',{className:'scatter-note'},`Dimmed dots have no Week ${week} sheet role. Scatter file: scatter-wk${week}.json when it is in the app. Touchdowns = rushing + receiving TDs (QB passing TDs not included). Estimates only, entertainment only, not betting advice.`)));
 }

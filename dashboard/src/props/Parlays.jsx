@@ -3,7 +3,7 @@ import {valid} from './model.js'
 import {betSignalScore} from './Bets.jsx'
 import {breakoutRating} from './breakout.js'
 import {buildFlyerThemes,rateAtLine} from './Flyers.jsx'
-import scatterWeek from '../data/scatter-wk12.json'
+import {fileForWeek} from '../data/weekFiles.js'
 import {decideScatterLine, scatterProjection} from './scatterCheck.js'
 import './parlays.css'
 
@@ -87,7 +87,7 @@ function Leg({leg}){
 export default function Parlays({data,matchup,roster,halfLife,window}){
   const reviewed=useMemo(()=>buildFlyerThemes(data,matchup,roster,halfLife,window)
     .filter(theme=>theme.tier==='Safe')
-    .flatMap(theme=>theme.candidates.map(player=>safeOverlapLeg(theme,player,window,scatterWeek.games,matchup.away.abbr,matchup.home.abbr)).filter(Boolean)),[data,matchup,roster,halfLife,window])
+    .flatMap(theme=>theme.candidates.map(player=>safeOverlapLeg(theme,player,window,fileForWeek('scatter',data.week).data?.games,matchup.away.abbr,matchup.home.abbr)).filter(Boolean)),[data,matchup,roster,halfLife,window])
   const legs=useMemo(()=>reviewed.filter(item=>item.leg).map(item=>item.leg).sort((a,b)=>b.concentration-a.concentration||b.theme.rate-a.theme.rate),[reviewed])
   const parlays=useMemo(()=>buildParlays(legs),[legs])
   const scatterGroups={

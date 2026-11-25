@@ -4,9 +4,8 @@ import {breakoutRating,ratingLevel} from './breakout.js'
 import {rbStarter} from './roleData.js'
 import {findRb,roleDecision} from './roleEligibility.js'
 import RoleTags from './RoleTags.jsx'
-import scatterWeek from '../data/scatter-wk12.json'
+import {fileForWeek,roleBookForWeek} from '../data/weekFiles.js'
 import {raisedBreakoutLine,scatterProjection} from './scatterCheck.js'
-import wrStarterRows from './wr-starters-week12.json'
 import './flyers.css'
 
 const THRESHOLDS={
@@ -33,7 +32,10 @@ const THRESHOLDS={
     {key:'totalTD',title:'TDs (rush + receiving)',usage:'targets',group:['rushing','receiving'],safe:1,breakout:2},
   ],
 }
-const wrLookup=new Map(wrStarterRows.map(row=>[row.name.trim().toLowerCase(),row]))
+const wrLookupFor=week=>{
+  const file=fileForWeek('wr',week)
+  return file.matched?new Map(file.data.map(row=>[row.name.trim().toLowerCase(),row])):new Map()
+}
 const fmt=n=>Number.isInteger(n)?String(n):Number(n).toFixed(1)
 const roleName=p=>p==='RB'?'RB/FB':p
 function posMatch(player,pos,roster){const actual=positionOf(player,roster);return actual===pos||(pos==='RB'&&actual==='FB')}
@@ -84,11 +86,13 @@ function rbRoleSimilarity(a,b){
   return weight?score/weight:null
 }
 const rbEvidence=r=>`${r.depth} · ${r.primary} · ${r.glLabel}`
-export function closestPlayer(candidates,theme,pos){
+export function closestPlayer(candidates,theme,pos,week){
   if(!candidates.length)return null
   const referenceUsage=mean(theme.hitPlayers.map(row=>row.usage))
+  const wrLookup=wrLookupFor(week)
+  const book=roleBookForWeek(week)
   const referenceWrRoles=pos==='WR'?theme.hitPlayers.map(row=>wrLookup.get(row.player.name.trim().toLowerCase())).filter(Boolean):[]
-  const referenceRbRoles=pos==='RB'?theme.hitPlayers.map(row=>rbStarter(row.player.name)).filter(Boolean):[]
+  const referenceRbRoles=pos==='RB'?theme.hitPlayers.map(row=>rbStarter(row.player.name,week)).filter(Boolean):[]
   return candidates.map(player=>{
     const usage=weighted(player.logs,theme.spec.usage,3)
     const usageScore=valid(referenceUsage)&&referenceUsage>0&&valid(usage)?Math.max(0,1-Math.abs(usage-referenceUsage)/referenceUsage):valid(usage)?Math.min(usage/10,1):0
@@ -99,12 +103,12 @@ export function closestPlayer(candidates,theme,pos){
       if(roleMatches.length){roleScore=Math.max(...roleMatches);matchedRole=playerRole}
     }
     if(pos==='RB'){
-      const playerRole=rbStarter(player.name)
+      const playerRole=rbStarter(player.name,week)
       const roleMatches=referenceRbRoles.map(role=>rbRoleSimilarity(playerRole,role)).filter(valid)
       if(roleMatches.length){roleScore=Math.max(...roleMatches);matchedRole=playerRole}
     }
     const similarity=roleScore==null?usageScore:usageScore*.65+roleScore*.35
-    const sheet=pos==='RB'?findRb(player.name):null
+    const sheet=pos==='RB'?findRb(player.name,book):null
     return {...player,similarity,usage,role:matchedRole,carryShare:sheet?.recentCarryShare??null}
   }).sort((a,b)=>b.similarity-a.similarity||(theme.spec.key==='rushYds'?(b.carryShare??-1)-(a.carryShare??-1):0)||(b.breakoutScore??-1)-(a.breakoutScore??-1))[0]
 }
@@ -115,10 +119,10 @@ function matchEvidence(theme,closest){
   return `Recent ${theme.spec.usage==='passAtt'?'pass attempts':theme.spec.usage} role`
 }
 function CandidateList({theme,pos,side}){
-  const closest=closestPlayer(theme.candidates,theme,pos)
+  const closest=closestPlayer(theme.candidates,theme,pos,theme.week)
   if(!closest)return <p className="flyers-no-player">No current active player with a recent role was identified for this position.</p>
-  const decision=roleDecision({name:closest.name,position:pos,team:{name:theme.offense.name}},{statKey:theme.spec.key})
-  return <div className="flyers-match"><div className="flyers-player-name"><b>{closest.name}</b>{decision.flag?<em className="role-flag">{decision.flag}</em>:null}{decision.note?<em className="role-note">{decision.note}</em>:null}<BreakoutIndexChip player={closest}/></div><span>{closest.team?.abbr||side.offense.abbr} · {closest.position}</span><RoleTags player={{name:closest.name,pos:pos==='RB'?'RB':closest.position}}/><small>Closest role match · {Math.round(closest.similarity*100)}% similarity · {matchEvidence(theme,closest)}</small></div>
+  const decision=roleDecision({name:closest.name,position:pos,team:{name:theme.offense.name}},{statKey:theme.spec.key,book:roleBookForWeek(theme.week)})
+  return <div className="flyers-match"><div className="flyers-player-name"><b>{closest.name}</b>{decision.flag?<em className="role-flag">{decision.flag}</em>:null}{decision.note?<em className="role-note">{decision.note}</em>:null}<BreakoutIndexChip player={closest}/></div><span>{closest.team?.abbr||side.offense.abbr} · {closest.position}</span><RoleTags player={{name:closest.name,pos:pos==='RB'?'RB':closest.position}} week={theme.week}/><small>Closest role match · {Math.round(closest.similarity*100)}% similarity · {matchEvidence(theme,closest)}</small></div>
 }
 function BreakoutIndexChip({player}){
   const score=breakoutRating(player)
@@ -126,11 +130,12 @@ function BreakoutIndexChip({player}){
   return <span className={`breakout-index-chip breakout-${ratingLevel(score)}`}>Breakout index {score}</span>
 }
 export function breakoutView(theme,matchup){
-  const closest=closestPlayer(theme.candidates,theme,theme.position)
-  const decision=closest?roleDecision({name:closest.name,position:theme.position,team:{name:theme.offense.name}},{statKey:theme.spec.key}):null
+  const book=roleBookForWeek(theme.week)
+  const closest=closestPlayer(theme.candidates,theme,theme.position,theme.week)
+  const decision=closest?roleDecision({name:closest.name,position:theme.position,team:{name:theme.offense.name}},{statKey:theme.spec.key,book}):null
   let line=theme.threshold,hits=theme.hits,n=theme.n,rate=theme.rate,note=null
   if(theme.tier==='Breakout'&&(theme.position==='RB'||theme.position==='WR')&&closest){
-    const scatter=scatterProjection(scatterWeek.games,{awayAbbr:matchup.away.abbr,homeAbbr:matchup.home.abbr,playerName:closest.name,statKey:theme.spec.key})
+    const scatter=scatterProjection(fileForWeek('scatter',theme.week).data?.games,{awayAbbr:matchup.away.abbr,homeAbbr:matchup.home.abbr,playerName:closest.name,statKey:theme.spec.key})
     const raised=raisedBreakoutLine(theme.threshold,scatter)
     note=raised.note
     if(raised.raised){
@@ -152,7 +157,7 @@ function FlyerTheme({theme,index,offenses,window,view}){
         {closest?<>
           <h4>{closest.name}{view.decision?.flag?<em className="role-flag">{view.decision.flag}</em>:null}{view.decision?.note?<em className="role-note">{view.decision.note}</em>:null}</h4>
           <span className="flyer-player-meta">{closest.team?.abbr||theme.offense.abbr} · {closest.position}</span>
-          <RoleTags player={{name:closest.name,pos:pos==='RB'?'RB':closest.position}}/>
+          <RoleTags player={{name:closest.name,pos:pos==='RB'?'RB':closest.position}} week={theme.week}/>
           <small>Closest role match · {Math.round(closest.similarity*100)}% similarity · {matchEvidence(theme,closest)}</small>
         </>:<p className="flyers-no-player">No current active player with a recent role was identified for this position.</p>}
       </div>
@@ -190,7 +195,7 @@ export function buildFlyerThemes(data,matchup,roster,halfLife,window){
       const result=rateForTheme(games,side.defense,position,spec,threshold,roster)
       if(result.n<2||result.hits===0)continue
       rows.push({...result,position,spec,tier,threshold,defense:side.defense,offense:side.offense,data,
-        candidates:currentPlayers.filter(p=>posMatch(p,position,roster)&&!p.unavailable&&!p.stale&&roleDecision({...p,team:{name:side.offense.name}},{statKey:spec.key}).eligible)})
+        week:data.week,candidates:currentPlayers.filter(p=>posMatch(p,position,roster)&&!p.unavailable&&!p.stale&&roleDecision({...p,team:{name:side.offense.name}},{statKey:spec.key,book:roleBookForWeek(data.week)}).eligible)})
     }
   }
   return rows.sort((a,b)=>(b.rate??-1)-(a.rate??-1)||b.hits-a.hits|| (a.tier==='Safe'?-1:1)||a.position.localeCompare(b.position)||a.spec.title.localeCompare(b.spec.title))
