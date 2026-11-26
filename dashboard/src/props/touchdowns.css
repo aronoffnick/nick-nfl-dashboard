@@ -1,0 +1,28 @@
+.td-board{margin-top:6px}
+.td-intro,.td-caption,.td-empty{color:#9aafbc;font-size:.8rem;line-height:1.5;margin:8px 0 12px}
+.td-switch{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.td-switch button{flex:1 1 220px;padding:9px 12px;border:1px solid #3d5663;border-radius:8px;background:#1b2b35;color:#d5e4ec;font:inherit;font-size:.84rem;font-weight:700;cursor:pointer}
+.td-switch button[aria-pressed=true]{background:#a5e6bd;color:#14251c;border-color:#a5e6bd}
+.td-row{margin:0 0 18px;padding:12px;border:1px solid #31424e;border-radius:12px;background:#121c24}
+.td-row header{display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap}
+.td-row h4{margin:0;font-size:1.05rem}
+.td-row header span{color:#9aafbc;font-size:.75rem}
+.td-scale{height:8px;border-radius:4px;margin:10px 0 4px;background:linear-gradient(90deg,#1f8f4e 0%,#9bc53d 35%,#f2b233 60%,#e5533d 100%)}
+.td-scale-labels{display:flex;justify-content:space-between;color:#8ea0ad;font-size:.68rem;margin-bottom:10px}
+.td-slots{display:flex;gap:8px;align-items:stretch}
+.td-slot{flex:1 1 200px;min-width:0;border:1px solid #2c3d4a;border-radius:10px;padding:10px;background:#0f1820}
+.td-slot h5{margin:0 0 8px;color:#8ea0ad;font-size:.68rem;letter-spacing:.06em;text-transform:uppercase}
+.td-slot p{margin:0;color:#8ea0ad;font-size:.75rem;line-height:1.4}
+.td-pick{display:flex;gap:8px;align-items:flex-start;padding-top:8px;margin-top:8px;border-top:1px solid #24323c}
+.td-pick:first-of-type{padding-top:0;margin-top:0;border-top:0}
+.td-pick-top{display:flex;justify-content:space-between;gap:8px}
+.td-pick b{font-size:.86rem}
+.td-pick span,.td-pick em{display:block;color:#9aafbc;font-size:.74rem;line-height:1.4;font-style:normal}
+.td-avatar{width:36px;height:36px;border-radius:50%;object-fit:cover;background:#1c2a34;flex:none}
+.td-initials{display:grid;place-items:center;color:#d5e4ec;font-size:.68rem;font-weight:800}
+.td-arrow{align-self:center;color:#8ea0ad;font-size:1.2rem}
+@media(max-width:800px){
+  .td-slots{flex-direction:column}
+  .td-arrow{transform:rotate(90deg);align-self:center;padding:2px 0}
+  .td-switch button{flex-basis:100%}
+}

@@ -1,0 +1,112 @@
+{
+  "week": 12,
+  "source": "Display snapshot for Chicago at Detroit, Nov 26 2026. Model chances and getoddy best prices as of 10:47 AM ET. Other games are not in this file yet.",
+  "games": {
+    "CHI-DET": {
+      "sides": [
+        {
+          "offense": "CHI",
+          "defense": "DET",
+          "title": "Bears offense vs Lions defense",
+          "caption": "Detroit allowed 28 offensive TDs in 10 games: TE 11, WR 8, RB 7, QB 2. Estimates, not advice.",
+          "rows": [
+            {
+              "pos": "TE",
+              "allowed": "11 TDs vs DET: TE1 6, TE2 3, TE3 2",
+              "confident": [{"name": "Colston Loveland", "role": "TE1", "chance": "41%", "price": "+140 theScore", "why": "12 red-zone targets, 4 inside the 10, 3 TDs. TE1s scored 6 times on Detroit."}],
+              "safe": [],
+              "safeNote": "No second Bears TE reaches 15%. Sam Roush is at 4%.",
+              "upside": [
+                {"name": "Loveland, 2+ TDs", "role": "Safer player, 2 TDs", "chance": "9.8%", "price": "+1000 FanDuel", "why": "Same red-zone role, needs two scores."},
+                {"name": "Sam Roush, 1 TD", "role": "TE2 backup", "chance": "4% est.", "price": "+841 Polymarket", "why": "TE2s scored 3 on Detroit. Roush has 1 red-zone target."}
+              ]
+            },
+            {
+              "pos": "WR",
+              "allowed": "8 TDs vs DET: WR1 4, WR2 1, WR3 2, WR4+ 1",
+              "confident": [{"name": "Luther Burden III", "role": "WR1", "chance": "25%", "price": "+146 Polymarket", "why": "11 red-zone targets plus 3 red-zone carries, 4 TDs. WR1s scored 4 on Detroit."}],
+              "safe": [{"name": "Rome Odunze", "role": "WR2", "chance": "22%", "price": "+185 BetMGM", "why": "9 red-zone targets, 4 inside the 10, 1 TD."}],
+              "upside": [
+                {"name": "Burden, 2+ TDs", "role": "Safer player, 2 TDs", "chance": "3.5%", "price": "+1000 DraftKings", "why": "Thin: the model rarely sees two WR scores."},
+                {"name": "Kalif Raymond, 1 TD", "role": "WR3", "chance": "14%", "price": "+374 Polymarket", "why": "WR3s scored 2 on Detroit. 6 red-zone targets, 1 TD."},
+                {"name": "Jahdae Walker, 1 TD", "role": "WR5 backup", "chance": "7% est.", "price": "+1900 FanDuel", "why": "One WR4-or-deeper scored on Detroit. Walker has 1 red-zone target and 1 TD."}
+              ]
+            },
+            {
+              "pos": "RB",
+              "allowed": "7 TDs vs DET: RB1 4, RB2 1, deeper backups 2",
+              "confident": [{"name": "D'Andre Swift", "role": "RB1", "chance": "56%", "price": "-110 Bally Bet", "why": "40 red-zone carries, 27 inside the 10, 19 inside the 5, 11 TDs."}],
+              "safe": [{"name": "Kyle Monangai", "role": "RB2", "chance": "37%", "price": "+166 Polymarket", "why": "15 red-zone carries, 11 inside the 10, 6 inside the 5, 3 TDs in 5 games."}],
+              "upside": [
+                {"name": "Swift, 2+ TDs", "role": "Safer player, 2 TDs", "chance": "20%", "price": "+575 BetRivers", "why": "Goal-line back in a high total."},
+                {"name": "Swift, 3+ TDs", "role": "3+ only because the model is at least 5%", "chance": "5.1%", "price": "No 3+ price in the snapshot", "why": "Model only, from the same rate."},
+                {"name": "Salvon Ahmed, 1 TD", "role": "RB3 (Roschon Johnson out)", "chance": "8% est.", "price": "+1000 DraftKings", "why": "Two deeper-backup RBs scored on Detroit. Ahmed has 1 red-zone carry."}
+              ]
+            },
+            {
+              "pos": "QB",
+              "allowed": "2 TDs vs DET: both Josh Allen runs, Week 2",
+              "confident": [{"name": "Caleb Williams", "role": "QB rush", "chance": "25%", "price": "+351 Polymarket", "why": "9 red-zone carries, 5 inside the 10, 2 rushing TDs in 7 games."}],
+              "safe": [],
+              "safeNote": "No other Bears QB is in line to play.",
+              "upside": [
+                {"name": "Williams, 2+ TDs", "role": "Safer player, 2 TDs", "chance": "3.4%", "price": "+3500 DraftKings", "why": "Long shot. Both QB TDs on Detroit came from one player in one game."}
+              ],
+              "upsideNote": "No backup QB has scored on Detroit, so there is no backup pick."
+            }
+          ]
+        },
+        {
+          "offense": "DET",
+          "defense": "CHI",
+          "title": "Lions offense vs Bears defense",
+          "caption": "Chicago allowed 22 offensive TDs in 10 games: RB 8, WR 8, TE 3, QB 3. The RB and WR tie is broken by the top pick's chance. Estimates, not advice.",
+          "rows": [
+            {
+              "pos": "RB",
+              "allowed": "8 TDs vs CHI: RB1 7, backup 1",
+              "confident": [{"name": "Jahmyr Gibbs", "role": "RB1", "chance": "68%", "price": "-250 BetMGM", "why": "54 red-zone carries plus 9 targets, 28 inside the 10, 20 inside the 5, 15 TDs."}],
+              "safe": [],
+              "safeNote": "No second Lions RB reaches 15%. Sione Vaki is at 11%.",
+              "upside": [
+                {"name": "Gibbs, 2+ TDs", "role": "Safer player, 2 TDs", "chance": "32%", "price": "+210 DraftKings", "why": "Best 2-TD case on the slate. He's had 2+ in 5 of 10 games."},
+                {"name": "Gibbs, 3+ TDs", "role": "3+ only because the model is at least 5%", "chance": "11%", "price": "No 3+ price in the snapshot", "why": "Model only, from the same rate."},
+                {"name": "Sione Vaki, 1 TD", "role": "RB2 backup", "chance": "11%", "price": "+625 Polymarket", "why": "A backup RB scored on Chicago in Week 11. Vaki has 2 red-zone carries and no TDs."}
+              ]
+            },
+            {
+              "pos": "WR",
+              "allowed": "8 TDs vs CHI: WR1 3, WR2 4, WR3 1",
+              "confident": [{"name": "Amon-Ra St. Brown", "role": "WR1", "chance": "42%", "price": "-125 Polymarket", "why": "19 red-zone targets, 7 inside the 10, 8 TDs."}],
+              "safe": [{"name": "Jameson Williams", "role": "WR2", "chance": "25%", "price": "+200 FanDuel", "why": "WR2s scored 4 on Chicago, the most of any WR role. 10 red-zone targets, 6 TDs."}],
+              "upside": [
+                {"name": "St. Brown, 2+ TDs", "role": "Safer player, 2 TDs", "chance": "10.6%", "price": "+480 BetRivers", "why": "Top red-zone target. He's had 2+ in 3 of 10 games."},
+                {"name": "Isaac TeSlaa, 1 TD", "role": "WR3", "chance": "17%", "price": "+456 Polymarket", "why": "A WR3 scored on Chicago. 7 red-zone targets, 1 TD."}
+              ]
+            },
+            {
+              "pos": "TE",
+              "allowed": "3 TDs vs CHI: TE1 2, TE2 1",
+              "confident": [{"name": "Sam LaPorta", "role": "TE1", "chance": "29%", "price": "+200 BetMGM", "why": "9 inside-10 targets, the most on the team. 13 red-zone targets, 3 TDs."}],
+              "safe": [],
+              "safeNote": "No second Lions TE reaches 15%.",
+              "upside": [
+                {"name": "LaPorta, 2+ TDs", "role": "Safer player, 2 TDs", "chance": "4.7%", "price": "+1500 DraftKings", "why": "Thin."},
+                {"name": "Brock Wright, 1 TD", "role": "TE2 backup", "chance": "6% est.", "price": "+1100 FanDuel", "why": "A TE2 scored on Chicago. Wright has 1 inside-10 target."}
+              ]
+            },
+            {
+              "pos": "QB",
+              "allowed": "3 TDs vs CHI: Bryce Young, Jalen Hurts and Drake Maye runs",
+              "confident": [{"name": "Jared Goff", "role": "QB rush", "chance": "14%", "price": "+1300 DraftKings", "why": "Low-confidence row. 7 red-zone carries, 2 inside the 5, 1 rushing TD."}],
+              "safe": [],
+              "safeNote": "No second option.",
+              "upside": [],
+              "upsideNote": "Goff for 2+ is 1.1%, which is too thin to show. No backup QB has scored on Chicago."
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
