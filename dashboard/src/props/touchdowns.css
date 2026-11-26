@@ -18,6 +18,10 @@
 .td-pick-top{display:flex;justify-content:space-between;gap:8px}
 .td-pick b{font-size:.86rem}
 .td-pick span,.td-pick em{display:block;color:#9aafbc;font-size:.74rem;line-height:1.4;font-style:normal}
+.td-flags{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.td-flag,.td-status{display:inline-block;padding:1px 6px;border-radius:999px;font-style:normal;font-size:.66rem;font-weight:800;letter-spacing:.03em;text-transform:uppercase}
+.td-flag{background:#3a3420;color:#f2b233}
+.td-status{background:#3a2a22;color:#f0a070}
 .td-avatar{width:36px;height:36px;border-radius:50%;object-fit:cover;background:#1c2a34;flex:none}
 .td-initials{display:grid;place-items:center;color:#d5e4ec;font-size:.68rem;font-weight:800}
 .td-arrow{align-self:center;color:#8ea0ad;font-size:1.2rem}
