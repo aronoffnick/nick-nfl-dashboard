@@ -1,0 +1,62 @@
+{
+  "week": 12,
+  "source": "getoddy best prices, Nov 26 2026 11:10 AM ET. Combined percents include a correlation adjustment. The payout multiplies leg prices; a real same-game parlay pays less. Other games are not in this file.",
+  "games": {
+    "CHI-DET": {
+      "cards": [
+        {
+          "title": "Overall favorite",
+          "joint": 0.387,
+          "independent": 0.338,
+          "payout": "+326",
+          "why": "The three highest single-leg estimates in the game. Detroit spreads the ball, so neither LaPorta nor St. Brown needs a big catch total, and Gibbs finishes drives.",
+          "note": "Team-win variant: Gibbs anytime TD, Lions moneyline +106 FanDuel, and LaPorta under 4.5 receptions is 35.4% (+407). The St. Brown under is the opposite side of the Lions stack.",
+          "legs": [
+            {"name": "Sam LaPorta", "side": "under", "line": 4.5, "market": "receptions", "price": "-130", "book": "FanDuel", "model": "3.52 mean", "hit": 0.722, "season": "Under in 6 of 10"},
+            {"name": "Amon-Ra St. Brown", "side": "under", "line": 7.5, "market": "receptions", "price": "-137", "book": "DraftKings", "model": "6.37 mean", "hit": 0.691, "season": "Under in 5 of 10"},
+            {"name": "Jahmyr Gibbs", "side": "anytime", "market": "anytime TD", "price": "-255", "book": "Fanatics", "model": "1.13 expected TDs", "hit": 0.677, "marketHit": "71.8%", "season": "Scored in 9 of 10"}
+          ]
+        },
+        {
+          "title": "CHI correlated",
+          "joint": 0.16,
+          "independent": 0.14,
+          "payout": "+648",
+          "why": "One passing game. Williams' yards move with Burden's receptions, and Odunze is the other target in that game.",
+          "note": "Williams has 7 logged games, and the model (259.8) sits just under 264.5.",
+          "legs": [
+            {"name": "Caleb Williams", "side": "over", "line": 264.5, "market": "pass yards", "price": "-110", "book": "theScore", "model": "259.8", "hit": 0.471, "season": "Over in 4 of 7", "lean": "under"},
+            {"name": "Rome Odunze", "side": "over", "line": 3.5, "market": "receptions", "price": "+125", "book": "Novig", "model": "3.74 mean", "hit": 0.514, "season": "Over in 5 of 10"},
+            {"name": "Luther Burden III", "side": "over", "line": 4.5, "market": "receptions", "price": "-135", "book": "Novig", "model": "5.10 mean", "hit": 0.577, "season": "Over in 5 of 10"}
+          ]
+        },
+        {
+          "title": "DET correlated",
+          "joint": 0.032,
+          "independent": 0.02,
+          "payout": "+1513",
+          "why": "When Goff throws for yards, St. Brown is the one catching them: yards, catches, and the touchdown are the same throws.",
+          "note": "The model leans under on all four legs. St. Brown is 68.6 yards versus 83.5, and Goff is 261.9 versus 277.5.",
+          "legs": [
+            {"name": "Amon-Ra St. Brown", "side": "over", "line": 83.5, "market": "receiving yards", "price": "+104", "book": "Novig", "model": "68.6", "hit": 0.364, "season": "Over in 4 of 10", "lean": "under"},
+            {"name": "Amon-Ra St. Brown", "side": "over", "line": 7.5, "market": "receptions", "price": "+135", "book": "Novig", "model": "6.37 mean", "hit": 0.309, "season": "Over in 5 of 10", "lean": "under"},
+            {"name": "Amon-Ra St. Brown", "side": "anytime", "market": "anytime TD", "price": "-125", "book": "Polymarket", "model": "0.54 expected TDs", "hit": 0.418, "marketHit": "55.6%", "season": "Scored in 5 of 10", "lean": "under"},
+            {"name": "Jared Goff", "side": "over", "line": 277.5, "market": "pass yards", "price": "-115", "book": "BetMGM", "model": "261.9", "hit": 0.416, "season": "Over in 5 of 10", "lean": "under"}
+          ]
+        },
+        {
+          "title": "Game-script mix",
+          "joint": 0.191,
+          "independent": 0.182,
+          "payout": "+350",
+          "why": "If Detroit leads, Gibbs should get the late carries. If Chicago trails, Williams checks down and Swift's catches go up.",
+          "note": "Odunze over 3.5 receptions instead of Swift is 21.4% (+326). League-wide, these two legs are close to independent.",
+          "legs": [
+            {"name": "Jahmyr Gibbs", "side": "over", "line": 95.5, "market": "rush yards", "price": "-112", "book": "DraftKings", "model": "87.1", "hit": 0.422, "season": "Over in 7 of 10", "lean": "under", "why": "Gibbs rushing goes up when Detroit leads. The dashboard has the Lions by 4.0."},
+            {"name": "D'Andre Swift", "side": "over", "line": 2.5, "market": "receptions", "price": "+138", "book": "Novig", "model": "2.40 mean", "hit": 0.431, "season": "Over in 4 of 10", "lean": "under", "why": "Swift's catches go up when Chicago trails."}
+          ]
+        }
+      ]
+    }
+  }
+}
