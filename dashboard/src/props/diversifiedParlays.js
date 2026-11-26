@@ -100,6 +100,13 @@ function teamLeg(matchup) {
   }
 }
 
+function anytimeLeg(player, window) {
+  const projection = projectionFor(player, 'totalTD')
+  if (!valid(projection) || projection < 0.35) return null
+  const estimate = legHitEstimate({ logs: player.logs, key: 'totalTD', line: 0.5, projection, window })
+  return { id: `${player.team.id}:${player.id}:totalTD`, kind: 'player', player, team: player.team, key: 'totalTD', label: LABELS.totalTD, line: 0.5, projection, ...estimate }
+}
+
 function bestLeg(player, keys, window) {
   return keys.map(key => makePlayerLeg(player, key, window)).filter(Boolean).sort((a, b) => b.hit - a.hit || b.projection - a.projection)[0] || null
 }
@@ -136,18 +143,17 @@ function correlatedParlay(team, players, window) {
     .filter(row => valid(row.recYds))
     .sort((a, b) => b.recYds - a.recYds)
   const receivers = catchers.filter(row => row.player.position === 'WR' || row.player.position === 'TE')
-  const leadReceiver = receivers[0] && bestLeg(receivers[0].player, ['recYds', 'rec'], window)
-  const secondReceiver = receivers[1] && bestLeg(receivers[1].player, ['recYds', 'rec'], window)
-  const leadBack = catchers.find(row => row.player.position === 'RB' || row.player.position === 'FB')
-  const backTd = leadBack && (projectionFor(leadBack.player, 'totalTD') ?? 0) >= 0.45 ? makePlayerLeg(leadBack.player, 'totalTD', window) : null
-  const third = [secondReceiver, backTd].filter(Boolean).sort((a, b) => b.hit - a.hit)[0]
-  const legs = [pass, leadReceiver, third].filter(Boolean).slice(0, 3)
-  if (legs.length < 2) return { title, legs, why: `${team.abbr} does not have a second pass-catcher with a projection.`, joint: legs.length ? independentJoint(legs) : null }
-  const names = legs.slice(1).map(leg => leg.player.name.split(' ').at(-1)).join(' and ')
+  const alpha = receivers[0]?.player
+  const yards = alpha && makePlayerLeg(alpha, 'recYds', window)
+  const catches = alpha && makePlayerLeg(alpha, 'rec', window)
+  const td = alpha && anytimeLeg(alpha, window)
+  const legs = [pass, yards, catches, td].filter(Boolean)
+  if (legs.length < 2) return { title, legs, why: `${team.abbr} does not have a pass-catcher with a projection next to ${qb.name.split(' ').at(-1)}.`, joint: legs.length ? independentJoint(legs) : null }
+  const alphaName = alpha.name.split(' ').at(-1)
   return {
     title,
     legs,
-    why: `Same-team passing game. ${qb.name.split(' ').at(-1)}'s yards and ${names} move together when this offense is throwing.`,
+    why: `Same throws. ${qb.name.split(' ').at(-1)}'s passing yards and ${alphaName}'s yards, catches, and touchdown chance move together.`,
     joint: independentJoint(legs),
   }
 }

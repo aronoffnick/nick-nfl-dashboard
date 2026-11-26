@@ -44,6 +44,7 @@ test('the four categories use the favorite, each passing game, and the script sp
   assert.ok(overall.legs.length >= 2 && overall.legs.length <= 3)
   assert.ok(awayStack.legs.every(leg => leg.kind === 'team' || leg.player.team.id === 'gb'))
   assert.equal(awayStack.legs[0].player.name, 'Jordan Love')
+  assert.ok(awayStack.legs.filter(leg => leg.player?.name === 'Christian Watson').length >= 2)
   assert.equal(homeStack.legs[0].player.name, 'Matthew Stafford')
   assert.equal(mix.legs[0].player.name, 'Kyren Williams')
   assert.equal(mix.legs[0].key, 'rushYds')
