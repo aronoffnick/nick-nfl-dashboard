@@ -1,0 +1,30 @@
+.coverage-tab{margin-top:8px}
+.coverage-switch{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+.coverage-switch button{flex:1 1 180px;padding:9px 12px;border:1px solid #3d5663;border-radius:8px;background:#1b2b35;color:#d5e4ec;font:inherit;font-size:.86rem;font-weight:700;cursor:pointer}
+.coverage-switch button[aria-pressed=true]{background:#a5e6bd;color:#14251c;border-color:#a5e6bd}
+.coverage-heading{margin:4px 0 12px;font-family:'Space Grotesk',sans-serif;font-size:1.05rem}
+.coverage-layout{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(220px,.8fr);gap:14px;align-items:start}
+.coverage-card,.coverage-side{background:#111920;border:1px solid #29323b;border-radius:12px;padding:12px}
+.coverage-plot{width:100%;height:auto;display:block}
+.coverage-tick{fill:#8b9ba8;font-size:11px}
+.coverage-tick-right{fill:#7eb6ff}
+.coverage-xlabel{fill:#c5d0d8;font-size:11px}
+.coverage-name{font-size:12px;font-weight:700}
+.coverage-axis{fill:#9cabb7;font-size:11px;text-anchor:middle}
+.coverage-total-label{fill:#7eb6ff;font-size:11px}
+.coverage-legend{display:flex;flex-wrap:wrap;gap:8px 14px;margin-top:8px;color:#9cabb7;font-size:12px;align-items:center}
+.coverage-legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px}
+.coverage-side h4{margin:0 0 8px;font-size:.95rem}
+.coverage-side p{margin:0 0 10px;color:#9cabb7;font-size:.78rem;line-height:1.45}
+.coverage-side table{width:100%;border-collapse:collapse;font-size:.82rem}
+.coverage-side th,.coverage-side td{text-align:left;padding:6px 4px;border-bottom:1px solid #2c3b46}
+.coverage-side th{color:#8b9ba8;font-size:.7rem;letter-spacing:.04em;text-transform:uppercase}
+.coverage-skill{color:#d5e4ec !important}
+.coverage-skill b{color:#7eb6ff}
+.coverage-note{color:#8b9ba8;font-size:.75rem;line-height:1.5;margin:12px 0 0}
+.coverage-empty{color:#9cabb7;padding:18px 4px}
+@media(max-width:800px){
+  .coverage-layout{grid-template-columns:1fr}
+  .coverage-switch button{flex-basis:100%}
+  .coverage-side{order:2}
+}
