@@ -6,6 +6,7 @@ import Parlays from './Parlays.jsx'
 import PlayerProjections, {projectionGroups} from './PlayerProjections.jsx'
 import ScatterTab from './ScatterTab.js'
 import Touchdowns from './Touchdowns.jsx'
+import BetGenerator from './BetGenerator.jsx'
 import './props.css'
 const format=(n,key='')=>valid(n)?n.toFixed(key.endsWith('TD')?2:1):'—'
 const date=d=>new Date(d).toLocaleDateString('en-US',{timeZone:'America/New_York',month:'short',day:'numeric'})
@@ -51,7 +52,7 @@ export default function MatchupExplorer({saveProp,data,matchup,halfLife,advantag
   const [error,setError]=useState('')
   const [message,setMessage]=useState('Loading player positions…')
   const [tab,setTab]=useState('bets')
-  const [betsView,setBetsView]=useState('flyers')
+  const [betsView,setBetsView]=useState('generator')
   const [offenseId,setOffenseId]=useState(matchup.away.id)
   const [historyPositions,setHistoryPositions]=useState(['QB','RB','WR','TE'])
   const [window,setWindow]=useState(4)
@@ -89,8 +90,9 @@ export default function MatchupExplorer({saveProp,data,matchup,halfLife,advantag
     <header className="prop-header"><div><p className="eyebrow">MATCHUP LAB · WEEK {data.week} · {date(matchup.date)}</p><h2 id="prop-title">{matchup.away.name} <span>at</span> {matchup.home.name}</h2></div><button className="close" onClick={onClose}>Close ✕</button></header>
     <div className="prop-score"><div><small>TEAM MODEL</small><b>{matchup.margin<.05?'Toss-up':`${matchup.winner.abbr} by ${format(matchup.margin)}`}</b></div><div><small>PROJECTED SCORE</small><b>{matchup.away.abbr} {format(matchup.awayPoints)} · {matchup.home.abbr} {format(matchup.homePoints)}</b></div><div><small>VENUE</small><b>{matchup.neutral?'Neutral · no home boost':`Home advantage +${advantage.toFixed(1)}`}</b></div></div>
     <nav className="prop-tabs" aria-label="Matchup analytics">{[['bets','Bets'],['scatter','Scatter Plot'],['history','Recent opponents']].map(([id,name])=><button key={id} aria-pressed={tab===id} className={tab===id?'active':''} onClick={()=>setTab(id)}>{name}</button>)}</nav>
-    {tab==='bets'&&<nav className="prop-tabs prop-subtabs" aria-label="Bets views">{[['flyers','Flyers'],['parlays','Parlays'],['projections','Player Projections'],['touchdowns','Touchdowns']].map(([id,name])=><button key={id} aria-pressed={betsView===id} className={betsView===id?'active':''} onClick={()=>setBetsView(id)}>{name}</button>)}</nav>}
+    {tab==='bets'&&<nav className="prop-tabs prop-subtabs" aria-label="Bets views">{[['generator','Bet generator'],['flyers','Flyers'],['parlays','Parlays'],['projections','Player Projections'],['touchdowns','Touchdowns']].map(([id,name])=><button key={id} aria-pressed={betsView===id} className={betsView===id?'active':''} onClick={()=>setBetsView(id)}>{name}</button>)}</nav>}
       {tab==='scatter'&&<ScatterTab away={matchup.away} home={matchup.home} week={data.week}/>}
+      {tab==='bets'&&betsView==='generator'&&<BetGenerator matchup={matchup} week={data.week}/>}
       {tab==='bets'&&betsView==='touchdowns'&&<Touchdowns away={matchup.away} home={matchup.home} week={data.week} roster={rosters?.roster}/>}
     {tab==='bets'&&betsView==='projections'&&<div className="projection-filters" aria-label="Player projection filters">
       <ProjectionFilters title="Teams" items={[[matchup.away.id,matchup.away.name],[matchup.home.id,matchup.home.name]]} selected={projectionTeams} onToggle={key=>toggle(setProjectionTeams,projectionTeams,key)}/>

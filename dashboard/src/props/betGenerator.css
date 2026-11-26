@@ -1,0 +1,10 @@
+.bet-generator{margin-top:4px}
+.bet-generator-form{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px 14px;margin:10px 0 12px;padding:12px 14px;border:1px solid #345066;border-radius:10px;background:#101c26}
+.bet-generator-form label{display:flex;flex-direction:column;gap:4px;color:#9fb4c4;font-size:.72rem;font-weight:700}
+.bet-generator-form select,.bet-generator-form input:not([type=checkbox]){min-width:92px;padding:6px 8px;border:1px solid #3a5568;border-radius:7px;background:#0c161e;color:#e3edf3;font-size:.82rem}
+.bet-generator-form input:not([type=checkbox]){width:96px}
+.bet-generator-form .bet-generator-check{flex-direction:row;align-items:center;gap:6px;padding-bottom:7px}
+.bet-generator-form button{padding:8px 16px;border:1px solid #78d69b;border-radius:8px;background:#1d3b2a;color:#d8f5e2;font-weight:800;cursor:pointer}
+.bet-generator-form select:disabled{opacity:.5}
+.bet-generator-excluded{margin:10px 0 0;color:#8ea0ad;font-size:.74rem}
+@media(max-width:600px){.bet-generator-form{flex-direction:column;align-items:stretch}.bet-generator-form input:not([type=checkbox]){width:auto}}

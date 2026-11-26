@@ -1,45 +1,50 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
 import { readFileSync } from 'node:fs'
-import { cardsFromParlayFile, pct1 } from '../src/props/parlayFile.js'
+import { boardGame, fileCards, tableConflict } from '../src/props/parlayBoard.js'
 
 const board = JSON.parse(readFileSync(new URL('../src/data/parlays-wk12.json', import.meta.url)))
+const file = { matched: true, data: board }
+const games = [['CHI', 'DET'], ['PHI', 'DAL'], ['KC', 'BUF']]
 
-test('week 12 parlay file has the three Thanksgiving games', () => {
+test('week 12 file is v2 with the three Thanksgiving games', () => {
   assert.equal(board.week, 12)
+  assert.equal(board.version, 2)
   assert.deepEqual(Object.keys(board.games), ['CHI-DET', 'PHI-DAL', 'KC-BUF'])
+  assert.equal(boardGame({ matched: true, data: { ...board, version: 1 } }, 'CHI', 'DET'), null)
 })
 
-test('Chicago at Detroit keeps the approved legs and uses the refreshed prices', () => {
-  const cards = cardsFromParlayFile(board.games['CHI-DET'])
-  assert.deepEqual(cards.map(card => card.title), ['Overall favorite', 'CHI correlated', 'DET correlated', 'Game-script mix'])
-  const favorite = cards[0]
-  assert.deepEqual(favorite.legs.map(leg => leg.label), [
-    'Sam LaPorta under 4.5 receptions',
-    'Amon-Ra St. Brown under 7.5 receptions',
-    'Jahmyr Gibbs anytime TD',
-  ])
-  assert.equal(pct1(favorite.joint), '38.7%')
-  assert.equal(favorite.payout, '+322')
-  assert.equal(favorite.legs[2].quote, '-263 Polymarket (after fees)')
-  assert.match(favorite.notes[0], /Team-win variant:.*35\.4%.*\+393/)
-  assert.match(cards[2].legs[0].quote, /\+104 Novig/)
-  assert.equal(cards[2].legs[0].lean, 'under')
-  assert.equal(cards[3].legs[1].label, "D'Andre Swift over 2.5 receptions")
-  assert.match(board.games['CHI-DET'].gaps[0], /market favors CHI/)
+for (const [away, home] of games) test(`${away}-${home} Safe-overlap cards follow the model-line rules`, () => {
+  const game = boardGame(file, away, home)
+  const cards = fileCards(game)
+  assert.deepEqual(cards.map(card => card.legs.length), [3, 3, 2, 2, 4])
+  const direction = new Map()
+  for (const card of cards) {
+    assert.equal(new Set(card.legs.map(leg => leg.player)).size, card.legs.length, 'one leg per player')
+    for (const leg of card.legs) {
+      assert.equal(leg.kind, 'prop', 'no TD scorers or moneylines in the cards')
+      assert.ok(['Over', 'Under'].includes(leg.side))
+      assert.ok(leg.priced ? /\S/.test(leg.book) && leg.asof : leg.price == null, 'priced legs carry book + as-of, unpriced legs carry no price')
+      const prior = direction.get(leg.player)
+      assert.ok(!prior || prior === leg.side, `${leg.player} on both sides`)
+      direction.set(leg.player, leg.side)
+    }
+  }
+  // no player on both sides anywhere in the leg pool
+  const sides = new Map()
+  for (const leg of game.legs.filter(leg => leg.kind !== 'ml')) {
+    const d = leg.side === 'Under' ? 'under' : 'over'
+    assert.ok(!sides.has(leg.player) || sides.get(leg.player) === d, `${leg.player} on both sides in the pool`)
+    sides.set(leg.player, d)
+  }
 })
 
-test('Philadelphia and Kansas City read the same four categories', () => {
-  const phi = cardsFromParlayFile(board.games['PHI-DAL'])
-  assert.equal(phi[0].legs[0].label, 'DeVonta Smith over 64.5 Rec yds')
-  assert.equal(phi[1].title, 'PHI correlated')
-  assert.match(phi[1].why, /No eligible QB/)
-  assert.equal(phi[3].legs[0].label, 'Javonte Williams over 76.5 Rush yds')
-  assert.match(phi[3].notes.find(note => note.startsWith('Alt:')), /Saquon Barkley/)
-  const kc = cardsFromParlayFile(board.games['KC-BUF'])
-  assert.equal(kc[0].legs[0].label, 'Patrick Mahomes over 224.5 Pass yds')
-  assert.equal(kc[2].title, 'BUF correlated')
-  assert.equal(kc[3].legs[1].label, 'Rashee Rice over 4.5 receptions')
-  assert.equal(kc[3].legs[0].lean, 'under')
-  assert.match(kc[0].notes[0], /Josh Allen under 1\.5 Pass TDs/)
+test('Bears-Lions drops the LaPorta and St. Brown unders that clash with the table overs', () => {
+  const game = boardGame(file, 'CHI', 'DET')
+  const labels = game.legs.map(leg => leg.label)
+  assert.ok(!labels.includes('Sam LaPorta under 4.5 receptions'))
+  assert.ok(!labels.includes('Amon-Ra St. Brown under 7.5 receptions'))
+  assert.ok(game.dropped.some(item => item.label === 'Sam LaPorta under 4.5 receptions' && /50\.5\+ receiving yards/.test(item.reason)))
+  assert.equal(tableConflict({ side: 'Under', player: 'Sam LaPorta' }, new Set(['sam laporta'])), true)
+  assert.equal(tableConflict({ side: 'Over', player: 'Sam LaPorta' }, new Set(['sam laporta'])), false)
 })
