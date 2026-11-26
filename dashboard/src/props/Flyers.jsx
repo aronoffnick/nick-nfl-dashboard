@@ -1,6 +1,5 @@
 import {useMemo,useState} from 'react'
 import {historyFor,sides,positionOf,projectTeam,valid,weighted} from './model.js'
-import {breakoutRating,ratingLevel} from './breakout.js'
 import {rbStarter} from './roleData.js'
 import {findRb,roleDecision} from './roleEligibility.js'
 import RoleTags from './RoleTags.jsx'
@@ -118,17 +117,6 @@ function matchEvidence(theme,closest){
   if(pos==='WR'&&closest.role)return `${closest.role.rank}${closest.role.slot?' · slot':''} · ${closest.role.alignment}/${closest.role.side}`
   return `Recent ${theme.spec.usage==='passAtt'?'pass attempts':theme.spec.usage} role`
 }
-function CandidateList({theme,pos,side}){
-  const closest=closestPlayer(theme.candidates,theme,pos,theme.week)
-  if(!closest)return <p className="flyers-no-player">No current active player with a recent role was identified for this position.</p>
-  const decision=roleDecision({name:closest.name,position:pos,team:{name:theme.offense.name}},{statKey:theme.spec.key,book:roleBookForWeek(theme.week)})
-  return <div className="flyers-match"><div className="flyers-player-name"><b>{closest.name}</b>{decision.flag?<em className="role-flag">{decision.flag}</em>:null}{decision.note?<em className="role-note">{decision.note}</em>:null}<BreakoutIndexChip player={closest}/></div><span>{closest.team?.abbr||side.offense.abbr} · {closest.position}</span><RoleTags player={{name:closest.name,pos:pos==='RB'?'RB':closest.position}} week={theme.week}/><small>Closest role match · {Math.round(closest.similarity*100)}% similarity · {matchEvidence(theme,closest)}</small></div>
-}
-function BreakoutIndexChip({player}){
-  const score=breakoutRating(player)
-  if(score==null)return <span className="breakout-index-chip breakout-unknown">Breakout index —</span>
-  return <span className={`breakout-index-chip breakout-${ratingLevel(score)}`}>Breakout index {score}</span>
-}
 export function breakoutView(theme,matchup){
   const book=roleBookForWeek(theme.week)
   const closest=closestPlayer(theme.candidates,theme,theme.position,theme.week)
@@ -145,42 +133,26 @@ export function breakoutView(theme,matchup){
   }
   return {closest,decision,line,hits,n,rate,note}
 }
-function FlyerTheme({theme,index,offenses,window,view}){
+function FlyerTheme({theme,index,window,view}){
   const pos=theme.position
-  const playerLed=pos==='RB'||pos==='WR'
-  if(playerLed){
-    const closest=view.closest
-    return <article className={`flyer-theme flyer-${theme.tier.toLowerCase()} flyer-player-prop`}>
-      <div className="flyer-rank">#{index+1}</div>
-      <div className="flyer-player-side">
-        <div className="flyer-theme-top"><span className="flyer-tier">{theme.tier}</span><span className="flyer-position">{roleName(pos)}</span></div>
-        {closest?<>
-          <h4>{closest.name}{view.decision?.flag?<em className="role-flag">{view.decision.flag}</em>:null}{view.decision?.note?<em className="role-note">{view.decision.note}</em>:null}</h4>
-          <span className="flyer-player-meta">{closest.team?.abbr||theme.offense.abbr} · {closest.position}</span>
-          <RoleTags player={{name:closest.name,pos:pos==='RB'?'RB':closest.position}} week={theme.week}/>
-          <small>Closest role match · {Math.round(closest.similarity*100)}% similarity · {matchEvidence(theme,closest)}</small>
-        </>:<p className="flyers-no-player">No current active player with a recent role was identified for this position.</p>}
-      </div>
-      <div className="flyer-prop-side">
-        <h4>{theme.spec.title} · {fmt(view.line)}+</h4>
-        <strong className="flyer-rate">{view.rate==null?'—':`${Math.round(view.rate*100)}%`}</strong>
-        <span className="flyer-count">{view.hits}/{view.n} recent opponent games</span>
-        <small>Defense: {theme.defense.name} · most recent {window} usable games with this stat data</small>
-        {view.note?<small className="flyer-line-note">{view.note}</small>:null}
-      </div>
-    </article>
-  }
-  return <article className={`flyer-theme flyer-${theme.tier.toLowerCase()}`}>
+  const closest=view.closest
+  return <article className={`flyer-theme flyer-${theme.tier.toLowerCase()} flyer-player-prop`}>
     <div className="flyer-rank">#{index+1}</div>
-    <div className="flyer-theme-main"><div className="flyer-theme-top"><span className="flyer-tier">{theme.tier}</span><span className="flyer-position">{roleName(pos)}</span></div>
-      <h4>{theme.spec.title} · {fmt(theme.threshold)}+</h4>
-      <strong className="flyer-rate">{theme.rate===null?'—':`${Math.round(theme.rate*100)}%`}</strong>
-      <span className="flyer-count">{theme.hits}/{theme.n} recent opponent games</span>
-      <small>Defense: {theme.defense.name} · most recent {window} usable games with this stat data</small>
+    <div className="flyer-player-side">
+      <div className="flyer-theme-top"><span className="flyer-tier">{theme.tier}</span><span className="flyer-position">{roleName(pos)}</span></div>
+      {closest?<>
+        <h4>{closest.name}{view.decision?.flag?<em className="role-flag">{view.decision.flag}</em>:null}{view.decision?.note?<em className="role-note">{view.decision.note}</em>:null}</h4>
+        <span className="flyer-player-meta">{closest.team?.abbr||theme.offense.abbr} · {closest.position}</span>
+        <RoleTags player={{name:closest.name,pos:pos==='RB'?'RB':closest.position}} week={theme.week}/>
+        <small>Closest role match · {Math.round(closest.similarity*100)}% similarity · {matchEvidence(theme,closest)}</small>
+      </>:<p className="flyers-no-player">No current active player with a recent role was identified for this position.</p>}
     </div>
-    <div className="flyer-similar"><small>MOST SIMILAR UPCOMING PLAYER</small>
-      <CandidateList theme={theme} pos={pos} side={offenses.find(s=>s.defense.id===theme.defense.id)}/>
-      <small className="flyer-explainer">Role match uses recent box-score workload; WRs also use the Week 12 starter/slot sheet; RBs use the Week 12 RB starters sheet (depth label, primary role, goal-line/red-zone role) when a matching name is available.</small>
+    <div className="flyer-prop-side">
+      <h4>{theme.spec.title} · {fmt(view.line)}+</h4>
+      <strong className="flyer-rate">{view.rate==null?'—':`${Math.round(view.rate*100)}%`}</strong>
+      <span className="flyer-count">{view.hits}/{view.n} recent opponent games</span>
+      <small>Defense: {theme.defense.name} · most recent {window} usable games with this stat data</small>
+      {view.note?<small className="flyer-line-note">{view.note}</small>:null}
     </div>
   </article>
 }
@@ -220,7 +192,7 @@ export default function Flyers({data,matchup,roster,halfLife,window}){
       <button type="button" onClick={()=>{setTeamFilter('all');setPositionFilter('all')}}>Reset</button>
     </div>
     <div className="flyers-legend"><span className="flyer-breakout-swatch">Breakout · green</span><span>Safe thresholds remain as background support for PARLAYS overlap ranges. RB and WR lines use the higher of the sheet threshold and that player’s Week 12 scatter projection.</span></div>
-    {!items.length?<p className="prop-warning">No themes match these filters.</p>:<div className="flyers-board">{items.map(({theme,view},index)=><FlyerTheme key={`${theme.defense.id}:${theme.position}:${theme.spec.key}:${theme.tier}`} theme={theme} view={view} index={index} offenses={offenses} window={window}/>)}</div>}
+    {!items.length?<p className="prop-warning">No themes match these filters.</p>:<div className="flyers-board">{items.map(({theme,view},index)=><FlyerTheme key={`${theme.defense.id}:${theme.position}:${theme.spec.key}:${theme.tier}`} theme={theme} view={view} index={index} window={window}/>)}</div>}
     <details className="prop-method"><summary>Threshold rules and data sources</summary>
       <p>Thresholds come from your supplied reference: QB pass yards 260/300, pass TDs 2/3, rush yards 20/35, rushing TDs 1/2; RB rush yards 90/110, receptions 4/6, receiving yards 15/25, total TDs 1/2; WR receptions 6/8, receiving yards 90/110, total TDs 1/2; TE receptions 5/7, receiving yards 40/60, total TDs 1/2. “Safe” and “Breakout” list first and second values respectively.</p>
       <p>For each game, the position group counts as crossing when at least one player at that position reaches the threshold. Hit rates use only recent games with complete box-score categories and position data. A theme enters the ranking with at least two usable games and one crossing; all qualifying themes are shown, ordered by percentage and hit count. Closest player selection uses current-team recent workload compared with the workloads of historical players who crossed the threshold. WR role matching also consults the supplied Ourlads-derived Week 12 sheet (slot/depth/alignment fields marked inferred in that source); it is a supplemental role hint, not tracking data.</p>
