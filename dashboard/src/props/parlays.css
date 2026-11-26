@@ -17,6 +17,7 @@
 .mix-card li em{color:#c5d5e0;font-style:normal;margin-top:3px}
 .mix-avatar{width:36px;height:36px;border-radius:50%;object-fit:cover;background:#1c2a34;flex:none}
 .mix-initials{display:grid;place-items:center;color:#d5e4ec;font-size:.72rem;font-weight:800}
-.mix-why,.mix-joint,.mix-empty{margin:10px 0 0;color:#9aafbc;font-size:.75rem;line-height:1.45}
+.mix-why,.mix-joint,.mix-empty,.mix-gaps{margin:10px 0 0;color:#9aafbc;font-size:.75rem;line-height:1.45}
+.mix-gaps{padding-left:18px}
 .mix-why{color:#d5e4ec}
 @media(max-width:800px){.mix-grid{grid-template-columns:1fr}.mix-avatar{width:32px;height:32px}}

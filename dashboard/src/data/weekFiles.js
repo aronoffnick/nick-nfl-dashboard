@@ -7,6 +7,7 @@ const groups = {
   scatter: import.meta.glob('./scatter-wk*.json', { eager: true, import: 'default' }),
   tdRisk: import.meta.glob('./td-riskscale-wk*.json', { eager: true, import: 'default' }),
   parlaySnap: import.meta.glob('./parlay-snapshot-wk*.json', { eager: true, import: 'default' }),
+  parlays: import.meta.glob('./parlays-wk*.json', { eager: true, import: 'default' }),
   defense: import.meta.glob('./defense-vs-opponents-wk*.json', { eager: true, import: 'default' }),
   wr: import.meta.glob('../props/wr-starters-week*.json', { eager: true, import: 'default' }),
   rb: import.meta.glob('../props/rb-starters-week*.json', { eager: true, import: 'default' }),
