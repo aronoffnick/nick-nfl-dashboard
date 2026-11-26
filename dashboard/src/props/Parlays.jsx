@@ -109,7 +109,7 @@ export default function Parlays({data,matchup,roster,halfLife,window}){
     skipped:reviewed.filter(item=>item.decision.kind==='skipped'),
     'no-data':reviewed.filter(item=>item.decision.kind==='no-data'),
   }
-  return <><DiversifiedParlays matchup={matchup} players={diversifiedPlayers} window={window}/>
+  return <><DiversifiedParlays matchup={matchup} players={diversifiedPlayers} window={window} week={data.week} roster={roster}/>
   <section className="parlays-section" aria-label="Parlays from Bets and Safe Flyers overlap">
     <div className="prop-section-title"><h3>PARLAYS · highest Safe overlap</h3><span>Bets signals + FLYERS Safe history</span></div>
     <p className="prop-help">Breakout candidates are excluded. FLYERS <b>Safe</b> history narrows the eligible position and stat; the player number comes directly from the same model used in <b>Player Projections</b>. A leg is removed unless that projection reaches the Safe target and the player reached it at least once in three or more recent appearances. Each kept non-touchdown leg is then checked against the Week 12 scatter projection. Touchdown legs stay on the Safe line and are marked skipped. When scatter covers the Safe line, the leg moves up to the live projection (rounded to the nearest 0.5) and is never lowered on that pass. Role eligibility runs before this check. Legs are ranked by 40% opponent hit rate at the line shown, 30% Bets strength, 15% projection coverage, and 15% the player’s recent hit rate at that line. The score measures model agreement, not a guaranteed win probability.</p>
