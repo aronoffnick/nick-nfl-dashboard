@@ -81,13 +81,13 @@ function buildParlays(legs){
   ]
 }
 function Leg({leg}){
-  return <li><div><span className="parlay-team">{leg.theme.offense.abbr} · {leg.player.position}</span><strong>{leg.player.name} · {leg.line}+ {leg.theme.spec.title.toLowerCase()}</strong>{leg.scatterFlag?<em className="scatter-flag">{leg.scatterFlag}</em>:null}</div>
+  return <li><div><span className="parlay-team">{leg.theme.offense.abbr} · {leg.player.position}</span><strong>{leg.player.name} · {leg.line}+ {leg.theme.spec.title.toLowerCase()}</strong>{(leg.player.gate?.note==='Shared role'||leg.player.gate?.note==='Backup')&&<em className={leg.player.gate.note==='Shared role'?'role-shared':'role-backup'}>{leg.player.gate.note}</em>}{leg.scatterFlag?<em className="scatter-flag">{leg.scatterFlag}</em>:null}</div>
     <div className="parlay-leg-evidence"><span><b>{leg.concentration}/100</b> overlap</span><span>Safe defense: {leg.theme.hits}/{leg.theme.n} ({Math.round(leg.theme.rate*100)}%)</span><span>Player recent: {leg.playerHits}/{leg.playerN} ({Math.round(leg.playerRate*100)}%)</span><span>Player Projection: {fmt(leg.projection,leg.theme.spec.key)}</span><span>Bets index: {leg.betsIndex}/100</span><small className="scatter-mark">{leg.scatterMark}</small></div></li>
 }
-export default function Parlays({data,matchup,roster,halfLife,window}){
-  const reviewed=useMemo(()=>buildFlyerThemes(data,matchup,roster,halfLife,window)
+export default function Parlays({data,matchup,roster,halfLife,window,includeBackups=false}){
+  const reviewed=useMemo(()=>buildFlyerThemes(data,matchup,roster,halfLife,window,includeBackups)
     .filter(theme=>theme.tier==='Safe')
-    .flatMap(theme=>theme.candidates.map(player=>safeOverlapLeg(theme,player,window,fileForWeek('scatter',data.week).data?.games,matchup.away.abbr,matchup.home.abbr)).filter(Boolean)),[data,matchup,roster,halfLife,window])
+    .flatMap(theme=>theme.candidates.map(player=>safeOverlapLeg(theme,player,window,fileForWeek('scatter',data.week).data?.games,matchup.away.abbr,matchup.home.abbr)).filter(Boolean)),[data,matchup,roster,halfLife,window,includeBackups])
   const legs=useMemo(()=>reviewed.filter(item=>item.leg).map(item=>item.leg).sort((a,b)=>b.concentration-a.concentration||b.theme.rate-a.theme.rate),[reviewed])
   const parlays=useMemo(()=>buildParlays(legs),[legs])
   const scatterGroups={

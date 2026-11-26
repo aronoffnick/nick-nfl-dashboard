@@ -2,7 +2,7 @@ import assert from 'node:assert/strict'
 import test from 'node:test'
 import rbRows from '../src/props/rb-starters-week12.json' with { type: 'json' }
 import wrRows from '../src/props/wr-starters-week12.json' with { type: 'json' }
-import { findRb, findWr, injuryInfo, roleDecision, rushWeight, tdWeight } from '../src/props/roleEligibility.js'
+import { findRb, findWr, injuryInfo, roleDecision, rushWeight, sharedRbSignals, sharedWrSignals, tdWeight } from '../src/props/roleEligibility.js'
 
 const gb = name => ({ name, position: 'RB', team: { name: 'Green Bay Packers' } })
 
@@ -30,10 +30,42 @@ test('Josh Jacobs stays in and is flagged Questionable (Finger)', () => {
 test('Out and depth backs are excluded; Doubtful counts as out', () => {
   assert.equal(injuryInfo('Doubtful (Knee)').state, 'out')
   const out = rbRows.find(row => /^Out\b/i.test(row.injury || ''))
-  const depth = rbRows.find(row => /depth|minimal/i.test(row.primary || ''))
   assert.equal(roleDecision({ name: out.name, position: 'RB' }).eligible, false)
-  assert.equal(roleDecision({ name: depth.name, position: 'RB' }).eligible, false)
-  assert.match(roleDecision({ name: depth.name, position: 'RB' }).reason, /minimal/i)
+  assert.equal(roleDecision({ name: 'Evan Hull', position: 'RB' }).eligible, false)
+  assert.match(roleDecision({ name: 'Evan Hull', position: 'RB' }).reason, /minimal/i)
+  assert.equal(roleDecision({ name: out.name, position: 'RB' }, { includeBackups: true }).eligible, false)
+  const backup = roleDecision({ name: 'Evan Hull', position: 'RB' }, { includeBackups: true })
+  assert.equal(backup.eligible, true)
+  assert.equal(backup.note, 'Backup')
+})
+test('a third-string or minimal back with a real shared role stays in', () => {
+  const tucker = roleDecision({ name: 'Sean Tucker', position: 'RB' }, { statKey: 'rushYds' })
+  assert.equal(tucker.eligible, true)
+  assert.equal(tucker.note, 'Shared role')
+  assert.match(tucker.reason, /inside-5/)
+  const allen = roleDecision({ name: 'LeQuint Allen Jr.', position: 'RB' }, { statKey: 'recYds' })
+  assert.equal(allen.eligible, true)
+  assert.equal(allen.note, 'Shared role')
+  assert.match(allen.reason, /target/)
+  assert.equal(roleDecision({ name: 'Evan Hull', position: 'RB' }, { statKey: 'rushYds' }).eligible, false)
+  assert.equal(sharedRbSignals(findRb('Evan Hull')).length, 0)
+})
+test('a receiver outside the top three can share a target role from his own logs', () => {
+  const games = [1, 2, 3, 4].map(gameId => ({ gameId, targets: 4 }))
+  const starter = { id: 's', name: 'Matthew Golden', position: 'WR', team: { name: 'Green Bay Packers' }, logs: games.map(game => ({ ...game, targets: 8 })) }
+  const backup = { id: 'b', name: 'Not On Sheet', position: 'WR', team: { name: 'Green Bay Packers' }, logs: games }
+  const teammates = [starter, backup]
+  const shared = roleDecision(backup, { teammates })
+  assert.equal(shared.eligible, true)
+  assert.equal(shared.note, 'Shared role')
+  assert.match(shared.reason, /WR targets/)
+  const quiet = { ...backup, logs: games.map(game => ({ ...game, targets: 1 })) }
+  assert.equal(roleDecision(quiet, { teammates: [starter, quiet] }).eligible, false)
+  assert.equal(sharedWrSignals(backup, []).length, 0)
+  const injured = { ...backup, unavailable: true }
+  assert.equal(roleDecision(injured, { teammates: [starter, injured] }).eligible, false)
+  const stale = { ...backup, unavailable: false, stale: true }
+  assert.equal(roleDecision(stale, { teammates: [starter, stale] }).eligible, false)
 })
 
 test('rush and touchdown weights follow the documented clamps', () => {

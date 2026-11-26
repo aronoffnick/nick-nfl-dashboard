@@ -6,7 +6,7 @@ import { defenseVs } from "../data/reference.js";
 import { scatterNoRole } from "./roleEligibility.js";
 import "./ScatterTab.css";
 
-export default function ScatterTab({ away, home, week }) {
+export default function ScatterTab({ away, home, week, includeBackups=false }) {
  const h=R.createElement,{useState,useRef,useEffect}=R;
  const AB=x=>({WSH:'WAS',LA:'LAR'}[x]||x);
  const key=AB(away.abbr)+'-'+AB(home.abbr);
@@ -16,7 +16,6 @@ export default function ScatterTab({ away, home, week }) {
  const [pos,setPos]=useState('All');
  const [stat,setStat]=useState('recYds');
  const [sel,setSel]=useState(null);
- const [roleOnly,setRoleOnly]=useState(false);
  const ref=useRef(null);const [w,setW]=useState(760);
  useEffect(()=>{const el=ref.current;if(!el)return;const f=()=>setW(Math.max(300,Math.min(1100,el.clientWidth)));f();const ro=new ResizeObserver(f);ro.observe(el);return()=>ro.disconnect()},[]);
  const STATS=[['passYds','Pass yards'],['rushYds','Rush yards'],['recYds','Receiving yards'],['rec','Receptions'],['td','Touchdowns']];
@@ -29,12 +28,11 @@ export default function ScatterTab({ away, home, week }) {
  const controls=h('div',{className:'projection-filters scatter-filters','aria-label':'Scatter plot filters'},
    btns('Offense (vs the other defense)',teams.map(([a,n])=>[a,n]),team,setTeam),
    btns('Position',POS.map(p=>[p,p]),pos,setPos),
-   btns('Stat',STATS,stat,setStat),
-   h('div',{className:'projection-window'},h('strong',null,'Role'),h('button',{type:'button','aria-pressed':roleOnly,onClick:()=>{setRoleOnly(v=>!v);setSel(null)}},'Role players only')));
+   btns('Stat',STATS,stat,setStat));
  if(!data) return h('div',{className:'scatter-tab'},controls,h('p',{className:'scatter-empty'},scatterFile.matched?`No Week ${week} scatter data for this matchup.`:`No Week ${week} scatter file. Add scatter-wk${week}.json to plot this week.`));
  const offenseName=teams.find(([abbr])=>abbr===team)?.[1]||'';
  const pts=data.players.filter(p=>p.t===team&&(pos==='All'||p.p===pos)&&p.s[stat]&&p.s[stat][0]!=null&&p.s[stat][1]!=null&&(p.s[stat][0]>0||p.s[stat][1]>0))
-   .map(p=>{const role=scatterNoRole({name:p.n,position:p.p,team:{name:offenseName}},roleBookForWeek(week));return {...p,x:p.s[stat][0],y:p.s[stat][1],mf:p.s[stat][2],noRole:role.dim,roleMark:role.mark}}).filter(p=>!roleOnly||!p.noRole);
+   .map(p=>{const role=scatterNoRole({name:p.n,position:p.p,team:{name:offenseName}},roleBookForWeek(week),includeBackups);return {...p,x:p.s[stat][0],y:p.s[stat][1],mf:p.s[stat][2],noRole:role.dim,roleMark:role.mark,roleOk:role.decision.eligible}}).filter(p=>p.roleOk);
  const nodata=data.players.filter(p=>p.t===team&&(pos==='All'||p.p===pos)&&p.s[stat]&&(p.s[stat][0]==null||p.s[stat][1]==null)).map(p=>p.n);
  const H=Math.round(Math.min(520,Math.max(300,w*0.62))),m={l:52,r:16,t:16,b:44};
  const mx=Math.max(1e-9,...pts.map(p=>Math.max(p.x,p.y)))*1.12;
@@ -93,5 +91,5 @@ export default function ScatterTab({ away, home, week }) {
      h('div',{ref,className:'scatter-plot'},pts.length?svg:h('p',{className:'scatter-empty'},`No ${pos==='All'?'':pos+' '}${statLbl.toLowerCase()} data for ${team} in this matchup.`)),
      pts.length?legend:null,detail,
      nodata.length?h('small',{className:'scatter-note'},`Not plotted (no 2026 games or projection): ${nodata.join(', ')}`):null,
-     h('small',{className:'scatter-note'},`Dimmed dots have no Week ${week} sheet role. Scatter file: scatter-wk${week}.json when it is in the app. Touchdowns = rushing + receiving TDs (QB passing TDs not included). Estimates only, entertainment only, not betting advice.`)));
+     h('small',{className:'scatter-note'},`Include backups is off, so dots outside the starter gate stay off this plot. Shared-role backs from the weekly sheet still appear. Scatter file: scatter-wk${week}.json when it is in the app. Touchdowns = rushing + receiving TDs (QB passing TDs not included). Estimates only, entertainment only, not betting advice.`)));
 }
