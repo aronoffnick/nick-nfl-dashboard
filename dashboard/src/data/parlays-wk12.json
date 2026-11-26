@@ -1,0 +1,1819 @@
+{
+  "week": 12,
+  "generated_at": "2026-11-26T11:26",
+  "disclaimer": "Model estimates from static snapshots; entertainment, not advice. Payout multiplies leg prices; real same-game parlays pay less.",
+  "rules": {
+    "min_price": -300,
+    "min_games": 4,
+    "min_line": {
+      "Rec yds": 10.5,
+      "Rush yds": 10.5,
+      "Receptions": 1.5
+    },
+    "exclude_flags": [
+      "not in projected starters",
+      "not projected"
+    ],
+    "corr_shrink": 0.5,
+    "min_corr_games": 6,
+    "favorite_legs": 3,
+    "favorite_pool": 6,
+    "team_receivers": 2,
+    "mix_receivers": [
+      "RB1",
+      "WR1",
+      "WR2"
+    ]
+  },
+  "games": {
+    "CHI-DET": {
+      "game": "CHI-DET",
+      "away": "CHI",
+      "home": "DET",
+      "kickoff": "Thu Nov 26, 1:00 PM ET",
+      "snapshot": {
+        "props_asof": "Nov 26, 11:07 AM ET",
+        "game_asof": "Nov 26, 11:17 AM ET",
+        "fetched_at": "Nov 26 11:20 AM ET"
+      },
+      "dashboard": {
+        "card": "DET by 4.0 Explore matchup \u2192",
+        "favorite": "DET",
+        "margin": 4.0,
+        "win_prob_model": 0.6165
+      },
+      "market": {
+        "no_vig": {
+          "CHI": 0.51,
+          "DET": 0.49
+        },
+        "moneyline": {
+          "CHI": {
+            "price": -104,
+            "book": "Novig (after fees)"
+          },
+          "DET": {
+            "price": 102,
+            "book": "FanDuel"
+          }
+        },
+        "spread": "Bears -1 -102 at BetMGM, Lions +1 -108 at BetMGM",
+        "total": "over 56 -110 at BetMGM, under -108 at Caesars"
+      },
+      "parlays": {
+        "favorite": {
+          "legs": [
+            {
+              "player": "Sam LaPorta",
+              "nk": "sam laporta",
+              "team": "DET",
+              "pos": "TE",
+              "market": "Receptions",
+              "side": "Under",
+              "line": 4.5,
+              "price": -130,
+              "book": "ProphetX (after fees)",
+              "p": 0.7217,
+              "center": 3.52,
+              "center_kind": "mean",
+              "season": "Under in 6 of 10",
+              "coverage": "PPR -0.4%, neutral (best vs Cover 2)",
+              "market_p": 0.5652173913043478,
+              "flags": "",
+              "label": "Sam LaPorta under 4.5 receptions",
+              "price_str": "-130 ProphetX (after fees)"
+            },
+            {
+              "player": "Amon-Ra St. Brown",
+              "nk": "amon-ra st brown",
+              "team": "DET",
+              "pos": "WR",
+              "market": "Receptions",
+              "side": "Under",
+              "line": 7.5,
+              "price": -137,
+              "book": "DraftKings",
+              "p": 0.6911,
+              "center": 6.37,
+              "center_kind": "mean",
+              "season": "Under in 5 of 10",
+              "coverage": "PPR +0.3%, neutral (best vs Cover 2)",
+              "market_p": 0.5780590717299579,
+              "flags": "",
+              "label": "Amon-Ra St. Brown under 7.5 receptions",
+              "price_str": "-137 DraftKings"
+            },
+            {
+              "player": "Jahmyr Gibbs",
+              "nk": "jahmyr gibbs",
+              "team": "DET",
+              "pos": "RB",
+              "market": "TD",
+              "side": "Yes",
+              "line": 0.5,
+              "price": -263,
+              "book": "Polymarket (after fees)",
+              "p": 0.677,
+              "center": 1.13,
+              "center_kind": "exp. TDs",
+              "season": "Scored in 9 of 10",
+              "coverage": "TDs excluded from coverage factors",
+              "market_p": 0.7245179063360881,
+              "label": "Jahmyr Gibbs anytime TD",
+              "price_str": "-263 Polymarket (after fees)"
+            }
+          ],
+          "combined": 0.3874,
+          "independent": 0.3377,
+          "payout": "+322",
+          "implied": 0.2367,
+          "correlations": [
+            {
+              "a": "Sam LaPorta under 4.5 receptions",
+              "b": "Amon-Ra St. Brown under 7.5 receptions",
+              "r": 0.22,
+              "n": 10
+            },
+            {
+              "a": "Sam LaPorta under 4.5 receptions",
+              "b": "Jahmyr Gibbs anytime TD",
+              "r": 0.04,
+              "n": 10
+            },
+            {
+              "a": "Amon-Ra St. Brown under 7.5 receptions",
+              "b": "Jahmyr Gibbs anytime TD",
+              "r": 0.31,
+              "n": 10
+            }
+          ],
+          "rule": "Forced by overrides file (approved request)",
+          "team_win_variant": {
+            "legs": [
+              {
+                "player": "Jahmyr Gibbs",
+                "nk": "jahmyr gibbs",
+                "team": "DET",
+                "pos": "RB",
+                "market": "TD",
+                "side": "Yes",
+                "line": 0.5,
+                "price": -263,
+                "book": "Polymarket (after fees)",
+                "p": 0.677,
+                "center": 1.13,
+                "center_kind": "exp. TDs",
+                "season": "Scored in 9 of 10",
+                "coverage": "TDs excluded from coverage factors",
+                "market_p": 0.7245179063360881,
+                "label": "Jahmyr Gibbs anytime TD",
+                "price_str": "-263 Polymarket (after fees)"
+              },
+              {
+                "player": "Lions moneyline",
+                "nk": "ml_DET",
+                "team": "DET",
+                "pos": "TEAM",
+                "market": "ML",
+                "side": "Yes",
+                "price": 102,
+                "book": "FanDuel",
+                "p": 0.6165,
+                "season": "Lions 8-2",
+                "coverage": "n/a",
+                "p_market": 0.49,
+                "label": "Lions moneyline",
+                "price_str": "+102 FanDuel"
+              },
+              {
+                "player": "Sam LaPorta",
+                "nk": "sam laporta",
+                "team": "DET",
+                "pos": "TE",
+                "market": "Receptions",
+                "side": "Under",
+                "line": 4.5,
+                "price": -130,
+                "book": "ProphetX (after fees)",
+                "p": 0.7217,
+                "center": 3.52,
+                "center_kind": "mean",
+                "season": "Under in 6 of 10",
+                "coverage": "PPR -0.4%, neutral (best vs Cover 2)",
+                "market_p": 0.5652173913043478,
+                "flags": "",
+                "label": "Sam LaPorta under 4.5 receptions",
+                "price_str": "-130 ProphetX (after fees)"
+              }
+            ],
+            "combined": 0.3542,
+            "independent": 0.3012,
+            "payout": "+393",
+            "implied": 0.2027,
+            "correlations": [
+              {
+                "a": "Jahmyr Gibbs anytime TD",
+                "b": "Lions moneyline",
+                "r": 0.19,
+                "n": 10
+              },
+              {
+                "a": "Jahmyr Gibbs anytime TD",
+                "b": "Sam LaPorta under 4.5 receptions",
+                "r": 0.04,
+                "n": 10
+              },
+              {
+                "a": "Lions moneyline",
+                "b": "Sam LaPorta under 4.5 receptions",
+                "r": 0.35,
+                "n": 10
+              }
+            ],
+            "combined_at_market_win": 0.2938
+          },
+          "two_leg_variant": {
+            "legs": [
+              {
+                "player": "Jahmyr Gibbs",
+                "nk": "jahmyr gibbs",
+                "team": "DET",
+                "pos": "RB",
+                "market": "TD",
+                "side": "Yes",
+                "line": 0.5,
+                "price": -263,
+                "book": "Polymarket (after fees)",
+                "p": 0.677,
+                "center": 1.13,
+                "center_kind": "exp. TDs",
+                "season": "Scored in 9 of 10",
+                "coverage": "TDs excluded from coverage factors",
+                "market_p": 0.7245179063360881,
+                "label": "Jahmyr Gibbs anytime TD",
+                "price_str": "-263 Polymarket (after fees)"
+              },
+              {
+                "player": "Lions moneyline",
+                "nk": "ml_DET",
+                "team": "DET",
+                "pos": "TEAM",
+                "market": "ML",
+                "side": "Yes",
+                "price": 102,
+                "book": "FanDuel",
+                "p": 0.6165,
+                "season": "Lions 8-2",
+                "coverage": "n/a",
+                "p_market": 0.49,
+                "label": "Lions moneyline",
+                "price_str": "+102 FanDuel"
+              }
+            ],
+            "combined": 0.4437,
+            "independent": 0.4174,
+            "payout": "+179",
+            "implied": 0.3587,
+            "correlations": [
+              {
+                "a": "Jahmyr Gibbs anytime TD",
+                "b": "Lions moneyline",
+                "r": 0.19,
+                "n": 10
+              }
+            ]
+          }
+        },
+        "team_CHI": {
+          "legs": [
+            {
+              "player": "Caleb Williams",
+              "nk": "caleb williams",
+              "team": "CHI",
+              "pos": "QB",
+              "market": "Pass yds",
+              "side": "Over",
+              "line": 264.5,
+              "price": -104,
+              "book": "Novig (after fees)",
+              "p": 0.4707,
+              "center": 259.78,
+              "center_kind": "median",
+              "season": "Over in 4 of 7",
+              "coverage": "Pass yds -1.4%, neutral (best vs Cover 6)",
+              "market_p": 0.5098039215686274,
+              "flags": "",
+              "label": "Caleb Williams over 264.5 Pass yds",
+              "price_str": "-104 Novig (after fees)"
+            },
+            {
+              "player": "Rome Odunze",
+              "nk": "rome odunze",
+              "team": "CHI",
+              "pos": "WR",
+              "market": "Receptions",
+              "side": "Over",
+              "line": 3.5,
+              "price": 125,
+              "book": "Novig (after fees)",
+              "p": 0.5141,
+              "center": 3.74,
+              "center_kind": "mean",
+              "season": "Over in 5 of 10",
+              "coverage": "PPR -0.5%, neutral (best vs Cover 6)",
+              "market_p": 0.4444444444444444,
+              "flags": "",
+              "label": "Rome Odunze over 3.5 receptions",
+              "price_str": "+125 Novig (after fees)"
+            },
+            {
+              "player": "Luther Burden III",
+              "nk": "luther burden",
+              "team": "CHI",
+              "pos": "WR",
+              "market": "Receptions",
+              "side": "Over",
+              "line": 4.5,
+              "price": -133,
+              "book": "Novig (after fees)",
+              "p": 0.5768,
+              "center": 5.1,
+              "center_kind": "mean",
+              "season": "Over in 5 of 10",
+              "coverage": "PPR -0.8%, neutral (best vs Cover 3)",
+              "market_p": 0.5708154506437768,
+              "flags": "",
+              "label": "Luther Burden III over 4.5 receptions",
+              "price_str": "-133 Novig (after fees)"
+            }
+          ],
+          "combined": 0.1597,
+          "independent": 0.1396,
+          "payout": "+673",
+          "implied": 0.1293,
+          "correlations": [
+            {
+              "a": "Caleb Williams over 264.5 Pass yds",
+              "b": "Rome Odunze over 3.5 receptions",
+              "r": 0.06,
+              "n": 7
+            },
+            {
+              "a": "Caleb Williams over 264.5 Pass yds",
+              "b": "Luther Burden III over 4.5 receptions",
+              "r": 0.27,
+              "n": 7
+            },
+            {
+              "a": "Rome Odunze over 3.5 receptions",
+              "b": "Luther Burden III over 4.5 receptions",
+              "r": -0.1,
+              "n": 10
+            }
+          ],
+          "rule": "Forced by overrides file (approved request)"
+        },
+        "team_DET": {
+          "legs": [
+            {
+              "player": "Amon-Ra St. Brown",
+              "nk": "amon-ra st brown",
+              "team": "DET",
+              "pos": "WR",
+              "market": "Rec yds",
+              "side": "Over",
+              "line": 83.5,
+              "price": 104,
+              "book": "Novig (after fees)",
+              "p": 0.3642,
+              "center": 68.6,
+              "center_kind": "median",
+              "season": "Over in 4 of 10",
+              "coverage": "Rec yds -0.3%, neutral (best vs Cover 6)",
+              "market_p": 0.49019607843137253,
+              "flags": "",
+              "label": "Amon-Ra St. Brown over 83.5 Rec yds",
+              "price_str": "+104 Novig (after fees)"
+            },
+            {
+              "player": "Amon-Ra St. Brown",
+              "nk": "amon-ra st brown",
+              "team": "DET",
+              "pos": "WR",
+              "market": "Receptions",
+              "side": "Over",
+              "line": 7.5,
+              "price": 135,
+              "book": "Novig (after fees)",
+              "p": 0.3089,
+              "center": 6.37,
+              "center_kind": "mean",
+              "season": "Over in 5 of 10",
+              "coverage": "PPR +0.3%, neutral (best vs Cover 2)",
+              "market_p": 0.425531914893617,
+              "flags": "",
+              "label": "Amon-Ra St. Brown over 7.5 receptions",
+              "price_str": "+135 Novig (after fees)"
+            },
+            {
+              "player": "Amon-Ra St. Brown",
+              "nk": "amon-ra st brown",
+              "team": "DET",
+              "pos": "WR",
+              "market": "TD",
+              "side": "Yes",
+              "line": 0.5,
+              "price": -125,
+              "book": "Polymarket (after fees)",
+              "p": 0.418,
+              "center": 0.54,
+              "center_kind": "exp. TDs",
+              "season": "Scored in 5 of 10",
+              "coverage": "TDs excluded from coverage factors",
+              "market_p": 0.5555555555555556,
+              "label": "Amon-Ra St. Brown anytime TD",
+              "price_str": "-125 Polymarket (after fees)"
+            },
+            {
+              "player": "Jared Goff",
+              "nk": "jared goff",
+              "team": "DET",
+              "pos": "QB",
+              "market": "Pass yds",
+              "side": "Over",
+              "line": 277.5,
+              "price": -106,
+              "book": "Novig (after fees)",
+              "p": 0.4161,
+              "center": 261.94,
+              "center_kind": "median",
+              "season": "Over in 5 of 10",
+              "coverage": "Pass yds -0.2%, neutral (best vs Cover 4)",
+              "market_p": 0.5145631067961165,
+              "flags": "",
+              "label": "Jared Goff over 277.5 Pass yds",
+              "price_str": "-106 Novig (after fees)"
+            }
+          ],
+          "combined": 0.0321,
+          "independent": 0.0196,
+          "payout": "+1577",
+          "implied": 0.0596,
+          "correlations": [
+            {
+              "a": "Amon-Ra St. Brown over 83.5 Rec yds",
+              "b": "Amon-Ra St. Brown over 7.5 receptions",
+              "r": 0.23,
+              "n": 10
+            },
+            {
+              "a": "Amon-Ra St. Brown over 83.5 Rec yds",
+              "b": "Amon-Ra St. Brown anytime TD",
+              "r": -0.01,
+              "n": 10
+            },
+            {
+              "a": "Amon-Ra St. Brown over 83.5 Rec yds",
+              "b": "Jared Goff over 277.5 Pass yds",
+              "r": 0.24,
+              "n": 10
+            },
+            {
+              "a": "Amon-Ra St. Brown over 7.5 receptions",
+              "b": "Amon-Ra St. Brown anytime TD",
+              "r": -0.01,
+              "n": 10
+            },
+            {
+              "a": "Amon-Ra St. Brown over 7.5 receptions",
+              "b": "Jared Goff over 277.5 Pass yds",
+              "r": 0.03,
+              "n": 10
+            },
+            {
+              "a": "Amon-Ra St. Brown anytime TD",
+              "b": "Jared Goff over 277.5 Pass yds",
+              "r": 0.1,
+              "n": 10
+            }
+          ],
+          "rule": "Forced by overrides file (approved request)"
+        },
+        "mix": {
+          "legs": [
+            {
+              "player": "Jahmyr Gibbs",
+              "nk": "jahmyr gibbs",
+              "team": "DET",
+              "pos": "RB",
+              "market": "Rush yds",
+              "side": "Over",
+              "line": 95.5,
+              "price": -102,
+              "book": "Novig (after fees)",
+              "p": 0.422,
+              "center": 87.06,
+              "center_kind": "median",
+              "season": "Over in 7 of 10",
+              "coverage": "No coverage adjustment for rushing",
+              "market_p": 0.504950495049505,
+              "flags": "",
+              "label": "Jahmyr Gibbs over 95.5 Rush yds",
+              "price_str": "-102 Novig (after fees)"
+            },
+            {
+              "player": "D'Andre Swift",
+              "nk": "dandre swift",
+              "team": "CHI",
+              "pos": "RB",
+              "market": "Receptions",
+              "side": "Over",
+              "line": 2.5,
+              "price": 133,
+              "book": "Novig (after fees)",
+              "p": 0.4314,
+              "center": 2.4,
+              "center_kind": "mean",
+              "season": "Over in 4 of 10",
+              "coverage": "PPR +0.0%, neutral (best vs Cover 0)",
+              "market_p": 0.4291845493562232,
+              "flags": "",
+              "label": "D'Andre Swift over 2.5 receptions",
+              "price_str": "+133 Novig (after fees)"
+            }
+          ],
+          "combined": 0.191,
+          "independent": 0.1821,
+          "payout": "+361",
+          "implied": 0.2167,
+          "correlations": [
+            {
+              "a": "Jahmyr Gibbs over 95.5 Rush yds",
+              "b": "D'Andre Swift over 2.5 receptions",
+              "r": 0.06,
+              "n": "league"
+            }
+          ],
+          "rule": "Forced by overrides file (approved request)",
+          "script": {
+            "favored": "DET",
+            "trailing": "CHI",
+            "leg1_vs_own_margin": [
+              0.35,
+              10
+            ],
+            "leg2_vs_own_margin": [
+              -0.54,
+              10
+            ],
+            "league_corr": {
+              "WR": {
+                "r": -0.014,
+                "n": 656
+              },
+              "RB": {
+                "r": 0.065,
+                "n": 328
+              }
+            }
+          }
+        }
+      },
+      "gaps": [
+        "Dashboard favors DET by 4.0 but the market favors CHI (51%)"
+      ],
+      "conflicts": [
+        "Amon-Ra St. Brown under 7.5 receptions (favorite) vs Amon-Ra St. Brown over 7.5 receptions (team_DET)"
+      ]
+    },
+    "PHI-DAL": {
+      "game": "PHI-DAL",
+      "away": "PHI",
+      "home": "DAL",
+      "kickoff": "Thu Nov 26, 4:30 PM ET",
+      "snapshot": {
+        "props_asof": "Nov 26, 10:52 AM ET",
+        "game_asof": "Nov 26, 11:12 AM ET",
+        "fetched_at": "Nov 26 11:21 AM ET"
+      },
+      "dashboard": {
+        "card": "DAL by 7.5 Explore matchup \u2192",
+        "favorite": "DAL",
+        "margin": 7.5,
+        "win_prob_model": 0.7107
+      },
+      "market": {
+        "no_vig": {
+          "DAL": 0.79,
+          "PHI": 0.21
+        },
+        "moneyline": {
+          "PHI": {
+            "price": 400,
+            "book": "Novig (after fees)"
+          },
+          "DAL": {
+            "price": -413,
+            "book": "Novig (after fees)"
+          }
+        },
+        "spread": "Eagles +8.5 +102 at Novig (after fees), Cowboys -8.5 -104 at Novig (after fees)",
+        "total": "over 49.5 +100 at betPARX, under +100 at Novig (after fees)"
+      },
+      "parlays": {
+        "favorite": {
+          "legs": [
+            {
+              "player": "DeVonta Smith",
+              "nk": "devonta smith",
+              "team": "PHI",
+              "pos": "WR",
+              "market": "Rec yds",
+              "side": "Over",
+              "line": 64.5,
+              "price": -115,
+              "book": "betPARX",
+              "p": 0.7794,
+              "center": 86.92,
+              "center_kind": "median",
+              "season": "Over in 3 of 5",
+              "coverage": "Rec yds +2.3%, favorable (best vs Cover 3)",
+              "market_p": 0.5348837209302325,
+              "flags": "",
+              "label": "DeVonta Smith over 64.5 Rec yds",
+              "price_str": "-115 betPARX"
+            },
+            {
+              "player": "Ryan Flournoy",
+              "nk": "ryan flournoy",
+              "team": "DAL",
+              "pos": "WR",
+              "market": "Receptions",
+              "side": "Over",
+              "line": 2.5,
+              "price": -133,
+              "book": "Novig (after fees)",
+              "p": 0.7624,
+              "center": 4.0,
+              "center_kind": "mean",
+              "season": "Over in 7 of 11",
+              "coverage": "PPR -0.5%, neutral (best vs Cover 6)",
+              "market_p": 0.5708154506437768,
+              "flags": "",
+              "label": "Ryan Flournoy over 2.5 receptions",
+              "price_str": "-133 Novig (after fees)"
+            },
+            {
+              "player": "CeeDee Lamb",
+              "nk": "ceedee lamb",
+              "team": "DAL",
+              "pos": "WR",
+              "market": "Receptions",
+              "side": "Over",
+              "line": 7.5,
+              "price": 122,
+              "book": "Novig (after fees)",
+              "p": 0.7213,
+              "center": 9.4,
+              "center_kind": "mean",
+              "season": "Over in 5 of 11",
+              "coverage": "PPR +1.1%, neutral (best vs Cover 1)",
+              "market_p": 0.45045045045045046,
+              "flags": "",
+              "label": "CeeDee Lamb over 7.5 receptions",
+              "price_str": "+122 Novig (after fees)"
+            }
+          ],
+          "combined": 0.4284,
+          "independent": 0.4286,
+          "payout": "+627",
+          "implied": 0.1375,
+          "correlations": [
+            {
+              "a": "DeVonta Smith over 64.5 Rec yds",
+              "b": "Ryan Flournoy over 2.5 receptions",
+              "r": 0.0,
+              "n": "cross-team, set to 0"
+            },
+            {
+              "a": "DeVonta Smith over 64.5 Rec yds",
+              "b": "CeeDee Lamb over 7.5 receptions",
+              "r": 0.0,
+              "n": "cross-team, set to 0"
+            },
+            {
+              "a": "Ryan Flournoy over 2.5 receptions",
+              "b": "CeeDee Lamb over 7.5 receptions",
+              "r": -0.01,
+              "n": 11
+            }
+          ],
+          "rule": "Best combined estimate among 3-leg combos of the 6 highest single-leg estimates (one leg per player)",
+          "team_win_variant": {
+            "legs": [
+              {
+                "player": "Ryan Flournoy",
+                "nk": "ryan flournoy",
+                "team": "DAL",
+                "pos": "WR",
+                "market": "Receptions",
+                "side": "Over",
+                "line": 2.5,
+                "price": -133,
+                "book": "Novig (after fees)",
+                "p": 0.7624,
+                "center": 4.0,
+                "center_kind": "mean",
+                "season": "Over in 7 of 11",
+                "coverage": "PPR -0.5%, neutral (best vs Cover 6)",
+                "market_p": 0.5708154506437768,
+                "flags": "",
+                "label": "Ryan Flournoy over 2.5 receptions",
+                "price_str": "-133 Novig (after fees)"
+              },
+              {
+                "player": "Cowboys moneyline",
+                "nk": "ml_DAL",
+                "team": "DAL",
+                "pos": "TEAM",
+                "market": "ML",
+                "side": "Yes",
+                "price": -413,
+                "book": "Novig (after fees)",
+                "p": 0.7107,
+                "season": "Cowboys 5-6",
+                "coverage": "n/a",
+                "p_market": 0.79,
+                "label": "Cowboys moneyline",
+                "price_str": "-413 Novig (after fees)"
+              },
+              {
+                "player": "CeeDee Lamb",
+                "nk": "ceedee lamb",
+                "team": "DAL",
+                "pos": "WR",
+                "market": "Receptions",
+                "side": "Over",
+                "line": 7.5,
+                "price": 122,
+                "book": "Novig (after fees)",
+                "p": 0.7213,
+                "center": 9.4,
+                "center_kind": "mean",
+                "season": "Over in 5 of 11",
+                "coverage": "PPR +1.1%, neutral (best vs Cover 1)",
+                "market_p": 0.45045045045045046,
+                "flags": "",
+                "label": "CeeDee Lamb over 7.5 receptions",
+                "price_str": "+122 Novig (after fees)"
+              }
+            ],
+            "combined": 0.4124,
+            "independent": 0.3909,
+            "payout": "+383",
+            "implied": 0.207,
+            "correlations": [
+              {
+                "a": "Ryan Flournoy over 2.5 receptions",
+                "b": "Cowboys moneyline",
+                "r": -0.06,
+                "n": 11
+              },
+              {
+                "a": "Ryan Flournoy over 2.5 receptions",
+                "b": "CeeDee Lamb over 7.5 receptions",
+                "r": -0.01,
+                "n": 11
+              },
+              {
+                "a": "Cowboys moneyline",
+                "b": "CeeDee Lamb over 7.5 receptions",
+                "r": 0.28,
+                "n": 11
+              }
+            ],
+            "combined_at_market_win": 0.4531
+          },
+          "two_leg_variant": {
+            "legs": [
+              {
+                "player": "Ryan Flournoy",
+                "nk": "ryan flournoy",
+                "team": "DAL",
+                "pos": "WR",
+                "market": "Receptions",
+                "side": "Over",
+                "line": 2.5,
+                "price": -133,
+                "book": "Novig (after fees)",
+                "p": 0.7624,
+                "center": 4.0,
+                "center_kind": "mean",
+                "season": "Over in 7 of 11",
+                "coverage": "PPR -0.5%, neutral (best vs Cover 6)",
+                "market_p": 0.5708154506437768,
+                "flags": "",
+                "label": "Ryan Flournoy over 2.5 receptions",
+                "price_str": "-133 Novig (after fees)"
+              },
+              {
+                "player": "Cowboys moneyline",
+                "nk": "ml_DAL",
+                "team": "DAL",
+                "pos": "TEAM",
+                "market": "ML",
+                "side": "Yes",
+                "price": -413,
+                "book": "Novig (after fees)",
+                "p": 0.7107,
+                "season": "Cowboys 5-6",
+                "coverage": "n/a",
+                "p_market": 0.79,
+                "label": "Cowboys moneyline",
+                "price_str": "-413 Novig (after fees)"
+              }
+            ],
+            "combined": 0.5355,
+            "independent": 0.5418,
+            "payout": "+118",
+            "implied": 0.4595,
+            "correlations": [
+              {
+                "a": "Ryan Flournoy over 2.5 receptions",
+                "b": "Cowboys moneyline",
+                "r": -0.06,
+                "n": 11
+              }
+            ]
+          }
+        },
+        "team_PHI": {
+          "legs": [
+            {
+              "player": "Dallas Goedert",
+              "nk": "dallas goedert",
+              "team": "PHI",
+              "pos": "TE",
+              "market": "Rec yds",
+              "side": "Over",
+              "line": 31.5,
+              "price": -104,
+              "book": "Novig (after fees)",
+              "p": 0.5807,
+              "center": 35.92,
+              "center_kind": "median",
+              "season": "Over in 6 of 8",
+              "coverage": "Rec yds +0.6%, neutral (best vs Cover 2)",
+              "market_p": 0.5098039215686274,
+              "flags": "",
+              "label": "Dallas Goedert over 31.5 Rec yds",
+              "price_str": "-104 Novig (after fees)"
+            },
+            {
+              "player": "DeVonta Smith",
+              "nk": "devonta smith",
+              "team": "PHI",
+              "pos": "WR",
+              "market": "Receptions",
+              "side": "Over",
+              "line": 5.5,
+              "price": -104,
+              "book": "betPARX",
+              "p": 0.7759,
+              "center": 7.66,
+              "center_kind": "mean",
+              "season": "Over in 3 of 5",
+              "coverage": "PPR +1.5%, favorable (best vs Cover 3)",
+              "market_p": 0.5098039215686274,
+              "flags": "",
+              "label": "DeVonta Smith over 5.5 receptions",
+              "price_str": "-104 betPARX"
+            },
+            {
+              "player": "Makai Lemon",
+              "nk": "makai lemon",
+              "team": "PHI",
+              "pos": "WR",
+              "market": "Receptions",
+              "side": "Over",
+              "line": 3.5,
+              "price": 127,
+              "book": "Novig (after fees)",
+              "p": 0.6126,
+              "center": 4.24,
+              "center_kind": "mean",
+              "season": "Over in 4 of 10",
+              "coverage": "PPR +0.8%, neutral (best vs Cover 3)",
+              "market_p": 0.44052863436123346,
+              "flags": "",
+              "label": "Makai Lemon over 3.5 receptions",
+              "price_str": "+127 Novig (after fees)"
+            }
+          ],
+          "combined": 0.286,
+          "independent": 0.276,
+          "payout": "+773",
+          "implied": 0.1145,
+          "correlations": [
+            {
+              "a": "Dallas Goedert over 31.5 Rec yds",
+              "b": "DeVonta Smith over 5.5 receptions",
+              "r": 0.0,
+              "n": "4 shared games, set to 0"
+            },
+            {
+              "a": "Dallas Goedert over 31.5 Rec yds",
+              "b": "Makai Lemon over 3.5 receptions",
+              "r": 0.08,
+              "n": 8
+            },
+            {
+              "a": "DeVonta Smith over 5.5 receptions",
+              "b": "Makai Lemon over 3.5 receptions",
+              "r": 0.0,
+              "n": "5 shared games, set to 0"
+            }
+          ],
+          "rule": "No eligible QB leg: best 3 receiving overs by combined estimate"
+        },
+        "team_DAL": {
+          "legs": [
+            {
+              "player": "Dak Prescott",
+              "nk": "dak prescott",
+              "team": "DAL",
+              "pos": "QB",
+              "market": "Pass yds",
+              "side": "Over",
+              "line": 265.5,
+              "price": -114,
+              "book": "betPARX",
+              "p": 0.5999,
+              "center": 280.82,
+              "center_kind": "median",
+              "season": "Over in 7 of 11",
+              "coverage": "Pass yds +0.4%, neutral (best vs Cover 1)",
+              "market_p": 0.5327102803738317,
+              "flags": "",
+              "label": "Dak Prescott over 265.5 Pass yds",
+              "price_str": "-114 betPARX"
+            },
+            {
+              "player": "CeeDee Lamb",
+              "nk": "ceedee lamb",
+              "team": "DAL",
+              "pos": "WR",
+              "market": "Receptions",
+              "side": "Over",
+              "line": 7.5,
+              "price": 122,
+              "book": "Novig (after fees)",
+              "p": 0.7213,
+              "center": 9.4,
+              "center_kind": "mean",
+              "season": "Over in 5 of 11",
+              "coverage": "PPR +1.1%, neutral (best vs Cover 1)",
+              "market_p": 0.45045045045045046,
+              "flags": "",
+              "label": "CeeDee Lamb over 7.5 receptions",
+              "price_str": "+122 Novig (after fees)"
+            },
+            {
+              "player": "Ryan Flournoy",
+              "nk": "ryan flournoy",
+              "team": "DAL",
+              "pos": "WR",
+              "market": "Receptions",
+              "side": "Over",
+              "line": 2.5,
+              "price": -133,
+              "book": "Novig (after fees)",
+              "p": 0.7624,
+              "center": 4.0,
+              "center_kind": "mean",
+              "season": "Over in 7 of 11",
+              "coverage": "PPR -0.5%, neutral (best vs Cover 6)",
+              "market_p": 0.5708154506437768,
+              "flags": "",
+              "label": "Ryan Flournoy over 2.5 receptions",
+              "price_str": "-133 Novig (after fees)"
+            }
+          ],
+          "combined": 0.3589,
+          "independent": 0.3299,
+          "payout": "+630",
+          "implied": 0.137,
+          "correlations": [
+            {
+              "a": "Dak Prescott over 265.5 Pass yds",
+              "b": "CeeDee Lamb over 7.5 receptions",
+              "r": 0.25,
+              "n": 11
+            },
+            {
+              "a": "Dak Prescott over 265.5 Pass yds",
+              "b": "Ryan Flournoy over 2.5 receptions",
+              "r": 0.05,
+              "n": 11
+            },
+            {
+              "a": "CeeDee Lamb over 7.5 receptions",
+              "b": "Ryan Flournoy over 2.5 receptions",
+              "r": -0.01,
+              "n": 11
+            }
+          ],
+          "rule": "QB over pass yds + best 2 receiving overs by combined estimate"
+        },
+        "mix": {
+          "legs": [
+            {
+              "player": "Javonte Williams",
+              "nk": "javonte williams",
+              "team": "DAL",
+              "pos": "RB",
+              "market": "Rush yds",
+              "side": "Over",
+              "line": 76.5,
+              "price": 106,
+              "book": "Novig (after fees)",
+              "p": 0.5835,
+              "center": 84.15,
+              "center_kind": "median",
+              "season": "Over in 3 of 11",
+              "coverage": "No coverage adjustment for rushing",
+              "market_p": 0.4854368932038835,
+              "flags": "",
+              "label": "Javonte Williams over 76.5 Rush yds",
+              "price_str": "+106 Novig (after fees)"
+            },
+            {
+              "player": "DeVonta Smith",
+              "nk": "devonta smith",
+              "team": "PHI",
+              "pos": "WR",
+              "market": "Receptions",
+              "side": "Over",
+              "line": 5.5,
+              "price": -104,
+              "book": "betPARX",
+              "p": 0.7759,
+              "center": 7.66,
+              "center_kind": "mean",
+              "season": "Over in 3 of 5",
+              "coverage": "PPR +1.5%, favorable (best vs Cover 3)",
+              "market_p": 0.5098039215686274,
+              "flags": "",
+              "label": "DeVonta Smith over 5.5 receptions",
+              "price_str": "-104 betPARX"
+            }
+          ],
+          "combined": 0.4517,
+          "independent": 0.4527,
+          "payout": "+304",
+          "implied": 0.2475,
+          "correlations": [
+            {
+              "a": "Javonte Williams over 76.5 Rush yds",
+              "b": "DeVonta Smith over 5.5 receptions",
+              "r": -0.01,
+              "n": "league"
+            }
+          ],
+          "alternatives": [
+            {
+              "legs": [
+                {
+                  "player": "Javonte Williams",
+                  "nk": "javonte williams",
+                  "team": "DAL",
+                  "pos": "RB",
+                  "market": "Rush yds",
+                  "side": "Over",
+                  "line": 76.5,
+                  "price": 106,
+                  "book": "Novig (after fees)",
+                  "p": 0.5835,
+                  "center": 84.15,
+                  "center_kind": "median",
+                  "season": "Over in 3 of 11",
+                  "coverage": "No coverage adjustment for rushing",
+                  "market_p": 0.4854368932038835,
+                  "flags": "",
+                  "label": "Javonte Williams over 76.5 Rush yds",
+                  "price_str": "+106 Novig (after fees)"
+                },
+                {
+                  "player": "Saquon Barkley",
+                  "nk": "saquon barkley",
+                  "team": "PHI",
+                  "pos": "RB",
+                  "market": "Receptions",
+                  "side": "Over",
+                  "line": 1.5,
+                  "price": 144,
+                  "book": "Novig (after fees)",
+                  "p": 0.3903,
+                  "center": 1.35,
+                  "center_kind": "mean",
+                  "season": "Over in 1 of 8",
+                  "coverage": "PPR -0.1%, neutral (best vs Cover 1)",
+                  "market_p": 0.4098360655737705,
+                  "flags": "",
+                  "label": "Saquon Barkley over 1.5 receptions",
+                  "price_str": "+144 Novig (after fees)"
+                }
+              ],
+              "combined": 0.2368,
+              "independent": 0.2278,
+              "payout": "+403",
+              "implied": 0.1989,
+              "correlations": [
+                {
+                  "a": "Javonte Williams over 76.5 Rush yds",
+                  "b": "Saquon Barkley over 1.5 receptions",
+                  "r": 0.06,
+                  "n": "league"
+                }
+              ],
+              "leg2_vs_own_margin": [
+                -0.36,
+                8
+              ]
+            },
+            {
+              "legs": [
+                {
+                  "player": "Javonte Williams",
+                  "nk": "javonte williams",
+                  "team": "DAL",
+                  "pos": "RB",
+                  "market": "Rush yds",
+                  "side": "Over",
+                  "line": 76.5,
+                  "price": 106,
+                  "book": "Novig (after fees)",
+                  "p": 0.5835,
+                  "center": 84.15,
+                  "center_kind": "median",
+                  "season": "Over in 3 of 11",
+                  "coverage": "No coverage adjustment for rushing",
+                  "market_p": 0.4854368932038835,
+                  "flags": "",
+                  "label": "Javonte Williams over 76.5 Rush yds",
+                  "price_str": "+106 Novig (after fees)"
+                },
+                {
+                  "player": "Darius Cooper",
+                  "nk": "darius cooper",
+                  "team": "PHI",
+                  "pos": "WR",
+                  "market": "Receptions",
+                  "side": "Over",
+                  "line": 2.5,
+                  "price": 113,
+                  "book": "Novig (after fees)",
+                  "p": 0.4061,
+                  "center": 2.31,
+                  "center_kind": "mean",
+                  "season": "Over in 2 of 10",
+                  "coverage": "PPR +1.0%, neutral (best vs Cover 3)",
+                  "market_p": 0.4694835680751174,
+                  "flags": "",
+                  "label": "Darius Cooper over 2.5 receptions",
+                  "price_str": "+113 Novig (after fees)"
+                }
+              ],
+              "combined": 0.234,
+              "independent": 0.2369,
+              "payout": "+339",
+              "implied": 0.2279,
+              "correlations": [
+                {
+                  "a": "Javonte Williams over 76.5 Rush yds",
+                  "b": "Darius Cooper over 2.5 receptions",
+                  "r": -0.01,
+                  "n": "league"
+                }
+              ],
+              "leg2_vs_own_margin": [
+                0.47,
+                10
+              ]
+            }
+          ],
+          "rule": "Favored team RB1 rush over + trailing team RB1/WR1/WR2 receptions over, best combined estimate",
+          "script": {
+            "favored": "DAL",
+            "trailing": "PHI",
+            "leg1_vs_own_margin": [
+              0.46,
+              11
+            ],
+            "leg2_vs_own_margin": [
+              0.2,
+              5
+            ],
+            "league_corr": {
+              "WR": {
+                "r": -0.014,
+                "n": 656
+              },
+              "RB": {
+                "r": 0.065,
+                "n": 328
+              }
+            }
+          }
+        }
+      },
+      "gaps": [
+        "PHI: no eligible QB pass-yds leg (sample or price), team parlay uses receivers only"
+      ],
+      "conflicts": []
+    },
+    "KC-BUF": {
+      "game": "KC-BUF",
+      "away": "KC",
+      "home": "BUF",
+      "kickoff": "Thu Nov 26, 8:20 PM ET",
+      "snapshot": {
+        "props_asof": "Nov 26, 11:02 AM ET",
+        "game_asof": "Nov 26, 11:12 AM ET",
+        "fetched_at": "Nov 26 11:22 AM ET"
+      },
+      "dashboard": {
+        "card": "BUF by 2.0 Explore matchup \u2192",
+        "favorite": "BUF",
+        "margin": 2.0,
+        "win_prob_model": 0.5589
+      },
+      "market": {
+        "no_vig": {
+          "BUF": 0.59,
+          "KC": 0.41
+        },
+        "moneyline": {
+          "KC": {
+            "price": 147,
+            "book": "Novig (after fees)"
+          },
+          "BUF": {
+            "price": -150,
+            "book": "Novig (after fees)"
+          }
+        },
+        "spread": "Chiefs +3 -110 at theScore Bet, Bills -3 +102 at ProphetX (after fees)",
+        "total": "over 45.5 -110 at BetMGM, under +105 at ProphetX (after fees)"
+      },
+      "parlays": {
+        "favorite": {
+          "legs": [
+            {
+              "player": "Patrick Mahomes",
+              "nk": "patrick mahomes",
+              "team": "KC",
+              "pos": "QB",
+              "market": "Pass yds",
+              "side": "Over",
+              "line": 224.5,
+              "price": -114,
+              "book": "betPARX",
+              "p": 0.7289,
+              "center": 268.05,
+              "center_kind": "median",
+              "season": "Over in 8 of 10",
+              "coverage": "Pass yds -1.3%, neutral (best vs Cover 3)",
+              "market_p": 0.5327102803738317,
+              "flags": "",
+              "label": "Patrick Mahomes over 224.5 Pass yds",
+              "price_str": "-114 betPARX"
+            },
+            {
+              "player": "Keon Coleman",
+              "nk": "keon coleman",
+              "team": "BUF",
+              "pos": "WR",
+              "market": "Receptions",
+              "side": "Over",
+              "line": 1.5,
+              "price": -149,
+              "book": "ProphetX (after fees)",
+              "p": 0.7268,
+              "center": 2.57,
+              "center_kind": "mean",
+              "season": "Over in 5 of 10",
+              "coverage": "PPR -1.6%, unfavorable (best vs Cover 3)",
+              "market_p": 0.5983935742971888,
+              "flags": "",
+              "label": "Keon Coleman over 1.5 receptions",
+              "price_str": "-149 ProphetX (after fees)"
+            },
+            {
+              "player": "Xavier Worthy",
+              "nk": "xavier worthy",
+              "team": "KC",
+              "pos": "WR",
+              "market": "Rec yds",
+              "side": "Over",
+              "line": 19.5,
+              "price": -107,
+              "book": "Kalshi (after fees)",
+              "p": 0.6792,
+              "center": 31.14,
+              "center_kind": "median",
+              "season": "Over in 6 of 10",
+              "coverage": "Rec yds -2.1%, unfavorable (best vs Cover 3)",
+              "market_p": 0.5169082125603864,
+              "flags": "",
+              "label": "Xavier Worthy over 19.5 Rec yds",
+              "price_str": "-107 Kalshi (after fees)"
+            }
+          ],
+          "combined": 0.3589,
+          "independent": 0.3598,
+          "payout": "+507",
+          "implied": 0.1648,
+          "correlations": [
+            {
+              "a": "Patrick Mahomes over 224.5 Pass yds",
+              "b": "Keon Coleman over 1.5 receptions",
+              "r": 0.0,
+              "n": "cross-team, set to 0"
+            },
+            {
+              "a": "Patrick Mahomes over 224.5 Pass yds",
+              "b": "Xavier Worthy over 19.5 Rec yds",
+              "r": -0.02,
+              "n": 10
+            },
+            {
+              "a": "Keon Coleman over 1.5 receptions",
+              "b": "Xavier Worthy over 19.5 Rec yds",
+              "r": 0.0,
+              "n": "cross-team, set to 0"
+            }
+          ],
+          "rule": "Best combined estimate among 3-leg combos of the 6 highest single-leg estimates (one leg per player)",
+          "team_win_variant": {
+            "legs": [
+              {
+                "player": "Keon Coleman",
+                "nk": "keon coleman",
+                "team": "BUF",
+                "pos": "WR",
+                "market": "Receptions",
+                "side": "Over",
+                "line": 1.5,
+                "price": -149,
+                "book": "ProphetX (after fees)",
+                "p": 0.7268,
+                "center": 2.57,
+                "center_kind": "mean",
+                "season": "Over in 5 of 10",
+                "coverage": "PPR -1.6%, unfavorable (best vs Cover 3)",
+                "market_p": 0.5983935742971888,
+                "flags": "",
+                "label": "Keon Coleman over 1.5 receptions",
+                "price_str": "-149 ProphetX (after fees)"
+              },
+              {
+                "player": "Bills moneyline",
+                "nk": "ml_BUF",
+                "team": "BUF",
+                "pos": "TEAM",
+                "market": "ML",
+                "side": "Yes",
+                "price": -150,
+                "book": "Novig (after fees)",
+                "p": 0.5589,
+                "season": "Bills 9-1",
+                "coverage": "n/a",
+                "p_market": 0.59,
+                "label": "Bills moneyline",
+                "price_str": "-150 Novig (after fees)"
+              },
+              {
+                "player": "Josh Allen",
+                "nk": "josh allen",
+                "team": "BUF",
+                "pos": "QB",
+                "market": "Pass TDs",
+                "side": "Under",
+                "line": 1.5,
+                "price": -148,
+                "book": "Polymarket (after fees)",
+                "p": 0.6506,
+                "center": 1.23,
+                "center_kind": "exp. pass TDs",
+                "season": "0-1 in 6 of 10",
+                "coverage": "TDs excluded from coverage factors",
+                "market_p": 0.5967741935483871,
+                "label": "Josh Allen under 1.5 Pass TDs",
+                "price_str": "-148 Polymarket (after fees)"
+              }
+            ],
+            "combined": 0.2213,
+            "independent": 0.2643,
+            "payout": "+367",
+            "implied": 0.2143,
+            "correlations": [
+              {
+                "a": "Keon Coleman over 1.5 receptions",
+                "b": "Bills moneyline",
+                "r": -0.25,
+                "n": 10
+              },
+              {
+                "a": "Keon Coleman over 1.5 receptions",
+                "b": "Josh Allen under 1.5 Pass TDs",
+                "r": -0.15,
+                "n": 10
+              },
+              {
+                "a": "Bills moneyline",
+                "b": "Josh Allen under 1.5 Pass TDs",
+                "r": -0.09,
+                "n": 10
+              }
+            ],
+            "combined_at_market_win": 0.2359
+          },
+          "two_leg_variant": {
+            "legs": [
+              {
+                "player": "Keon Coleman",
+                "nk": "keon coleman",
+                "team": "BUF",
+                "pos": "WR",
+                "market": "Receptions",
+                "side": "Over",
+                "line": 1.5,
+                "price": -149,
+                "book": "ProphetX (after fees)",
+                "p": 0.7268,
+                "center": 2.57,
+                "center_kind": "mean",
+                "season": "Over in 5 of 10",
+                "coverage": "PPR -1.6%, unfavorable (best vs Cover 3)",
+                "market_p": 0.5983935742971888,
+                "flags": "",
+                "label": "Keon Coleman over 1.5 receptions",
+                "price_str": "-149 ProphetX (after fees)"
+              },
+              {
+                "player": "Bills moneyline",
+                "nk": "ml_BUF",
+                "team": "BUF",
+                "pos": "TEAM",
+                "market": "ML",
+                "side": "Yes",
+                "price": -150,
+                "book": "Novig (after fees)",
+                "p": 0.5589,
+                "season": "Bills 9-1",
+                "coverage": "n/a",
+                "p_market": 0.59,
+                "label": "Bills moneyline",
+                "price_str": "-150 Novig (after fees)"
+              }
+            ],
+            "combined": 0.374,
+            "independent": 0.4062,
+            "payout": "+179",
+            "implied": 0.359,
+            "correlations": [
+              {
+                "a": "Keon Coleman over 1.5 receptions",
+                "b": "Bills moneyline",
+                "r": -0.25,
+                "n": 10
+              }
+            ]
+          }
+        },
+        "team_KC": {
+          "legs": [
+            {
+              "player": "Patrick Mahomes",
+              "nk": "patrick mahomes",
+              "team": "KC",
+              "pos": "QB",
+              "market": "Pass yds",
+              "side": "Over",
+              "line": 224.5,
+              "price": -114,
+              "book": "betPARX",
+              "p": 0.7289,
+              "center": 268.05,
+              "center_kind": "median",
+              "season": "Over in 8 of 10",
+              "coverage": "Pass yds -1.3%, neutral (best vs Cover 3)",
+              "market_p": 0.5327102803738317,
+              "flags": "",
+              "label": "Patrick Mahomes over 224.5 Pass yds",
+              "price_str": "-114 betPARX"
+            },
+            {
+              "player": "Rashee Rice",
+              "nk": "rashee rice",
+              "team": "KC",
+              "pos": "WR",
+              "market": "Rec yds",
+              "side": "Over",
+              "line": 44.5,
+              "price": -111,
+              "book": "Novig (after fees)",
+              "p": 0.5506,
+              "center": 47.65,
+              "center_kind": "median",
+              "season": "Over in 6 of 7",
+              "coverage": "Rec yds -0.3%, neutral (best vs Cover 3)",
+              "market_p": 0.5260663507109005,
+              "flags": "",
+              "label": "Rashee Rice over 44.5 Rec yds",
+              "price_str": "-111 Novig (after fees)"
+            },
+            {
+              "player": "Xavier Worthy",
+              "nk": "xavier worthy",
+              "team": "KC",
+              "pos": "WR",
+              "market": "Rec yds",
+              "side": "Over",
+              "line": 19.5,
+              "price": -107,
+              "book": "Kalshi (after fees)",
+              "p": 0.6792,
+              "center": 31.14,
+              "center_kind": "median",
+              "season": "Over in 6 of 10",
+              "coverage": "Rec yds -2.1%, unfavorable (best vs Cover 3)",
+              "market_p": 0.5169082125603864,
+              "flags": "",
+              "label": "Xavier Worthy over 19.5 Rec yds",
+              "price_str": "-107 Kalshi (after fees)"
+            }
+          ],
+          "combined": 0.2936,
+          "independent": 0.2726,
+          "payout": "+590",
+          "implied": 0.1449,
+          "correlations": [
+            {
+              "a": "Patrick Mahomes over 224.5 Pass yds",
+              "b": "Rashee Rice over 44.5 Rec yds",
+              "r": 0.32,
+              "n": 7
+            },
+            {
+              "a": "Patrick Mahomes over 224.5 Pass yds",
+              "b": "Xavier Worthy over 19.5 Rec yds",
+              "r": -0.02,
+              "n": 10
+            },
+            {
+              "a": "Rashee Rice over 44.5 Rec yds",
+              "b": "Xavier Worthy over 19.5 Rec yds",
+              "r": -0.07,
+              "n": 7
+            }
+          ],
+          "rule": "QB over pass yds + best 2 receiving overs by combined estimate"
+        },
+        "team_BUF": {
+          "legs": [
+            {
+              "player": "Josh Allen",
+              "nk": "josh allen",
+              "team": "BUF",
+              "pos": "QB",
+              "market": "Pass yds",
+              "side": "Over",
+              "line": 217.5,
+              "price": -112,
+              "book": "DraftKings",
+              "p": 0.6276,
+              "center": 232.2,
+              "center_kind": "median",
+              "season": "Over in 7 of 10",
+              "coverage": "Pass yds -0.8%, neutral (best vs Cover 4)",
+              "market_p": 0.5283018867924528,
+              "flags": "",
+              "label": "Josh Allen over 217.5 Pass yds",
+              "price_str": "-112 DraftKings"
+            },
+            {
+              "player": "Khalil Shakir",
+              "nk": "khalil shakir",
+              "team": "BUF",
+              "pos": "WR",
+              "market": "Rec yds",
+              "side": "Over",
+              "line": 39.5,
+              "price": 102,
+              "book": "Novig (after fees)",
+              "p": 0.5806,
+              "center": 45.39,
+              "center_kind": "median",
+              "season": "Over in 6 of 10",
+              "coverage": "Rec yds +2.1%, favorable (best vs Cover 4)",
+              "market_p": 0.49504950495049505,
+              "flags": "",
+              "label": "Khalil Shakir over 39.5 Rec yds",
+              "price_str": "+102 Novig (after fees)"
+            },
+            {
+              "player": "Keon Coleman",
+              "nk": "keon coleman",
+              "team": "BUF",
+              "pos": "WR",
+              "market": "Receptions",
+              "side": "Over",
+              "line": 1.5,
+              "price": -149,
+              "book": "ProphetX (after fees)",
+              "p": 0.7268,
+              "center": 2.57,
+              "center_kind": "mean",
+              "season": "Over in 5 of 10",
+              "coverage": "PPR -1.6%, unfavorable (best vs Cover 3)",
+              "market_p": 0.5983935742971888,
+              "flags": "",
+              "label": "Keon Coleman over 1.5 receptions",
+              "price_str": "-149 ProphetX (after fees)"
+            }
+          ],
+          "combined": 0.3055,
+          "independent": 0.2648,
+          "payout": "+539",
+          "implied": 0.1565,
+          "correlations": [
+            {
+              "a": "Josh Allen over 217.5 Pass yds",
+              "b": "Khalil Shakir over 39.5 Rec yds",
+              "r": 0.25,
+              "n": 10
+            },
+            {
+              "a": "Josh Allen over 217.5 Pass yds",
+              "b": "Keon Coleman over 1.5 receptions",
+              "r": 0.08,
+              "n": 10
+            },
+            {
+              "a": "Khalil Shakir over 39.5 Rec yds",
+              "b": "Keon Coleman over 1.5 receptions",
+              "r": 0.1,
+              "n": 10
+            }
+          ],
+          "rule": "QB over pass yds + best 2 receiving overs by combined estimate"
+        },
+        "mix": {
+          "legs": [
+            {
+              "player": "James Cook",
+              "nk": "james cook",
+              "team": "BUF",
+              "pos": "RB",
+              "market": "Rush yds",
+              "side": "Over",
+              "line": 87.5,
+              "price": 101,
+              "book": "ProphetX (after fees)",
+              "p": 0.4162,
+              "center": 80.37,
+              "center_kind": "median",
+              "season": "Over in 7 of 10",
+              "coverage": "No coverage adjustment for rushing",
+              "market_p": 0.4975124378109453,
+              "flags": "",
+              "label": "James Cook over 87.5 Rush yds",
+              "price_str": "+101 ProphetX (after fees)"
+            },
+            {
+              "player": "Rashee Rice",
+              "nk": "rashee rice",
+              "team": "KC",
+              "pos": "WR",
+              "market": "Receptions",
+              "side": "Over",
+              "line": 4.5,
+              "price": 125,
+              "book": "Novig (after fees)",
+              "p": 0.434,
+              "center": 4.32,
+              "center_kind": "mean",
+              "season": "Over in 5 of 7",
+              "coverage": "PPR -0.4%, neutral (best vs Cover 3)",
+              "market_p": 0.4444444444444444,
+              "flags": "",
+              "label": "Rashee Rice over 4.5 receptions",
+              "price_str": "+125 Novig (after fees)"
+            }
+          ],
+          "combined": 0.1776,
+          "independent": 0.1806,
+          "payout": "+352",
+          "implied": 0.2211,
+          "correlations": [
+            {
+              "a": "James Cook over 87.5 Rush yds",
+              "b": "Rashee Rice over 4.5 receptions",
+              "r": -0.01,
+              "n": "league"
+            }
+          ],
+          "alternatives": [
+            {
+              "legs": [
+                {
+                  "player": "James Cook",
+                  "nk": "james cook",
+                  "team": "BUF",
+                  "pos": "RB",
+                  "market": "Rush yds",
+                  "side": "Over",
+                  "line": 87.5,
+                  "price": 101,
+                  "book": "ProphetX (after fees)",
+                  "p": 0.4162,
+                  "center": 80.37,
+                  "center_kind": "median",
+                  "season": "Over in 7 of 10",
+                  "coverage": "No coverage adjustment for rushing",
+                  "market_p": 0.4975124378109453,
+                  "flags": "",
+                  "label": "James Cook over 87.5 Rush yds",
+                  "price_str": "+101 ProphetX (after fees)"
+                },
+                {
+                  "player": "Josh Downs",
+                  "nk": "josh downs",
+                  "team": "KC",
+                  "pos": "WR",
+                  "market": "Receptions",
+                  "side": "Over",
+                  "line": 3.5,
+                  "price": 147,
+                  "book": "Novig (after fees)",
+                  "p": 0.2902,
+                  "center": 2.72,
+                  "center_kind": "mean",
+                  "season": "Over in 6 of 11",
+                  "coverage": "PPR -0.5%, neutral (best vs Cover 2)",
+                  "market_p": 0.4048582995951417,
+                  "flags": "",
+                  "label": "Josh Downs over 3.5 receptions",
+                  "price_str": "+147 Novig (after fees)"
+                }
+              ],
+              "combined": 0.1177,
+              "independent": 0.1208,
+              "payout": "+396",
+              "implied": 0.2014,
+              "correlations": [
+                {
+                  "a": "James Cook over 87.5 Rush yds",
+                  "b": "Josh Downs over 3.5 receptions",
+                  "r": -0.01,
+                  "n": "league"
+                }
+              ],
+              "leg2_vs_own_margin": [
+                0.03,
+                10
+              ]
+            }
+          ],
+          "rule": "Favored team RB1 rush over + trailing team RB1/WR1/WR2 receptions over, best combined estimate",
+          "script": {
+            "favored": "BUF",
+            "trailing": "KC",
+            "leg1_vs_own_margin": [
+              0.26,
+              10
+            ],
+            "leg2_vs_own_margin": [
+              -0.16,
+              7
+            ],
+            "league_corr": {
+              "WR": {
+                "r": -0.014,
+                "n": 656
+              },
+              "RB": {
+                "r": 0.065,
+                "n": 328
+              }
+            }
+          }
+        }
+      },
+      "gaps": [],
+      "conflicts": []
+    }
+  }
+}
