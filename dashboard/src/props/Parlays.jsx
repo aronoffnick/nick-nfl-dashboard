@@ -1,10 +1,12 @@
 import {useMemo} from 'react'
-import {valid} from './model.js'
+import {projectTeam,valid} from './model.js'
 import {betSignalScore} from './Bets.jsx'
 import {breakoutRating} from './breakout.js'
 import {buildFlyerThemes,rateAtLine} from './Flyers.jsx'
-import {fileForWeek} from '../data/weekFiles.js'
+import {fileForWeek,roleBookForWeek} from '../data/weekFiles.js'
+import {roleDecision} from './roleEligibility.js'
 import {decideScatterLine, scatterProjection} from './scatterCheck.js'
+import DiversifiedParlays from './DiversifiedParlays.jsx'
 import './parlays.css'
 
 const fmt=(value,key)=>valid(value)?value.toFixed(key.toLowerCase().includes('td')?2:1):'—'
@@ -85,6 +87,15 @@ function Leg({leg}){
     <div className="parlay-leg-evidence"><span><b>{leg.concentration}/100</b> overlap</span><span>Safe defense: {leg.theme.hits}/{leg.theme.n} ({Math.round(leg.theme.rate*100)}%)</span><span>Player recent: {leg.playerHits}/{leg.playerN} ({Math.round(leg.playerRate*100)}%)</span><span>Player Projection: {fmt(leg.projection,leg.theme.spec.key)}</span><span>Bets index: {leg.betsIndex}/100</span><small className="scatter-mark">{leg.scatterMark}</small></div></li>
 }
 export default function Parlays({data,matchup,roster,halfLife,window}){
+  const diversifiedPlayers=useMemo(()=>{
+    const book=roleBookForWeek(data.week)
+    return [[matchup.away,matchup.home],[matchup.home,matchup.away]].flatMap(([team,opponent])=>projectTeam(data,team,opponent,roster,halfLife,window).flatMap(player=>{
+      if(player.unavailable||player.stale)return []
+      const keys=(player.position==='QB'?['passYds']:player.position==='RB'||player.position==='FB'?['rushYds','rec','recYds','totalTD']:['recYds','rec','totalTD'])
+        .filter(statKey=>roleDecision({...player,team:{name:team.name}},{statKey,book}).eligible)
+      return keys.length?[{...player,team,opponent,allowedKeys:keys}]:[]
+    }))
+  },[data,matchup,roster,halfLife,window])
   const reviewed=useMemo(()=>buildFlyerThemes(data,matchup,roster,halfLife,window)
     .filter(theme=>theme.tier==='Safe')
     .flatMap(theme=>theme.candidates.map(player=>safeOverlapLeg(theme,player,window,fileForWeek('scatter',data.week).data?.games,matchup.away.abbr,matchup.home.abbr)).filter(Boolean)),[data,matchup,roster,halfLife,window])
@@ -98,7 +109,8 @@ export default function Parlays({data,matchup,roster,halfLife,window}){
     skipped:reviewed.filter(item=>item.decision.kind==='skipped'),
     'no-data':reviewed.filter(item=>item.decision.kind==='no-data'),
   }
-  return <><section className="parlays-section" aria-label="Parlays from Bets and Safe Flyers overlap">
+  return <><DiversifiedParlays matchup={matchup} players={diversifiedPlayers} window={window}/>
+  <section className="parlays-section" aria-label="Parlays from Bets and Safe Flyers overlap">
     <div className="prop-section-title"><h3>PARLAYS · highest Safe overlap</h3><span>Bets signals + FLYERS Safe history</span></div>
     <p className="prop-help">Breakout candidates are excluded. FLYERS <b>Safe</b> history narrows the eligible position and stat; the player number comes directly from the same model used in <b>Player Projections</b>. A leg is removed unless that projection reaches the Safe target and the player reached it at least once in three or more recent appearances. Each kept non-touchdown leg is then checked against the Week 12 scatter projection. Touchdown legs stay on the Safe line and are marked skipped. When scatter covers the Safe line, the leg moves up to the live projection (rounded to the nearest 0.5) and is never lowered on that pass. Role eligibility runs before this check. Legs are ranked by 40% opponent hit rate at the line shown, 30% Bets strength, 15% projection coverage, and 15% the player’s recent hit rate at that line. The score measures model agreement, not a guaranteed win probability.</p>
     <details className="scatter-check">
