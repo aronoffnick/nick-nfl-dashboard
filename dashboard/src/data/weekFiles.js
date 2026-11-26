@@ -5,6 +5,7 @@ import { bookFrom } from '../props/roleEligibility.js'
 
 const groups = {
   scatter: import.meta.glob('./scatter-wk*.json', { eager: true, import: 'default' }),
+  coverage: import.meta.glob('./coverage-wk*.json', { eager: true, import: 'default' }),
   defense: import.meta.glob('./defense-vs-opponents-wk*.json', { eager: true, import: 'default' }),
   wr: import.meta.glob('../props/wr-starters-week*.json', { eager: true, import: 'default' }),
   rb: import.meta.glob('../props/rb-starters-week*.json', { eager: true, import: 'default' }),
