@@ -66,12 +66,12 @@ export function snapshotText(game) {
   return bits.join(' · ')
 }
 
-export function safeNote(row, rules) {
-  const notes = (row?.notes || []).filter(Boolean)
-  if (notes.length) return notes.join(' ')
-  if (row?.relativelySafe) return ''
-  const min = rules?.relativelySafeMinProb
-  return `No player at this position reaches ${min == null ? 'the cutoff' : chanceText(min)}.`
+export function safeNote() {
+  return ''
+}
+
+export function slotNote() {
+  return ''
 }
 
 export function gameKey(awayAbbr, homeAbbr) {

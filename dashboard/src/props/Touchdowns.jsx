@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { fileForWeek } from '../data/weekFiles.js'
 import { scatterAbbrev } from './scatterCheck.js'
-import { allowedText, chanceText, findTdGame, flavorLabel, picksOf, priceText, rulesText, safeNote, sideCaption, snapshotText } from './tdRiskBoard.js'
+import { applyCoverage } from './tdCoverage.js'
+import { allowedText, chanceText, findTdGame, flavorLabel, picksOf, priceText, rulesText, sideCaption, snapshotText } from './tdRiskBoard.js'
 import './touchdowns.css'
 
 function nameKey(value) {
@@ -58,33 +59,32 @@ function PickCard({ pick, ids }) {
     </div>
   </div>
 }
-function Slot({ title, picks, note, ids }) {
+function Slot({ title, picks, ids }) {
   return <div className="td-slot">
     <h5>{title}</h5>
     {picks.map(pick => <PickCard key={`${pick.player}:${pick.prop}:${pick.modelProb}`} pick={pick} ids={ids} />)}
-    {!picks.length && note ? <p>{note}</p> : null}
-    {!!picks.length && note ? <p>{note}</p> : null}
   </div>
 }
-function RiskRow({ row, ids, rules }) {
-  const upside = picksOf(row.upside)
+function RiskRow({ row, ids }) {
   return <article className="td-row">
     <header><h4>{row.position}</h4><span>{allowedText(row)}</span></header>
     <div className="td-scale" aria-hidden="true" />
     <div className="td-scale-labels"><span>More confident</span><span>More risk</span></div>
     <div className="td-slots">
-      <Slot title="Confident" picks={picksOf(row.confident)} note={row.confident ? '' : 'No confident pick in this snapshot.'} ids={ids} />
+      <Slot title="Confident" picks={picksOf(row.confident)} ids={ids} />
       <span className="td-arrow" aria-hidden="true">→</span>
-      <Slot title="Relatively safe" picks={picksOf(row.relativelySafe)} note={safeNote(row, rules)} ids={ids} />
+      <Slot title="Relatively safe" picks={picksOf(row.relativelySafe)} ids={ids} />
       <span className="td-arrow" aria-hidden="true">→</span>
-      <Slot title="Upside" picks={upside} note={upside.length ? '' : 'No 2+ or backup pick in this snapshot.'} ids={ids} />
+      <Slot title="Upside" picks={picksOf(row.upside)} ids={ids} />
     </div>
   </article>
 }
 
 export default function Touchdowns({ away, home, week, roster }) {
   const file = fileForWeek('tdRisk', week)
-  const game = findTdGame(file.data, away?.abbr, home?.abbr)
+  const coverage = fileForWeek('coverage', week)
+  const tdCoverage = fileForWeek('tdCoverage', week)
+  const game = applyCoverage(findTdGame(file.data, away?.abbr, home?.abbr), coverage.matched ? coverage.data : null, tdCoverage.matched ? tdCoverage.data : null, file.data?.rules)
   const ids = idsByName(roster)
   const matchKey = game?.key || `${away?.abbr}@${home?.abbr}`
   const [selection, setSelection] = useState({ key: matchKey, index: 0 })
@@ -99,7 +99,7 @@ export default function Touchdowns({ away, home, week, roster }) {
   return <section className="td-board" aria-label="Touchdowns">
     <div className="prop-section-title"><h3>Touchdowns</h3><span>Estimates · entertainment, not advice</span></div>
     {file.data?.disclaimer && <p className="td-intro">{file.data.disclaimer}</p>}
-    {rules && <p className="td-intro">{rules} An Estimate tag is a rough season-usage figure. Injury status is shown when the file has one.</p>}
+    {rules && <p className="td-intro">{rules} An Estimate tag is a rough season-usage figure. Injury status is shown when the file has one.{game.coverageApplied ? ' Chances are coverage-adjusted: 2025 TD rate vs man/zone, weighted by this defense\'s 2026 coverage mix, capped ±10%. Estimates.' : ''}</p>}
     {snapshotText(game) && <p className="td-caption">{snapshotText(game)}</p>}
     <div className="td-switch" role="group" aria-label="Offense">
       {(game.sides || []).map((item, index) => {
@@ -109,6 +109,6 @@ export default function Touchdowns({ away, home, week, roster }) {
       })}
     </div>
     {side && <p className="td-caption">{sideCaption(side)}</p>}
-    {(side?.rows || []).map(row => <RiskRow key={row.position} row={row} ids={ids} rules={file.data?.rules} />)}
+    {(side?.rows || []).map(row => <RiskRow key={row.position} row={row} ids={ids} />)}
   </section>
 }
