@@ -93,6 +93,13 @@
 .projection-window button[aria-pressed=true]{background:#a5e6bd;color:#14251c;border-color:#a5e6bd;font-weight:700}
 .projection-filters>.prop-action{justify-self:start;align-self:end;margin:0}
 .projection-sort{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin:14px 0;color:#b5c5ce;font-size:.85rem}
+.include-backups{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:12px 0 2px;color:#d5e4ee;font-size:.88rem;font-weight:700}
+.include-backups input{width:18px;height:18px;accent-color:#a5e6bd;flex:none}
+.include-backups small{font-weight:500;color:#9aafbc;font-size:.75rem;line-height:1.35}
+.role-shared,.role-backup{font-style:normal;font-weight:800;font-size:.68rem;margin-left:6px;padding:1px 6px;border-radius:999px}
+.role-shared{color:#10261b;background:#9fe2b4}
+.role-backup{color:#2a2112;background:#efbd79}
+@media(max-width:760px){.include-backups{align-items:flex-start}.include-backups small{flex-basis:100%;padding-left:26px}}
 .projection-role-toggle{display:inline-flex;align-items:center;gap:6px;color:#d5e4ee}
 .projection-hidden-count{color:#efbd79;font-size:.78rem}
 .projection-role .role-flag,.projection-role .role-note{margin:0 0 6px;font-style:normal;font-weight:800;font-size:.75rem}

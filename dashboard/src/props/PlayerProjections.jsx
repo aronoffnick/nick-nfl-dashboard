@@ -78,6 +78,7 @@ function ProjectionCard({player,matchup,slots,chosen,onOpen,halfLife,window}){
       <div className="breakout-player-identity">
         <h4>{player.name}</h4>
         <p>{player.team.abbr} · {player.position} · {player.injury||player.status}</p>
+        {(player.gate?.note==='Shared role'||player.gate?.note==='Backup')&&<em className={player.gate.note==='Shared role'?'role-shared':'role-backup'}>{player.gate.note}</em>}
         <small>{player.logs.length} recorded appearances</small>
       </div>
       <section className="breakout-score-cell"><h5>Breakout index</h5><BreakoutScale score={score}/><small>Directional composite · not a probability</small></section>
@@ -104,16 +105,19 @@ function ProjectionCard({player,matchup,slots,chosen,onOpen,halfLife,window}){
   </article>
 }
 const breakoutBuckets=[['all','All'],['low','Low'],['moderate','Moderate'],['high','High']]
-export default function PlayerProjections({matchup,saveProp,data,teams,roster,halfLife,window,positions,categories}){
-  const [chosen,setChosen]=useState(''),[line,setLine]=useState(''),[lineMetric,setLineMetric]=useState(''),[trackMessage,setTrackMessage]=useState(''),[sortKey,setSortKey]=useState('recYds'),[ascending,setAscending]=useState(false),[roleOnly,setRoleOnly]=useState(true),[breakoutFilter,setBreakoutFilter]=useState('all')
+export default function PlayerProjections({matchup,saveProp,data,teams,roster,halfLife,window,positions,categories,includeBackups=false}){
+  const [chosen,setChosen]=useState(''),[line,setLine]=useState(''),[lineMetric,setLineMetric]=useState(''),[trackMessage,setTrackMessage]=useState(''),[sortKey,setSortKey]=useState('recYds'),[ascending,setAscending]=useState(false),[breakoutFilter,setBreakoutFilter]=useState('all')
   const sortableKeys=fields.map(([key])=>key).filter(key=>categoryAllows(key,categories))
   const activeSortKey=sortableKeys.includes(sortKey)?sortKey:sortableKeys[0]||'recYds'
-  const players=useMemo(()=>dedupePlayers(teams.flatMap(({team,opponent})=>projectTeam(data,team,opponent,roster,halfLife,window).map(player=>({...player,team,opponent}))))
-    .filter(player=>positions.includes(listedPosition(player))&&slotsFor(player,categories).length)
-    .map(player=>({...player,week:data.week,gate:roleDecision(player,{book:roleBookForWeek(data.week)}),breakoutScore:breakoutRating(player)}))
-    .sort((a,b)=>{const av=projectedValue(a,activeSortKey),bv=projectedValue(b,activeSortKey);if(!valid(av))return valid(bv)?1:a.name.localeCompare(b.name);if(!valid(bv))return -1;return (av-bv)*(ascending?1:-1)||a.name.localeCompare(b.name)}),[teams,data,roster,halfLife,window,positions,categories,activeSortKey,ascending])
+  const players=useMemo(()=>{
+    const projected=dedupePlayers(teams.flatMap(({team,opponent})=>projectTeam(data,team,opponent,roster,halfLife,window).map(player=>({...player,team,opponent}))))
+      .filter(player=>positions.includes(listedPosition(player))&&slotsFor(player,categories).length)
+    const book=roleBookForWeek(data.week)
+    return projected.map(player=>({...player,week:data.week,gate:roleDecision(player,{book,includeBackups,teammates:projected.filter(other=>other.team?.id===player.team?.id)}),breakoutScore:breakoutRating(player)}))
+      .sort((a,b)=>{const av=projectedValue(a,activeSortKey),bv=projectedValue(b,activeSortKey);if(!valid(av))return valid(bv)?1:a.name.localeCompare(b.name);if(!valid(bv))return -1;return (av-bv)*(ascending?1:-1)||a.name.localeCompare(b.name)})
+  },[teams,data,roster,halfLife,window,positions,categories,activeSortKey,ascending,includeBackups])
   const hiddenCount=players.filter(player=>!player.gate.eligible).length
-  const roleVisible=roleOnly?players.filter(player=>player.gate.eligible):players
+  const roleVisible=players.filter(player=>player.gate.eligible)
   const visible=breakoutFilter==='all'?roleVisible:roleVisible.filter(player=>ratingLevel(player.breakoutScore)===breakoutFilter)
   const breakoutHidden=roleVisible.length-visible.length
   const selected=visible.find(player=>`${player.team.id}:${player.id}`===chosen)
@@ -125,7 +129,7 @@ export default function PlayerProjections({matchup,saveProp,data,teams,roster,ha
   const pushes=validLine?sample.filter(value=>value===Number(line)).length:0
   function choosePlayer(player,key){setChosen(`${player.team.id}:${player.id}`);setLineMetric(key||slotsFor(player,categories).find(Boolean)||'');setLine('');setTrackMessage('')}
   return <section><div className="prop-section-title"><h3>Player projections · both teams</h3><span>One row per player · {ascending?'lowest':'highest'} selected stat first</span></div>
-    <div className="projection-sort"><label>Order by <select value={activeSortKey} onChange={event=>setSortKey(event.target.value)}>{sortableKeys.map(key=><option key={key} value={key}>{fieldLabel[key]}</option>)}</select></label><button className="prop-action" onClick={()=>setAscending(value=>!value)}>{ascending?'Lowest first':'Highest first'}</button><label className="projection-role-toggle"><input type="checkbox" checked={roleOnly} onChange={event=>setRoleOnly(event.target.checked)}/> Role players only</label>{roleOnly?<span className="projection-hidden-count">{hiddenCount} non-role player{hiddenCount===1?'':'s'} hidden</span>:null}<div className="projection-window" aria-label="Breakout index filter"><strong>Breakout index</strong>{breakoutBuckets.map(([id,name])=><button key={id} type="button" aria-pressed={breakoutFilter===id} onClick={()=>setBreakoutFilter(id)}>{name}</button>)}</div>{breakoutFilter!=='all'?<span className="projection-hidden-count">{breakoutHidden} outside {breakoutFilter} hidden</span>:null}</div>
+    <div className="projection-sort"><label>Order by <select value={activeSortKey} onChange={event=>setSortKey(event.target.value)}>{sortableKeys.map(key=><option key={key} value={key}>{fieldLabel[key]}</option>)}</select></label><button className="prop-action" onClick={()=>setAscending(value=>!value)}>{ascending?'Lowest first':'Highest first'}</button>{!includeBackups?<span className="projection-hidden-count">{hiddenCount} backup{hiddenCount===1?'':'s'} hidden</span>:null}<div className="projection-window" aria-label="Breakout index filter"><strong>Breakout index</strong>{breakoutBuckets.map(([id,name])=><button key={id} type="button" aria-pressed={breakoutFilter===id} onClick={()=>setBreakoutFilter(id)}>{name}</button>)}</div>{breakoutFilter!=='all'?<span className="projection-hidden-count">{breakoutHidden} outside {breakoutFilter} hidden</span>:null}</div>
     <div className="projection-card-board">{visible.map(player=><ProjectionCard key={player.id} player={player} matchup={matchup} slots={slotsFor(player,categories)} chosen={chosen} halfLife={halfLife} window={window} onOpen={choosePlayer}/>)}</div>
     {!visible.length&&<p className="prop-warning">No players match the selected team, position, stat, and breakout filters.</p>}
     {selected&&<div className="prop-comparison"><h3>{selected.name} · {fieldLabel[lineMetric]||'Game log'}</h3>
