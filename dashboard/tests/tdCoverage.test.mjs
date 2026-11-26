@@ -3,7 +3,7 @@ import test from 'node:test'
 import { execFileSync } from 'node:child_process'
 import { readFileSync } from 'node:fs'
 import { slotNote } from '../src/props/tdRiskBoard.js'
-import { applyCoverage, coverageMultiplier, lambdaFromAnytime, lambdaFromTail, probAtLeast } from '../src/props/tdCoverage.js'
+import { applyCoverage, coverageMultiplier, DEFAULT_TOUCHDOWN_VIEW, lambdaFromAnytime, lambdaFromTail, mergeTouchdownSides, probAtLeast } from '../src/props/tdCoverage.js'
 
 const root = new URL('../', import.meta.url)
 const tdCoverage = JSON.parse(readFileSync(new URL('../src/data/td-coverage-wk12.json', import.meta.url)))
@@ -85,6 +85,40 @@ test('a missing coverage file leaves the board untouched', () => {
   const game = { key: 'CHI@DET', sides: [{ rows: [{ confident: { player: 'A', modelProb: 0.5 } }] }] }
   assert.equal(applyCoverage(game, null, tdCoverage), game)
   assert.equal(applyCoverage(game, { games: {} }, null), game)
+})
+
+test('both-teams view keeps the higher projection in each slot', () => {
+  assert.equal(DEFAULT_TOUCHDOWN_VIEW, 'both')
+  const pick = (player, team, prop, modelProb, price) => ({ player, team, position: 'WR', prop, modelProb, price, book: 'Book' })
+  const sides = [
+    { defense: 'DAL', rows: [
+      { position: 'WR', tdsAllowed: 14, confident: pick('Lower', 'PHI', 'Anytime TD', 0.3, '+200'), relativelySafe: null, upside: [pick('Short', 'PHI', '2+ TDs', 0.04, '+900'), pick('Backup Low', 'PHI', 'Anytime TD', 0.08, '+500')] },
+      { position: 'QB', tdsAllowed: 2, confident: pick('Only QB', 'PHI', 'Anytime TD', 0.2, '+300'), relativelySafe: null, upside: [] },
+    ] },
+    { defense: 'PHI', rows: [
+      { position: 'WR', tdsAllowed: 12, confident: pick('Higher', 'DAL', 'Anytime TD', 0.5, '-150'), relativelySafe: pick('Safe', 'DAL', 'Anytime TD', 0.2, '+100'), upside: [pick('Long', 'DAL', '2+ TDs', 0.11, '+400'), pick('Backup High', 'DAL', 'Anytime TD', 0.09, '+300'), pick('Three', 'DAL', '3+ TDs', 0.05, '+2000')] },
+      { position: 'RB', tdsAllowed: 6, confident: null, relativelySafe: null, upside: [] },
+    ] },
+  ]
+  const rows = mergeTouchdownSides(sides)
+  assert.deepEqual(rows.map(row => row.position), ['WR', 'RB', 'QB'])
+  assert.equal(rows[0].confident.player, 'Higher')
+  assert.equal(rows[0].relativelySafe.player, 'Safe')
+  assert.deepEqual(rows[0].upside.map(item => item.player), ['Long', 'Three', 'Backup High'])
+  assert.equal(rows[1].confident, null)
+  assert.equal(rows[1].relativelySafe, null)
+  assert.deepEqual(rows[1].upside, [])
+  const tied = mergeTouchdownSides([
+    { defense: 'A', rows: [{ position: 'TE', tdsAllowed: 1, confident: pick('Zed', 'A', 'Anytime TD', 0.2, '+150'), relativelySafe: null, upside: [] }] },
+    { defense: 'B', rows: [{ position: 'TE', tdsAllowed: 1, confident: pick('Amy', 'B', 'Anytime TD', 0.2, '+150'), relativelySafe: pick('Price', 'B', 'Anytime TD', 0.1, '-110'), upside: [pick('Plus', 'B', '2+ TDs', 0.04, '+200'), pick('Minus', 'A', '2+ TDs', 0.04, '-150')] }] },
+  ])
+  assert.equal(tied[0].confident.player, 'Amy')
+  assert.equal(tied[0].upside[0].player, 'Plus')
+  const longerPrice = mergeTouchdownSides([
+    { defense: 'A', rows: [{ position: 'TE', tdsAllowed: 1, confident: pick('Fav', 'A', 'Anytime TD', 0.25, '-150'), relativelySafe: null, upside: [] }] },
+    { defense: 'B', rows: [{ position: 'TE', tdsAllowed: 1, confident: pick('Dog', 'B', 'Anytime TD', 0.25, '+180'), relativelySafe: null, upside: [] }] },
+  ])
+  assert.equal(longerPrice[0].confident.player, 'Dog')
 })
 
 test('coverage files match the published sources', () => {

@@ -211,6 +211,67 @@ function sideContext(side, game, coverage, tdCoverage) {
   }
 }
 
+export const DEFAULT_TOUCHDOWN_VIEW = 'both'
+
+function americanOddsRank(price) {
+  if (price == null || price === '') return Number.NEGATIVE_INFINITY
+  const value = Number(String(price).replace(/^\+/, ''))
+  if (!Number.isFinite(value) || value === 0) return Number.NEGATIVE_INFINITY
+  return value > 0 ? 1 + value / 100 : 1 + 100 / -value
+}
+
+function betterPick(current, candidate) {
+  const currentProb = Number(current.modelProb)
+  const candidateProb = Number(candidate.modelProb)
+  if (candidateProb !== currentProb) return candidateProb > currentProb ? candidate : current
+  const priceGap = americanOddsRank(candidate.price) - americanOddsRank(current.price)
+  if (priceGap !== 0) return priceGap > 0 ? candidate : current
+  return String(candidate.player).localeCompare(String(current.player)) < 0 ? candidate : current
+}
+
+function bestOf(picks) {
+  const list = picks.filter(Boolean)
+  if (!list.length) return null
+  return list.reduce((best, pick) => betterPick(best, pick))
+}
+
+function mergedUpside(rows) {
+  const picks = rows.flatMap(row => row.upside || [])
+  const chosen = [
+    bestOf(picks.filter(pick => pick.prop === '2+ TDs')),
+    bestOf(picks.filter(pick => pick.prop === '3+ TDs')),
+    bestOf(picks.filter(pick => pick.prop === 'Anytime TD')),
+  ]
+  return chosen.filter(Boolean)
+}
+
+export function mergeTouchdownSides(sides) {
+  const grouped = new Map()
+  for (const side of sides || []) {
+    for (const row of side?.rows || []) {
+      const list = grouped.get(row.position) || []
+      list.push({ defense: side.defense, row })
+      grouped.set(row.position, list)
+    }
+  }
+  return [...grouped.keys()].sort((a, b) => {
+    const peak = position => Math.max(...grouped.get(position).map(item => Number(item.row.tdsAllowed) || 0))
+    return peak(b) - peak(a) || a.localeCompare(b)
+  }).map(position => {
+    const sources = grouped.get(position)
+    const rows = sources.map(item => item.row)
+    return {
+      position,
+      tdsAllowed: Math.max(...rows.map(row => Number(row.tdsAllowed) || 0)),
+      sources,
+      confident: bestOf(rows.map(row => row.confident)),
+      relativelySafe: bestOf(rows.map(row => row.relativelySafe)),
+      upside: mergedUpside(rows),
+      notes: [],
+    }
+  })
+}
+
 export function applyCoverage(game, coverage, tdCoverage, rules) {
   if (!game || !coverage?.games || !tdCoverage?.players) return game
   return {
