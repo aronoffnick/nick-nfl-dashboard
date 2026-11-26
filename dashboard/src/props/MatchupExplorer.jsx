@@ -8,7 +8,7 @@ import ScatterTab from './ScatterTab.js'
 import './props.css'
 const format=(n,key='')=>valid(n)?n.toFixed(key.endsWith('TD')?2:1):'—'
 const date=d=>new Date(d).toLocaleDateString('en-US',{timeZone:'America/New_York',month:'short',day:'numeric'})
-const positions=['QB','RB','FB','WR','TE']
+const positions=['QB','RB','WR','TE']
 const boxStat=(p,k)=>k==='totalTD'?(valid(p.rushTD)&&valid(p.recTD)?p.rushTD+p.recTD:null):p[k]
 
 function Historical({data,defense,roster,window,selectedPositions}){

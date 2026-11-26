@@ -1,12 +1,30 @@
-import {valid,weighted} from './model.js'
+import {valid} from './model.js'
 import {DISPLAY_METRICS,statFor,valueFor} from './analysis.js'
-// Position defaults plus meaningful secondary usage; never render unrelated zero categories.
+import {ratingLevel} from './breakout.js'
+// One fixed set per role. Fullbacks use the running-back columns. Receivers never pick up a rush column from a one-off carry.
+export function roleMetricKeys(position){
+  if(position==='QB')return ['passYds','passTD','rushYds','totalTD']
+  if(position==='RB'||position==='FB')return ['rushYds','rec','recYds','totalTD']
+  if(position==='WR'||position==='TE')return ['rec','recYds','totalTD']
+  return []
+}
 export function relevantMetrics(p){
-  const used=key=>p.logs.some(l=>valid(l[key])&&l[key]>0)
-  let keys=p.position==='QB'?['passYds','passTD',...(used('carries')?['rushYds','totalTD']:[])]:
-    ['RB','FB'].includes(p.position)?['rushYds',...(used('targets')||used('rec')?['rec','recYds']:[]),'totalTD']:
-    ['rec','recYds',...(weighted(p.logs,'carries',3)>=3||weighted(p.logs,'rushYds',3)>=10?['rushYds']:[]),'totalTD']
-  return keys.map(k=>DISPLAY_METRICS.find(([key])=>key===k))
+  return roleMetricKeys(p.position).map(k=>DISPLAY_METRICS.find(([key])=>key===k)).filter(Boolean)
+}
+/** High breakout index only. The mark is the player's own weighted 90th percentile in the selected window, lifted up to 15% as the index goes from 70 to 100. */
+export function anticipatedBreakout(player,key,halfLife,lookback,score){
+  if(ratingLevel(score)!=='high')return null
+  const raw=player.logs.slice(-lookback)
+  const rows=raw.flatMap((log,i)=>{const value=valueFor(log,key);return valid(value)?[{value,weight:2**(-(raw.length-1-i)/halfLife)}]:[]})
+  if(rows.length<3)return null
+  const own=weightedQuantile(rows,.9)
+  if(!valid(own))return null
+  const lift=(Math.min(100,score)-70)/30
+  const line=own*(1+.15*lift)
+  if(line<=0)return null
+  const places=String(key).endsWith('TD')?2:1
+  const factor=10**places
+  return Math.round(line*factor)/factor
 }
 export function bigGameThreshold(p,key){
   return {passYds:275,passTD:3,rushYds:p.position==='QB'?40:['WR','TE'].includes(p.position)?25:75,

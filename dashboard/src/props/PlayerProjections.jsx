@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { valid, projectTeam } from './model.js'
-import { breakoutRating } from './breakout.js'
+import { breakoutRating, ratingLevel } from './breakout.js'
 import BreakoutScale from './BreakoutScale.jsx'
 import Performance from './Performance.jsx'
 import RoleTags from './RoleTags.jsx'
@@ -32,15 +32,17 @@ function projectedValue(player,key){
   const rush=player.stats.rushTD?.projection,rec=player.stats.recTD?.projection
   return valid(rush)&&valid(rec)?rush+rec:null
 }
-const skillSlots=['rushYds','rec','recYds','totalTD']
-const quarterbackSlots=['passYds','passTD','rushYds','totalTD']
-function hasData(player,key){
-  return player.logs.some(log=>valid(logValue(log,key)))||valid(projectedValue(player,key))
+const roleStats={
+  QB:['passYds','passTD','rushYds','totalTD'],
+  RB:['rushYds','rec','recYds','totalTD'],
+  FB:['rushYds','rec','recYds','totalTD'],
+  WR:['rec','recYds','totalTD'],
+  TE:['rec','recYds','totalTD'],
 }
 function slotsFor(player,categories){
-  const order=player.position==='QB'?quarterbackSlots:skillSlots
-  return order.map(key=>categoryAllows(key,categories)&&hasData(player,key)?key:null)
+  return (roleStats[player.position]||[]).filter(key=>categoryAllows(key,categories))
 }
+function listedPosition(player){return player.position==='FB'?'RB':player.position}
 function betterPlayer(next,prev){
   const aligned=player=>String(player.teamId)===String(player.team?.id)
   if(aligned(next)!==aligned(prev))return aligned(next)?next:prev
@@ -61,7 +63,7 @@ function dedupePlayers(list){
   return [...byName.values()]
 }
 function ProjectionCard({player,matchup,slots,chosen,onOpen,halfLife,window}){
-  const score=breakoutRating(player)
+  const score=player.breakoutScore
   const usageKey=player.position==='QB'?'passAtt':['RB','FB'].includes(player.position)?'carries':'targets'
   const recent=average(player.logs.slice(-3),usageKey),prior=average(player.logs.slice(-6,-3),usageKey)
   const mainStat=player.position==='QB'?'passYds':['RB','FB'].includes(player.position)?'rushYds':'recYds'
@@ -72,14 +74,14 @@ function ProjectionCard({player,matchup,slots,chosen,onOpen,halfLife,window}){
   const first=slots.find(Boolean)
   const tags=roleTags(player,player.week)
   return <article className="projection-outlook-card" aria-label={`${player.name} projections`}>
-    <div className="projection-row">
+    <div className="projection-row" style={{'--stat-count':Math.max(slots.length,1)}}>
       <div className="breakout-player-identity">
         <h4>{player.name}</h4>
         <p>{player.team.abbr} · {player.position} · {player.injury||player.status}</p>
         <small>{player.logs.length} recorded appearances</small>
       </div>
       <section className="breakout-score-cell"><h5>Breakout index</h5><BreakoutScale score={score}/><small>Directional composite · not a probability</small></section>
-      {slots.map((key,index)=>key?<div className="projection-scale-cell" key={key}><Performance player={player} metric={key} halfLife={halfLife} lookback={window} label={fieldLabel[key]}/></div>:<div className="projection-scale-cell projection-scale-empty" key={`empty-${index}`} aria-hidden="true"/>)}
+      {slots.map(key=><div className="projection-scale-cell" key={key}><Performance player={player} metric={key} halfLife={halfLife} lookback={window} label={fieldLabel[key]} breakoutScore={score}/></div>)}
     </div>
     <details className="projection-context">
       <summary>Role, recent opportunity, and matchup context<span className="support-chevron" aria-hidden="true"/></summary>
@@ -101,16 +103,19 @@ function ProjectionCard({player,matchup,slots,chosen,onOpen,halfLife,window}){
     </details>
   </article>
 }
+const breakoutBuckets=[['all','All'],['low','Low'],['moderate','Moderate'],['high','High']]
 export default function PlayerProjections({matchup,saveProp,data,teams,roster,halfLife,window,positions,categories}){
-  const [chosen,setChosen]=useState(''),[line,setLine]=useState(''),[lineMetric,setLineMetric]=useState(''),[trackMessage,setTrackMessage]=useState(''),[sortKey,setSortKey]=useState('recYds'),[ascending,setAscending]=useState(false),[roleOnly,setRoleOnly]=useState(true)
+  const [chosen,setChosen]=useState(''),[line,setLine]=useState(''),[lineMetric,setLineMetric]=useState(''),[trackMessage,setTrackMessage]=useState(''),[sortKey,setSortKey]=useState('recYds'),[ascending,setAscending]=useState(false),[roleOnly,setRoleOnly]=useState(true),[breakoutFilter,setBreakoutFilter]=useState('all')
   const sortableKeys=fields.map(([key])=>key).filter(key=>categoryAllows(key,categories))
   const activeSortKey=sortableKeys.includes(sortKey)?sortKey:sortableKeys[0]||'recYds'
   const players=useMemo(()=>dedupePlayers(teams.flatMap(({team,opponent})=>projectTeam(data,team,opponent,roster,halfLife,window).map(player=>({...player,team,opponent}))))
-    .filter(player=>positions.includes(player.position)&&slotsFor(player,categories).some(Boolean))
-    .map(player=>({...player,week:data.week,gate:roleDecision(player,{book:roleBookForWeek(data.week)})}))
+    .filter(player=>positions.includes(listedPosition(player))&&slotsFor(player,categories).length)
+    .map(player=>({...player,week:data.week,gate:roleDecision(player,{book:roleBookForWeek(data.week)}),breakoutScore:breakoutRating(player)}))
     .sort((a,b)=>{const av=projectedValue(a,activeSortKey),bv=projectedValue(b,activeSortKey);if(!valid(av))return valid(bv)?1:a.name.localeCompare(b.name);if(!valid(bv))return -1;return (av-bv)*(ascending?1:-1)||a.name.localeCompare(b.name)}),[teams,data,roster,halfLife,window,positions,categories,activeSortKey,ascending])
   const hiddenCount=players.filter(player=>!player.gate.eligible).length
-  const visible=roleOnly?players.filter(player=>player.gate.eligible):players
+  const roleVisible=roleOnly?players.filter(player=>player.gate.eligible):players
+  const visible=breakoutFilter==='all'?roleVisible:roleVisible.filter(player=>ratingLevel(player.breakoutScore)===breakoutFilter)
+  const breakoutHidden=roleVisible.length-visible.length
   const selected=visible.find(player=>`${player.team.id}:${player.id}`===chosen)
   const selectedMetrics=selected?slotsFor(selected,categories).filter(Boolean):[]
   const validLine=line.trim()!==''&&Number.isFinite(Number(line))&&Number(line)>=0
@@ -120,9 +125,9 @@ export default function PlayerProjections({matchup,saveProp,data,teams,roster,ha
   const pushes=validLine?sample.filter(value=>value===Number(line)).length:0
   function choosePlayer(player,key){setChosen(`${player.team.id}:${player.id}`);setLineMetric(key||slotsFor(player,categories).find(Boolean)||'');setLine('');setTrackMessage('')}
   return <section><div className="prop-section-title"><h3>Player projections · both teams</h3><span>One row per player · {ascending?'lowest':'highest'} selected stat first</span></div>
-    <div className="projection-sort"><label>Order by <select value={activeSortKey} onChange={event=>setSortKey(event.target.value)}>{sortableKeys.map(key=><option key={key} value={key}>{fieldLabel[key]}</option>)}</select></label><button className="prop-action" onClick={()=>setAscending(value=>!value)}>{ascending?'Lowest first':'Highest first'}</button><label className="projection-role-toggle"><input type="checkbox" checked={roleOnly} onChange={event=>setRoleOnly(event.target.checked)}/> Role players only</label>{roleOnly?<span className="projection-hidden-count">{hiddenCount} non-role player{hiddenCount===1?'':'s'} hidden</span>:null}</div>
+    <div className="projection-sort"><label>Order by <select value={activeSortKey} onChange={event=>setSortKey(event.target.value)}>{sortableKeys.map(key=><option key={key} value={key}>{fieldLabel[key]}</option>)}</select></label><button className="prop-action" onClick={()=>setAscending(value=>!value)}>{ascending?'Lowest first':'Highest first'}</button><label className="projection-role-toggle"><input type="checkbox" checked={roleOnly} onChange={event=>setRoleOnly(event.target.checked)}/> Role players only</label>{roleOnly?<span className="projection-hidden-count">{hiddenCount} non-role player{hiddenCount===1?'':'s'} hidden</span>:null}<div className="projection-window" aria-label="Breakout index filter"><strong>Breakout index</strong>{breakoutBuckets.map(([id,name])=><button key={id} type="button" aria-pressed={breakoutFilter===id} onClick={()=>setBreakoutFilter(id)}>{name}</button>)}</div>{breakoutFilter!=='all'?<span className="projection-hidden-count">{breakoutHidden} outside {breakoutFilter} hidden</span>:null}</div>
     <div className="projection-card-board">{visible.map(player=><ProjectionCard key={player.id} player={player} matchup={matchup} slots={slotsFor(player,categories)} chosen={chosen} halfLife={halfLife} window={window} onOpen={choosePlayer}/>)}</div>
-    {!visible.length&&<p className="prop-warning">No players match the selected team, position, and stat filters.</p>}
+    {!visible.length&&<p className="prop-warning">No players match the selected team, position, stat, and breakout filters.</p>}
     {selected&&<div className="prop-comparison"><h3>{selected.name} · {fieldLabel[lineMetric]||'Game log'}</h3>
       <label>Your prop line <input type="number" min="0" step="0.5" placeholder="Enter a line, e.g. 64.5" value={line} onChange={event=>setLine(event.target.value)}/></label>
       {validLine&&!selected.unavailable&&valid(selectedStat)&&selectedStat!==Number(line)&&!matchup.started&&<button onClick={()=>{

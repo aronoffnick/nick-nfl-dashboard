@@ -1,22 +1,24 @@
-import {performance} from './performance.js'
+import {anticipatedBreakout,performance} from './performance.js'
 import {valid} from './model.js'
 import {metricLabel} from './analysis.js'
 import './performance.css'
 const fmt=(n,key)=>valid(n)?n.toFixed(key.endsWith('TD')?2:1):'—'
 export function PerformanceLegend(){return <div className="performance-legend"><strong>Big-game support</strong><span className="support-low">Amber · lower</span><span className="support-medium">Blue · mixed</span><span className="support-high">Green · higher</span><span>Gray · not rated</span><p>Colors describe recent weighted frequency at the displayed benchmark: below one-third, one-third to under two-thirds, or two-thirds and above. They are not forecast probabilities. The range is the observed weighted 20th–80th percentile, not a floor, ceiling or prediction interval. Numbers below the scale mark range endpoints; labels above dashed markers show big-game benchmarks. TD scored also includes a separate 2+ marker and historical frequency in the expanded details. Missing stats stay missing; recorded zeros count. Expand a support headline for benchmark details and line/odds comparisons where available.</p></div>}
-export default function Performance({player,metric,halfLife,lookback,children,label}){
+export default function Performance({player,metric,halfLife,lookback,children,label,breakoutScore=null}){
   const name=label||metricLabel(metric)
   const r=performance(player,metric,halfLife,lookback),projection=player.unavailable?null:r.stat?.projection
   const twoTD=metric==='totalTD'?performance(player,metric,halfLife,lookback,2):null
-  const min=Math.min(0,r.low||0,projection||0),max=Math.max(r.high||0,r.threshold,twoTD?2:0,projection||0,1)*1.15
+  const breakoutLine=anticipatedBreakout(player,metric,halfLife,lookback,breakoutScore)
+  const min=Math.min(0,r.low||0,projection||0,breakoutLine||0),max=Math.max(r.high||0,r.threshold,twoTD?2:0,projection||0,breakoutLine||0,1)*1.15
   const point=v=>(v-min)/(max-min)*100
   const low=point(r.low),high=point(r.high),close=high-low<20
   const labelStyle=x=>({left:`${x}%`,transform:`translateX(-${x}%)`})
-  return <div className={`performance-stat support-${r.level}`} aria-label={`${name} performance`}>
+  return <div className={`performance-stat support-${r.level}${breakoutLine!=null?' has-breakout-line':''}`} aria-label={`${name} performance`}>
     <div className="performance-head"><strong>{name}</strong><span>Projected <b>{player.unavailable?'Withheld':fmt(projection,metric)}</b></span></div>
-    {r.low!=null?<div className="performance-scale" role="img" aria-label={`Observed middle range ${fmt(r.low,metric)} to ${fmt(r.high,metric)}; projection ${fmt(projection,metric)}; big-game benchmark ${r.threshold} plus${twoTD?'; second touchdown benchmark 2 plus':''}`}>
+    {r.low!=null?<div className="performance-scale" role="img" aria-label={`Observed middle range ${fmt(r.low,metric)} to ${fmt(r.high,metric)}; projection ${fmt(projection,metric)}; big-game benchmark ${r.threshold} plus${breakoutLine!=null?`; anticipated breakout ${fmt(breakoutLine,metric)}`:''}${twoTD?'; second touchdown benchmark 2 plus':''}`}>
       <span className="performance-band" style={{left:`${low}%`,width:`${Math.max(1,high-low)}%`}}/>
       <span className="performance-benchmark" style={{left:`${point(r.threshold)}%`}}/><span className="benchmark-axis-label" style={labelStyle(point(r.threshold))}>{r.threshold}+</span>
+      {breakoutLine!=null&&<><span className="breakout-level-mark" style={{left:`${point(breakoutLine)}%`}}/><span className="breakout-level-label" style={labelStyle(point(breakoutLine))}>Breakout {fmt(breakoutLine,metric)}</span></>}
       {twoTD&&<><span className="performance-benchmark second-td-benchmark" style={{left:`${point(2)}%`}}/><span className="benchmark-axis-label second-td-label" style={labelStyle(point(2))}>2+</span></>}
       {valid(projection)&&<span className="performance-marker" style={{left:`${point(projection)}%`}}/>}
       <span className="range-tick" style={{left:`${low}%`}}/><span className="range-tick" style={{left:`${high}%`}}/>
