@@ -67,8 +67,6 @@ export default function PickTracker({ data, matchups, historicalPicks, props, sa
   const weekly = entries.filter(([, item]) => (selectedWeek === 'All weeks' || item.week === selectedWeek) &&
     `${item.matchup} ${item.teams || ''}`.toLowerCase().includes(team.trim().toLowerCase()))
   const count = result => weekly.filter(([, item]) => item.result === result).length
-  const rows = weekly.filter(([, item]) => filter === 'All results' || item.result === filter)
-    .sort(([, a], [, b]) => a.date.localeCompare(b.date))
   const marginBands = [
     ['All picks', () => true],
     ['Under 3 pts', margin => margin < 3],
@@ -93,20 +91,6 @@ export default function PickTracker({ data, matchups, historicalPicks, props, sa
         <span>{percent}% ({hits}/{graded.length})</span>
       </>}
     </div>
-  }
-
-  function saveOdds(event, id) {
-    event.preventDefault()
-    const input = event.currentTarget.elements.price
-    const odds = input.value.trim()
-    if (odds && (!/^[+-][1-9][0-9]+$/.test(odds) || Math.abs(Number(odds)) < 100)) {
-      input.setCustomValidity('Enter American odds such as +120 or -135.')
-      input.reportValidity()
-      return
-    }
-    setRecords(previous => Date.now() < Date.parse(previous[id].date)
-      ? { ...previous, [id]: { ...previous[id], odds, oddsRecordedAt: new Date().toISOString() } }
-      : previous)
   }
 
   return <section>
@@ -166,19 +150,6 @@ export default function PickTracker({ data, matchups, historicalPicks, props, sa
     <StatsBlock key="team-accuracy" title="Accuracy by picked team">
       {teamNames.map(name => accuracy(name, decided.map(([, item]) => item).filter(item => item.team === name)))}
     </StatsBlock>
-    {rows.length ? <div className="table-wrap"><table>
-      <thead><tr><th>Matchup</th><th>Model pick</th><th>Projected margin</th><th>DraftKings moneyline</th><th>Final score</th><th>Outright</th><th>Margin result</th></tr></thead>
-      <tbody>{rows.map(([id, item]) => <tr key={id}>
-        <td>{item.matchup}</td><td>{item.team}{item.backtested && <small>Backtested</small>}</td><td>{item.margin == null ? "—" : item.margin.toFixed(1)}</td>
-        <td>{Date.now() < Date.parse(item.date) ? <form onSubmit={event => saveOdds(event, id)}>
-          <input name="price" aria-label={`DraftKings odds for ${item.team}`} placeholder="+120 or -135"
-            defaultValue={item.odds} onChange={event => event.target.setCustomValidity('')} />
-          <button type="submit">Save price</button>
-          {item.odds && <small>Saved {item.odds}</small>}
-        </form> : item.odds || 'Unavailable'}</td>
-        <td>{item.finalScore || '—'}</td><td>{item.result}</td><td>{item.marginResult || '—'}</td>
-      </tr>)}</tbody>
-    </table></div> : <p>No saved picks match these filters.</p>}
     </>}
   </section>
 }

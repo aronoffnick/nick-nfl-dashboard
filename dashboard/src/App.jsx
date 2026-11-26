@@ -344,7 +344,17 @@ export default function App() {
     <header className="masthead"><div className="brand">NA<span> / NFL LAB</span></div><span className="edition">{data ? `${data.year} · WEEK ${String(data.week).padStart(2, '0')}` : 'CURRENT NFL WEEK'}</span></header>
     {busy && <p role="status" className="notice">{message} First load may take a few minutes.</p>}
     {error && <div role="alert" className="error"><strong>Data could not be validated.</strong><p>{error}</p><button onClick={refresh}>Retry data load</button></div>}
-    {result&&<WeeklyGames matchups={result.matchups} onOpen={setSelected}/>}
+    <section className="hero">
+      <div><p className="eyebrow">NICK'S MATCHUP DASHBOARD</p><h1>Find the edge.<br /><span>Know the matchup.</span></h1>
+      <p>{data ? `${data.year} regular season · Week ${data.week}` : 'Finding the current week…'} · All kickoff times Eastern</p></div>
+      <div className="hero-card"><small>INDEPENDENT MODEL</small><strong>Recent form.<br />Both sides of the ball.</strong><p>Exponential weighting + venue adjustment.<br />No sportsbook lines used.</p></div>
+    </section>
+    <section className="summary">
+      <div><strong>{data?.matchups.length ?? '—'}</strong><span>{data ? `Week ${data.week} matchups` : 'Current matchups'}</span></div>
+      <div><strong>{data?.games.length ?? '—'}</strong><span>Prior games analyzed</span></div>
+      <div><strong>{halfLife} games</strong><span>Weight half-life</span></div>
+      <div><strong>+{advantage.toFixed(1)} pts</strong><span>Home advantage · neutral = 0</span></div>
+    </section>
     <section className="controls">
       <div className="tabs">
         <button className={view === 'matchups' ? 'active' : ''} onClick={() => { setView('matchups'); setSort({ key: 'date', ascending: true }) }}>Matchups</button>
@@ -376,18 +386,6 @@ export default function App() {
         <td><button className="pick" onClick={() => setSelected(row.id)}>{row.margin < .05 ? 'Toss-up' : `${row.winner.abbr} by ${fmt(row.margin)}`}<small>Explore matchup →</small></button></td>
       </tr> : <tr key={row.id}><td><Team team={row} /></td>{metrics.map(([k]) => <td key={k}><Rank value={row.ranks[k]} /><small>{fmt(row.display[k])} yd</small></td>)}<td>{fmt(row.ppg)}</td><td>{fmt(row.papg)}</td></tr>)}</tbody>
     </table>{!rows.length && <p className="notice">No teams or games match these filters.</p>}</div>}
-    <section className="hero">
-      <div><p className="eyebrow">NICK'S MATCHUP DASHBOARD</p><h1>Find the edge.<br /><span>Know the matchup.</span></h1>
-      <p>{data ? `${data.year} regular season · Week ${data.week}` : 'Finding the current week…'} · All kickoff times Eastern</p></div>
-      <div className="hero-card"><small>INDEPENDENT MODEL</small><strong>Recent form.<br />Both sides of the ball.</strong><p>Exponential weighting + venue adjustment.<br />No sportsbook lines used.</p></div>
-    </section>
-    <section className="summary">
-      <div><strong>{data?.matchups.length ?? '—'}</strong><span>{data ? `Week ${data.week} matchups` : 'Current matchups'}</span></div>
-      <div><strong>{data?.games.length ?? '—'}</strong><span>Prior games analyzed</span></div>
-      <div><strong>{halfLife} games</strong><span>Weight half-life</span></div>
-      <div><strong>+{advantage.toFixed(1)} pts</strong><span>Home advantage · neutral = 0</span></div>
-    </section>
-    <PickTracker data={data} matchups={trackedPicks} historicalPicks={historicalPicks} props={props} saveProp={saveProp} />
     <section className="method">
       <div><p className="eyebrow">MODEL SETTINGS</p><h2>Recent games count more.</h2>
         <label>Weight half-life: {halfLife} games<input type="range" min="1" max="6" step=".5" value={halfLife} onChange={e => setHalfLife(Number(e.target.value))} /></label>
@@ -400,10 +398,15 @@ export default function App() {
         <p className="muted">This is a transparent, uncalibrated heuristic, not a backtested betting model. No injury, starting-quarterback, weather, or opponent-strength adjustments. Decimal margins express model output, not certainty.</p>
       </div>
     </section>
-    <footer><strong>Sources & validation</strong><p>Schedule, scores and team box scores: <a href="https://www.espn.com/nfl/scoreboard" target="_blank" rel="noreferrer">ESPN</a>, fetched through its public Site API. Passing = net passing yards, including sack losses. Defense = the opponent's yards. Rankings cover all 32 teams, with equal values sharing a rank.</p>
-      <p>Only completed {data?.year || 'current-season'} regular-season games from earlier weeks, before the first kickoff of Week {data?.week || '—'}, enter the model. All required box scores and 32-team coverage must pass validation before results display.</p>
-      <p>Last fetched: {data ? kickoff(data.updated) + ' ET' : 'Not yet loaded'} · Schedule and rankings refresh on opening and every 30 minutes while open. Completed box scores are cached for 24 hours. After every current-week game is final, the dashboard advances to ESPN's next valid schedule; this is a pregame model and excludes the displayed week's results.</p>
-    </footer>
+    <details className="landing-more">
+      <summary><span className="pick-chevron" aria-hidden="true" />Weekly favorites, picks, and sources</summary>
+      {result&&<WeeklyGames matchups={result.matchups} onOpen={setSelected}/>}
+      <PickTracker data={data} matchups={trackedPicks} historicalPicks={historicalPicks} props={props} saveProp={saveProp} />
+      <footer><strong>Sources & validation</strong><p>Schedule, scores and team box scores: <a href="https://www.espn.com/nfl/scoreboard" target="_blank" rel="noreferrer">ESPN</a>, fetched through its public Site API. Passing = net passing yards, including sack losses. Defense = the opponent's yards. Rankings cover all 32 teams, with equal values sharing a rank.</p>
+        <p>Only completed {data?.year || 'current-season'} regular-season games from earlier weeks, before the first kickoff of Week {data?.week || '—'}, enter the model. All required box scores and 32-team coverage must pass validation before results display.</p>
+        <p>Last fetched: {data ? kickoff(data.updated) + ' ET' : 'Not yet loaded'} · Schedule and rankings refresh on opening and every 30 minutes while open. Completed box scores are cached for 24 hours. After every current-week game is final, the dashboard advances to ESPN's next valid schedule; this is a pregame model and excludes the displayed week's results.</p>
+      </footer>
+    </details>
     {detail && <MatchupExplorer key={detail.id} data={data} matchup={detail} saveProp={saveProp} halfLife={halfLife} advantage={advantage} onClose={() => setSelected(null)} />}
   </main>
 }
