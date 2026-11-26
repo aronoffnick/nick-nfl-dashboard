@@ -6,6 +6,8 @@ import { bookFrom } from '../props/roleEligibility.js'
 const groups = {
   scatter: import.meta.glob('./scatter-wk*.json', { eager: true, import: 'default' }),
   tdRisk: import.meta.glob('./td-riskscale-wk*.json', { eager: true, import: 'default' }),
+  tdCoverage: import.meta.glob('./td-coverage-wk*.json', { eager: true, import: 'default' }),
+  coverage: import.meta.glob('./coverage-wk*.json', { eager: true, import: 'default' }),
   parlaySnap: import.meta.glob('./parlay-snapshot-wk*.json', { eager: true, import: 'default' }),
   parlays: import.meta.glob('./parlays-wk*.json', { eager: true, import: 'default' }),
   defense: import.meta.glob('./defense-vs-opponents-wk*.json', { eager: true, import: 'default' }),
