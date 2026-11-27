@@ -1,0 +1,294 @@
+import assert from 'node:assert/strict'
+import test from 'node:test'
+import {
+  applyGameScript,
+  buildCustomParlays,
+  filterPools,
+  outcomeCandidates,
+  propCandidates,
+  seasonTdShare,
+  validateCustomParlay,
+} from '../src/props/customParlay.js'
+import { selectionFromChoices, scriptSummary } from '../src/props/gameScript.js'
+
+const types = (outcome, td, prop) => ({ outcome, td, prop })
+
+function leg(partial) {
+  return {
+    type: 'prop',
+    confidence: 0.5,
+    valueScore: 0,
+    priced: false,
+    kickoff: '2026-11-30T18:00:00Z',
+    gameLabel: partial.gameId,
+    title: partial.id,
+    playerId: partial.playerId === undefined ? partial.id : partial.playerId,
+    ...partial,
+  }
+}
+
+test('blank legs per game is not a constraint', () => {
+  const result = validateCustomParlay({ legs: '4', games: '2', legsPerGame: '   ', types: types(true, true, true) })
+  assert.equal(result.ok, true)
+  assert.equal(result.input.legsPerGame, null)
+  assert.equal(result.note, null)
+})
+
+test('legs per game must multiply back to the leg count', () => {
+  const result = validateCustomParlay({ legs: '4', games: '2', legsPerGame: '3', types: types(true, false, false) })
+  assert.equal(result.ok, false)
+  assert.match(result.message, /2 games × 3 legs per game is 6 legs, not 4/)
+})
+
+test('fewer legs than games cannot cover every game', () => {
+  const result = validateCustomParlay({ legs: '2', games: '3', legsPerGame: '', types: types(true, true, false) })
+  assert.equal(result.ok, false)
+  assert.match(result.message, /2 legs cannot cover 3 games/)
+})
+
+test('a parlay needs at least one selected type', () => {
+  const result = validateCustomParlay({ legs: '3', games: '2', legsPerGame: '', types: types(false, false, false) })
+  assert.equal(result.ok, false)
+  assert.match(result.message, /at least one/)
+})
+
+test('outcome-only parlays cannot put two outcomes on one game', () => {
+  const result = validateCustomParlay({ legs: '3', games: '2', legsPerGame: '', types: types(true, false, false) })
+  assert.equal(result.ok, false)
+  assert.match(result.message, /one outcome pick/)
+})
+
+test('too few legs for every type is allowed and explained', () => {
+  const result = validateCustomParlay({ legs: '2', games: '1', legsPerGame: '', types: types(true, true, true) })
+  assert.equal(result.ok, true)
+  assert.match(result.note, /cannot include all 3 types/)
+})
+
+test('season touchdown weight favors a more recent score', () => {
+  const recent = seasonTdShare([{ rushTD: 0, recTD: 0 }, { rushTD: 0, recTD: 0 }, { rushTD: 0, recTD: 0 }, { rushTD: 1, recTD: 0 }], 1)
+  const older = seasonTdShare([{ rushTD: 1, recTD: 0 }, { rushTD: 0, recTD: 0 }, { rushTD: 0, recTD: 0 }, { rushTD: 0, recTD: 0 }], 1)
+  assert.ok(recent.rate > older.rate)
+  assert.equal(recent.hits, 1)
+  assert.equal(recent.n, 4)
+})
+
+test('props keep the higher hit chance and skip started games', () => {
+  const file = {
+    version: 2,
+    games: {
+      'BUF-KC': {
+        legs: [
+          { id: 'a:over', kind: 'prop', player: 'Player A', team: 'BUF', pos: 'WR', market: 'Receptions', side: 'Over', line: 4.5, p: 0.6, priced: false, card_label: 'Player A over' },
+          { id: 'a:under', kind: 'prop', player: 'Player A', team: 'BUF', pos: 'WR', market: 'Receptions', side: 'Under', line: 4.5, p: 0.7, priced: true, price: 120, card_label: 'Player A under' },
+          { id: 'b', kind: 'prop', player: 'Player B', team: 'KC', pos: 'WR', market: 'Receptions', side: 'Over', line: 5.5, p: 0.55, priced: false },
+        ],
+      },
+    },
+  }
+  const matchups = [
+    { id: 'g1', date: '2026-11-30T18:00:00Z', started: false, final: null, away: { abbr: 'BUF', name: 'Bills' }, home: { abbr: 'KC', name: 'Chiefs' } },
+    { id: 'g2', date: '2026-11-27T01:00:00Z', started: true, final: null, away: { abbr: 'DAL' }, home: { abbr: 'PHI' } },
+  ]
+  const props = propCandidates(file, matchups)
+  assert.deepEqual(props.map(item => item.id), ['prop:a:under', 'prop:b'])
+  assert.ok(props[0].valueScore > 0.2)
+  assert.equal(props[1].valueScore, 0)
+})
+
+test('confidence mode picks the higher hit chance and value mode picks the higher edge', () => {
+  const pools = {
+    prop: [
+      leg({ id: 'a', gameId: 'A', confidence: 0.9, valueScore: 0.01 }),
+      leg({ id: 'b', gameId: 'B', confidence: 0.7, valueScore: 0.2 }),
+      leg({ id: 'c', gameId: 'C', confidence: 0.85, valueScore: 0.02 }),
+    ],
+  }
+  const input = validateCustomParlay({ legs: '2', games: '2', legsPerGame: '', types: types(false, false, true) }).input
+  const byConfidence = buildCustomParlays(pools, input, { mode: 'confidence' }).parlays[0]
+  const byValue = buildCustomParlays(pools, input, { mode: 'value' }).parlays[0]
+  assert.deepEqual(byConfidence.legs.map(item => item.id).sort(), ['a', 'c'])
+  assert.deepEqual(byValue.legs.map(item => item.id).sort(), ['b', 'c'])
+})
+
+test('each checked type is included when the leg count allows', () => {
+  const pools = {
+    outcome: [leg({ id: 'o', type: 'outcome', gameId: 'A', playerId: null, confidence: 0.8 })],
+    td: [leg({ id: 't', type: 'td', gameId: 'B', playerId: 'scorer', confidence: 0.4 })],
+    prop: [
+      leg({ id: 'p1', gameId: 'A', playerId: 'alpha', confidence: 0.95 }),
+      leg({ id: 'p2', gameId: 'B', playerId: 'beta', confidence: 0.3 }),
+    ],
+  }
+  const input = validateCustomParlay({ legs: '3', games: '2', legsPerGame: '', types: types(true, true, true) }).input
+  const parlay = buildCustomParlays(pools, input).parlays[0]
+  assert.deepEqual(parlay.legs.map(item => item.type).sort(), ['outcome', 'prop', 'td'])
+  assert.equal(parlay.games, 2)
+})
+
+test('the same player is not used twice', () => {
+  const pools = {
+    td: [leg({ id: 'td', type: 'td', gameId: 'A', playerId: 'sam', confidence: 0.5 })],
+    prop: [
+      leg({ id: 'same', gameId: 'A', playerId: 'sam', confidence: 0.9 }),
+      leg({ id: 'other', gameId: 'B', playerId: 'other', confidence: 0.4 }),
+    ],
+  }
+  const input = validateCustomParlay({ legs: '2', games: '2', legsPerGame: '', types: types(false, true, true) }).input
+  const parlay = buildCustomParlays(pools, input).parlays[0]
+  assert.deepEqual(parlay.legs.map(item => item.id).sort(), ['other', 'td'])
+})
+
+test('a set legs-per-game count fills every game to that count', () => {
+  const pools = {
+    outcome: [
+      leg({ id: 'oa', type: 'outcome', gameId: 'A', playerId: null, confidence: 0.7 }),
+      leg({ id: 'ob', type: 'outcome', gameId: 'B', playerId: null, confidence: 0.66 }),
+    ],
+    td: [
+      leg({ id: 'ta', type: 'td', gameId: 'A', playerId: 'a', confidence: 0.6 }),
+      leg({ id: 'tb', type: 'td', gameId: 'B', playerId: 'b', confidence: 0.55 }),
+    ],
+    prop: [],
+  }
+  const input = validateCustomParlay({ legs: '4', games: '2', legsPerGame: '2', types: types(true, true, false) }).input
+  const parlay = buildCustomParlays(pools, input).parlays[0]
+  assert.equal(parlay.legs.length, 4)
+  for (const gameId of ['A', 'B']) assert.equal(parlay.legs.filter(item => item.gameId === gameId).length, 2)
+})
+
+test('without legs per game, legs can split unevenly and still use every game', () => {
+  const pools = {
+    prop: [
+      leg({ id: 'a1', gameId: 'A', playerId: 'a1', confidence: 0.9 }),
+      leg({ id: 'a2', gameId: 'A', playerId: 'a2', confidence: 0.8 }),
+      leg({ id: 'a3', gameId: 'A', playerId: 'a3', confidence: 0.7 }),
+      leg({ id: 'b1', gameId: 'B', playerId: 'b1', confidence: 0.2 }),
+    ],
+  }
+  const input = validateCustomParlay({ legs: '3', games: '2', legsPerGame: '', types: types(false, false, true) }).input
+  const parlay = buildCustomParlays(pools, input).parlays[0]
+  assert.deepEqual(parlay.legs.map(item => item.id).sort(), ['a1', 'a2', 'b1'])
+  assert.equal(parlay.games, 2)
+})
+
+test('required types move onto an empty game instead of stacking', () => {
+  const pools = {
+    outcome: [
+      leg({ id: 'oa', type: 'outcome', gameId: 'A', playerId: null, confidence: 0.8 }),
+      leg({ id: 'ob', type: 'outcome', gameId: 'B', playerId: null, confidence: 0.55 }),
+    ],
+    td: [
+      leg({ id: 'ta', type: 'td', gameId: 'A', playerId: 'a', confidence: 0.7 }),
+      leg({ id: 'tb', type: 'td', gameId: 'B', playerId: 'b', confidence: 0.45 }),
+    ],
+  }
+  const input = validateCustomParlay({ legs: '2', games: '2', legsPerGame: '', types: types(true, true, false) }).input
+  const parlay = buildCustomParlays(pools, input).parlays[0]
+  assert.equal(new Set(parlay.legs.map(item => item.gameId)).size, 2)
+  assert.deepEqual(parlay.legs.map(item => item.type).sort(), ['outcome', 'td'])
+})
+
+test('next best is a different mix', () => {
+  const pools = {
+    prop: [
+      leg({ id: 'a', gameId: 'A', confidence: 0.9 }),
+      leg({ id: 'b', gameId: 'B', confidence: 0.8 }),
+      leg({ id: 'c', gameId: 'C', confidence: 0.7 }),
+    ],
+  }
+  const input = validateCustomParlay({ legs: '2', games: '2', legsPerGame: '', types: types(false, false, true) }).input
+  const { parlays } = buildCustomParlays(pools, input)
+  assert.ok(parlays.length >= 2)
+  assert.notEqual(parlays[0].id, parlays[1].id)
+  assert.ok(parlays[0].combined >= parlays[1].combined)
+})
+
+test('one team keeps only that side, including an outcome the model does not prefer', () => {
+  const pools = {
+    outcome: [
+      leg({ id: 'home', type: 'outcome', gameId: 'g', team: 'KC', playerId: null, confidence: 0.7 }),
+      leg({ id: 'away', type: 'outcome', gameId: 'g2', team: 'BUF', playerId: null, confidence: 0.4 }),
+    ],
+    td: [leg({ id: 'td', type: 'td', gameId: 'g', team: 'KC', playerId: 'chief', confidence: 0.3 })],
+    prop: [leg({ id: 'prop', gameId: 'g', team: 'BUF', playerId: 'bill', confidence: 0.8 })],
+  }
+  const filtered = filterPools(pools, 'KC')
+  assert.deepEqual(filtered.outcome.map(item => item.id), ['home'])
+  assert.deepEqual(filtered.td.map(item => item.id), ['td'])
+  assert.equal(filtered.prop.length, 0)
+})
+
+test('predicted outcome and flow write one game script', () => {
+  const selection = selectionFromChoices('big:home', 'rush:away', { awayId: 'a', homeId: 'h' })
+  assert.equal(selection.win, 'h')
+  assert.equal(selection.margin, 'big')
+  assert.equal(selection.rush, 'a')
+  assert.equal(scriptSummary(selection, {
+    away: { id: 'a', abbr: 'BUF' },
+    home: { id: 'h', abbr: 'KC' },
+  }), 'KC wins big · BUF rushing success')
+})
+
+test('a script arrow outranks a slightly higher raw prop when the side agrees', () => {
+  const pools = applyGameScript({
+    prop: [
+      leg({ id: 'plain', gameId: 'g', playerId: 'other', confidence: 0.62, market: 'Rush yds', side: 'Over' }),
+      leg({ id: 'scripted', gameId: 'g', playerId: 'lead back', confidence: 0.55, market: 'Rush yds', side: 'Over' }),
+    ],
+  }, {
+    matchup: { id: 'g', away: { id: 'a', abbr: 'BUF' }, home: { id: 'h', abbr: 'KC' } },
+    selection: { win: 'h', margin: 'big' },
+    props: [{ name: 'Lead Back', key: 'rushYds', pct: 0.16, direction: 'over', arrow: 'up', why: 'Lead raises the rush.' }],
+  })
+  const input = validateCustomParlay({ legs: '1', games: '1', legsPerGame: '', types: types(false, false, true) }).input
+  const parlay = buildCustomParlays(pools, input).parlays[0]
+  assert.equal(parlay.legs[0].id, 'scripted')
+  assert.equal(parlay.legs[0].arrow, 'up')
+})
+
+test('outcome candidates use the model pick and skip games that already started', () => {
+  const matchups = [
+    {
+      id: 'live',
+      date: '2026-11-30T18:00:00Z',
+      started: false,
+      final: null,
+      margin: 3,
+      winner: { id: 'h' },
+      awayPoints: 20,
+      homePoints: 23,
+      away: { id: 'a', abbr: 'BUF', name: 'Bills', logo: 'buf.png' },
+      home: { id: 'h', abbr: 'KC', name: 'Chiefs', logo: 'kc.png' },
+    },
+    {
+      id: 'done',
+      date: '2026-11-27T01:00:00Z',
+      started: true,
+      final: null,
+      margin: 7,
+      winner: { id: 'h2' },
+      awayPoints: 17,
+      homePoints: 24,
+      away: { id: 'a2', abbr: 'DAL', name: 'Cowboys' },
+      home: { id: 'h2', abbr: 'PHI', name: 'Eagles' },
+    },
+  ]
+  const odds = {
+    games: {
+      'BUF-KC': {
+        moneyline: { BUF: { price: -160, book: 'DraftKings' }, KC: { price: 140, book: 'DraftKings' } },
+        source: 'test',
+      },
+      'DAL-PHI': {
+        moneyline: { DAL: { price: 200, book: 'DraftKings' }, PHI: { price: 130, book: 'DraftKings' } },
+        source: 'test',
+      },
+    },
+  }
+  const outcomes = outcomeCandidates(matchups, odds)
+  assert.equal(outcomes.length, 1)
+  assert.equal(outcomes[0].gameId, 'live')
+  assert.equal(outcomes[0].type, 'outcome')
+  assert.ok(outcomes[0].confidence > 0.5)
+  assert.ok(outcomes[0].valueScore > 0)
+})

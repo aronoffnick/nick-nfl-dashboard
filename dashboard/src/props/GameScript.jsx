@@ -1,3 +1,5 @@
+// No longer mounted. The Bet generator at the top of Parlays drives this same script
+// through the predicted-outcome and game-flow dropdowns.
 import { useMemo, useState } from 'react'
 import { fileForWeek } from '../data/weekFiles.js'
 import { boardGame } from './parlayBoard.js'
