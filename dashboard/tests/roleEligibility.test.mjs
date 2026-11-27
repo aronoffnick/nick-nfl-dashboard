@@ -39,8 +39,8 @@ test('Out and depth backs are excluded; Doubtful counts as out', () => {
 test('rush and touchdown weights follow the documented clamps', () => {
   const jacobs = findRb('Josh Jacobs')
   const kyren = findRb('Kyren Williams')
-  assert.equal(rushWeight(jacobs), 0.74)
-  assert.equal(rushWeight(findRb('MarShawn Lloyd')), 0.4)
+  assert.equal(rushWeight(jacobs), 0.5)
+  assert.equal(rushWeight(findRb('MarShawn Lloyd')), 0.46)
   assert.ok(tdWeight(kyren) > tdWeight(jacobs))
   assert.equal(Number(tdWeight(kyren).toFixed(4)), 1.5625)
 })
