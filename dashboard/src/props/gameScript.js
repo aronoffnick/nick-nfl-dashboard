@@ -458,6 +458,7 @@ export function buildGameScript({ matchup, players = [], selection = emptyScript
     const stat = readStat(bucket.player, bucket.key, halfLife)
     if (!stat) continue
     const scenario = roundStat(stat.projection * (1 + pct), bucket.key)
+    if (formatStat(stat.projection, bucket.key) === formatStat(scenario, bucket.key)) continue
     const book = lineFor(lines, bucket.player, bucket.key)
     const role = roles.get(bucket.player.id) || roleName(bucket.player.position, 0)
     const fit = scriptFit({
