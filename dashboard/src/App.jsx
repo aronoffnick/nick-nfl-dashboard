@@ -3,7 +3,8 @@ import './App.css'
 import PickTracker from './PickTracker.jsx'
 import WeeklyGames from './WeeklyGames.jsx'
 import { bundledHistory, remember } from './data/historyFile.js'
-import { applyTeamStarter } from './props/qbStarter.js'
+import { boardSnapshot, compute, gradePick, preKickoffPick, usableSnapshot } from './boardModel.js'
+import TeamParlay from './TeamParlay.jsx'
 import AccuracyNote from './props/AccuracyNote.jsx'
 import MatchupExplorer from './props/MatchupExplorer.jsx'
 import { parsePlayers } from './props/model.js'
@@ -184,69 +185,6 @@ async function loadData(progress) {
   return data
 }
 
-function compute(data, halfLife, advantage, mode) {
-  if (!data) return null
-  const all = Object.values(data.teams).map(team => {
-    const history = data.games.filter(g => g.away.id === team.id || g.home.id === team.id)
-      .sort((a, b) => new Date(a.date) - new Date(b.date))
-    const rows = history.map((g, i) => {
-      const atHome = g.home.id === team.id
-      const self = atHome ? g.home : g.away
-      const opponent = atHome ? g.away : g.home
-      const venue = g.neutral ? 0 : (atHome ? advantage / 2 : -advantage / 2)
-      return {
-        weight: 2 ** (-(history.length - 1 - i) / halfLife),
-        passO: self.pass, rushO: self.rush, passD: opponent.pass, rushD: opponent.rush,
-        pf: self.points - venue, pa: opponent.points + venue,
-        rawPF: self.points, rawPA: opponent.points,
-      }
-    })
-    const average = (key, weighted) => rows.reduce((s, r) => s + r[key] * (weighted ? r.weight : 1), 0) /
-      rows.reduce((s, r) => s + (weighted ? r.weight : 1), 0)
-    const season = Object.fromEntries(metrics.map(([k]) => [k, average(k, false)]))
-    const recent = Object.fromEntries(metrics.map(([k]) => [k, average(k, true)]))
-    return {
-      ...team, season, recent, display: mode === 'recent' ? recent : season,
-      pf: average('pf', true), pa: average('pa', true),
-      ppg: average('rawPF', false), papg: average('rawPA', false), n: rows.length,
-      wins: rows.filter(r => r.rawPF > r.rawPA).length,
-      losses: rows.filter(r => r.rawPF < r.rawPA).length,
-      ties: rows.filter(r => r.rawPF === r.rawPA).length, ranks: {},
-    }
-  })
-  for (const [key, , lower] of metrics) {
-    for (const t of all) {
-      t.ranks[key] = 1 + all.filter(o => lower ? o.display[key] < t.display[key] : o.display[key] > t.display[key]).length
-    }
-  }
-  const teams = Object.fromEntries(all.map(t => [t.id, t]))
-  const pointMean = all.reduce((s, t) => s + t.pf, 0) / all.length
-  const yardMean = all.reduce((s, t) => s + t.recent.passO + t.recent.rushO, 0) / all.length
-  function expected(offense, defense) {
-    const scoring = (offense.pf + defense.pa) / 2
-    const yards = (offense.recent.passO + defense.recent.passD +
-      offense.recent.rushO + defense.recent.rushD) / 2
-    return .8 * scoring + .2 * (pointMean + .06 * (yards - yardMean))
-  }
-  const matchups = data.matchups.map(g => {
-    const away = teams[g.away], home = teams[g.home]
-    const awayScored = applyTeamStarter(away, data.week)
-    const homeScored = applyTeamStarter(home, data.week)
-    const hfa = g.neutral ? 0 : advantage
-    const halfPoint = value => Math.round(value * 2) / 2
-    const awayPoints = halfPoint(Math.max(0, expected(awayScored, home) - hfa / 2))
-    const homePoints = halfPoint(Math.max(0, expected(homeScored, away) + hfa / 2))
-    const signedMargin = homePoints - awayPoints
-    return {
-      ...g, away, home, awayPoints, homePoints,
-      margin: halfPoint(Math.abs(signedMargin)),
-      winner: signedMargin >= 0 ? home : away,
-      qbOverride: awayScored.qbOverride || homeScored.qbOverride || null,
-    }
-  })
-  return { teams: all, matchups }
-}
-
 function backtest(data) {
   if (!data) return []
   const finals = new Map(data.games.map(game => [game.id, game]))
@@ -328,6 +266,44 @@ export default function App() {
   }, [])
 
   const result = useMemo(() => compute(data, halfLife, advantage, mode), [data, halfLife, advantage, mode])
+  const [snapshots, setSnapshots] = useState({})
+  useEffect(() => {
+    if (!result || !data) return
+    const key = 'nick-nfl-board-picks-v1'
+    let saved = {}
+    try { saved = JSON.parse(localStorage.getItem(key) || '{}') } catch { saved = {} }
+    let changed = false
+    for (const game of result.matchups) {
+      if (!game.started && !game.final) {
+        const next = boardSnapshot(game)
+        const prior = saved[game.id]
+        if (!prior || prior.winnerId !== next.winnerId || prior.margin !== next.margin || prior.tie !== next.tie) {
+          saved[game.id] = next
+          changed = true
+        }
+      } else if (game.final && !usableSnapshot(saved[game.id], game)) {
+        const pick = preKickoffPick(data, game)
+        if (pick) {
+          saved[game.id] = { ...pick, savedAt: new Date(Date.parse(game.date) - 1000).toISOString() }
+          changed = true
+        }
+      }
+    }
+    if (changed) remember(key, JSON.stringify(saved))
+    setSnapshots(saved)
+  }, [result, data])
+  const card = useMemo(() => {
+    const marks = {}
+    let wins = 0, losses = 0
+    for (const game of result?.matchups || []) {
+      const pick = usableSnapshot(snapshots[game.id], game) || (game.final ? preKickoffPick(data, game) : null)
+      const mark = gradePick(pick, game.final)
+      marks[game.id] = mark
+      if (mark === 'W') wins += 1
+      if (mark === 'L') losses += 1
+    }
+    return { marks, wins, losses }
+  }, [result, data, snapshots])
   const historicalPicks = useMemo(() => backtest(data), [data])
   const trackedPicks = useMemo(() => compute(data, 3, 2, 'season')?.matchups, [data])
   const days = [...new Set((data?.matchups || []).map(g => easternDay(g.date)))].sort()
@@ -377,6 +353,7 @@ export default function App() {
       <div><strong>{halfLife} games</strong><span>Weight half-life</span></div>
       <div><strong>+{advantage.toFixed(1)} pts</strong><span>Home advantage · neutral = 0</span></div>
     </section>
+    {result && <TeamParlay matchups={result.matchups} week={data.week} />}
     <AccuracyNote />
     <section className="controls">
       <div className="tabs">
@@ -388,7 +365,7 @@ export default function App() {
       <label>Statistics<select value={mode} onChange={e => setMode(e.target.value)}><option value="season">Season averages</option><option value="recent">Recent weighted averages</option></select></label>
       <button disabled={busy} onClick={refresh}>{busy ? 'Loading…' : 'Refresh data'}</button>
     </section>
-    <div className="table-note">Yards per game · #1 = most yards on offense / fewest allowed on defense · click column headings to sort</div>
+    <div className="table-note">Yards per game · #1 = most yards on offense / fewest allowed on defense · click column headings to sort{result ? ` · Pre-kickoff card ${card.wins}–${card.losses}` : ''}</div>
     {result && <div className="table-wrap"><table>
       <thead>{view === 'matchups' ? <tr>
         <th>{header('Away pass O', 'away.passO')}</th><th>{header('Away rush O', 'away.rushO')}</th>
@@ -402,7 +379,7 @@ export default function App() {
         {['passO', 'rushO'].map(k => <td key={k}><Rank value={row.away.ranks[k]} /><small>{fmt(row.away.display[k])} yd</small></td>)}
         {['passD', 'rushD'].map(k => <td key={k}><Rank value={row.away.ranks[k]} /><small>{fmt(row.away.display[k])} yd</small></td>)}
         <td><Team team={row.away} /></td>
-        <td className="date">{kickoff(row.date)}<small>{row.neutral ? 'Neutral site' : row.status}</small></td>
+        <td className="date">{row.final ? <span className="final-score">{row.away.abbr} {row.final.away.points} – {row.home.abbr} {row.final.home.points} Final <i className={`grade grade-${card.marks[row.id] === '–' ? 'push' : card.marks[row.id] || 'push'}`}>{card.marks[row.id] || '–'}</i></span> : <>{kickoff(row.date)}<small>{row.neutral ? 'Neutral site' : row.status}</small></>}</td>
         <td><Team team={row.home} /></td>
         {['passD', 'rushD'].map(k => <td key={k}><Rank value={row.home.ranks[k]} /><small>{fmt(row.home.display[k])} yd</small></td>)}
         {['passO', 'rushO'].map(k => <td key={k}><Rank value={row.home.ranks[k]} /><small>{fmt(row.home.display[k])} yd</small></td>)}

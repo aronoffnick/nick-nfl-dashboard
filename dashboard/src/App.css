@@ -31,3 +31,12 @@
 .landing-more>summary::marker{content:none}
 .landing-more[open]>summary .pick-chevron{transform:rotate(45deg)}
 .landing-more>summary:focus-visible{outline:2px solid #b2e7c8;outline-offset:3px}
+.final-score{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-weight:700}
+.grade{display:inline-flex;align-items:center;justify-content:center;min-width:1.4rem;height:1.4rem;border-radius:4px;font-style:normal;font-size:12px;font-weight:800}
+.grade-W{background:#1c3d2e;color:#a5e6bd}.grade-L{background:#3d221c;color:#e5a68f}.grade-push{background:#2a3138;color:#9aa7b2}
+.team-parlay{margin:8px 0 22px;padding:16px;border:1px solid #314a3a;border-radius:12px;background:#121a16}
+.team-parlay-head h2{margin:0 0 6px;font-size:22px}.team-parlay-head p,.team-parlay-empty{margin:0;color:#9aa7b2;font-size:13px;line-height:1.5}
+.team-parlay form{display:flex;flex-wrap:wrap;gap:12px;margin:14px 0}.team-parlay label{display:flex;flex-direction:column;gap:6px;font-size:12px;color:#c5d0c8;min-width:120px}
+.team-parlay input,.team-parlay select{background:#0d1411;color:#e8edf1;border:1px solid #3c5348;border-radius:6px;padding:8px 10px}
+.team-parlay-summary{margin:0 0 8px}.team-parlay ol{margin:0;padding-left:18px;display:grid;gap:6px}.team-parlay li{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline}.team-parlay small{color:#8ea097}
+@media (max-width:700px){.team-parlay{padding:12px}.team-parlay form label{flex:1 1 calc(50% - 12px);min-width:0}.team-parlay li{flex-direction:column;gap:2px}}
