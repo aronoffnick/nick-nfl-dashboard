@@ -1,0 +1,14 @@
+.position-rankings{margin-top:4px}
+.position-lead,.position-basis{color:#8f9ca7;font-size:12px;line-height:1.6;margin:0 0 12px;max-width:82ch}
+.position-lead{margin-top:4px}
+.position-filters{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 16px}
+.position-filters strong{font-size:11px;letter-spacing:.3px;color:#9cabb7;margin-right:4px}
+.position-filters button{background:#1b2b35;color:#c6d7e2;border:1px solid #3d5663;border-radius:5px;padding:8px 12px;font-size:12px}
+.position-filters button[aria-pressed=true]{background:#a5e6bd;color:#14251c;border-color:#a5e6bd;font-weight:700}
+.position-group{margin:0 0 28px}
+.position-group h3{margin:0 0 6px;font-size:18px}
+.position-method{margin:0 0 16px}
+.position-method summary{cursor:pointer;color:#b4c5d1;font-size:12px}
+.position-method p{color:#96a8b5;font-size:12px;line-height:1.7;max-width:88ch}
+.tabs button{white-space:nowrap}
+@media(max-width:800px){.tabs button{padding:10px 6px;font-size:11px}.position-filters button{padding:8px 9px}}

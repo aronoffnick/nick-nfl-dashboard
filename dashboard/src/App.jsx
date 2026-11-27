@@ -5,6 +5,7 @@ import WeeklyGames from './WeeklyGames.jsx'
 import { bundledHistory, remember } from './data/historyFile.js'
 import { boardSnapshot, compute, gradePick, preKickoffPick, usableSnapshot } from './boardModel.js'
 import TeamParlay from './TeamParlay.jsx'
+import PositionRankings from './PositionRankings.jsx'
 import AccuracyNote from './props/AccuracyNote.jsx'
 import MatchupExplorer from './props/MatchupExplorer.jsx'
 import { parsePlayers } from './props/model.js'
@@ -358,13 +359,17 @@ export default function App() {
     <section className="controls">
       <div className="tabs">
         <button className={view === 'matchups' ? 'active' : ''} onClick={() => { setView('matchups'); setSort({ key: 'date', ascending: true }) }}>Matchups</button>
-        <button className={view === 'teams' ? 'active' : ''} onClick={() => { setView('teams'); setSort({ key: 'passO', ascending: true }) }}>32-team rankings</button>
+        <button className={view === 'teams' ? 'active' : ''} onClick={() => { setView('teams'); setSort({ key: 'passO', ascending: true }) }}>Team Rankings</button>
+        <button className={view === 'positions' ? 'active' : ''} onClick={() => setView('positions')}>Position Rankings</button>
       </div>
-      <label>Find a team<input placeholder="Giants, Jets, Chiefs…" value={query} onChange={e => setQuery(e.target.value)} /></label>
+      <label>{view === 'positions' ? 'Find a player' : 'Find a team'}<input placeholder={view === 'positions' ? 'Name or team…' : 'Giants, Jets, Chiefs…'} value={query} onChange={e => setQuery(e.target.value)} /></label>
       {view === 'matchups' && <label>Game day<select value={day} onChange={e => setDay(e.target.value)}><option value="all">All days</option>{days.map(d => <option key={d} value={d}>{new Date(`${d}T12:00:00Z`).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'America/New_York' })}</option>)}</select></label>}
-      <label>Statistics<select value={mode} onChange={e => setMode(e.target.value)}><option value="season">Season averages</option><option value="recent">Recent weighted averages</option></select></label>
+      {view !== 'positions' && <label>Statistics<select value={mode} onChange={e => setMode(e.target.value)}><option value="season">Season averages</option><option value="recent">Recent weighted averages</option></select></label>}
       <button disabled={busy} onClick={refresh}>{busy ? 'Loading…' : 'Refresh data'}</button>
     </section>
+    {view === 'positions'
+      ? <PositionRankings week={data?.week} query={query} />
+      : <>
     <div className="table-note">Yards per game · #1 = most yards on offense / fewest allowed on defense · click column headings to sort{result ? ` · Pre-kickoff card ${card.wins}–${card.losses}` : ''}</div>
     {result && <div className="table-wrap"><table>
       <thead>{view === 'matchups' ? <tr>
@@ -386,6 +391,7 @@ export default function App() {
         <td><button className="pick" onClick={() => setSelected(row.id)}>{row.margin < .05 ? 'Toss-up' : `${row.winner.abbr} by ${fmt(row.margin)}`}<small>{row.qbOverride ? `${row.qbOverride.note} · Explore` : 'Explore matchup →'}</small></button></td>
       </tr> : <tr key={row.id}><td><Team team={row} /></td>{metrics.map(([k]) => <td key={k}><Rank value={row.ranks[k]} /><small>{fmt(row.display[k])} yd</small></td>)}<td>{fmt(row.ppg)}</td><td>{fmt(row.papg)}</td></tr>)}</tbody>
     </table>{!rows.length && <p className="notice">No teams or games match these filters.</p>}</div>}
+    </>}
     <section className="method">
       <div><p className="eyebrow">MODEL SETTINGS</p><h2>Recent games count more.</h2>
         <label>Weight half-life: {halfLife} games<input type="range" min="1" max="6" step=".5" value={halfLife} onChange={e => setHalfLife(Number(e.target.value))} /></label>
