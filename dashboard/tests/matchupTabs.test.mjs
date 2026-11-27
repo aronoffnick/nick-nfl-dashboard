@@ -18,6 +18,8 @@ test('old tab names land on the Stats sub tabs', () => {
 
 test('bet views stay under Bets', () => {
   assert.deepEqual(parseMatchupHash('#bets/flyers'), { tab: 'bets', view: 'flyers' })
+  assert.deepEqual(parseMatchupHash('#bets/script'), { tab: 'bets', view: 'script' })
+  assert.deepEqual(parseMatchupHash('#game-script'), { tab: 'bets', view: 'script' })
   assert.deepEqual(parseMatchupHash('#touchdowns'), { tab: 'bets', view: 'touchdowns' })
   assert.deepEqual(parseMatchupHash('#breakout'), { tab: 'bets', view: 'generator' })
   assert.deepEqual(parseMatchupHash('#bets/breakout'), { tab: 'bets', view: 'generator' })
