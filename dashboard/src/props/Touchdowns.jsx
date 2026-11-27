@@ -103,7 +103,7 @@ export default function Touchdowns({ away, home, week, roster }) {
   return <section className="td-board" aria-label="Touchdowns">
     <div className="prop-section-title"><h3>Touchdowns</h3><span>Estimates · entertainment, not advice</span></div>
     {file.data?.disclaimer && <p className="td-intro">{file.data.disclaimer}</p>}
-    {rules && <p className="td-intro">{rules} An Estimate tag is a rough season-usage figure. Injury status is shown when the file has one.{game.coverageApplied ? ' Chances are coverage-adjusted: 2025 TD rate vs man/zone, weighted by this defense\'s 2026 coverage mix, capped ±10%. Estimates.' : ''}</p>}
+    {rules && <p className="td-intro">{rules} An Estimate tag is a rough season-usage figure. Injury status is shown when the file has one.{game.coverageApplied ? (game.coverageStale ? ' Chances use the previous week\'s coverage mix, marked stale, capped ±10%.' : ' Chances are coverage-adjusted: 2025 TD rate vs man/zone, weighted by this defense\'s coverage mix, capped ±10%. Estimates.') : ''}</p>}
     {snapshotText(game) && <p className="td-caption">{snapshotText(game)}</p>}
     <div className="td-switch" role="group" aria-label="Offense">
       <button type="button" aria-pressed={combined} onClick={() => chooseSide('both')}>Both teams</button>

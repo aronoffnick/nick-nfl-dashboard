@@ -4,11 +4,12 @@
   "disclaimer": "Model estimates for entertainment only, not betting advice. Prices are left blank when no snapshot is available.",
   "rules": {
     "questionableRankFactor": 0.85,
-    "relativelySafeMinProb": 0.15,
-    "upside2plusMinProb": 0.03,
-    "upside3plusMinProb": 0.05,
+    "relativelySafeMinProb": 0.22,
+    "upside2plusMinProb": 0.12,
+    "upside3plusMinProb": 0.06,
+    "longShotMinProb": 0.04,
     "maxBackups": 2,
-    "probability": "Poisson from expected rushing plus receiving touchdowns. Team totals are rescaled toward season scoring (points divided by 7), not a sportsbook total. estimate=true means fewer than 4 games."
+    "probability": "Poisson from expected rushing plus receiving touchdowns. Relatively safe starts at 22%. 2+ is upside only at 12% or higher, and 3+ only at 6%. Below that, down to 4%, the label is Long shot. The Week 12 tier check is three finished games. Team totals use season scoring, not a sportsbook total. estimate=true means fewer than 4 games."
   },
   "games": [
     {

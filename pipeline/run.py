@@ -58,6 +58,11 @@ def score_existing(root: Path, stats, schedule, season: int, week: int):
     if not scatter:
         print(f"no scatter-wk{week}.json, so week {week} was not scored")
         return None
+    prior_rollup = None
+    for path in sorted(folder.glob("calibration-wk*.json")):
+        digits = "".join(ch for ch in path.stem if ch.isdigit())
+        if digits and int(digits) < week:
+            prior_rollup = (read_json(path) or {}).get("rollup")
     payload = score_week(
         scatter,
         read_json(folder / f"td-riskscale-wk{week}.json") or {},
@@ -68,6 +73,7 @@ def score_existing(root: Path, stats, schedule, season: int, week: int):
         schedule,
         season,
         week,
+        prior_rollup=prior_rollup,
     )
     if not payload["gamesScored"]:
         print(f"week {week} has no final games to score")
