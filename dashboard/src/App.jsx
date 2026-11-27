@@ -413,8 +413,8 @@ export default function App() {
         <th>{header('Home pass D', 'home.passD')}</th><th>{header('Home rush D', 'home.rushD')}</th>
         <th>{header('Home pass O', 'home.passO')}</th><th>{header('Home rush O', 'home.rushO')}</th>
         <th>{header('Model pick / margin', 'margin')}</th>
-        <th>Explore</th>
         <th>{header('Best value', 'value')}</th>
+        <th>Explore</th>
       </tr> : <tr><th>{header('Team', 'name')}</th>{metrics.map(([k, name]) => <th key={k}>{header(name, k)}</th>)}<th>Points / game</th><th>Allowed / game</th></tr>}</thead>
       <tbody>{rows.map(row => {
         if (view !== 'matchups') return <tr key={row.id}><td><Team team={row} /></td>{metrics.map(([k]) => <td key={k}><Rank value={row.ranks[k]} /><small>{fmt(row.display[k])} yd</small></td>)}<td>{fmt(row.ppg)}</td><td>{fmt(row.papg)}</td></tr>
@@ -430,8 +430,8 @@ export default function App() {
         {['passD', 'rushD'].map(k => <td key={k}><Rank value={row.home.ranks[k]} /><small>{fmt(row.home.display[k])} yd</small></td>)}
         {['passO', 'rushO'].map(k => <td key={k}><Rank value={row.home.ranks[k]} /><small>{fmt(row.home.display[k])} yd</small></td>)}
         <td className={pickClass}><span className={`pick-readout ${pickClass}`}>{row.margin < .05 ? 'Toss-up' : `${row.winner.abbr} by ${fmt(row.margin)}`}</span></td>
-        <td className={pickClass}><button type="button" className={`pick ${pickClass}`} onClick={() => setSelected(row.id)}>Explore matchup</button></td>
         <td className={`value-cell ${valueClass}`}><ValueBadge value={value} game={row} /></td>
+        <td className="explore-cell"><button type="button" className="explore-btn" onClick={() => setSelected(row.id)}>Explore</button></td>
       </tr>})}</tbody>
     </table>{!rows.length && <p className="notice">No teams or games match these filters.</p>}</div>}
     </>}
