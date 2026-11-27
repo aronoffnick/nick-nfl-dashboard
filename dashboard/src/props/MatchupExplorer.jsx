@@ -54,7 +54,7 @@ function ProjectionFilters({title,items,selected,onToggle}){
   return <fieldset className="projection-filter-group"><legend>{title}</legend>{items.map(([key,name])=><label key={key}><input type="checkbox" checked={selected.includes(key)} onChange={()=>onToggle(key)}/>{name}</label>)}</fieldset>
 }
 
-export default function MatchupExplorer({saveProp,data,matchup,matchups,halfLife,advantage,onClose}){
+export default function MatchupExplorer({saveProp,data,matchup,halfLife,advantage,onClose}){
   const [rosters,setRosters]=useState(null)
   const [error,setError]=useState('')
   const [message,setMessage]=useState('Loading player positions…')
@@ -82,6 +82,7 @@ export default function MatchupExplorer({saveProp,data,matchup,matchups,halfLife
     const next=formatMatchupHash(tab,view)
     if(window.location.hash!==next) window.history.replaceState(null,'',next)
     function apply(){
+      if (window.location.hash.replace(/^#/, '') === 'parlay-generator') { onClose(); return }
       const parsed=parseMatchupHash(window.location.hash)
       setTab(parsed.tab)
       if(parsed.tab==='bets') setBetsView(parsed.view)
@@ -90,6 +91,7 @@ export default function MatchupExplorer({saveProp,data,matchup,matchups,halfLife
     window.addEventListener('hashchange',apply)
     return()=>{
       window.removeEventListener('hashchange',apply)
+      if (window.location.hash.replace(/^#/, '') === 'parlay-generator') return
       if(window.location.hash!==previous) window.history.replaceState(null,'',previous||window.location.pathname+window.location.search)
     }
   },[tab,betsView,statsView])
@@ -142,7 +144,7 @@ export default function MatchupExplorer({saveProp,data,matchup,matchups,halfLife
       {rosters.failed.length>0&&<p className="prop-warning">{rosters.failed.length} team rosters unavailable. Unknown positions are labeled; incomplete position groups are excluded from adjustments. <button onClick={()=>load(true)}>Retry rosters</button></p>}
       {tab==='bets'&&betsView==='projections'&&<PlayerProjections matchup={matchup} saveProp={saveProp} data={data} teams={projectionTeamsList} roster={rosters.roster} halfLife={halfLife} window={recentGames} positions={projectionPositions} categories={projectionCategories}/>}
       {tab==='bets'&&betsView==='flyers'&&<Flyers data={data} matchup={matchup} roster={rosters.roster} halfLife={halfLife} window={recentGames}/>}
-      {tab==='bets'&&betsView==='parlays'&&<Parlays data={data} matchup={matchup} matchups={matchups} roster={rosters.roster} halfLife={halfLife} window={recentGames}/>}
+      {tab==='bets'&&betsView==='parlays'&&<Parlays data={data} matchup={matchup} roster={rosters.roster} halfLife={halfLife} window={recentGames}/>}
       {tab==='stats'&&statsView==='history'&&<Historical data={data} defense={defense} roster={rosters.roster} window={recentGames} selectedPositions={historyPositions}/>}
     </>}
     <details className="prop-method"><summary>Team offense vs defense estimates</summary><div className="table-wrap"><table><thead><tr><th>Offense</th><th>Expected net pass yards</th><th>Expected rush yards</th></tr></thead><tbody>{[[matchup.away,matchup.home],[matchup.home,matchup.away]].map(([o,d])=><tr key={o.id}><td>{o.abbr} vs {d.abbr}</td><td>{format((o.recent.passO+d.recent.passD)/2)}</td><td>{format((o.recent.rushO+d.recent.rushD)/2)}</td></tr>)}</tbody></table></div></details>

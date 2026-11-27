@@ -3,7 +3,7 @@
 // and the deduped prop list's hit chance `p`. Nothing here invents a price.
 import { americanImplied, valueParlayLegs } from '../matchupValue.js'
 import { coverProb } from '../teamParlayPick.js'
-import { americanToDecimal } from './betGenerator.js'
+import { americanToDecimal, decimalToAmerican } from './betGenerator.js'
 import { favoriteWinEstimate } from './diversifiedParlays.js'
 import { valid, weightedShare } from './model.js'
 import { boardGame, filePropCandidates, legHit, normName } from './parlayBoard.js'
@@ -369,6 +369,56 @@ export function touchdownCandidate({ game, player, share, team, price = null }) 
   }
 }
 
+export function parseAmerican(value) {
+  const text = String(value ?? '').trim()
+  if (!text) return { ok: true, value: null }
+  const number = Number(text.replace(/^\+/, ''))
+  if (!Number.isFinite(number) || Math.abs(number) < 100) return { ok: false, value: null }
+  return { ok: true, value: number }
+}
+
+export function americanBounds(minOdds, maxOdds) {
+  const min = parseAmerican(minOdds)
+  const max = parseAmerican(maxOdds)
+  if (!min.ok || !max.ok) return { ok: false, message: 'American odds look like +200 or -150. Leave a box blank to skip that side.' }
+  if (min.value == null && max.value == null) return { ok: true, range: null }
+  return { ok: true, range: { min: min.value, max: max.value } }
+}
+
+export function combinedAmerican(legs) {
+  let decimal = 1
+  for (const leg of legs || []) {
+    const price = Number(leg?.price)
+    if (!Number.isFinite(price) || price === 0) return null
+    const quote = americanToDecimal(price)
+    if (!Number.isFinite(quote) || quote <= 1) return null
+    decimal *= quote
+  }
+  const text = decimalToAmerican(decimal)
+  const number = Number(String(text).replace(/^\+/, ''))
+  return Number.isFinite(number) ? { text, number } : null
+}
+
+export function priceInRange(price, range) {
+  if (!range || (range.min == null && range.max == null)) return true
+  if (!price) return false
+  const bounds = [range.min, range.max].filter(value => value != null)
+  if (bounds.length === 2) {
+    const [lo, hi] = [...bounds].sort((a, b) => a - b)
+    return price.number >= lo && price.number <= hi
+  }
+  if (range.min != null) return price.number >= range.min
+  return price.number <= range.max
+}
+
+function withPrice(parlay, range) {
+  if (!parlay) return null
+  const price = combinedAmerican(parlay.legs)
+  const next = { ...parlay, priceText: price?.text || null, priceNumber: price?.number ?? null }
+  if (range && !priceInRange(price, range)) return null
+  return next
+}
+
 function legScore(leg, mode) {
   const nudge = Number(leg.scriptNudge) || 0
   if (mode === 'value') return (Number(leg.valueScore) || 0) + nudge * 0.25
@@ -554,7 +604,7 @@ function emptyReason(type) {
   return 'No unstarted game has a prop on the deduped list.'
 }
 
-export function buildCustomParlays(pools = {}, input, { mode = 'confidence', limit = 8 } = {}) {
+export function buildCustomParlays(pools = {}, input, { mode = 'confidence', limit = 8, oddsRange = null } = {}) {
   const types = checkedTypes(input?.types)
   const byType = { outcome: pools.outcome || [], td: pools.td || [], prop: pools.prop || [] }
   for (const type of types) {
@@ -581,12 +631,18 @@ export function buildCustomParlays(pools = {}, input, { mode = 'confidence', lim
   if (combinationCount(pool.length, input.games) > 5000) pool = ranked.slice(0, Math.min(ranked.length, input.games + 6))
   const seen = new Set()
   const found = []
-  for (const combo of combinations(pool, input.games)) {
-    const parlay = bestFill(combo, byType, input, mode, new Set())
-    if (!parlay || seen.has(parlay.id)) continue
-    seen.add(parlay.id)
-    found.push(parlay)
+  let rejectedByOdds = false
+  const keep = parlay => {
+    if (!parlay || seen.has(parlay.id)) return
+    const priced = withPrice(parlay, oddsRange)
+    if (!priced) {
+      if (oddsRange) rejectedByOdds = true
+      return
+    }
+    seen.add(priced.id)
+    found.push(priced)
   }
+  for (const combo of combinations(pool, input.games)) keep(bestFill(combo, byType, input, mode, new Set()))
   found.sort(compareParlays(mode))
   if (found.length < 2 && found[0]) {
     const ids = new Set(found[0].legs.map(leg => leg.gameId))
@@ -596,16 +652,15 @@ export function buildCustomParlays(pools = {}, input, { mode = 'confidence', lim
       const worst = [...found[found.length - 1].legs].sort(compareLegs(mode)).at(-1)
       if (!worst) break
       banned.add(worst.id)
-      const next = bestFill(combo.length ? combo : pool.filter(game => ids.has(game.id)), byType, input, mode, banned)
-      if (!next) break
-      if (seen.has(next.id)) continue
-      seen.add(next.id)
-      found.push(next)
+      keep(bestFill(combo.length ? combo : pool.filter(game => ids.has(game.id)), byType, input, mode, banned))
     }
     found.sort(compareParlays(mode))
   }
   if (!found.length) {
-    return { parlays: [], reason: `No mix of ${input.games} ${input.games === 1 ? 'game' : 'games'} can fill ${input.legs} legs from the selected types without repeating a leg.` }
+    const reason = rejectedByOdds
+      ? 'No parlay in this mix has a snapshot price inside that American range. A leg without a saved price stays out of the range. Clear the odds, or use priced outcomes.'
+      : `No mix of ${input.games} ${input.games === 1 ? 'game' : 'games'} can fill ${input.legs} legs from the selected types without repeating a leg.`
+    return { parlays: [], reason }
   }
   return { parlays: found.slice(0, limit), reason: null, typeName: TYPE_NAME }
 }

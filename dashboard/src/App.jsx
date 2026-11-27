@@ -7,7 +7,7 @@ import { fileForWeek } from './data/weekFiles.js'
 import { boardSnapshot, compute, gradePick, preKickoffPick, usableSnapshot } from './boardModel.js'
 import { compareValue, gradeDisplayedPick, gradeValuePick, mergeOdds, resultClass, scoreMatchups } from './matchupValue.js'
 import { ValueBadge, ValueHelp } from './MatchupValue.jsx'
-import TeamParlay from './TeamParlay.jsx'
+import CustomParlay from './props/CustomParlay.jsx'
 import PositionRankings from './PositionRankings.jsx'
 import AccuracyNote from './props/AccuracyNote.jsx'
 import MatchupExplorer from './props/MatchupExplorer.jsx'
@@ -287,6 +287,16 @@ export default function App() {
   }, [])
 
   const result = useMemo(() => compute(data, halfLife, advantage, mode), [data, halfLife, advantage, mode])
+  useEffect(() => {
+    function scrollToGenerator() {
+      if (window.location.hash.replace(/^#/, '') !== 'parlay-generator') return
+      setSelected(null)
+      requestAnimationFrame(() => document.getElementById('parlay-generator')?.scrollIntoView({ block: 'start' }))
+    }
+    scrollToGenerator()
+    window.addEventListener('hashchange', scrollToGenerator)
+    return () => window.removeEventListener('hashchange', scrollToGenerator)
+  }, [result])
   const [snapshots, setSnapshots] = useState({})
   useEffect(() => {
     if (!result || !data) return
@@ -385,7 +395,7 @@ export default function App() {
       <div><strong>{halfLife} games</strong><span>Weight half-life</span></div>
       <div><strong>+{advantage.toFixed(1)} pts</strong><span>Home advantage · neutral = 0</span></div>
     </section>
-    {result && <TeamParlay matchups={result.matchups} week={data.week} />}
+    {result && <CustomParlay data={data} matchups={result.matchups} halfLife={halfLife} />}
     <AccuracyNote />
     <section className="controls">
       <div className="tabs">
@@ -456,6 +466,6 @@ export default function App() {
         <p>Last fetched: {data ? kickoff(data.updated) + ' ET' : 'Not yet loaded'} · Schedule and rankings refresh on opening and every 30 minutes while open. Completed box scores are cached for 24 hours. After every current-week game is final, the dashboard advances to ESPN's next valid schedule; this is a pregame model and excludes the displayed week's results.</p>
       </footer>
     </details>
-    {detail && <MatchupExplorer key={detail.id} data={data} matchup={detail} matchups={result.matchups} saveProp={saveProp} halfLife={halfLife} advantage={advantage} onClose={() => setSelected(null)} />}
+    {detail && <MatchupExplorer key={detail.id} data={data} matchup={detail} saveProp={saveProp} halfLife={halfLife} advantage={advantage} onClose={() => setSelected(null)} />}
   </main>
 }
