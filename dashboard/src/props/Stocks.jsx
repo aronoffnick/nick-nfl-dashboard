@@ -39,7 +39,7 @@ export default function Stocks({ week, away, home }) {
   const data = file.data
   const momentum = fileForWeek('momentum', week).data
   const breakout = fileForWeek('breakout', week).data
-  const [position, setPosition] = useState('RB')
+  const [position, setPosition] = useState('All')
   const [scope, setScope] = useState('game')
   const [sortKey, setSortKey] = useState('sharpe')
   const [ascending, setAscending] = useState(false)
@@ -68,14 +68,14 @@ export default function Stocks({ week, away, home }) {
     return <button className="sort" title={tip} onClick={() => { if (sortKey === key) setAscending(value => !value); else { setSortKey(key); setAscending(false) } }}>{label} {sortKey === key ? (ascending ? '↑' : '↓') : '↕'}</button>
   }
   if (!file.matched || !data) {
-    return <section aria-label="RB Stocks"><div className="prop-section-title"><h3>RB Stocks</h3><span>Model estimates</span></div><p className="prop-warning">No stocks file for week {week}.</p></section>
+    return <section aria-label="Stat Metrics"><div className="prop-section-title"><h3>Stat Metrics</h3><span>Model estimates</span></div><p className="prop-warning">No stat metrics file for week {week}.</p></section>
   }
   const pickedRow = rows.find(row => row.name === picked) || rows[0]
-  return <section aria-label="RB Stocks">
-    <div className="prop-section-title"><h3>RB Stocks</h3><span>Model estimates · through week {data.throughWeek ?? '—'}</span></div>
+  return <section aria-label="Stat Metrics">
+    <div className="prop-section-title"><h3>Stat Metrics</h3><span>Model estimates · through week {data.throughWeek ?? '—'}</span></div>
     <p className="prop-help">{data.method} {momentum?.method} {momentum?.backtest ? `Weeks 9–12 absolute error, adjusted versus baseline: ${Object.entries(momentum.backtest).map(([pos, row]) => `${pos} ${row.testAdjustedMae} vs ${row.testBaselineMae}${row.helps ? '' : ', no help'}`).join('; ')}.` : ''}</p>
     <div className="projection-filters" aria-label="Stocks filters">
-      <div className="projection-window"><strong>Position</strong>{['RB', 'WR', 'TE', 'QB', 'All'].map(value => <button key={value} type="button" aria-pressed={position === value} onClick={() => setPosition(value)}>{value}</button>)}</div>
+      <div className="projection-window"><strong>Position</strong>{['All', 'QB', 'RB', 'WR', 'TE'].map(value => <button key={value} type="button" aria-pressed={position === value} onClick={() => { setPosition(value); setPicked(null) }}>{value}</button>)}</div>
       <div className="projection-window"><strong>Players</strong><button type="button" aria-pressed={scope === 'game'} onClick={() => setScope('game')}>This game</button><button type="button" aria-pressed={scope === 'all'} onClick={() => setScope('all')}>All players</button></div>
     </div>
     <RiskPlot rows={rows} picked={pickedRow} onPick={setPicked} />
@@ -104,7 +104,7 @@ function RiskPlot({ rows, picked, onPick }) {
   const maxY = Math.max(0.5, ...plotted.map(row => Math.abs(row.meanExcess))) * 1.2
   const x = value => margin.l + (value / maxX) * (width - margin.l - margin.r)
   const y = value => height - margin.b - ((value + maxY) / (maxY * 2)) * (height - margin.t - margin.b)
-  const color = { RB: '#4fd1b5', WR: '#ff8a65', TE: '#90a4ae' }
+  const color = { QB: '#b388ff', RB: '#4fd1b5', WR: '#ff8a65', TE: '#90a4ae' }
   return <div className="scatter-card">
     <h4>Risk versus return</h4>
     <div className="scatter-plot">

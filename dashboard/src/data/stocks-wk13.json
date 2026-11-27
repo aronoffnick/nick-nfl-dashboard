@@ -6,11 +6,12 @@
   "minGames": 4,
   "shrinkGames": 4.0,
   "positions": [
+    "QB",
     "RB",
     "WR",
     "TE"
   ],
-  "method": "Return = weekly half-PPR points minus a pre-game line. The line is the pipeline projection from earlier weeks only (current-team average times the shrunk defense factor), and a trailing average when that projection is missing. Players under 4 scored games are omitted. Each metric shrinks toward the position mean with a prior of 4 games. A good or bad script is the team's points versus its own earlier scoring average, not a sportsbook total.",
+  "method": "Return = weekly half-PPR points minus a pre-game line. The line is the pipeline projection from earlier weeks only (current-team average times the shrunk defense factor). Quarterbacks also add their earlier passing-touchdown and interception rates, because the yardage model does not project those. A trailing average is used when that projection is missing. A quarterback is not correlated with himself, so that cell stays blank. Players under 4 scored games are omitted. Each metric shrinks toward the position mean with a prior of 4 games. A good or bad script is the team's points versus its own earlier scoring average, not a sportsbook total.",
   "tooltips": {
     "meanExcess": "Mean excess: how many half-PPR points he has finished above the pre-game line, on average.",
     "volatility": "Volatility: how wide those week-to-week finishes swing around that line.",
@@ -50,6 +51,32 @@
       }
     },
     {
+      "name": "Kyler Murray",
+      "team": "MIN",
+      "position": "QB",
+      "games": 5,
+      "meanExcess": 4.428,
+      "volatility": 5.433,
+      "sharpe": 0.815,
+      "upsideCapture": null,
+      "downsideCapture": -0.541,
+      "beta": 0.166,
+      "skew": -0.159,
+      "tailRate": 0.318,
+      "qbCorrelation": null,
+      "raw": {
+        "meanExcess": 8.036,
+        "volatility": 3.216,
+        "sharpe": 2.499,
+        "upsideCapture": null,
+        "downsideCapture": -1.348,
+        "beta": -0.114,
+        "skew": -0.439,
+        "tailRate": 0.5,
+        "qbCorrelation": null
+      }
+    },
+    {
       "name": "Blake Corum",
       "team": "LAR",
       "position": "RB",
@@ -73,6 +100,32 @@
         "skew": -0.4,
         "tailRate": 0.2,
         "qbCorrelation": -0.282
+      }
+    },
+    {
+      "name": "Joe Burrow",
+      "team": "CIN",
+      "position": "QB",
+      "games": 9,
+      "meanExcess": 3.946,
+      "volatility": 6.913,
+      "sharpe": 0.571,
+      "upsideCapture": 0.938,
+      "downsideCapture": 0.157,
+      "beta": 0.65,
+      "skew": -0.242,
+      "tailRate": 0.028,
+      "qbCorrelation": null,
+      "raw": {
+        "meanExcess": 5.737,
+        "volatility": 6.339,
+        "sharpe": 0.905,
+        "upsideCapture": 1.16,
+        "downsideCapture": 0.019,
+        "beta": 0.709,
+        "skew": -0.434,
+        "tailRate": 0.0,
+        "qbCorrelation": null
       }
     },
     {
@@ -151,6 +204,32 @@
         "skew": 1.493,
         "tailRate": 0.333,
         "qbCorrelation": 0.433
+      }
+    },
+    {
+      "name": "J.J. McCarthy",
+      "team": "NYG",
+      "position": "QB",
+      "games": 5,
+      "meanExcess": 3.39,
+      "volatility": 7.278,
+      "sharpe": 0.466,
+      "upsideCapture": 1.5,
+      "downsideCapture": -0.475,
+      "beta": 0.41,
+      "skew": 0.563,
+      "tailRate": 0.152,
+      "qbCorrelation": null,
+      "raw": {
+        "meanExcess": 6.168,
+        "volatility": 6.538,
+        "sharpe": 0.943,
+        "upsideCapture": 2.349,
+        "downsideCapture": -1.228,
+        "beta": 0.324,
+        "skew": 0.859,
+        "tailRate": 0.2,
+        "qbCorrelation": null
       }
     },
     {
@@ -1012,6 +1091,32 @@
       }
     },
     {
+      "name": "Dak Prescott",
+      "team": "DAL",
+      "position": "QB",
+      "games": 10,
+      "meanExcess": 2.599,
+      "volatility": 8.662,
+      "sharpe": 0.3,
+      "upsideCapture": 0.584,
+      "downsideCapture": 0.412,
+      "beta": 0.639,
+      "skew": 0.368,
+      "tailRate": 0.098,
+      "qbCorrelation": null,
+      "raw": {
+        "meanExcess": 3.672,
+        "volatility": 8.846,
+        "sharpe": 0.415,
+        "upsideCapture": 0.642,
+        "downsideCapture": 0.39,
+        "beta": 0.688,
+        "skew": 0.438,
+        "tailRate": 0.1,
+        "qbCorrelation": null
+      }
+    },
+    {
       "name": "Harold Fannin Jr.",
       "team": "CLE",
       "position": "TE",
@@ -1298,6 +1403,32 @@
       }
     },
     {
+      "name": "Sam Darnold",
+      "team": "SEA",
+      "position": "QB",
+      "games": 6,
+      "meanExcess": 2.718,
+      "volatility": 10.242,
+      "sharpe": 0.265,
+      "upsideCapture": 0.929,
+      "downsideCapture": 0.029,
+      "beta": 0.365,
+      "skew": 1.248,
+      "tailRate": 0.137,
+      "qbCorrelation": null,
+      "raw": {
+        "meanExcess": 4.585,
+        "volatility": 11.602,
+        "sharpe": 0.395,
+        "upsideCapture": 1.257,
+        "downsideCapture": -0.264,
+        "beta": 0.264,
+        "skew": 1.952,
+        "tailRate": 0.167,
+        "qbCorrelation": null
+      }
+    },
+    {
       "name": "Xavier Smith",
       "team": "LAR",
       "position": "WR",
@@ -1425,6 +1556,32 @@
         "skew": 2.095,
         "tailRate": 0.222,
         "qbCorrelation": 0.8
+      }
+    },
+    {
+      "name": "Drake Maye",
+      "team": "NE",
+      "position": "QB",
+      "games": 9,
+      "meanExcess": 2.947,
+      "volatility": 11.801,
+      "sharpe": 0.25,
+      "upsideCapture": 0.799,
+      "downsideCapture": 0.911,
+      "beta": 0.853,
+      "skew": 0.061,
+      "tailRate": 0.182,
+      "qbCorrelation": null,
+      "raw": {
+        "meanExcess": 4.293,
+        "volatility": 13.4,
+        "sharpe": 0.32,
+        "upsideCapture": 0.959,
+        "downsideCapture": 1.108,
+        "beta": 1.003,
+        "skew": 0.003,
+        "tailRate": 0.222,
+        "qbCorrelation": null
       }
     },
     {
@@ -1633,6 +1790,32 @@
         "skew": -0.474,
         "tailRate": 0.111,
         "qbCorrelation": -0.247
+      }
+    },
+    {
+      "name": "Bo Nix",
+      "team": "DEN",
+      "position": "QB",
+      "games": 9,
+      "meanExcess": 1.904,
+      "volatility": 8.137,
+      "sharpe": 0.234,
+      "upsideCapture": 0.465,
+      "downsideCapture": 0.77,
+      "beta": 0.453,
+      "skew": 0.304,
+      "tailRate": 0.182,
+      "qbCorrelation": null,
+      "raw": {
+        "meanExcess": 2.788,
+        "volatility": 8.108,
+        "sharpe": 0.344,
+        "upsideCapture": 0.478,
+        "downsideCapture": 0.904,
+        "beta": 0.424,
+        "skew": 0.353,
+        "tailRate": 0.222,
+        "qbCorrelation": null
       }
     },
     {
@@ -2309,6 +2492,32 @@
         "skew": 0.856,
         "tailRate": 0.25,
         "qbCorrelation": 0.057
+      }
+    },
+    {
+      "name": "Jalon Daniels",
+      "team": "TB",
+      "position": "QB",
+      "games": 4,
+      "meanExcess": 1.633,
+      "volatility": 8.984,
+      "sharpe": 0.182,
+      "upsideCapture": 0.174,
+      "downsideCapture": -0.806,
+      "beta": 0.042,
+      "skew": -0.449,
+      "tailRate": 0.212,
+      "qbCorrelation": null,
+      "raw": {
+        "meanExcess": 3.35,
+        "volatility": 9.764,
+        "sharpe": 0.343,
+        "upsideCapture": -0.091,
+        "downsideCapture": -2.08,
+        "beta": -0.433,
+        "skew": -1.089,
+        "tailRate": 0.333,
+        "qbCorrelation": null
       }
     },
     {
@@ -3092,6 +3301,32 @@
       }
     },
     {
+      "name": "C.J. Stroud",
+      "team": "HOU",
+      "position": "QB",
+      "games": 9,
+      "meanExcess": 1.101,
+      "volatility": 7.768,
+      "sharpe": 0.142,
+      "upsideCapture": 0.554,
+      "downsideCapture": 0.481,
+      "beta": 0.516,
+      "skew": 0.669,
+      "tailRate": 0.028,
+      "qbCorrelation": null,
+      "raw": {
+        "meanExcess": 1.628,
+        "volatility": 7.575,
+        "sharpe": 0.215,
+        "upsideCapture": 0.606,
+        "downsideCapture": 0.486,
+        "beta": 0.516,
+        "skew": 0.881,
+        "tailRate": 0.0,
+        "qbCorrelation": null
+      }
+    },
+    {
       "name": "DeVonta Smith",
       "team": "PHI",
       "position": "WR",
@@ -3245,6 +3480,32 @@
         "skew": 1.513,
         "tailRate": 0.0,
         "qbCorrelation": 0.107
+      }
+    },
+    {
+      "name": "Cam Ward",
+      "team": "TEN",
+      "position": "QB",
+      "games": 9,
+      "meanExcess": 1.115,
+      "volatility": 8.386,
+      "sharpe": 0.133,
+      "upsideCapture": 0.402,
+      "downsideCapture": 0.695,
+      "beta": 0.494,
+      "skew": 0.148,
+      "tailRate": 0.105,
+      "qbCorrelation": null,
+      "raw": {
+        "meanExcess": 1.648,
+        "volatility": 8.468,
+        "sharpe": 0.195,
+        "upsideCapture": 0.386,
+        "downsideCapture": 0.796,
+        "beta": 0.485,
+        "skew": 0.128,
+        "tailRate": 0.111,
+        "qbCorrelation": null
       }
     },
     {
@@ -5120,6 +5381,84 @@
       }
     },
     {
+      "name": "Justin Herbert",
+      "team": "LAC",
+      "position": "QB",
+      "games": 9,
+      "meanExcess": 0.328,
+      "volatility": 6.175,
+      "sharpe": 0.053,
+      "upsideCapture": 0.467,
+      "downsideCapture": 0.392,
+      "beta": 0.478,
+      "skew": 0.957,
+      "tailRate": 0.105,
+      "qbCorrelation": null,
+      "raw": {
+        "meanExcess": 0.51,
+        "volatility": 5.273,
+        "sharpe": 0.097,
+        "upsideCapture": 0.48,
+        "downsideCapture": 0.358,
+        "beta": 0.462,
+        "skew": 1.297,
+        "tailRate": 0.111,
+        "qbCorrelation": null
+      }
+    },
+    {
+      "name": "Kirk Cousins",
+      "team": "MIN",
+      "position": "QB",
+      "games": 10,
+      "meanExcess": 0.361,
+      "volatility": 6.932,
+      "sharpe": 0.052,
+      "upsideCapture": 0.346,
+      "downsideCapture": 0.232,
+      "beta": 0.562,
+      "skew": 0.051,
+      "tailRate": 0.026,
+      "qbCorrelation": null,
+      "raw": {
+        "meanExcess": 0.538,
+        "volatility": 6.424,
+        "sharpe": 0.084,
+        "upsideCapture": 0.31,
+        "downsideCapture": 0.138,
+        "beta": 0.58,
+        "skew": -0.006,
+        "tailRate": 0.0,
+        "qbCorrelation": null
+      }
+    },
+    {
+      "name": "Matthew Stafford",
+      "team": "LAR",
+      "position": "QB",
+      "games": 10,
+      "meanExcess": 0.516,
+      "volatility": 9.934,
+      "sharpe": 0.052,
+      "upsideCapture": 0.368,
+      "downsideCapture": 1.069,
+      "beta": 0.558,
+      "skew": 0.754,
+      "tailRate": 0.098,
+      "qbCorrelation": null,
+      "raw": {
+        "meanExcess": 0.756,
+        "volatility": 10.626,
+        "sharpe": 0.071,
+        "upsideCapture": 0.339,
+        "downsideCapture": 1.309,
+        "beta": 0.575,
+        "skew": 0.979,
+        "tailRate": 0.1,
+        "qbCorrelation": null
+      }
+    },
+    {
       "name": "Malik Benson",
       "team": "LV",
       "position": "WR",
@@ -5195,6 +5534,58 @@
         "skew": 0.997,
         "tailRate": 0.25,
         "qbCorrelation": -0.151
+      }
+    },
+    {
+      "name": "Aaron Rodgers",
+      "team": "PIT",
+      "position": "QB",
+      "games": 9,
+      "meanExcess": 0.34,
+      "volatility": 7.782,
+      "sharpe": 0.044,
+      "upsideCapture": 0.354,
+      "downsideCapture": 0.358,
+      "beta": 0.481,
+      "skew": 0.103,
+      "tailRate": 0.105,
+      "qbCorrelation": null,
+      "raw": {
+        "meanExcess": 0.528,
+        "volatility": 7.594,
+        "sharpe": 0.069,
+        "upsideCapture": 0.316,
+        "downsideCapture": 0.308,
+        "beta": 0.465,
+        "skew": 0.063,
+        "tailRate": 0.111,
+        "qbCorrelation": null
+      }
+    },
+    {
+      "name": "Geno Smith",
+      "team": "NYJ",
+      "position": "QB",
+      "games": 10,
+      "meanExcess": 0.343,
+      "volatility": 7.984,
+      "sharpe": 0.043,
+      "upsideCapture": 0.76,
+      "downsideCapture": 0.608,
+      "beta": 0.688,
+      "skew": 0.136,
+      "tailRate": 0.026,
+      "qbCorrelation": null,
+      "raw": {
+        "meanExcess": 0.513,
+        "volatility": 7.896,
+        "sharpe": 0.065,
+        "upsideCapture": 0.889,
+        "downsideCapture": 0.664,
+        "beta": 0.757,
+        "skew": 0.114,
+        "tailRate": 0.0,
+        "qbCorrelation": null
       }
     },
     {
@@ -5432,6 +5823,32 @@
       }
     },
     {
+      "name": "Tyler Huntley",
+      "team": "BAL",
+      "position": "QB",
+      "games": 4,
+      "meanExcess": 0.368,
+      "volatility": 11.67,
+      "sharpe": 0.032,
+      "upsideCapture": null,
+      "downsideCapture": 0.415,
+      "beta": 0.684,
+      "skew": 0.247,
+      "tailRate": 0.171,
+      "qbCorrelation": null,
+      "raw": {
+        "meanExcess": 0.82,
+        "volatility": 15.138,
+        "sharpe": 0.054,
+        "upsideCapture": null,
+        "downsideCapture": 0.363,
+        "beta": 0.851,
+        "skew": 0.302,
+        "tailRate": 0.25,
+        "qbCorrelation": null
+      }
+    },
+    {
       "name": "Kaelon Black",
       "team": "SF",
       "position": "RB",
@@ -5611,6 +6028,32 @@
         "skew": 0.197,
         "tailRate": 0.222,
         "qbCorrelation": 0.24
+      }
+    },
+    {
+      "name": "Jameis Winston",
+      "team": "NYG",
+      "position": "QB",
+      "games": 8,
+      "meanExcess": 0.213,
+      "volatility": 9.389,
+      "sharpe": 0.023,
+      "upsideCapture": 0.401,
+      "downsideCapture": 0.84,
+      "beta": 0.576,
+      "skew": 0.613,
+      "tailRate": 0.28,
+      "qbCorrelation": -0.843,
+      "raw": {
+        "meanExcess": 0.361,
+        "volatility": 9.983,
+        "sharpe": 0.036,
+        "upsideCapture": 0.383,
+        "downsideCapture": 1.025,
+        "beta": 0.605,
+        "skew": 0.823,
+        "tailRate": 0.375,
+        "qbCorrelation": -0.843
       }
     },
     {
@@ -5848,6 +6291,32 @@
       }
     },
     {
+      "name": "Jordan Love",
+      "team": "GB",
+      "position": "QB",
+      "games": 10,
+      "meanExcess": 0.058,
+      "volatility": 8.438,
+      "sharpe": 0.007,
+      "upsideCapture": 0.653,
+      "downsideCapture": 0.73,
+      "beta": 0.666,
+      "skew": 0.765,
+      "tailRate": 0.026,
+      "qbCorrelation": null,
+      "raw": {
+        "meanExcess": 0.115,
+        "volatility": 8.533,
+        "sharpe": 0.013,
+        "upsideCapture": 0.739,
+        "downsideCapture": 0.835,
+        "beta": 0.726,
+        "skew": 0.995,
+        "tailRate": 0.0,
+        "qbCorrelation": null
+      }
+    },
+    {
       "name": "Brian Thomas Jr.",
       "team": "JAX",
       "position": "WR",
@@ -5952,6 +6421,32 @@
       }
     },
     {
+      "name": "Brock Purdy",
+      "team": "SF",
+      "position": "QB",
+      "games": 9,
+      "meanExcess": -0.027,
+      "volatility": 8.123,
+      "sharpe": -0.003,
+      "upsideCapture": 0.516,
+      "downsideCapture": 0.802,
+      "beta": 0.648,
+      "skew": 0.014,
+      "tailRate": 0.028,
+      "qbCorrelation": null,
+      "raw": {
+        "meanExcess": -0.002,
+        "volatility": 8.088,
+        "sharpe": -0.0,
+        "upsideCapture": 0.551,
+        "downsideCapture": 0.951,
+        "beta": 0.706,
+        "skew": -0.065,
+        "tailRate": 0.0,
+        "qbCorrelation": null
+      }
+    },
+    {
       "name": "Greg Dulcich",
       "team": "MIA",
       "position": "TE",
@@ -5975,6 +6470,58 @@
         "skew": 0.186,
         "tailRate": 0.25,
         "qbCorrelation": 0.714
+      }
+    },
+    {
+      "name": "Deshaun Watson",
+      "team": "CLE",
+      "position": "QB",
+      "games": 8,
+      "meanExcess": -0.034,
+      "volatility": 5.957,
+      "sharpe": -0.006,
+      "upsideCapture": 0.348,
+      "downsideCapture": 0.497,
+      "beta": 0.445,
+      "skew": 0.065,
+      "tailRate": 0.03,
+      "qbCorrelation": null,
+      "raw": {
+        "meanExcess": -0.01,
+        "volatility": 4.834,
+        "sharpe": -0.002,
+        "upsideCapture": 0.304,
+        "downsideCapture": 0.511,
+        "beta": 0.409,
+        "skew": 0.001,
+        "tailRate": 0.0,
+        "qbCorrelation": null
+      }
+    },
+    {
+      "name": "Michael Penix Jr.",
+      "team": "ATL",
+      "position": "QB",
+      "games": 7,
+      "meanExcess": -0.052,
+      "volatility": 8.58,
+      "sharpe": -0.006,
+      "upsideCapture": 0.279,
+      "downsideCapture": 0.278,
+      "beta": 0.4,
+      "skew": -0.916,
+      "tailRate": 0.033,
+      "qbCorrelation": null,
+      "raw": {
+        "meanExcess": -0.034,
+        "volatility": 8.795,
+        "sharpe": -0.004,
+        "upsideCapture": 0.189,
+        "downsideCapture": 0.17,
+        "beta": 0.334,
+        "skew": -1.55,
+        "tailRate": 0.0,
+        "qbCorrelation": null
       }
     },
     {
@@ -6186,6 +6733,32 @@
       }
     },
     {
+      "name": "Jayden Daniels",
+      "team": "WAS",
+      "position": "QB",
+      "games": 7,
+      "meanExcess": -0.136,
+      "volatility": 8.391,
+      "sharpe": -0.016,
+      "upsideCapture": 0.523,
+      "downsideCapture": 0.473,
+      "beta": 0.54,
+      "skew": 1.259,
+      "tailRate": 0.124,
+      "qbCorrelation": null,
+      "raw": {
+        "meanExcess": -0.166,
+        "volatility": 8.498,
+        "sharpe": -0.02,
+        "upsideCapture": 0.572,
+        "downsideCapture": 0.476,
+        "beta": 0.554,
+        "skew": 1.869,
+        "tailRate": 0.143,
+        "qbCorrelation": null
+      }
+    },
+    {
       "name": "Antonio Williams",
       "team": "WAS",
       "position": "WR",
@@ -6287,6 +6860,32 @@
         "skew": 1.196,
         "tailRate": 0.167,
         "qbCorrelation": -0.428
+      }
+    },
+    {
+      "name": "Patrick Mahomes",
+      "team": "KC",
+      "position": "QB",
+      "games": 9,
+      "meanExcess": -0.217,
+      "volatility": 9.27,
+      "sharpe": -0.023,
+      "upsideCapture": 0.755,
+      "downsideCapture": 0.668,
+      "beta": 0.616,
+      "skew": 0.449,
+      "tailRate": 0.028,
+      "qbCorrelation": null,
+      "raw": {
+        "meanExcess": -0.277,
+        "volatility": 9.744,
+        "sharpe": -0.028,
+        "upsideCapture": 0.896,
+        "downsideCapture": 0.756,
+        "beta": 0.66,
+        "skew": 0.563,
+        "tailRate": 0.0,
+        "qbCorrelation": null
       }
     },
     {
@@ -7200,6 +7799,58 @@
       }
     },
     {
+      "name": "Malik Willis",
+      "team": "MIA",
+      "position": "QB",
+      "games": 7,
+      "meanExcess": -0.778,
+      "volatility": 9.253,
+      "sharpe": -0.084,
+      "upsideCapture": 0.637,
+      "downsideCapture": 1.575,
+      "beta": 0.84,
+      "skew": 0.249,
+      "tailRate": 0.124,
+      "qbCorrelation": null,
+      "raw": {
+        "meanExcess": -1.176,
+        "volatility": 9.853,
+        "sharpe": -0.119,
+        "upsideCapture": 0.751,
+        "downsideCapture": 2.208,
+        "beta": 1.025,
+        "skew": 0.281,
+        "tailRate": 0.143,
+        "qbCorrelation": null
+      }
+    },
+    {
+      "name": "Trevor Lawrence",
+      "team": "JAX",
+      "position": "QB",
+      "games": 9,
+      "meanExcess": -0.816,
+      "volatility": 8.85,
+      "sharpe": -0.092,
+      "upsideCapture": 0.34,
+      "downsideCapture": 0.531,
+      "beta": 0.455,
+      "skew": -0.567,
+      "tailRate": 0.028,
+      "qbCorrelation": null,
+      "raw": {
+        "meanExcess": -1.142,
+        "volatility": 9.138,
+        "sharpe": -0.125,
+        "upsideCapture": 0.296,
+        "downsideCapture": 0.559,
+        "beta": 0.427,
+        "skew": -0.904,
+        "tailRate": 0.0,
+        "qbCorrelation": null
+      }
+    },
+    {
       "name": "Jordan Whittington",
       "team": "LAR",
       "position": "WR",
@@ -7408,6 +8059,32 @@
       }
     },
     {
+      "name": "Jared Goff",
+      "team": "DET",
+      "position": "QB",
+      "games": 10,
+      "meanExcess": -1.032,
+      "volatility": 8.214,
+      "sharpe": -0.126,
+      "upsideCapture": 0.28,
+      "downsideCapture": 0.704,
+      "beta": 0.618,
+      "skew": 0.03,
+      "tailRate": 0.026,
+      "qbCorrelation": null,
+      "raw": {
+        "meanExcess": -1.412,
+        "volatility": 8.218,
+        "sharpe": -0.172,
+        "upsideCapture": 0.216,
+        "downsideCapture": 0.798,
+        "beta": 0.659,
+        "skew": -0.035,
+        "tailRate": 0.0,
+        "qbCorrelation": null
+      }
+    },
+    {
       "name": "Tyler Higbee",
       "team": "LAR",
       "position": "TE",
@@ -7613,6 +8290,32 @@
         "skew": 0.302,
         "tailRate": 0.111,
         "qbCorrelation": 0.549
+      }
+    },
+    {
+      "name": "Jacoby Brissett",
+      "team": "BAL",
+      "position": "QB",
+      "games": 9,
+      "meanExcess": -1.256,
+      "volatility": 8.552,
+      "sharpe": -0.147,
+      "upsideCapture": 0.064,
+      "downsideCapture": 0.422,
+      "beta": 0.264,
+      "skew": 0.642,
+      "tailRate": 0.105,
+      "qbCorrelation": null,
+      "raw": {
+        "meanExcess": -1.778,
+        "volatility": 8.707,
+        "sharpe": -0.204,
+        "upsideCapture": -0.102,
+        "downsideCapture": 0.401,
+        "beta": 0.151,
+        "skew": 0.842,
+        "tailRate": 0.111,
+        "qbCorrelation": null
       }
     },
     {
@@ -8318,6 +9021,32 @@
       }
     },
     {
+      "name": "Baker Mayfield",
+      "team": "TB",
+      "position": "QB",
+      "games": 6,
+      "meanExcess": -2.044,
+      "volatility": 7.397,
+      "sharpe": -0.276,
+      "upsideCapture": -0.09,
+      "downsideCapture": 0.419,
+      "beta": 0.155,
+      "skew": 0.854,
+      "tailRate": 0.037,
+      "qbCorrelation": null,
+      "raw": {
+        "meanExcess": -3.352,
+        "volatility": 6.859,
+        "sharpe": -0.489,
+        "upsideCapture": -0.441,
+        "downsideCapture": 0.387,
+        "beta": -0.086,
+        "skew": 1.296,
+        "tailRate": 0.0,
+        "qbCorrelation": null
+      }
+    },
+    {
       "name": "Jelani Woods",
       "team": "NYJ",
       "position": "TE",
@@ -8445,6 +9174,32 @@
         "skew": 0.234,
         "tailRate": 0.0,
         "qbCorrelation": 0.206
+      }
+    },
+    {
+      "name": "Daniel Jones",
+      "team": "IND",
+      "position": "QB",
+      "games": 10,
+      "meanExcess": -1.447,
+      "volatility": 4.906,
+      "sharpe": -0.295,
+      "upsideCapture": -0.052,
+      "downsideCapture": 0.306,
+      "beta": 0.303,
+      "skew": 0.335,
+      "tailRate": 0.026,
+      "qbCorrelation": null,
+      "raw": {
+        "meanExcess": -1.992,
+        "volatility": 3.587,
+        "sharpe": -0.555,
+        "upsideCapture": -0.248,
+        "downsideCapture": 0.241,
+        "beta": 0.217,
+        "skew": 0.391,
+        "tailRate": 0.0,
+        "qbCorrelation": null
       }
     },
     {
@@ -8656,6 +9411,32 @@
       }
     },
     {
+      "name": "Caleb Williams",
+      "team": "CHI",
+      "position": "QB",
+      "games": 7,
+      "meanExcess": -3.394,
+      "volatility": 9.802,
+      "sharpe": -0.346,
+      "upsideCapture": 0.055,
+      "downsideCapture": 0.495,
+      "beta": 0.439,
+      "skew": -0.984,
+      "tailRate": 0.033,
+      "qbCorrelation": null,
+      "raw": {
+        "meanExcess": -5.286,
+        "volatility": 10.716,
+        "sharpe": -0.493,
+        "upsideCapture": -0.164,
+        "downsideCapture": 0.51,
+        "beta": 0.395,
+        "skew": -1.656,
+        "tailRate": 0.0,
+        "qbCorrelation": null
+      }
+    },
+    {
       "name": "Dalton Kincaid",
       "team": "BUF",
       "position": "TE",
@@ -8731,6 +9512,32 @@
         "skew": 0.522,
         "tailRate": 0.0,
         "qbCorrelation": 0.019
+      }
+    },
+    {
+      "name": "Tyler Shough",
+      "team": "NO",
+      "position": "QB",
+      "games": 9,
+      "meanExcess": -3.223,
+      "volatility": 8.501,
+      "sharpe": -0.379,
+      "upsideCapture": null,
+      "downsideCapture": 0.785,
+      "beta": 0.735,
+      "skew": -0.468,
+      "tailRate": 0.028,
+      "qbCorrelation": null,
+      "raw": {
+        "meanExcess": -4.619,
+        "volatility": 8.634,
+        "sharpe": -0.535,
+        "upsideCapture": null,
+        "downsideCapture": 0.926,
+        "beta": 0.832,
+        "skew": -0.762,
+        "tailRate": 0.0,
+        "qbCorrelation": null
       }
     },
     {
@@ -8916,6 +9723,32 @@
       }
     },
     {
+      "name": "Lamar Jackson",
+      "team": "BAL",
+      "position": "QB",
+      "games": 4,
+      "meanExcess": -4.1,
+      "volatility": 9.045,
+      "sharpe": -0.453,
+      "upsideCapture": null,
+      "downsideCapture": 0.586,
+      "beta": 0.655,
+      "skew": -0.405,
+      "tailRate": 0.046,
+      "qbCorrelation": null,
+      "raw": {
+        "meanExcess": -8.117,
+        "volatility": 9.887,
+        "sharpe": -0.821,
+        "upsideCapture": null,
+        "downsideCapture": 0.705,
+        "beta": 0.793,
+        "skew": -1.003,
+        "tailRate": 0.0,
+        "qbCorrelation": null
+      }
+    },
+    {
       "name": "Jordan Mason",
       "team": "MIN",
       "position": "RB",
@@ -9046,6 +9879,32 @@
       }
     },
     {
+      "name": "Josh Allen",
+      "team": "BUF",
+      "position": "QB",
+      "games": 9,
+      "meanExcess": -4.444,
+      "volatility": 8.184,
+      "sharpe": -0.543,
+      "upsideCapture": -0.136,
+      "downsideCapture": 1.061,
+      "beta": 1.067,
+      "skew": 0.168,
+      "tailRate": 0.028,
+      "qbCorrelation": null,
+      "raw": {
+        "meanExcess": -6.382,
+        "volatility": 8.176,
+        "sharpe": -0.781,
+        "upsideCapture": -0.391,
+        "downsideCapture": 1.325,
+        "beta": 1.312,
+        "skew": 0.158,
+        "tailRate": 0.0,
+        "qbCorrelation": null
+      }
+    },
+    {
       "name": "Zay Flowers",
       "team": "BAL",
       "position": "WR",
@@ -9124,6 +9983,32 @@
       }
     },
     {
+      "name": "Jalen Hurts",
+      "team": "PHI",
+      "position": "QB",
+      "games": 4,
+      "meanExcess": -3.103,
+      "volatility": 5.25,
+      "sharpe": -0.591,
+      "upsideCapture": null,
+      "downsideCapture": 0.583,
+      "beta": 0.345,
+      "skew": 0.231,
+      "tailRate": 0.046,
+      "qbCorrelation": null,
+      "raw": {
+        "meanExcess": -6.123,
+        "volatility": 2.298,
+        "sharpe": -2.665,
+        "upsideCapture": null,
+        "downsideCapture": 0.699,
+        "beta": 0.174,
+        "skew": 0.269,
+        "tailRate": 0.0,
+        "qbCorrelation": null
+      }
+    },
+    {
       "name": "TreVeyon Henderson",
       "team": "NE",
       "position": "RB",
@@ -9199,6 +10084,32 @@
         "skew": -0.006,
         "tailRate": 0.0,
         "qbCorrelation": 0.687
+      }
+    },
+    {
+      "name": "Bryce Young",
+      "team": "CAR",
+      "position": "QB",
+      "games": 9,
+      "meanExcess": -4.931,
+      "volatility": 6.503,
+      "sharpe": -0.758,
+      "upsideCapture": -0.214,
+      "downsideCapture": 0.818,
+      "beta": 0.588,
+      "skew": -0.064,
+      "tailRate": 0.028,
+      "qbCorrelation": null,
+      "raw": {
+        "meanExcess": -7.086,
+        "volatility": 5.747,
+        "sharpe": -1.233,
+        "upsideCapture": -0.504,
+        "downsideCapture": 0.974,
+        "beta": 0.62,
+        "skew": -0.177,
+        "tailRate": 0.0,
+        "qbCorrelation": null
       }
     },
     {

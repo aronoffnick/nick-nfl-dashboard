@@ -8,6 +8,8 @@ test('stocks keep a four-game floor and football-term tooltips', () => {
   const data = read('stocks-wk13.json')
   assert.ok(data.players.length > 0)
   assert.ok(data.players.every(player => player.games >= 4))
+  assert.ok(data.players.some(player => player.position === 'QB' && player.qbCorrelation == null))
+  for (const pos of ['QB', 'RB', 'WR', 'TE']) assert.ok(data.positions.includes(pos))
   assert.match(data.tooltips.sharpe, /week-to-week swing/)
   assert.match(data.tooltips.upsideCapture, /good script/)
   assert.match(data.tooltips.beta, /points his team scores/)
