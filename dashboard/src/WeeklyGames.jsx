@@ -56,8 +56,10 @@ export default function WeeklyGames({matchups,onOpen}){
       const logo=game.winner?.logo
       return <button key={game.id} type="button" className={upset?'model-pick model-pick-upset':'model-pick'} onClick={()=>onOpen(game.id)}>
         {logo?<img src={logo} alt="" onError={event=>event.currentTarget.remove()}/>:null}
-        <span>{chipText(game)}</span>
-        {upset?<span>(upset)</span>:null}
+        <span className="pick-card-copy">
+          <span className="pick-card-name">{chipText(game)}</span>
+          {upset?<span className="pick-card-tag">(upset)</span>:null}
+        </span>
       </button>
     })}
   </div>

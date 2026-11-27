@@ -36,20 +36,23 @@ function espnIndex(week) {
   return fileForWeek('teamOdds', week).data?.games || {}
 }
 
-function consider(legs, game, side, quote, prob, bet) {
+function consider(legs, game, side, quote, prob, bet, spreadLine) {
   if (!quote || quote.price == null) return
   const implied = americanImplied(quote.price)
   if (implied == null) return
   const edge = prob - implied
   if (edge <= 0) return
   const team = game[side]
+  const line = Number(spreadLine)
   legs.push({
     gameId: game.id,
     team: team.abbr,
     teamName: team.name,
+    logo: team.logo || null,
     side,
     bet,
     line: quote.line,
+    spreadLine: Number.isFinite(line) ? line : null,
     price: quote.price,
     book: quote.book,
     asOf: quote.asOf,
@@ -81,10 +84,11 @@ export function teamCandidates(matchups, week) {
       const kept = prior?.prices?.[abbr] || prior?.prices?.[game[side].abbr]
       const fresh = board?.moneyline?.[abbr]
       const quote = kept || (fresh ? { ...fresh, asOf: board.asOf, source: board.source } : null)
-      consider(legs, game, side, quote, win[side], 'ML')
       const spread = board?.spread?.[abbr]
+      const spreadLine = spread?.line
+      consider(legs, game, side, quote, win[side], 'ML', spreadLine)
       if (spread && homeCover != null) {
-        consider(legs, game, side, { ...spread, asOf: board.asOf, source: board.source }, side === 'home' ? homeCover : 1 - homeCover, 'Spread')
+        consider(legs, game, side, { ...spread, asOf: board.asOf, source: board.source }, side === 'home' ? homeCover : 1 - homeCover, 'Spread', spreadLine)
       }
     }
   }

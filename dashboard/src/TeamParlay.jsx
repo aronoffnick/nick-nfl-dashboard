@@ -1,6 +1,49 @@
 import { useMemo, useState } from 'react'
 import { buildTeamParlay } from './teamParlay.js'
 
+function nickname(name, abbr) {
+  const parts = String(name || '').trim().split(/\s+/).filter(Boolean)
+  return parts.at(-1) || abbr || 'Team'
+}
+
+function signedSpread(value) {
+  const n = Number(value)
+  if (!Number.isFinite(n)) return null
+  const rounded = Math.round(n * 10) / 10
+  const body = Number.isInteger(rounded) ? String(Math.abs(rounded)) : Math.abs(rounded).toFixed(1)
+  if (rounded > 0) return `+${body}`
+  if (rounded < 0) return `-${body}`
+  return '0'
+}
+
+function legSpread(leg) {
+  if (leg.spreadLine != null && Number.isFinite(Number(leg.spreadLine))) return Number(leg.spreadLine)
+  if (leg.bet === 'Spread' && leg.line != null && Number.isFinite(Number(leg.line))) return Number(leg.line)
+  return null
+}
+
+function legUpset(leg) {
+  const line = legSpread(leg)
+  if (line != null) return line > 0
+  return Number(leg.price) > 0
+}
+
+function LegCard({ leg }) {
+  const spread = signedSpread(legSpread(leg))
+  const upset = legUpset(leg)
+  const name = nickname(leg.teamName, leg.team)
+  const label = spread ? `${name} (${spread})` : name
+  const price = leg.price > 0 ? `+${leg.price}` : leg.price
+  const detail = `${leg.teamName}${spread ? ` ${spread}` : ''} · ${leg.bet} ${price} · ${Math.round(leg.prob * 1000) / 10}% model${leg.source ? ` · ${leg.source}` : ''}${leg.asOf ? ` · ${leg.asOf}` : ''}`
+  return <li className={upset ? 'team-parlay-card team-parlay-card-upset' : 'team-parlay-card'} title={detail}>
+    {leg.logo ? <img src={leg.logo} alt="" onError={event => event.currentTarget.remove()} /> : null}
+    <span className="pick-card-copy">
+      <span className="pick-card-name">{label}</span>
+      {upset ? <span className="pick-card-tag">(upset)</span> : null}
+    </span>
+  </li>
+}
+
 export default function TeamParlay({ matchups, week }) {
   const [legs, setLegs] = useState(3)
   const [minOdds, setMinOdds] = useState('+200')
@@ -21,7 +64,7 @@ export default function TeamParlay({ matchups, week }) {
     </form>
     {!parlay ? <p className="team-parlay-empty">{result.reason}</p> : <>
       <p className="team-parlay-summary"><strong>{parlay.priceText}</strong> combined · <strong>{Math.round(parlay.hit * 1000) / 10}%</strong> model hit{parlay.asOf ? ` · snapshot ${parlay.asOf}` : ''}</p>
-      <ol>{parlay.legs.map(leg => <li key={leg.gameId + leg.bet}><b>{leg.team}</b> {leg.bet}{leg.bet === 'Spread' && leg.line != null ? ` ${leg.line > 0 ? `+${leg.line}` : leg.line}` : ''} <span>{leg.price > 0 ? `+${leg.price}` : leg.price}</span> <span>{Math.round(leg.prob * 1000) / 10}% model</span><small>{leg.source}{leg.asOf ? ` · ${leg.asOf}` : ''}</small></li>)}</ol>
+      <ol className="team-parlay-legs">{parlay.legs.map(leg => <LegCard key={leg.gameId + leg.bet} leg={leg} />)}</ol>
     </>}
   </section>
 }
