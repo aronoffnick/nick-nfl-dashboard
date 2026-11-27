@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import './App.css'
 import PickTracker from './PickTracker.jsx'
 import WeeklyGames from './WeeklyGames.jsx'
+import AccuracyNote from './props/AccuracyNote.jsx'
 import MatchupExplorer from './props/MatchupExplorer.jsx'
 import { parsePlayers } from './props/model.js'
 
@@ -355,6 +356,7 @@ export default function App() {
       <div><strong>{halfLife} games</strong><span>Weight half-life</span></div>
       <div><strong>+{advantage.toFixed(1)} pts</strong><span>Home advantage · neutral = 0</span></div>
     </section>
+    <AccuracyNote />
     <section className="controls">
       <div className="tabs">
         <button className={view === 'matchups' ? 'active' : ''} onClick={() => { setView('matchups'); setSort({ key: 'date', ascending: true }) }}>Matchups</button>
