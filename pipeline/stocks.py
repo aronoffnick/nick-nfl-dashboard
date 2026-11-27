@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Write the skill-player stocks file for one week.
+"""Write stat metrics for quarterbacks, backs, and receivers.
 
   python pipeline/stocks.py --season 2026 --week 13
   python pipeline/stocks.py --auto
@@ -47,7 +47,7 @@ def write_week(root: Path, stats, schedule, season: int, week: int) -> Path:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Write skill-player stocks for an NFL week")
+    parser = argparse.ArgumentParser(description="Write stat metrics for an NFL week")
     parser.add_argument("--season", type=int, default=2026)
     parser.add_argument("--week", type=int)
     parser.add_argument("--auto", action="store_true")

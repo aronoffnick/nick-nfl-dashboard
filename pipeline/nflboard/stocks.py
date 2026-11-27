@@ -1,4 +1,4 @@
-"""Skill-player surplus versus a pre-game line.
+"""Quarterback, back, and receiver surplus versus a pre-game line.
 
 The line is the pipeline projection from weeks before that game. When that
 projection does not exist, the line is the player's own trailing average.
@@ -20,7 +20,7 @@ from nflboard.logic import (
     round_num,
 )
 
-SKILL = ("RB", "WR", "TE")
+SKILL = ("QB", "RB", "WR", "TE")
 MIN_GAMES = 4
 PRIOR = 4.0
 TOOLTIPS = {
@@ -64,7 +64,7 @@ def row_half_ppr(row) -> float:
     )
 
 
-def projected_half_ppr(projected: dict) -> float | None:
+def projected_half_ppr(projected: dict, pass_tds: float = 0, interceptions: float = 0) -> float | None:
     if not projected:
         return None
     def mid(stat):
@@ -72,9 +72,9 @@ def projected_half_ppr(projected: dict) -> float | None:
         if not triple or triple[1] is None:
             return 0.0
         return float(triple[1])
-    if not any(projected.get(stat) and projected[stat][1] is not None for stat in ("rushYds", "recYds", "rec", "td")):
+    if not any(projected.get(stat) and projected[stat][1] is not None for stat in ("passYds", "rushYds", "recYds", "rec", "td")):
         return None
-    return half_ppr_value(mid("rushYds"), mid("recYds"), mid("rec"), mid("td"))
+    return half_ppr_value(mid("rushYds"), mid("recYds"), mid("rec"), mid("td"), mid("passYds"), pass_tds, interceptions)
 
 
 def _mean(values):
@@ -187,7 +187,7 @@ def _team_points(schedule: pd.DataFrame) -> dict[tuple[str, int], float]:
     return found
 
 
-def _quarterbacks(stats: pd.DataFrame) -> dict[tuple[str, int], float]:
+def _quarterbacks(stats: pd.DataFrame) -> dict[tuple[str, int], tuple[str, float]]:
     qbs = stats[stats["pos"] == "QB"]
     best = {}
     for row in qbs.itertuples(index=False):
@@ -195,8 +195,8 @@ def _quarterbacks(stats: pd.DataFrame) -> dict[tuple[str, int], float]:
         attempts = float(getattr(row, "attempts", 0) or 0)
         current = best.get(key)
         if current is None or attempts > current[0]:
-            best[key] = (attempts, row_half_ppr(row))
-    return {key: points for key, (_, points) in best.items()}
+            best[key] = (attempts, str(row.player_id), row_half_ppr(row))
+    return {key: (pid, points) for key, (_, pid, points) in best.items()}
 
 
 def build_stocks(stats: pd.DataFrame, schedule: pd.DataFrame, season: int, week: int) -> dict:
@@ -215,6 +215,7 @@ def build_stocks(stats: pd.DataFrame, schedule: pd.DataFrame, season: int, week:
     logs: dict[str, list] = {}
     names: dict[str, dict] = {}
     prior_actual: dict[str, list] = {}
+    prior_pass: dict[str, dict] = {}
     prior_team_points: dict[str, list] = {}
     for played in weeks:
         hist = history_stats(stats, schedule, played)
@@ -232,18 +233,29 @@ def build_stocks(stats: pd.DataFrame, schedule: pd.DataFrame, season: int, week:
             benchmark = None
             source = None
             if player and player["team"] == team and player["pos"] in SKILL:
-                benchmark = projected_half_ppr(project_player(player, opponent, factors, {}))
+                pass_tds = interceptions = 0.0
+                if player["pos"] == "QB":
+                    history = prior_pass.get(pid) or {}
+                    pass_tds = _mean(history.get("td") or []) or 0.0
+                    interceptions = _mean(history.get("int") or []) or 0.0
+                benchmark = projected_half_ppr(project_player(player, opponent, factors, {}), pass_tds, interceptions)
                 source = "projection"
             if benchmark is None and prior_actual.get(pid) and str(getattr(row, "pos", "")) in SKILL:
                 benchmark = _mean(prior_actual[pid])
                 source = "trailing"
             if str(getattr(row, "pos", "")) in SKILL:
                 prior_actual.setdefault(pid, []).append(actual)
+            if str(getattr(row, "pos", "")) == "QB":
+                bucket = prior_pass.setdefault(pid, {"td": [], "int": []})
+                bucket["td"].append(float(getattr(row, "passing_tds", 0) or 0))
+                bucket["int"].append(float(getattr(row, "passing_interceptions", 0) or 0))
             if benchmark is None or source is None:
                 continue
             usual = _mean(prior_team_points.get(team, []))
             team_points = points[(team, played)]
             script = None if usual is None else team_points - usual
+            starter = quarterbacks.get((team, played))
+            own_quarterback = starter is not None and starter[0] != pid
             logs.setdefault(pid, []).append({
                 "week": played,
                 "actual": round_num(actual, 2),
@@ -252,7 +264,7 @@ def build_stocks(stats: pd.DataFrame, schedule: pd.DataFrame, season: int, week:
                 "excess": round_num(actual - benchmark, 2),
                 "teamPoints": team_points,
                 "script": None if script is None else round_num(script, 2),
-                "qbPoints": None if quarterbacks.get((team, played)) is None else round_num(quarterbacks[(team, played)], 2),
+                "qbPoints": None if not own_quarterback else round_num(starter[1], 2),
             })
             names[pid] = {"name": str(row.player_display_name), "team": team, "position": str(row.pos)}
         for team, played_week in points:
@@ -297,8 +309,10 @@ def build_stocks(stats: pd.DataFrame, schedule: pd.DataFrame, season: int, week:
         "positions": list(SKILL),
         "method": (
             "Return = weekly half-PPR points minus a pre-game line. "
-            "The line is the pipeline projection from earlier weeks only (current-team average times the shrunk defense factor), "
-            "and a trailing average when that projection is missing. "
+            "The line is the pipeline projection from earlier weeks only (current-team average times the shrunk defense factor). "
+            "Quarterbacks also add their earlier passing-touchdown and interception rates, because the yardage model does not project those. "
+            "A trailing average is used when that projection is missing. "
+            "A quarterback is not correlated with himself, so that cell stays blank. "
             f"Players under {MIN_GAMES} scored games are omitted. "
             f"Each metric shrinks toward the position mean with a prior of {int(PRIOR)} games. "
             "A good or bad script is the team's points versus its own earlier scoring average, not a sportsbook total."

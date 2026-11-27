@@ -56,7 +56,7 @@ jobs:
           else
             python pipeline/prices.py --auto --season "${{ inputs.season || '2026' }}"
           fi
-      - name: Write skill-player stocks
+      - name: Write stat metrics for every position
         run: |
           if [ -n "${{ inputs.week }}" ]; then
             python pipeline/stocks.py --season "${{ inputs.season || '2026' }}" --week "${{ inputs.week }}"

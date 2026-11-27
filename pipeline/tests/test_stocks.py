@@ -59,6 +59,19 @@ class StocksTest(unittest.TestCase):
         moved = shrink_toward(2, 4, 0)
         self.assertTrue(math.isclose(moved, 1.0))
 
+    def test_quarterbacks_use_their_own_position_mean(self):
+        rows = []
+        for week in range(1, 7):
+            rows.append(player("qb", "Passer", "QB", "BUF", "MIA", week, rush=0, targets=0, rec=0, rec_yds=0, attempts=30, pass_yds=250, pass_td=2))
+            rows.append(player("rb", "Back", "RB", "MIA", "BUF", week, rush=40))
+        payload = build_stocks(pd.DataFrame(rows), schedule(), 2026, 7)
+        passer = next(row for row in payload["players"] if row["name"] == "Passer")
+        self.assertEqual(passer["position"], "QB")
+        self.assertGreaterEqual(passer["games"], 4)
+        self.assertIsNone(passer["qbCorrelation"])
+        self.assertIn("QB", payload["positions"])
+        self.assertLess(passer["weeks"][-1]["benchmark"], passer["weeks"][-1]["actual"] + 5)
+
     def test_half_ppr_from_the_projection(self):
         points = projected_half_ppr({"rushYds": [10, 100, 1], "rec": [1, 4, 1], "recYds": [5, 40, 1], "td": [0.1, 0.5, 1]})
         self.assertTrue(math.isclose(points, 0.1 * 100 + 0.1 * 40 + 0.5 * 4 + 6 * 0.5))
