@@ -399,6 +399,46 @@ export function combinedAmerican(legs) {
   return Number.isFinite(number) ? { text, number } : null
 }
 
+/** Fair American price for a model probability. 68.75% is −220. About 47.6% is +110. */
+export function fairAmerican(probability) {
+  const p = Number(probability)
+  if (!Number.isFinite(p) || p <= 0 || p >= 1) return null
+  if (p >= 0.5) return -Math.round((p / (1 - p)) * 100)
+  return Math.round(((1 - p) / p) * 100)
+}
+
+/**
+ * Book line versus the model's fair line.
+ * A −500 price the model makes −220 is overvalued. A +150 the model makes +110 is undervalued.
+ * ev is expected profit per 1 unit staked (probability edge times the decimal price).
+ */
+export function legValue(probability, price) {
+  const book = Number(price)
+  const fair = fairAmerican(probability)
+  const implied = americanImplied(book)
+  if (fair == null || implied == null) return { hasLine: false, fair: null, book: null, edge: null, ev: null, tag: 'no-line' }
+  const decimal = americanToDecimal(book)
+  if (!Number.isFinite(decimal) || decimal <= 1) return { hasLine: false, fair: null, book: null, edge: null, ev: null, tag: 'no-line' }
+  const edge = Number(probability) - implied
+  const ev = Number(probability) * decimal - 1
+  const tag = edge > 1e-4 ? 'undervalued' : edge < -1e-4 ? 'overvalued' : 'fair'
+  return { hasLine: true, fair, book, edge, ev, tag }
+}
+
+function decorateLeg(leg) {
+  const value = legValue(leg?.confidence, leg?.price)
+  return {
+    ...leg,
+    hasLine: value.hasLine,
+    bookLine: value.book,
+    fairLine: value.fair,
+    edge: value.hasLine ? value.edge : null,
+    ev: value.ev,
+    valueTag: value.tag,
+    valueScore: value.hasLine ? value.ev : null,
+  }
+}
+
 export function priceInRange(price, range) {
   if (!range || (range.min == null && range.max == null)) return true
   if (!price) return false
@@ -421,7 +461,10 @@ function withPrice(parlay, range) {
 
 function legScore(leg, mode) {
   const nudge = Number(leg.scriptNudge) || 0
-  if (mode === 'value') return (Number(leg.valueScore) || 0) + nudge * 0.25
+  if (mode === 'value') {
+    if (!leg.hasLine) return -2 + nudge * 0.01
+    return (Number(leg.ev) || 0) + nudge * 0.05
+  }
   return (Number(leg.confidence) || 0) + nudge
 }
 
@@ -480,14 +523,15 @@ function summarize(legs, mode) {
     || (b.confidence || 0) - (a.confidence || 0)
   ))
   const combined = ordered.reduce((product, leg) => product * (Number(leg.confidence) || 0), 1)
-  const value = ordered.reduce((sum, leg) => sum + (Number(leg.valueScore) || 0), 0)
+  const value = ordered.reduce((sum, leg) => sum + (leg.hasLine ? Number(leg.ev) || 0 : 0), 0)
   const nudge = ordered.reduce((sum, leg) => sum + (Number(leg.scriptNudge) || 0), 0)
   return {
     id: ordered.map(leg => leg.id).sort().join('|'),
     legs: ordered,
     combined,
     value,
-    rank: mode === 'value' ? value + nudge * 0.25 : combined + nudge,
+    missingLine: ordered.some(leg => !leg.hasLine),
+    rank: mode === 'value' ? ordered.reduce((sum, leg) => sum + legScore(leg, 'value'), 0) : combined + nudge,
     games: new Set(ordered.map(leg => leg.gameId)).size,
     mode,
   }
@@ -606,7 +650,11 @@ function emptyReason(type) {
 
 export function buildCustomParlays(pools = {}, input, { mode = 'confidence', limit = 8, oddsRange = null } = {}) {
   const types = checkedTypes(input?.types)
-  const byType = { outcome: pools.outcome || [], td: pools.td || [], prop: pools.prop || [] }
+  const byType = {
+    outcome: (pools.outcome || []).map(decorateLeg),
+    td: (pools.td || []).map(decorateLeg),
+    prop: (pools.prop || []).map(decorateLeg),
+  }
   for (const type of types) {
     if (!byType[type].length) return { parlays: [], reason: emptyReason(type) }
   }

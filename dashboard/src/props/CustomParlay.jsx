@@ -26,13 +26,19 @@ import './customParlay.css'
 const EMPTY_TYPES = { outcome: true, td: true, prop: true }
 const SNAPSHOT_NOTE = 'Unstarted games only. Prices are a static snapshot, not live odds. A getoddy moneyline is kept when one was already saved. Otherwise the price is the ESPN scoreboard odds snapshot.'
 
-function valueDetail(leg) {
-  if (leg.type === 'outcome') return `Kelly ${formatSignedChance(leg.kelly)} · edge ${formatSignedChance(leg.edge)}`
-  if (leg.priced) return `Edge vs price ${formatSignedChance(leg.edge)}`
-  return 'No snapshot price'
+function formatBook(price) {
+  const n = Number(price)
+  if (!Number.isFinite(n)) return '—'
+  return n > 0 ? `+${n}` : String(n)
 }
 
-function LegRow({ leg, showValue }) {
+function valueDetail(leg) {
+  if (!leg.hasLine) return 'No line'
+  const tag = leg.valueTag === 'undervalued' ? 'Undervalued ↑' : leg.valueTag === 'overvalued' ? 'Overvalued ↓' : 'Fair'
+  return `Book ${formatBook(leg.bookLine)} · Fair ${formatBook(leg.fairLine)} · ${tag}`
+}
+
+function LegRow({ leg }) {
   const pct = Math.max(0, Math.min(100, Math.round((leg.confidence || 0) * 100)))
   return <li className="custom-parlay-leg">
     {leg.logo ? <img className="custom-parlay-logo" src={leg.logo} alt="" /> : <span className="custom-parlay-logo custom-parlay-logo-fallback" aria-hidden="true">{leg.team || '•'}</span>}
@@ -45,7 +51,7 @@ function LegRow({ leg, showValue }) {
     <div className="custom-parlay-confidence" role="img" aria-label={`${formatChance(leg.confidence)} confidence for ${leg.title}`}>
       <strong>{formatChance(leg.confidence)}</strong>
       <span className="custom-parlay-bar" aria-hidden="true"><span style={{ width: `${pct}%` }} /></span>
-      <small>{showValue ? valueDetail(leg) : 'Confidence'}</small>
+      <small className={leg.valueTag === 'undervalued' ? 'custom-parlay-up' : leg.valueTag === 'overvalued' ? 'custom-parlay-down' : ''}>{valueDetail(leg)}</small>
     </div>
   </li>
 }
@@ -266,7 +272,7 @@ export default function CustomParlay({ data, matchups, roster, halfLife, window 
     <p className="custom-parlay-mode">{!scriptMatchup && team === 'all'
       ? 'No game is being scripted. The parlay uses the model as it stands.'
       : valueMode
-        ? 'Value ranks outcomes by Kelly and ranks a prop or touchdown by its hit chance minus the implied probability when a snapshot price exists.'
+        ? 'Value ranks by expected profit per dollar: model probability times the decimal price, minus 1. A book −500 the model makes −220 is overvalued. A +150 the model makes +110 is undervalued. No line ranks last.'
         : 'Confidence ranks the moneyline or spread model probability, the season-weighted touchdown rate, and each prop’s hit chance.'}</p>
     {validation.note ? <p className="custom-parlay-note">{validation.note}</p> : null}
     {message ? <p className="custom-parlay-error" role="alert">{message}</p> : null}
@@ -280,14 +286,14 @@ export default function CustomParlay({ data, matchups, roster, halfLife, window 
           <strong>{formatChance(parlay.combined)}</strong>
           <small>Combined estimate</small>
           {parlay.priceText ? <small>Snapshot {parlay.priceText}</small> : null}
-          {valueMode ? <small>Value {formatSignedChance(parlay.value)}</small> : null}
+          {valueMode ? <small>EV {formatSignedChance(parlay.value)} per $1</small> : null}
         </div>
       </header>
       {groups.map(group => <div key={group.id} className="custom-parlay-game">
         <h5>{group.label}</h5>
-        <ol>{group.legs.map(leg => <LegRow key={leg.id} leg={leg} showValue={valueMode} />)}</ol>
+        <ol>{group.legs.map(leg => <LegRow key={leg.id} leg={leg} />)}</ol>
       </div>)}
-      {unpricedFill ? <p className="custom-parlay-note">Props and touchdowns in this mix have no snapshot price, so they break ties by hit chance. Outcomes are weighted by Kelly.</p> : null}
+      {unpricedFill ? <p className="custom-parlay-note">A leg with no saved price is marked no line and ranks last while Optimize for value is on.</p> : null}
       <div className="custom-parlay-actions">
         <button type="button" onClick={() => setOption(current => (Math.min(current, parlays.length - 1) + 1) % parlays.length)} disabled={parlays.length < 2}>
           {parlays.length < 2 ? 'Only mix that fits' : 'Next best'}

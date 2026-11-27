@@ -5,7 +5,9 @@ import {
   applyGameScript,
   buildCustomParlays,
   combinedAmerican,
+  fairAmerican,
   filterPools,
+  legValue,
   outcomeCandidates,
   propCandidates,
   priceInRange,
@@ -98,19 +100,37 @@ test('props keep the higher hit chance and skip started games', () => {
   assert.equal(props[1].valueScore, 0)
 })
 
-test('confidence mode picks the higher hit chance and value mode picks the higher edge', () => {
+test('a −500 price the model makes −220 is overvalued, and a +150 the model makes +110 is undervalued', () => {
+  assert.equal(fairAmerican(0.6875), -220)
+  assert.equal(fairAmerican(100 / 210), 110)
+  const favorite = legValue(0.6875, -500)
+  assert.equal(favorite.tag, 'overvalued')
+  assert.equal(favorite.fair, -220)
+  assert.equal(favorite.book, -500)
+  assert.ok(favorite.ev < 0)
+  const dog = legValue(100 / 210, 150)
+  assert.equal(dog.tag, 'undervalued')
+  assert.equal(dog.fair, 110)
+  assert.equal(dog.book, 150)
+  assert.ok(dog.ev > favorite.ev)
+  assert.equal(legValue(0.6, null).tag, 'no-line')
+})
+
+test('confidence mode picks the higher hit chance and value mode ranks profit per dollar', () => {
   const pools = {
     prop: [
-      leg({ id: 'a', gameId: 'A', confidence: 0.9, valueScore: 0.01 }),
-      leg({ id: 'b', gameId: 'B', confidence: 0.7, valueScore: 0.2 }),
-      leg({ id: 'c', gameId: 'C', confidence: 0.85, valueScore: 0.02 }),
+      leg({ id: 'a', gameId: 'A', confidence: 0.9, price: -500, priced: true }),
+      leg({ id: 'b', gameId: 'B', confidence: 0.55, price: 200, priced: true }),
+      leg({ id: 'c', gameId: 'C', confidence: 0.85, price: -150, priced: true }),
+      leg({ id: 'blank', gameId: 'D', confidence: 0.99 }),
     ],
   }
   const input = validateCustomParlay({ legs: '2', games: '2', legsPerGame: '', types: types(false, false, true) }).input
   const byConfidence = buildCustomParlays(pools, input, { mode: 'confidence' }).parlays[0]
   const byValue = buildCustomParlays(pools, input, { mode: 'value' }).parlays[0]
-  assert.deepEqual(byConfidence.legs.map(item => item.id).sort(), ['a', 'c'])
+  assert.deepEqual(byConfidence.legs.map(item => item.id).sort(), ['a', 'blank'])
   assert.deepEqual(byValue.legs.map(item => item.id).sort(), ['b', 'c'])
+  assert.equal(byValue.legs.every(item => item.hasLine), true)
 })
 
 test('each checked type is included when the leg count allows', () => {
