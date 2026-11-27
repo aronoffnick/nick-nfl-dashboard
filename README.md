@@ -2,7 +2,7 @@
 
 Matchup lab for the current NFL week. The app is in `dashboard/` and is deployed at https://nick-nfl-dashboard.vercel.app.
 
-The page loads the live week from ESPN. Charts, touchdown boards, parlays, and role sheets come from JSON files named by week (`dashboard/src/data/*-wk12.json`, `dashboard/src/props/*-week12.json`). A missing week stays blank. Older weeks stay in the repo.
+The page loads the current week from ESPN. Earlier weeks come from `dashboard/src/data/history-2026.json`, which the pipeline writes from nflverse. Charts, touchdown boards, parlays, and role sheets come from JSON files named by week (`dashboard/src/data/*-wk12.json`, `dashboard/src/props/*-week12.json`). A missing week stays blank. Older weeks stay in the repo. Player projections, Flyers, and the parlay table use that week's scatter file when it exists, and the in-browser model only when it does not.
 
 ## Weekly pipeline
 

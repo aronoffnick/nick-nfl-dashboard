@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import './App.css'
 import PickTracker from './PickTracker.jsx'
 import WeeklyGames from './WeeklyGames.jsx'
+import { bundledHistory, remember } from './data/historyFile.js'
 import AccuracyNote from './props/AccuracyNote.jsx'
 import MatchupExplorer from './props/MatchupExplorer.jsx'
 import { parsePlayers } from './props/model.js'
@@ -44,11 +45,7 @@ async function get(path) {
   })
   if (!res.ok) throw new Error(`ESPN returned HTTP ${res.status}. Try Refresh data.`)
   const payload = await res.json()
-  if (cacheKey) {
-    try {
-      localStorage.setItem(cacheKey, JSON.stringify({ time: Date.now(), data: payload }))
-    } catch {}
-  }
+  if (cacheKey) remember(cacheKey, JSON.stringify({ time: Date.now(), data: payload }))
   return payload
 }
 
@@ -93,55 +90,75 @@ async function loadData(progress) {
   }
   progress(`Loading ${YEAR} Week ${WEEK}…`)
   const firstKickoff = Math.min(...schedule.events.map(e => +new Date(e.date)))
-  const events = new Map()
-  const historicalWeeks = []
-  for (let week = 1; week < WEEK; week++) {
-    progress(`Loading completed games: week ${week} of ${WEEK - 1}…`)
-    const board = await get(`scoreboard?dates=${YEAR}&seasontype=2&week=${week}&limit=100`)
-    if (Number(board.season?.year) !== YEAR || Number(board.week?.number) !== week) {
-      throw new Error(`Historical schedule validation failed for week ${week}.`)
-    }
-    historicalWeeks.push({ week, events: board.events || [] })
-    for (const e of board.events || []) {
-      const { c } = competition(e)
-      if (c.status?.type?.completed && +new Date(e.date) < firstKickoff) events.set(e.id, e)
-    }
-  }
-  if (!events.size) throw new Error('No completed prior games were returned.')
+  const history = bundledHistory(YEAR)
   const teams = {}
   const games = []
-  const list = [...events.values()].sort((a, b) => new Date(a.date) - new Date(b.date))
-  for (let offset = 0; offset < list.length; offset += 4) {
-    progress(`Reading box scores ${offset + 1}–${Math.min(offset + 4, list.length)} of ${list.length}…`)
-    const batch = await Promise.all(list.slice(offset, offset + 4).map(async event => {
-      const detail = await get(`summary?event=${event.id}`)
-      const { c, away, home } = competition(event)
-      const sides = [away, home].map(side => {
-        const box = detail.boxscore?.teams?.find(t => String(t.team.id) === String(side.team.id))
-        const stat = key => {
-          const item = box?.statistics?.find(s => s.name === key)
-          return item ? num(item.displayValue) : NaN
-        }
-        const passing = stat('netPassingYards')
-        const rushing = stat('rushingYards')
-        const points = num(side.score)
-        if (![passing, rushing, points].every(Number.isFinite)) {
-          throw new Error(`Missing net passing/rushing yards or score for ${event.name}. No partial rankings were generated.`)
-        }
-        return {
-          id: String(side.team.id), name: side.team.displayName,
-          abbr: side.team.abbreviation, logo: side.team.logo,
-          pass: passing, rush: rushing, points,
-          playerBox: parsePlayers(detail, String(side.team.id)),
-        }
-      })
-      return { id: event.id, date: event.date, neutral: Boolean(c.neutralSite), away: sides[0], home: sides[1] }
-    }))
-    for (const g of batch) {
-      games.push(g)
-      for (const side of [g.away, g.home]) teams[side.id] = side
+  const historicalWeeks = []
+  if (history?.games?.length) {
+    progress(`Using saved weeks 1–${history.throughWeek}…`)
+    for (const game of history.games) {
+      if (game.week >= WEEK || Date.parse(game.date) >= firstKickoff) continue
+      games.push(game)
+      for (const side of [game.away, game.home]) teams[side.id] = side
+    }
+    const byWeek = new Map()
+    for (const game of games) {
+      const bucket = byWeek.get(game.week) || []
+      bucket.push({ id: game.id, date: game.date })
+      byWeek.set(game.week, bucket)
+    }
+    for (const [week, events] of [...byWeek.entries()].sort((a, b) => a[0] - b[0])) {
+      historicalWeeks.push({ week, events })
+    }
+  } else {
+    const events = new Map()
+    for (let week = 1; week < WEEK; week++) {
+      progress(`Loading completed games: week ${week} of ${WEEK - 1}…`)
+      const board = await get(`scoreboard?dates=${YEAR}&seasontype=2&week=${week}&limit=100`)
+      if (Number(board.season?.year) !== YEAR || Number(board.week?.number) !== week) {
+        throw new Error(`Historical schedule validation failed for week ${week}.`)
+      }
+      historicalWeeks.push({ week, events: board.events || [] })
+      for (const e of board.events || []) {
+        const { c } = competition(e)
+        if (c.status?.type?.completed && +new Date(e.date) < firstKickoff) events.set(e.id, e)
+      }
+    }
+    if (!events.size) throw new Error('No completed prior games were returned.')
+    const list = [...events.values()].sort((a, b) => new Date(a.date) - new Date(b.date))
+    for (let offset = 0; offset < list.length; offset += 4) {
+      progress(`Reading box scores ${offset + 1}–${Math.min(offset + 4, list.length)} of ${list.length}…`)
+      const batch = await Promise.all(list.slice(offset, offset + 4).map(async event => {
+        const detail = await get(`summary?event=${event.id}`)
+        const { c, away, home } = competition(event)
+        const sides = [away, home].map(side => {
+          const box = detail.boxscore?.teams?.find(t => String(t.team.id) === String(side.team.id))
+          const stat = key => {
+            const item = box?.statistics?.find(s => s.name === key)
+            return item ? num(item.displayValue) : NaN
+          }
+          const passing = stat('netPassingYards')
+          const rushing = stat('rushingYards')
+          const points = num(side.score)
+          if (![passing, rushing, points].every(Number.isFinite)) {
+            throw new Error(`Missing net passing/rushing yards or score for ${event.name}. No partial rankings were generated.`)
+          }
+          return {
+            id: String(side.team.id), name: side.team.displayName,
+            abbr: side.team.abbreviation, logo: side.team.logo,
+            pass: passing, rush: rushing, points,
+            playerBox: parsePlayers(detail, String(side.team.id)),
+          }
+        })
+        return { id: event.id, date: event.date, neutral: Boolean(c.neutralSite), away: sides[0], home: sides[1] }
+      }))
+      for (const g of batch) {
+        games.push(g)
+        for (const side of [g.away, g.home]) teams[side.id] = side
+      }
     }
   }
+  if (!games.length) throw new Error('No completed prior games were returned.')
   if (Object.keys(teams).length !== 32) throw new Error('Validation failed: historical data must include all 32 NFL teams.')
   const matchups = schedule.events.map(e => {
     const { c, away, home } = competition(e)
@@ -282,7 +299,7 @@ export default function App() {
   })
   function saveProp(key, record) {
     const next = { ...props, [key]: record }
-    localStorage.setItem('nfl-tracked-props-v1', JSON.stringify(next))
+    remember('nfl-tracked-props-v1', JSON.stringify(next))
     setProps(next)
   }
 

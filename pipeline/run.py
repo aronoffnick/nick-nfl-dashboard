@@ -21,6 +21,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "pipeline"))
 
 from nflboard.fetch import paths_for  # noqa: E402
+from nflboard.history import write_history  # noqa: E402
 from nflboard.logic import build_week, score_week, select_weeks  # noqa: E402
 from nflboard.store import (  # noqa: E402
     data_dir,
@@ -35,6 +36,7 @@ STAT_COLUMNS = [
     "player_id", "player_display_name", "position", "season", "week", "season_type",
     "game_id", "team", "opponent_team", "attempts", "passing_yards", "passing_tds",
     "carries", "rushing_yards", "rushing_tds", "receptions", "targets", "receiving_yards", "receiving_tds",
+    "sack_yards_lost",
 ]
 PBP_COLUMNS = ["season", "season_type", "week", "posteam", "yardline_100", "rush_attempt", "rusher_player_id"]
 
@@ -113,6 +115,7 @@ def main():
         print(f"auto {plan['weekday']}: weeks {weeks}")
     else:
         weeks = [args.week]
+    write_history(root, stats, schedule, args.season)
     reports = []
     for week in weeks:
         report = build_one(root, stats, schedule, pbp, args.season, week, args.mode)

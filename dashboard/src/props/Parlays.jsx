@@ -5,7 +5,7 @@ import {breakoutRating} from './breakout.js'
 import {buildFlyerThemes,rateAtLine} from './Flyers.jsx'
 import {fileForWeek} from '../data/weekFiles.js'
 import {decideScatterLine, scatterProjection} from './scatterCheck.js'
-import {boardGame,fileCards,normName,pctText,tableConflict} from './parlayBoard.js'
+import {boardGame,fileCards,pctText} from './parlayBoard.js'
 import './parlays.css'
 
 const fmt=(value,key)=>valid(value)?value.toFixed(key.toLowerCase().includes('td')?2:1):'—'
@@ -98,7 +98,10 @@ export default function Parlays({data,matchup,roster,halfLife,window}){
   const legs=useMemo(()=>reviewed.filter(item=>item.leg).map(item=>item.leg).sort((a,b)=>b.concentration-a.concentration||b.theme.rate-a.theme.rate),[reviewed])
   // Cards: the game-day file when it has this game; otherwise the live Safe-overlap legs without TD scorers.
   const parlays=useMemo(()=>game?fileCards(game):buildParlays(legs.filter(leg=>leg.theme.spec.key!=='totalTD')),[game,legs])
-  const tableNames=useMemo(()=>new Set(legs.map(leg=>normName(leg.player.name))),[legs])
+  const fileRows=useMemo(()=>game?(game.legs||[]).filter(leg=>leg.kind==='prop').map(leg=>({
+    id:leg.id, player:{name:leg.player, position:leg.pos}, line:leg.line, projection:leg.center,
+    concentration:leg.rating, season:leg.season, market:leg.market, side:leg.side, team:leg.team,
+  })):[],[game])
   const scatterGroups={
     pass:reviewed.filter(item=>item.decision.kind==='pass'),
     bump:reviewed.filter(item=>item.decision.kind==='bump'),
@@ -109,7 +112,7 @@ export default function Parlays({data,matchup,roster,halfLife,window}){
   }
   return <><section className="parlays-section" aria-label="Parlays from Bets and Safe Flyers overlap">
     <div className="prop-section-title"><h3>PARLAYS · highest Safe overlap</h3><span>{game?`Week ${data.week} matchup model lines + getoddy snapshot ${game.snapshot?.props_asof||''}`:'Bets signals + FLYERS Safe history'}</span></div>
-    {game&&<p className="prop-help">The cards use player props only, at the Week {data.week} matchup model’s own lines (the main line the model projected against) on the side the model favors. No touchdown scorers, no alternate lines, a different player on every leg, and a player never appears on both sides: when the model has a player on both an over and an under, only the side with the higher model hit chance stays, and a player shown as an over in the Safe-overlap table below never gets an under. The rating is the model hit chance; the card score blends 65% weakest leg and 35% average. Prices are the best price across books in a saved getoddy.com snapshot, not live odds; a leg with no snapshot price at the model line is flagged and the card shows no payout. The table below is unchanged and still uses the rules that follow.</p>}
+    {game&&<p className="prop-help">The cards and the table use the same Week {data.week} file, so they cannot pick opposite sides of one player. Prices are a saved snapshot, not live odds. A leg with no snapshot price at the model line is flagged and the card shows no payout.</p>}
     <p className="prop-help">Breakout candidates are excluded. FLYERS <b>Safe</b> history narrows the eligible position and stat; the player number comes directly from the same model used in <b>Player Projections</b>. A leg is removed unless that projection reaches the Safe target and the player reached it at least once in three or more recent appearances. Each kept non-touchdown leg is then checked against the Week {data.week} scatter projection. Touchdown legs stay on the Safe line and are marked skipped. When scatter covers the Safe line, the leg moves up to the live projection (rounded to the nearest 0.5) and is never lowered on that pass. Role eligibility runs before this check. Legs are ranked by 40% opponent hit rate at the line shown, 30% Bets strength, 15% projection coverage, and 15% the player’s recent hit rate at that line. The score measures model agreement, not a guaranteed win probability.</p>
     <details className="scatter-check">
       <summary className="prop-section-title"><span><h3>Scatter cross-check</h3><span>Week {data.week} projection vs the Safe line</span></span><span className="scatter-chevron" aria-hidden="true"/></summary>
@@ -120,12 +123,13 @@ export default function Parlays({data,matchup,roster,halfLife,window}){
     {parlays.length<5&&<p className="prop-warning">Only {parlays.length} of the five requested structures have enough distinct qualifying players. Unsupported parlays are not forced.</p>}
     {!!parlays.length&&<div className="parlay-card-grid">{parlays.map((parlay,index)=><article className={`parlay-card ${parlay.legs.length===4?'parlay-card-wide':''}`} key={parlay.id}>
       <header><div><small>{index===0?'TOP SAFE-OVERLAP PICK':'SAFE-OVERLAP PICK'}</small><h4>{parlay.label}</h4></div><strong>{parlay.score}/100</strong></header>
-      <ol>{parlay.legs.map(leg=>game?<FileLeg key={leg.id} leg={leg} conflict={tableConflict(leg,tableNames)}/>:<Leg key={leg.id} leg={leg}/>)}</ol>
+      <ol>{parlay.legs.map(leg=>game?<FileLeg key={leg.id} leg={leg} conflict={false}/>:<Leg key={leg.id} leg={leg}/>)}</ol>
       {game&&<small className="parlay-disclaimer">Est. combined {pctText(parlay.combined)} with same-team correlation ({pctText(parlay.independent)} if independent){parlay.payout?` · snapshot payout ${parlay.payout} multiplies the leg prices; a real same-game parlay pays less`:' · no payout: a leg has no snapshot price'}</small>}
       <small className="parlay-disclaimer">Suggested milestones only · confirm player status, line availability, and combined odds with your sportsbook</small>
     </article>)}</div>}
     <section className="overlap-board"><div className="prop-section-title"><h3>Top Safe-overlap legs</h3><span>All qualifying player/stat combinations</span></div>
-      {!legs.length?<p className="prop-warning">No individual legs currently satisfy the Bets signal, FLYERS Safe screen, Player Projection target, and recent-hit requirements.</p>:<div className="table-wrap"><table><thead><tr><th>Rank</th><th>Player</th><th>Safe stat</th><th>Overlap</th><th>Safe defense rate</th><th>Player recent</th><th>Player Projection</th><th>Bets index</th></tr></thead><tbody>{legs.map((leg,index)=><tr key={leg.id}><td>#{index+1}</td><td><b>{leg.player.name}</b><small>{leg.theme.offense.abbr} · {leg.player.position}</small></td><td>{leg.line}+ {leg.theme.spec.title.toLowerCase()}<small className="scatter-mark">{leg.scatterMark}</small></td><td><strong>{leg.concentration}/100</strong></td><td>{leg.theme.hits}/{leg.theme.n} · {Math.round(leg.theme.rate*100)}%</td><td>{leg.playerHits}/{leg.playerN} · {Math.round(leg.playerRate*100)}%</td><td>{fmt(leg.projection,leg.theme.spec.key)}</td><td>{leg.betsIndex}/100</td></tr>)}</tbody></table></div>}
+      {!game&&!legs.length?<p className="prop-warning">No individual legs currently satisfy the Bets signal, FLYERS Safe screen, Player Projection target, and recent-hit requirements.</p>:null}
+      {(game?fileRows:legs).length?<div className="table-wrap"><table><thead><tr><th>Rank</th><th>Player</th><th>Safe stat</th><th>Overlap</th><th>Safe defense rate</th><th>Player recent</th><th>Player Projection</th><th>Bets index</th></tr></thead><tbody>{(game?fileRows:legs).map((leg,index)=><tr key={leg.id}><td>#{index+1}</td><td><b>{leg.player.name}</b><small>{(leg.team||leg.theme?.offense?.abbr)} · {leg.player.position}</small></td><td>{game?`${leg.side} ${leg.line} ${leg.market}`:`${leg.line}+ ${leg.theme.spec.title.toLowerCase()}`}<small className="scatter-mark">{leg.scatterMark||''}</small></td><td><strong>{leg.concentration}/100</strong></td><td>{game?'—':`${leg.theme.hits}/${leg.theme.n} · ${Math.round(leg.theme.rate*100)}%`}</td><td>{game?leg.season:`${leg.playerHits}/${leg.playerN} · ${Math.round(leg.playerRate*100)}%`}</td><td>{game?leg.projection:fmt(leg.projection,leg.theme.spec.key)}</td><td>{game?leg.concentration:leg.betsIndex}/100</td></tr>)}</tbody></table></div>:null}
     </section>
     <details className="prop-method"><summary>Parlay rules and limitations</summary><p>PARLAYS uses FLYERS Safe results only as a position/stat and opponent-history screen. Player projections are read from the same projectTeam output displayed in Player Projections. A candidate needs at least three valid recent observations, one or more personal hits at the Safe target, a projection at or above that target, and a positive Bets-tab signal. FLYERS Breakout candidates do not enter this calculation. Each parlay requires a different player for every leg. The five target structures are two 3-leg parlays, two 2-leg parlays, and one 4-leg parlay. Combinations are ranked 65% by their weakest leg and 35% by their average overlap so one strong leg cannot conceal a weak one. Adding legs lowers joint win likelihood. The model does not fetch live sportsbook prices or estimate expected value.</p></details>
   </section>

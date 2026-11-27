@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
-import { valid, projectTeam } from './model.js'
+import { valid } from './model.js'
+import { boardFor } from './gameBoard.js'
 import { breakoutRating, ratingLevel } from './breakout.js'
 import BreakoutScale from './BreakoutScale.jsx'
 import Performance from './Performance.jsx'
@@ -108,10 +109,10 @@ export default function PlayerProjections({matchup,saveProp,data,teams,roster,ha
   const [chosen,setChosen]=useState(''),[line,setLine]=useState(''),[lineMetric,setLineMetric]=useState(''),[trackMessage,setTrackMessage]=useState(''),[sortKey,setSortKey]=useState('recYds'),[ascending,setAscending]=useState(false),[roleOnly,setRoleOnly]=useState(true),[breakoutFilter,setBreakoutFilter]=useState('all')
   const sortableKeys=fields.map(([key])=>key).filter(key=>categoryAllows(key,categories))
   const activeSortKey=sortableKeys.includes(sortKey)?sortKey:sortableKeys[0]||'recYds'
-  const players=useMemo(()=>dedupePlayers(teams.flatMap(({team,opponent})=>projectTeam(data,team,opponent,roster,halfLife,window).map(player=>({...player,team,opponent}))))
+  const players=useMemo(()=>dedupePlayers(boardFor(data,matchup,roster,halfLife,window).players.filter(player=>teams.some(({team})=>team.id===player.team.id)))
     .filter(player=>positions.includes(listedPosition(player))&&slotsFor(player,categories).length)
     .map(player=>({...player,week:data.week,gate:roleDecision(player,{book:roleBookForWeek(data.week)}),breakoutScore:breakoutRating(player)}))
-    .sort((a,b)=>{const av=projectedValue(a,activeSortKey),bv=projectedValue(b,activeSortKey);if(!valid(av))return valid(bv)?1:a.name.localeCompare(b.name);if(!valid(bv))return -1;return (av-bv)*(ascending?1:-1)||a.name.localeCompare(b.name)}),[teams,data,roster,halfLife,window,positions,categories,activeSortKey,ascending])
+    .sort((a,b)=>{const av=projectedValue(a,activeSortKey),bv=projectedValue(b,activeSortKey);if(!valid(av))return valid(bv)?1:a.name.localeCompare(b.name);if(!valid(bv))return -1;return (av-bv)*(ascending?1:-1)||a.name.localeCompare(b.name)}),[teams,data,matchup,roster,halfLife,window,positions,categories,activeSortKey,ascending])
   const hiddenCount=players.filter(player=>!player.gate.eligible).length
   const roleVisible=roleOnly?players.filter(player=>player.gate.eligible):players
   const visible=breakoutFilter==='all'?roleVisible:roleVisible.filter(player=>ratingLevel(player.breakoutScore)===breakoutFilter)

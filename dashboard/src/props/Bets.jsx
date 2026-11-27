@@ -1,29 +1,11 @@
 import { useMemo } from 'react'
-import { projectTeam, valid } from './model.js'
+import { betSignalScore, boardFor } from './gameBoard.js'
 import {sameGameFavorite} from './sgp.js'
 import {SGPCard} from './WeeklySGPs.jsx'
 
-const average = (games,key) => games.length && games.every(game=>valid(game[key]))
-  ? games.reduce((sum,game)=>sum+game[key],0)/games.length : null
-function totalTD(game,position){
-  const keys=position==='QB'?['rushTD']:['rushTD','recTD']
-  return keys.every(key=>valid(game[key]))?keys.reduce((total,key)=>total+game[key],0):null
-}
-export function betSignalScore(player){
-  const usageKey=player.position==='QB'?'passAtt':['RB','FB'].includes(player.position)?'carries':'targets'
-  const now=average(player.logs.slice(-3),usageKey),before=average(player.logs.slice(-6,-3),usageKey)
-  const stat=player.position==='QB'?'passYds':['RB','FB'].includes(player.position)?'rushYds':'recYds'
-  const outputNow=average(player.logs.slice(-3),stat),outputBefore=average(player.logs.slice(-6,-3),stat)
-  const rising=valid(now)&&valid(before)&&before>0&&now>=before*1.15
-  const momentum=valid(outputNow)&&valid(outputBefore)&&outputBefore>0&&outputNow>=outputBefore*1.15
-  const bounce=valid(now)&&valid(before)&&before>0&&now>=before*.9&&valid(outputNow)&&valid(outputBefore)&&outputBefore>0&&outputNow<=outputBefore*.8
-  const defense=player.stats[stat]?.defense
-  const favorable=defense?.adjusted&&defense.factor>=1.05
-  const td=player.logs.slice(-4).some(g=>totalTD(g,player.position)>=1)
-  return (rising?2:0)+(momentum?2:0)+(bounce?1:0)+(favorable?2:0)+(td?1:0)
-}
+export { betSignalScore }
 export default function Bets({ data, matchup, roster, halfLife, window }) {
-  const players=useMemo(()=>[[matchup.away,matchup.home],[matchup.home,matchup.away]].flatMap(([offense,opponent])=>projectTeam(data,offense,opponent,roster,halfLife,window).map(player=>({...player,offense,opponent}))),[data,matchup,roster,halfLife,window])
+  const players=useMemo(()=>boardFor(data, matchup, roster, halfLife, window).players,[data,matchup,roster,halfLife,window])
   const favorite=sameGameFavorite(data,matchup,roster,halfLife,window,Date.now(),players.map(p=>({...p,team:p.offense,opponent:p.opponent})))
   return <section aria-label="Bets">
     <div className="prop-section-title"><h3>Favorite 2-leg parlay</h3><span>Two different players · matchup-specific</span></div>
