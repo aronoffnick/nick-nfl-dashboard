@@ -20,6 +20,26 @@
         "sample2026Attempts": 4,
         "detail": "Career 690 attempts, 4617 yards, 28 TD, 20 INT, regressed toward the 2026 non-starter pool (1522 attempts) with a 200-attempt prior. 2026 alone is 4 attempts and 2 yards."
       }
+    },
+    "13": {
+      "PIT": {
+        "season": 2026,
+        "team": "PIT",
+        "qb": "Mason Rudolph",
+        "out": "Aaron Rodgers",
+        "note": "QB override: Rudolph starting (Rodgers out)",
+        "careerAttempts": 690,
+        "attemptsPerGame": 36.5,
+        "yardsPerAttempt": 6.654,
+        "defenseFactor": 1.05,
+        "passYdsBeforeDefense": 242.9,
+        "passYds": 255.0,
+        "efficiency": 0.9305,
+        "rodgersYardsPerAttempt": 6.208,
+        "backupYardsPerAttempt": 6.527,
+        "sample2026Attempts": 4,
+        "detail": "Career 690 attempts, 4617 yards, 28 TD, 20 INT, regressed toward the 2026 non-starter pool (1522 attempts) with a 200-attempt prior. 2026 alone is 4 attempts and 2 yards. Week 13 pass yards use the Houston pass-defense factor already on the Rodgers projection (1.05) times the same pre-defense rate."
+      }
     }
   }
 }

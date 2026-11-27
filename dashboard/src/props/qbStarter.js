@@ -2,7 +2,19 @@ import starters from '../data/qb-starters.json' with { type: 'json' }
 import { valid } from './model.js'
 
 export function starterFor(abbr, week) {
-  return starters.weeks?.[String(week)]?.[abbr] || null
+  const target = Number(week)
+  if (!Number.isFinite(target)) return null
+  let chosen = null
+  let chosenWeek = -1
+  for (const [key, teams] of Object.entries(starters.weeks || {})) {
+    const number = Number(key)
+    if (!Number.isFinite(number) || number > target || number < chosenWeek) continue
+    const spec = teams?.[abbr]
+    if (!spec) continue
+    chosen = spec
+    chosenWeek = number
+  }
+  return chosen
 }
 
 export function applyTeamStarter(team, week) {
