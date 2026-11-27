@@ -37,7 +37,7 @@ export function lambdaFromTail(prob, count) {
   return (lo + hi) / 2
 }
 
-export function coverageMultiplier({ idxMan, idxZone, manDef, zoneDef, manLg, zoneLg, position, recTd = 0, rushTd = 0, clipped = false, hasSample = true, hasMix = true }) {
+export function coverageMultiplier({ idxMan, idxZone, manDef, zoneDef, manLg, zoneLg, position, recTd = 0, rushTd = 0, clipped = false, hasSample = true, hasMix = true, extraDamp = 1 }) {
   if (!hasMix) return { mRaw: 1, m: 1, mAdj: 1, share: null, reason: 'no coverage mix' }
   if (!hasSample || position === 'QB') return { mRaw: 1, m: 1, mAdj: 1, share: null, reason: 'no 2025 coverage sample' }
   const denom = manLg * idxMan + zoneLg * idxZone
@@ -48,7 +48,9 @@ export function coverageMultiplier({ idxMan, idxZone, manDef, zoneDef, manLg, zo
     share = (recTd + 0.5) / (recTd + rushTd + 2.5)
     m = 1 + share * (mRaw - 1)
   }
-  let deviation = 0.5 * (m - 1)
+  const rawDamp = Number(extraDamp)
+  const damp = Number.isFinite(rawDamp) ? Math.min(1, Math.max(0.5, rawDamp)) : 1
+  let deviation = 0.5 * (m - 1) * damp
   if (clipped) deviation *= 0.5
   const mAdj = Math.min(1.1, Math.max(0.9, 1 + deviation))
   return { mRaw, m, mAdj, share, reason: null }
@@ -145,6 +147,7 @@ export function adjustRow(row, context) {
       clipped: context.clipped,
       hasSample: Boolean(sample),
       hasMix: context.hasMix,
+      extraDamp: context.extraDamp ?? 1,
     })
     const lambda = baseLambda(picks)
     const sentence = ({ base, adjusted }) => coverageSentence({
@@ -272,14 +275,15 @@ export function mergeTouchdownSides(sides) {
   })
 }
 
-export function applyCoverage(game, coverage, tdCoverage, rules) {
+export function applyCoverage(game, coverage, tdCoverage, rules, options) {
   if (!game || !coverage?.games || !tdCoverage?.players) return game
+  const extraDamp = options?.coverageDamp ?? options?.extraDamp ?? 1
   return {
     ...game,
     coverageApplied: true,
     sides: (game.sides || []).map(side => ({
       ...side,
-      rows: (side.rows || []).map(row => adjustRow(row, { ...sideContext(side, game, coverage, tdCoverage), rules })),
+      rows: (side.rows || []).map(row => adjustRow(row, { ...sideContext(side, game, coverage, tdCoverage), rules, extraDamp })),
     })),
   }
 }

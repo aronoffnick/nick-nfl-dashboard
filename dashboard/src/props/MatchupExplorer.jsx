@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { getRosters } from './data.js'
 import { valid, historyFor, sides, positionOf } from './model.js'
+import AccuracyNote from './AccuracyNote.jsx'
 import Flyers from './Flyers.jsx'
 import Parlays from './Parlays.jsx'
 import PlayerProjections, {projectionGroups} from './PlayerProjections.jsx'
@@ -89,6 +90,7 @@ export default function MatchupExplorer({saveProp,data,matchup,halfLife,advantag
   return <div className="overlay prop-overlay" onClick={onClose}><section ref={dialog} className="prop-modal" role="dialog" aria-modal="true" aria-labelledby="prop-title" onClick={e=>e.stopPropagation()}>
     <header className="prop-header"><div><p className="eyebrow">MATCHUP LAB · WEEK {data.week} · {date(matchup.date)}</p><h2 id="prop-title">{matchup.away.name} <span>at</span> {matchup.home.name}</h2></div><button className="close" onClick={onClose}>Close ✕</button></header>
     <div className="prop-score"><div><small>TEAM MODEL</small><b>{matchup.margin<.05?'Toss-up':`${matchup.winner.abbr} by ${format(matchup.margin)}`}</b></div><div><small>PROJECTED SCORE</small><b>{matchup.away.abbr} {format(matchup.awayPoints)} · {matchup.home.abbr} {format(matchup.homePoints)}</b></div><div><small>VENUE</small><b>{matchup.neutral?'Neutral · no home boost':`Home advantage +${advantage.toFixed(1)}`}</b></div></div>
+    <AccuracyNote compact />
     <nav className="prop-tabs" aria-label="Matchup analytics">{[['bets','Bets'],['scatter','Scatter Plot'],['history','Recent opponents']].map(([id,name])=><button key={id} aria-pressed={tab===id} className={tab===id?'active':''} onClick={()=>setTab(id)}>{name}</button>)}</nav>
     {tab==='bets'&&<nav className="prop-tabs prop-subtabs" aria-label="Bets views">{[['generator','Bet generator'],['flyers','Flyers'],['parlays','Parlays'],['projections','Player Projections'],['touchdowns','Touchdowns']].map(([id,name])=><button key={id} aria-pressed={betsView===id} className={betsView===id?'active':''} onClick={()=>setBetsView(id)}>{name}</button>)}</nav>}
       {tab==='scatter'&&<ScatterTab away={matchup.away} home={matchup.home} week={data.week}/>}

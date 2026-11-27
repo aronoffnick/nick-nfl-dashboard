@@ -5,12 +5,18 @@ import { chanceText, findTdGame, flavorLabel, priceText, sideCaption } from '../
 
 const board = JSON.parse(readFileSync(new URL('../src/data/td-riskscale-wk12.json', import.meta.url)))
 
-test('week 12 touchdown file covers the Thanksgiving games and Denver at Pittsburgh', () => {
+test('week 12 touchdown file keeps the Thanksgiving board and covers the rest of the slate', () => {
   assert.equal(board.week, 12)
-  assert.equal(board.games.length, 4)
-  assert.deepEqual(board.games.map(game => game.key), ['CHI@DET', 'PHI@DAL', 'KC@BUF', 'DEN@PIT'])
-  assert.equal(findTdGame(board, 'GB', 'LAR'), null)
   assert.equal(findTdGame(board, 'CHI', 'DET').priceSnapshot.asOf, 'Nov 26, 11:07 AM ET')
+  for (const key of ['CHI@DET', 'PHI@DAL', 'KC@BUF', 'GB@LAR', 'NO@CIN']) {
+    assert.ok(findTdGame(board, ...key.split('@')), key)
+  }
+  assert.equal(board.games.length >= 16, true)
+  const broncos = findTdGame(board, 'DEN', 'PIT')
+  assert.equal(broncos.priceSnapshot.asOf, 'Nov 27, 8:46 AM ET')
+  assert.equal(broncos.sides[0].rows[0].confident.player, 'Jonah Coleman')
+  assert.equal(broncos.sides[0].rows[0].confident.modelProb, 0.642)
+  assert.equal(priceText(broncos.sides[0].rows[0].confident), '-125 Polymarket')
 })
 
 test('Chicago at Detroit uses the refreshed prices', () => {
