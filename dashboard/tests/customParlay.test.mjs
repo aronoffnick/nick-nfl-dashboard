@@ -1,11 +1,14 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
 import {
+  americanBounds,
   applyGameScript,
   buildCustomParlays,
+  combinedAmerican,
   filterPools,
   outcomeCandidates,
   propCandidates,
+  priceInRange,
   seasonTdShare,
   validateCustomParlay,
 } from '../src/props/customParlay.js'
@@ -244,6 +247,26 @@ test('a script arrow outranks a slightly higher raw prop when the side agrees', 
   const parlay = buildCustomParlays(pools, input).parlays[0]
   assert.equal(parlay.legs[0].id, 'scripted')
   assert.equal(parlay.legs[0].arrow, 'up')
+})
+
+test('blank American odds are optional and a real range keeps the priced leg inside it', () => {
+  assert.deepEqual(americanBounds('', ''), { ok: true, range: null })
+  assert.equal(americanBounds('50', '').ok, false)
+  const pools = {
+    prop: [
+      leg({ id: 'short', gameId: 'A', playerId: 'a', confidence: 0.9, price: -110, priced: true }),
+      leg({ id: 'long', gameId: 'B', playerId: 'b', confidence: 0.4, price: 250, priced: true }),
+      leg({ id: 'open', gameId: 'C', playerId: 'c', confidence: 0.95 }),
+    ],
+  }
+  const input = validateCustomParlay({ legs: '1', games: '1', legsPerGame: '', types: types(false, false, true) }).input
+  const open = buildCustomParlays(pools, input)
+  assert.equal(open.parlays[0].id, 'open')
+  assert.equal(combinedAmerican(open.parlays.find(item => item.id === 'long').legs).text, '+250')
+  const ranged = buildCustomParlays(pools, input, { oddsRange: americanBounds('+400', '+200').range })
+  assert.deepEqual(ranged.parlays.map(item => item.id), ['long'])
+  assert.equal(ranged.parlays[0].priceText, '+250')
+  assert.equal(priceInRange({ number: 250 }, { min: 400, max: 200 }), true)
 })
 
 test('outcome candidates use the model pick and skip games that already started', () => {

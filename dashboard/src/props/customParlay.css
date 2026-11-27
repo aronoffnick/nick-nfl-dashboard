@@ -1,8 +1,12 @@
-.custom-parlay{margin:0 0 22px;padding:16px;border:1px solid #3d684f;border-radius:12px;background:linear-gradient(155deg,#14291f,#13232a 70%)}
+.custom-parlay{margin:8px 0 22px;padding:16px;border:1px solid #3d684f;border-radius:12px;background:linear-gradient(155deg,#14291f,#13232a 70%);scroll-margin-top:20px}
+.custom-parlay-title{display:flex;justify-content:space-between;gap:12px;align-items:baseline;flex-wrap:wrap}
+.custom-parlay-title h3{margin:0;font-family:'Space Grotesk',sans-serif;font-size:1.35rem}
+.custom-parlay-title span{color:#9db5aa;font-size:.75rem}
 .custom-parlay-help,.custom-parlay-mode,.custom-parlay-note{margin:8px 0 0;color:#9db5aa;font-size:.78rem;line-height:1.5}
 .custom-parlay-form{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:14px}
 .custom-parlay-form label{display:flex;flex-direction:column;gap:6px;color:#c5d5e0;font-size:.75rem;font-weight:700}
 .custom-parlay-form input[type="text"],.custom-parlay-form input:not([type]),.custom-parlay-form select{background:#0b131a;color:#e8edf1;border:1px solid #3d5663;border-radius:8px;padding:10px 12px;font-size:16px;min-height:44px;width:100%}
+.custom-parlay-span{grid-column:2 / -1;align-self:end;margin:0}
 .custom-parlay-flow{grid-column:1 / -1;margin:0;padding:10px 12px 12px;border:1px solid #365344;border-radius:10px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .custom-parlay-flow legend{padding:0 6px;color:#9fe2b4;font-size:.72rem;font-weight:800;letter-spacing:.06em}
 .custom-parlay-up{color:#a5e6bd;font-style:normal}
@@ -52,4 +56,5 @@
 }
 @media(max-width:420px){
   .custom-parlay-form,.custom-parlay-flow{grid-template-columns:1fr}
+  .custom-parlay-span{grid-column:1 / -1}
 }
