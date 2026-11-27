@@ -31,8 +31,10 @@
 .landing-more>summary::marker{content:none}
 .landing-more[open]>summary .pick-chevron{transform:rotate(45deg)}
 .landing-more>summary:focus-visible{outline:2px solid #b2e7c8;outline-offset:3px}
-.final-score{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-weight:700}
-.grade{display:inline-flex;align-items:center;justify-content:center;min-width:1.4rem;height:1.4rem;border-radius:4px;font-style:normal;font-size:12px;font-weight:800}
+td.date:has(.final-score){max-width:none;width:12.75rem;min-width:12.75rem;text-align:center;vertical-align:middle}
+.final-score{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;box-sizing:border-box;width:12.75rem;margin-inline:auto;font-size:12px;font-weight:700;line-height:1.25;text-align:center;font-variant-numeric:tabular-nums}
+.final-score-line{display:block;width:100%;white-space:nowrap;text-align:center}
+.grade{display:inline-flex;align-items:center;justify-content:center;width:1.4rem;min-width:1.4rem;height:1.4rem;flex:0 0 auto;border-radius:4px;font-style:normal;font-size:12px;font-weight:800}
 .grade-W{background:#1c3d2e;color:#a5e6bd}.grade-L{background:#3d221c;color:#e5a68f}.grade-push{background:#2a3138;color:#9aa7b2}
 .team-parlay{margin:8px 0 22px;padding:16px;border:1px solid #314a3a;border-radius:12px;background:#121a16}
 .team-parlay-head h2{margin:0 0 6px;font-size:22px}.team-parlay-head p,.team-parlay-empty{margin:0;color:#9aa7b2;font-size:13px;line-height:1.5}

@@ -379,7 +379,7 @@ export default function App() {
         {['passO', 'rushO'].map(k => <td key={k}><Rank value={row.away.ranks[k]} /><small>{fmt(row.away.display[k])} yd</small></td>)}
         {['passD', 'rushD'].map(k => <td key={k}><Rank value={row.away.ranks[k]} /><small>{fmt(row.away.display[k])} yd</small></td>)}
         <td><Team team={row.away} /></td>
-        <td className="date">{row.final ? <span className="final-score">{row.away.abbr} {row.final.away.points} – {row.home.abbr} {row.final.home.points} Final <i className={`grade grade-${card.marks[row.id] === '–' ? 'push' : card.marks[row.id] || 'push'}`}>{card.marks[row.id] || '–'}</i></span> : <>{kickoff(row.date)}<small>{row.neutral ? 'Neutral site' : row.status}</small></>}</td>
+        <td className="date">{row.final ? <span className="final-score"><span className="final-score-line">{row.away.abbr} {row.final.away.points} – {row.home.abbr} {row.final.home.points} Final</span><i className={`grade grade-${card.marks[row.id] === '–' ? 'push' : card.marks[row.id] || 'push'}`}>{card.marks[row.id] || '–'}</i></span> : <>{kickoff(row.date)}<small>{row.neutral ? 'Neutral site' : row.status}</small></>}</td>
         <td><Team team={row.home} /></td>
         {['passD', 'rushD'].map(k => <td key={k}><Rank value={row.home.ranks[k]} /><small>{fmt(row.home.display[k])} yd</small></td>)}
         {['passO', 'rushO'].map(k => <td key={k}><Rank value={row.home.ranks[k]} /><small>{fmt(row.home.display[k])} yd</small></td>)}
