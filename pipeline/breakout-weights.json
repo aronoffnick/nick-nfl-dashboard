@@ -1,0 +1,51 @@
+{
+  "rb": {
+    "redZoneShare": { "min": 0.2, "points": 2 },
+    "inside10Share": { "min": 0.25, "points": 1 },
+    "snapShareRising": { "points": 1 },
+    "opportunitiesRising": { "points": 1 },
+    "minScore": 3,
+    "minPriorGames": 3,
+    "minOpportunitiesPerGame": 3
+  },
+  "unvalidated": {
+    "wr": {
+      "impliedTotal": { "min": 24, "points": 1 },
+      "favoriteBy": { "min": 3, "points": 1 },
+      "defenseYardsFactor": { "min": 1.15, "points": 1 },
+      "home": { "points": 1 },
+      "lowBaseline": { "points": 1, "priorReceivingYards": 30 }
+    },
+    "te": {
+      "lowBaseline": { "points": 2, "priorReceivingYards": 30 },
+      "snapShare": { "min": 0.7, "points": 1 },
+      "gameTotal": { "min": 47, "points": 1 }
+    }
+  },
+  "negative": {
+    "underdogBy3": 0.76,
+    "priorSpike": 0.63,
+    "qbChange": 0.82
+  },
+  "noEffect": ["adot", "airYardsShare", "targetShare"],
+  "study": {
+    "sample": "2026 nflverse weeks 4-12. Train weeks 1-8. Test weeks 9-12.",
+    "definition": "A breakout is receiving yards at least the larger of double the prior average and 60, or rush plus receiving yards at least the larger of double and 80, or touchdowns at least the larger of double and 2. Minimum 3 prior games and 3 targets plus carries per game.",
+    "baseRate": 0.13,
+    "baseByPosition": { "RB": 0.145, "WR": 0.126, "TE": 0.113 },
+    "rbHitRate": 0.247,
+    "rbComparisonRate": 0.077,
+    "auc": 0.675,
+    "testBreakouts": 57,
+    "wrAuc": 0.51,
+    "teAuc": 0.47,
+    "notes": [
+      "Running backs at 3 or more broke out 24.7% of the time against 7.7% otherwise, out of sample. That check is 57 breakouts.",
+      "There is no route data. Snap share is the proxy.",
+      "Books may already price goal-line roles.",
+      "The wide-receiver and tight-end environment rules failed out of sample (AUC 0.51 and 0.47). They are flags, not a ranking.",
+      "Air yards, target share, and aDOT had no effect and are not scored.",
+      "Prices are blank. No sportsbook snapshot is used."
+    ]
+  }
+}

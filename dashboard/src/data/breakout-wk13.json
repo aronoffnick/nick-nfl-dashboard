@@ -1,0 +1,4881 @@
+{
+  "season": 2026,
+  "week": 13,
+  "label": "Model estimates. Running-back rule only. Receiver flags are not a ranking.",
+  "prices": "blank",
+  "weights": {
+    "rb": {
+      "redZoneShare": {
+        "min": 0.2,
+        "points": 2
+      },
+      "inside10Share": {
+        "min": 0.25,
+        "points": 1
+      },
+      "snapShareRising": {
+        "points": 1
+      },
+      "opportunitiesRising": {
+        "points": 1
+      },
+      "minScore": 3,
+      "minPriorGames": 3,
+      "minOpportunitiesPerGame": 3
+    },
+    "negative": {
+      "underdogBy3": 0.76,
+      "priorSpike": 0.63,
+      "qbChange": 0.82
+    },
+    "noEffect": [
+      "adot",
+      "airYardsShare",
+      "targetShare"
+    ]
+  },
+  "study": {
+    "sample": "2026 nflverse weeks 4-12. Train weeks 1-8. Test weeks 9-12.",
+    "definition": "A breakout is receiving yards at least the larger of double the prior average and 60, or rush plus receiving yards at least the larger of double and 80, or touchdowns at least the larger of double and 2. Minimum 3 prior games and 3 targets plus carries per game.",
+    "baseRate": 0.13,
+    "baseByPosition": {
+      "RB": 0.145,
+      "WR": 0.126,
+      "TE": 0.113
+    },
+    "rbHitRate": 0.247,
+    "rbComparisonRate": 0.077,
+    "auc": 0.675,
+    "testBreakouts": 57,
+    "wrAuc": 0.51,
+    "teAuc": 0.47,
+    "notes": [
+      "Running backs at 3 or more broke out 24.7% of the time against 7.7% otherwise, out of sample. That check is 57 breakouts.",
+      "There is no route data. Snap share is the proxy.",
+      "Books may already price goal-line roles.",
+      "The wide-receiver and tight-end environment rules failed out of sample (AUC 0.51 and 0.47). They are flags, not a ranking.",
+      "Air yards, target share, and aDOT had no effect and are not scored.",
+      "Prices are blank. No sportsbook snapshot is used."
+    ]
+  },
+  "candidates": [
+    {
+      "name": "Emanuel Wilson",
+      "team": "SEA",
+      "position": "RB",
+      "opponent": "DAL",
+      "games": 7,
+      "score": 5,
+      "implied": 25.77,
+      "signals": {
+        "redZoneShare": 0.207,
+        "inside10Share": 0.267,
+        "snapShareRising": true,
+        "opportunitiesRising": true
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "Jonah Coleman",
+      "team": "DEN",
+      "position": "RB",
+      "opponent": "MIA",
+      "games": 6,
+      "score": 5,
+      "implied": 24.3,
+      "signals": {
+        "redZoneShare": 0.202,
+        "inside10Share": 0.259,
+        "snapShareRising": true,
+        "opportunitiesRising": true
+      },
+      "flags": [
+        "priorSpike"
+      ],
+      "negative": {
+        "priorSpike": 0.63
+      }
+    },
+    {
+      "name": "Woody Marks",
+      "team": "HOU",
+      "position": "RB",
+      "opponent": "PIT",
+      "games": 9,
+      "score": 5,
+      "implied": 23.0,
+      "signals": {
+        "redZoneShare": 0.28,
+        "inside10Share": 0.267,
+        "snapShareRising": true,
+        "opportunitiesRising": true
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "Tony Pollard",
+      "team": "TEN",
+      "position": "RB",
+      "opponent": "WAS",
+      "games": 10,
+      "score": 5,
+      "implied": 22.0,
+      "signals": {
+        "redZoneShare": 0.375,
+        "inside10Share": 0.488,
+        "snapShareRising": true,
+        "opportunitiesRising": true
+      },
+      "flags": [
+        "underdog"
+      ],
+      "negative": {
+        "underdogBy3": 0.76
+      }
+    },
+    {
+      "name": "Cam Skattebo",
+      "team": "NYG",
+      "position": "RB",
+      "opponent": "SF",
+      "games": 8,
+      "score": 5,
+      "implied": 21.6,
+      "signals": {
+        "redZoneShare": 0.278,
+        "inside10Share": 0.25,
+        "snapShareRising": true,
+        "opportunitiesRising": true
+      },
+      "flags": [
+        "underdog",
+        "qbChange"
+      ],
+      "negative": {
+        "underdogBy3": 0.76,
+        "qbChange": 0.82
+      }
+    },
+    {
+      "name": "Chuba Hubbard",
+      "team": "CAR",
+      "position": "RB",
+      "opponent": "MIN",
+      "games": 10,
+      "score": 5,
+      "implied": 20.75,
+      "signals": {
+        "redZoneShare": 0.394,
+        "inside10Share": 0.453,
+        "snapShareRising": true,
+        "opportunitiesRising": true
+      },
+      "flags": [
+        "priorSpike"
+      ],
+      "negative": {
+        "priorSpike": 0.63
+      }
+    },
+    {
+      "name": "Omarion Hampton",
+      "team": "LAC",
+      "position": "RB",
+      "opponent": "TB",
+      "games": 10,
+      "score": 5,
+      "implied": 18.85,
+      "signals": {
+        "redZoneShare": 0.319,
+        "inside10Share": 0.351,
+        "snapShareRising": true,
+        "opportunitiesRising": true
+      },
+      "flags": [
+        "underdog"
+      ],
+      "negative": {
+        "underdogBy3": 0.76
+      }
+    },
+    {
+      "name": "Ollie Gordon II",
+      "team": "MIA",
+      "position": "RB",
+      "opponent": "DEN",
+      "games": 9,
+      "score": 5,
+      "implied": 18.35,
+      "signals": {
+        "redZoneShare": 0.394,
+        "inside10Share": 0.324,
+        "snapShareRising": true,
+        "opportunitiesRising": true
+      },
+      "flags": [
+        "underdog",
+        "qbChange"
+      ],
+      "negative": {
+        "underdogBy3": 0.76,
+        "qbChange": 0.82
+      }
+    },
+    {
+      "name": "James Cook",
+      "team": "BUF",
+      "position": "RB",
+      "opponent": "NE",
+      "games": 10,
+      "score": 4,
+      "implied": 27.75,
+      "signals": {
+        "redZoneShare": 0.374,
+        "inside10Share": 0.344,
+        "snapShareRising": false,
+        "opportunitiesRising": true
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "Jahmyr Gibbs",
+      "team": "DET",
+      "position": "RB",
+      "opponent": "ATL",
+      "games": 11,
+      "score": 4,
+      "implied": 27.58,
+      "signals": {
+        "redZoneShare": 0.519,
+        "inside10Share": 0.522,
+        "snapShareRising": false,
+        "opportunitiesRising": true
+      },
+      "flags": [
+        "priorSpike"
+      ],
+      "negative": {
+        "priorSpike": 0.63
+      }
+    },
+    {
+      "name": "Bhayshul Tuten",
+      "team": "JAX",
+      "position": "RB",
+      "opponent": "CHI",
+      "games": 10,
+      "score": 4,
+      "implied": 24.9,
+      "signals": {
+        "redZoneShare": 0.324,
+        "inside10Share": 0.286,
+        "snapShareRising": false,
+        "opportunitiesRising": true
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "Bucky Irving",
+      "team": "TB",
+      "position": "RB",
+      "opponent": "LAC",
+      "games": 10,
+      "score": 4,
+      "implied": 24.45,
+      "signals": {
+        "redZoneShare": 0.465,
+        "inside10Share": 0.487,
+        "snapShareRising": false,
+        "opportunitiesRising": true
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "Javonte Williams",
+      "team": "DAL",
+      "position": "RB",
+      "opponent": "SEA",
+      "games": 11,
+      "score": 4,
+      "implied": 24.38,
+      "signals": {
+        "redZoneShare": 0.354,
+        "inside10Share": 0.423,
+        "snapShareRising": false,
+        "opportunitiesRising": true
+      },
+      "flags": [
+        "priorSpike"
+      ],
+      "negative": {
+        "priorSpike": 0.63
+      }
+    },
+    {
+      "name": "Saquon Barkley",
+      "team": "PHI",
+      "position": "RB",
+      "opponent": "ARI",
+      "games": 8,
+      "score": 4,
+      "implied": 24.05,
+      "signals": {
+        "redZoneShare": 0.2,
+        "inside10Share": 0.237,
+        "snapShareRising": true,
+        "opportunitiesRising": true
+      },
+      "flags": [
+        "qbChange"
+      ],
+      "negative": {
+        "qbChange": 0.82
+      }
+    },
+    {
+      "name": "D'Andre Swift",
+      "team": "CHI",
+      "position": "RB",
+      "opponent": "JAX",
+      "games": 11,
+      "score": 4,
+      "implied": 22.03,
+      "signals": {
+        "redZoneShare": 0.306,
+        "inside10Share": 0.403,
+        "snapShareRising": true,
+        "opportunitiesRising": false
+      },
+      "flags": [
+        "priorSpike"
+      ],
+      "negative": {
+        "priorSpike": 0.63
+      }
+    },
+    {
+      "name": "Bijan Robinson",
+      "team": "ATL",
+      "position": "RB",
+      "opponent": "DET",
+      "games": 10,
+      "score": 4,
+      "implied": 21.82,
+      "signals": {
+        "redZoneShare": 0.416,
+        "inside10Share": 0.394,
+        "snapShareRising": true,
+        "opportunitiesRising": false
+      },
+      "flags": [
+        "underdog"
+      ],
+      "negative": {
+        "underdogBy3": 0.76
+      }
+    },
+    {
+      "name": "Blake Corum",
+      "team": "LAR",
+      "position": "RB",
+      "opponent": "KC",
+      "games": 11,
+      "score": 4,
+      "implied": 20.6,
+      "signals": {
+        "redZoneShare": 0.217,
+        "inside10Share": 0.2,
+        "snapShareRising": true,
+        "opportunitiesRising": true
+      },
+      "flags": [
+        "priorSpike"
+      ],
+      "negative": {
+        "priorSpike": 0.63
+      }
+    },
+    {
+      "name": "Christian McCaffrey",
+      "team": "SF",
+      "position": "RB",
+      "opponent": "NYG",
+      "games": 10,
+      "score": 3,
+      "implied": 26.5,
+      "signals": {
+        "redZoneShare": 0.404,
+        "inside10Share": 0.412,
+        "snapShareRising": false,
+        "opportunitiesRising": false
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "Chase Brown",
+      "team": "CIN",
+      "position": "RB",
+      "opponent": "CLE",
+      "games": 10,
+      "score": 3,
+      "implied": 25.9,
+      "signals": {
+        "redZoneShare": 0.216,
+        "inside10Share": 0.265,
+        "snapShareRising": false,
+        "opportunitiesRising": false
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "Aaron Jones",
+      "team": "MIN",
+      "position": "RB",
+      "opponent": "CAR",
+      "games": 10,
+      "score": 3,
+      "implied": 22.75,
+      "signals": {
+        "redZoneShare": 0.324,
+        "inside10Share": 0.32,
+        "snapShareRising": false,
+        "opportunitiesRising": false
+      },
+      "flags": [
+        "qbChange"
+      ],
+      "negative": {
+        "qbChange": 0.82
+      }
+    },
+    {
+      "name": "Kenneth Walker III",
+      "team": "KC",
+      "position": "RB",
+      "opponent": "LAR",
+      "games": 8,
+      "score": 3,
+      "implied": 22.64,
+      "signals": {
+        "redZoneShare": 0.431,
+        "inside10Share": 0.596,
+        "snapShareRising": false,
+        "opportunitiesRising": false
+      },
+      "flags": [
+        "priorSpike"
+      ],
+      "negative": {
+        "priorSpike": 0.63
+      }
+    },
+    {
+      "name": "Rhamondre Stevenson",
+      "team": "NE",
+      "position": "RB",
+      "opponent": "BUF",
+      "games": 10,
+      "score": 3,
+      "implied": 21.45,
+      "signals": {
+        "redZoneShare": 0.203,
+        "inside10Share": 0.25,
+        "snapShareRising": false,
+        "opportunitiesRising": false
+      },
+      "flags": [
+        "underdog",
+        "qbChange"
+      ],
+      "negative": {
+        "underdogBy3": 0.76,
+        "qbChange": 0.82
+      }
+    },
+    {
+      "name": "Kyren Williams",
+      "team": "LAR",
+      "position": "RB",
+      "opponent": "KC",
+      "games": 11,
+      "score": 3,
+      "implied": 20.6,
+      "signals": {
+        "redZoneShare": 0.308,
+        "inside10Share": 0.418,
+        "snapShareRising": false,
+        "opportunitiesRising": false
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "Quinshon Judkins",
+      "team": "CLE",
+      "position": "RB",
+      "opponent": "CIN",
+      "games": 9,
+      "score": 3,
+      "implied": 20.15,
+      "signals": {
+        "redZoneShare": 0.371,
+        "inside10Share": 0.432,
+        "snapShareRising": false,
+        "opportunitiesRising": false
+      },
+      "flags": [
+        "underdog"
+      ],
+      "negative": {
+        "underdogBy3": 0.76
+      }
+    }
+  ],
+  "players": [
+    {
+      "name": "Emanuel Wilson",
+      "team": "SEA",
+      "position": "RB",
+      "opponent": "DAL",
+      "games": 7,
+      "score": 5,
+      "implied": 25.77,
+      "signals": {
+        "redZoneShare": 0.207,
+        "inside10Share": 0.267,
+        "snapShareRising": true,
+        "opportunitiesRising": true
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "Jonah Coleman",
+      "team": "DEN",
+      "position": "RB",
+      "opponent": "MIA",
+      "games": 6,
+      "score": 5,
+      "implied": 24.3,
+      "signals": {
+        "redZoneShare": 0.202,
+        "inside10Share": 0.259,
+        "snapShareRising": true,
+        "opportunitiesRising": true
+      },
+      "flags": [
+        "priorSpike"
+      ],
+      "negative": {
+        "priorSpike": 0.63
+      }
+    },
+    {
+      "name": "Woody Marks",
+      "team": "HOU",
+      "position": "RB",
+      "opponent": "PIT",
+      "games": 9,
+      "score": 5,
+      "implied": 23.0,
+      "signals": {
+        "redZoneShare": 0.28,
+        "inside10Share": 0.267,
+        "snapShareRising": true,
+        "opportunitiesRising": true
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "Tony Pollard",
+      "team": "TEN",
+      "position": "RB",
+      "opponent": "WAS",
+      "games": 10,
+      "score": 5,
+      "implied": 22.0,
+      "signals": {
+        "redZoneShare": 0.375,
+        "inside10Share": 0.488,
+        "snapShareRising": true,
+        "opportunitiesRising": true
+      },
+      "flags": [
+        "underdog"
+      ],
+      "negative": {
+        "underdogBy3": 0.76
+      }
+    },
+    {
+      "name": "Cam Skattebo",
+      "team": "NYG",
+      "position": "RB",
+      "opponent": "SF",
+      "games": 8,
+      "score": 5,
+      "implied": 21.6,
+      "signals": {
+        "redZoneShare": 0.278,
+        "inside10Share": 0.25,
+        "snapShareRising": true,
+        "opportunitiesRising": true
+      },
+      "flags": [
+        "underdog",
+        "qbChange"
+      ],
+      "negative": {
+        "underdogBy3": 0.76,
+        "qbChange": 0.82
+      }
+    },
+    {
+      "name": "Chuba Hubbard",
+      "team": "CAR",
+      "position": "RB",
+      "opponent": "MIN",
+      "games": 10,
+      "score": 5,
+      "implied": 20.75,
+      "signals": {
+        "redZoneShare": 0.394,
+        "inside10Share": 0.453,
+        "snapShareRising": true,
+        "opportunitiesRising": true
+      },
+      "flags": [
+        "priorSpike"
+      ],
+      "negative": {
+        "priorSpike": 0.63
+      }
+    },
+    {
+      "name": "Omarion Hampton",
+      "team": "LAC",
+      "position": "RB",
+      "opponent": "TB",
+      "games": 10,
+      "score": 5,
+      "implied": 18.85,
+      "signals": {
+        "redZoneShare": 0.319,
+        "inside10Share": 0.351,
+        "snapShareRising": true,
+        "opportunitiesRising": true
+      },
+      "flags": [
+        "underdog"
+      ],
+      "negative": {
+        "underdogBy3": 0.76
+      }
+    },
+    {
+      "name": "Ollie Gordon II",
+      "team": "MIA",
+      "position": "RB",
+      "opponent": "DEN",
+      "games": 9,
+      "score": 5,
+      "implied": 18.35,
+      "signals": {
+        "redZoneShare": 0.394,
+        "inside10Share": 0.324,
+        "snapShareRising": true,
+        "opportunitiesRising": true
+      },
+      "flags": [
+        "underdog",
+        "qbChange"
+      ],
+      "negative": {
+        "underdogBy3": 0.76,
+        "qbChange": 0.82
+      }
+    },
+    {
+      "name": "James Cook",
+      "team": "BUF",
+      "position": "RB",
+      "opponent": "NE",
+      "games": 10,
+      "score": 4,
+      "implied": 27.75,
+      "signals": {
+        "redZoneShare": 0.374,
+        "inside10Share": 0.344,
+        "snapShareRising": false,
+        "opportunitiesRising": true
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "Jahmyr Gibbs",
+      "team": "DET",
+      "position": "RB",
+      "opponent": "ATL",
+      "games": 11,
+      "score": 4,
+      "implied": 27.58,
+      "signals": {
+        "redZoneShare": 0.519,
+        "inside10Share": 0.522,
+        "snapShareRising": false,
+        "opportunitiesRising": true
+      },
+      "flags": [
+        "priorSpike"
+      ],
+      "negative": {
+        "priorSpike": 0.63
+      }
+    },
+    {
+      "name": "Bhayshul Tuten",
+      "team": "JAX",
+      "position": "RB",
+      "opponent": "CHI",
+      "games": 10,
+      "score": 4,
+      "implied": 24.9,
+      "signals": {
+        "redZoneShare": 0.324,
+        "inside10Share": 0.286,
+        "snapShareRising": false,
+        "opportunitiesRising": true
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "Bucky Irving",
+      "team": "TB",
+      "position": "RB",
+      "opponent": "LAC",
+      "games": 10,
+      "score": 4,
+      "implied": 24.45,
+      "signals": {
+        "redZoneShare": 0.465,
+        "inside10Share": 0.487,
+        "snapShareRising": false,
+        "opportunitiesRising": true
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "Javonte Williams",
+      "team": "DAL",
+      "position": "RB",
+      "opponent": "SEA",
+      "games": 11,
+      "score": 4,
+      "implied": 24.38,
+      "signals": {
+        "redZoneShare": 0.354,
+        "inside10Share": 0.423,
+        "snapShareRising": false,
+        "opportunitiesRising": true
+      },
+      "flags": [
+        "priorSpike"
+      ],
+      "negative": {
+        "priorSpike": 0.63
+      }
+    },
+    {
+      "name": "Saquon Barkley",
+      "team": "PHI",
+      "position": "RB",
+      "opponent": "ARI",
+      "games": 8,
+      "score": 4,
+      "implied": 24.05,
+      "signals": {
+        "redZoneShare": 0.2,
+        "inside10Share": 0.237,
+        "snapShareRising": true,
+        "opportunitiesRising": true
+      },
+      "flags": [
+        "qbChange"
+      ],
+      "negative": {
+        "qbChange": 0.82
+      }
+    },
+    {
+      "name": "D'Andre Swift",
+      "team": "CHI",
+      "position": "RB",
+      "opponent": "JAX",
+      "games": 11,
+      "score": 4,
+      "implied": 22.03,
+      "signals": {
+        "redZoneShare": 0.306,
+        "inside10Share": 0.403,
+        "snapShareRising": true,
+        "opportunitiesRising": false
+      },
+      "flags": [
+        "priorSpike"
+      ],
+      "negative": {
+        "priorSpike": 0.63
+      }
+    },
+    {
+      "name": "Bijan Robinson",
+      "team": "ATL",
+      "position": "RB",
+      "opponent": "DET",
+      "games": 10,
+      "score": 4,
+      "implied": 21.82,
+      "signals": {
+        "redZoneShare": 0.416,
+        "inside10Share": 0.394,
+        "snapShareRising": true,
+        "opportunitiesRising": false
+      },
+      "flags": [
+        "underdog"
+      ],
+      "negative": {
+        "underdogBy3": 0.76
+      }
+    },
+    {
+      "name": "Blake Corum",
+      "team": "LAR",
+      "position": "RB",
+      "opponent": "KC",
+      "games": 11,
+      "score": 4,
+      "implied": 20.6,
+      "signals": {
+        "redZoneShare": 0.217,
+        "inside10Share": 0.2,
+        "snapShareRising": true,
+        "opportunitiesRising": true
+      },
+      "flags": [
+        "priorSpike"
+      ],
+      "negative": {
+        "priorSpike": 0.63
+      }
+    },
+    {
+      "name": "Christian McCaffrey",
+      "team": "SF",
+      "position": "RB",
+      "opponent": "NYG",
+      "games": 10,
+      "score": 3,
+      "implied": 26.5,
+      "signals": {
+        "redZoneShare": 0.404,
+        "inside10Share": 0.412,
+        "snapShareRising": false,
+        "opportunitiesRising": false
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "Chase Brown",
+      "team": "CIN",
+      "position": "RB",
+      "opponent": "CLE",
+      "games": 10,
+      "score": 3,
+      "implied": 25.9,
+      "signals": {
+        "redZoneShare": 0.216,
+        "inside10Share": 0.265,
+        "snapShareRising": false,
+        "opportunitiesRising": false
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "Aaron Jones",
+      "team": "MIN",
+      "position": "RB",
+      "opponent": "CAR",
+      "games": 10,
+      "score": 3,
+      "implied": 22.75,
+      "signals": {
+        "redZoneShare": 0.324,
+        "inside10Share": 0.32,
+        "snapShareRising": false,
+        "opportunitiesRising": false
+      },
+      "flags": [
+        "qbChange"
+      ],
+      "negative": {
+        "qbChange": 0.82
+      }
+    },
+    {
+      "name": "Kenneth Walker III",
+      "team": "KC",
+      "position": "RB",
+      "opponent": "LAR",
+      "games": 8,
+      "score": 3,
+      "implied": 22.64,
+      "signals": {
+        "redZoneShare": 0.431,
+        "inside10Share": 0.596,
+        "snapShareRising": false,
+        "opportunitiesRising": false
+      },
+      "flags": [
+        "priorSpike"
+      ],
+      "negative": {
+        "priorSpike": 0.63
+      }
+    },
+    {
+      "name": "Rhamondre Stevenson",
+      "team": "NE",
+      "position": "RB",
+      "opponent": "BUF",
+      "games": 10,
+      "score": 3,
+      "implied": 21.45,
+      "signals": {
+        "redZoneShare": 0.203,
+        "inside10Share": 0.25,
+        "snapShareRising": false,
+        "opportunitiesRising": false
+      },
+      "flags": [
+        "underdog",
+        "qbChange"
+      ],
+      "negative": {
+        "underdogBy3": 0.76,
+        "qbChange": 0.82
+      }
+    },
+    {
+      "name": "Kyren Williams",
+      "team": "LAR",
+      "position": "RB",
+      "opponent": "KC",
+      "games": 11,
+      "score": 3,
+      "implied": 20.6,
+      "signals": {
+        "redZoneShare": 0.308,
+        "inside10Share": 0.418,
+        "snapShareRising": false,
+        "opportunitiesRising": false
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "Quinshon Judkins",
+      "team": "CLE",
+      "position": "RB",
+      "opponent": "CIN",
+      "games": 9,
+      "score": 3,
+      "implied": 20.15,
+      "signals": {
+        "redZoneShare": 0.371,
+        "inside10Share": 0.432,
+        "snapShareRising": false,
+        "opportunitiesRising": false
+      },
+      "flags": [
+        "underdog"
+      ],
+      "negative": {
+        "underdogBy3": 0.76
+      }
+    },
+    {
+      "name": "Ty Johnson",
+      "team": "BUF",
+      "position": "RB",
+      "opponent": "NE",
+      "games": 8,
+      "score": 2,
+      "implied": 27.75,
+      "signals": {
+        "redZoneShare": 0.061,
+        "inside10Share": 0.031,
+        "snapShareRising": true,
+        "opportunitiesRising": true
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "Sione Vaki",
+      "team": "DET",
+      "position": "RB",
+      "opponent": "ATL",
+      "games": 11,
+      "score": 2,
+      "implied": 27.58,
+      "signals": {
+        "redZoneShare": 0.022,
+        "inside10Share": 0.014,
+        "snapShareRising": true,
+        "opportunitiesRising": true
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "Kaelon Black",
+      "team": "SF",
+      "position": "RB",
+      "opponent": "NYG",
+      "games": 10,
+      "score": 2,
+      "implied": 26.5,
+      "signals": {
+        "redZoneShare": 0.121,
+        "inside10Share": 0.078,
+        "snapShareRising": true,
+        "opportunitiesRising": true
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "Samaje Perine",
+      "team": "CIN",
+      "position": "RB",
+      "opponent": "CLE",
+      "games": 10,
+      "score": 2,
+      "implied": 25.9,
+      "signals": {
+        "redZoneShare": 0.165,
+        "inside10Share": 0.143,
+        "snapShareRising": true,
+        "opportunitiesRising": true
+      },
+      "flags": [
+        "priorSpike"
+      ],
+      "negative": {
+        "priorSpike": 0.63
+      }
+    },
+    {
+      "name": "Jadarian Price",
+      "team": "SEA",
+      "position": "RB",
+      "opponent": "DAL",
+      "games": 6,
+      "score": 2,
+      "implied": 25.77,
+      "signals": {
+        "redZoneShare": 0.08,
+        "inside10Share": 0.044,
+        "snapShareRising": true,
+        "opportunitiesRising": true
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "Austin Ekeler",
+      "team": "WAS",
+      "position": "RB",
+      "opponent": "TEN",
+      "games": 7,
+      "score": 2,
+      "implied": 25.4,
+      "signals": {
+        "redZoneShare": 0.086,
+        "inside10Share": 0.077,
+        "snapShareRising": true,
+        "opportunitiesRising": true
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "Chris Rodriguez Jr.",
+      "team": "JAX",
+      "position": "RB",
+      "opponent": "CHI",
+      "games": 10,
+      "score": 2,
+      "implied": 24.9,
+      "signals": {
+        "redZoneShare": 0.12,
+        "inside10Share": 0.161,
+        "snapShareRising": true,
+        "opportunitiesRising": true
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "Tyler Goodson",
+      "team": "DAL",
+      "position": "RB",
+      "opponent": "SEA",
+      "games": 6,
+      "score": 2,
+      "implied": 24.38,
+      "signals": {
+        "redZoneShare": 0.09,
+        "inside10Share": 0.014,
+        "snapShareRising": true,
+        "opportunitiesRising": true
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "Tank Bigsby",
+      "team": "PHI",
+      "position": "RB",
+      "opponent": "ARI",
+      "games": 4,
+      "score": 2,
+      "implied": 24.05,
+      "signals": {
+        "redZoneShare": 0.077,
+        "inside10Share": 0.079,
+        "snapShareRising": true,
+        "opportunitiesRising": true
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "Will Shipley",
+      "team": "PHI",
+      "position": "RB",
+      "opponent": "ARI",
+      "games": 6,
+      "score": 2,
+      "implied": 24.05,
+      "signals": {
+        "redZoneShare": 0.138,
+        "inside10Share": 0.105,
+        "snapShareRising": true,
+        "opportunitiesRising": true
+      },
+      "flags": [
+        "qbChange"
+      ],
+      "negative": {
+        "qbChange": 0.82
+      }
+    },
+    {
+      "name": "Kaleb Johnson",
+      "team": "GB",
+      "position": "RB",
+      "opponent": "NO",
+      "games": 9,
+      "score": 2,
+      "implied": 23.71,
+      "signals": {
+        "redZoneShare": 0.047,
+        "inside10Share": 0.077,
+        "snapShareRising": true,
+        "opportunitiesRising": true
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "Emmett Johnson",
+      "team": "KC",
+      "position": "RB",
+      "opponent": "LAR",
+      "games": 10,
+      "score": 2,
+      "implied": 22.64,
+      "signals": {
+        "redZoneShare": 0.147,
+        "inside10Share": 0.085,
+        "snapShareRising": true,
+        "opportunitiesRising": true
+      },
+      "flags": [
+        "priorSpike"
+      ],
+      "negative": {
+        "priorSpike": 0.63
+      }
+    },
+    {
+      "name": "Kyle Monangai",
+      "team": "CHI",
+      "position": "RB",
+      "opponent": "JAX",
+      "games": 6,
+      "score": 2,
+      "implied": 22.03,
+      "signals": {
+        "redZoneShare": 0.136,
+        "inside10Share": 0.195,
+        "snapShareRising": true,
+        "opportunitiesRising": true
+      },
+      "flags": [
+        "priorSpike"
+      ],
+      "negative": {
+        "priorSpike": 0.63
+      }
+    },
+    {
+      "name": "CJ Donaldson",
+      "team": "NO",
+      "position": "RB",
+      "opponent": "GB",
+      "games": 7,
+      "score": 2,
+      "implied": 21.98,
+      "signals": {
+        "redZoneShare": 0.021,
+        "inside10Share": 0.038,
+        "snapShareRising": true,
+        "opportunitiesRising": true
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "Kendre Miller",
+      "team": "NO",
+      "position": "RB",
+      "opponent": "GB",
+      "games": 6,
+      "score": 2,
+      "implied": 21.98,
+      "signals": {
+        "redZoneShare": 0.138,
+        "inside10Share": 0.173,
+        "snapShareRising": true,
+        "opportunitiesRising": true
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "Khalil Herbert",
+      "team": "ATL",
+      "position": "RB",
+      "opponent": "DET",
+      "games": 4,
+      "score": 2,
+      "implied": 21.82,
+      "signals": {
+        "redZoneShare": 0.022,
+        "inside10Share": 0.0,
+        "snapShareRising": true,
+        "opportunitiesRising": true
+      },
+      "flags": [
+        "underdog"
+      ],
+      "negative": {
+        "underdogBy3": 0.76
+      }
+    },
+    {
+      "name": "Jaylen Warren",
+      "team": "PIT",
+      "position": "RB",
+      "opponent": "HOU",
+      "games": 10,
+      "score": 2,
+      "implied": 21.8,
+      "signals": {
+        "redZoneShare": 0.224,
+        "inside10Share": 0.207,
+        "snapShareRising": false,
+        "opportunitiesRising": false
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "Devin Singletary",
+      "team": "NYG",
+      "position": "RB",
+      "opponent": "SF",
+      "games": 7,
+      "score": 2,
+      "implied": 21.6,
+      "signals": {
+        "redZoneShare": 0.063,
+        "inside10Share": 0.062,
+        "snapShareRising": true,
+        "opportunitiesRising": true
+      },
+      "flags": [
+        "underdog"
+      ],
+      "negative": {
+        "underdogBy3": 0.76
+      }
+    },
+    {
+      "name": "Tyrone Tracy Jr.",
+      "team": "NYG",
+      "position": "RB",
+      "opponent": "SF",
+      "games": 7,
+      "score": 2,
+      "implied": 21.6,
+      "signals": {
+        "redZoneShare": 0.063,
+        "inside10Share": 0.094,
+        "snapShareRising": true,
+        "opportunitiesRising": true
+      },
+      "flags": [
+        "underdog",
+        "qbChange"
+      ],
+      "negative": {
+        "underdogBy3": 0.76,
+        "qbChange": 0.82
+      }
+    },
+    {
+      "name": "Corey Kiner",
+      "team": "NE",
+      "position": "RB",
+      "opponent": "BUF",
+      "games": 10,
+      "score": 2,
+      "implied": 21.45,
+      "signals": {
+        "redZoneShare": 0.13,
+        "inside10Share": 0.083,
+        "snapShareRising": true,
+        "opportunitiesRising": true
+      },
+      "flags": [
+        "underdog",
+        "qbChange"
+      ],
+      "negative": {
+        "underdogBy3": 0.76,
+        "qbChange": 0.82
+      }
+    },
+    {
+      "name": "Trevor Etienne",
+      "team": "CAR",
+      "position": "RB",
+      "opponent": "MIN",
+      "games": 6,
+      "score": 2,
+      "implied": 20.75,
+      "signals": {
+        "redZoneShare": 0.029,
+        "inside10Share": 0.019,
+        "snapShareRising": true,
+        "opportunitiesRising": true
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "Dylan Sampson",
+      "team": "CLE",
+      "position": "RB",
+      "opponent": "CIN",
+      "games": 5,
+      "score": 2,
+      "implied": 20.15,
+      "signals": {
+        "redZoneShare": 0.043,
+        "inside10Share": 0.0,
+        "snapShareRising": true,
+        "opportunitiesRising": true
+      },
+      "flags": [
+        "underdog"
+      ],
+      "negative": {
+        "underdogBy3": 0.76
+      }
+    },
+    {
+      "name": "Jaleel McLaughlin",
+      "team": "CLE",
+      "position": "RB",
+      "opponent": "CIN",
+      "games": 5,
+      "score": 2,
+      "implied": 20.15,
+      "signals": {
+        "redZoneShare": 0.014,
+        "inside10Share": 0.0,
+        "snapShareRising": true,
+        "opportunitiesRising": true
+      },
+      "flags": [
+        "underdog"
+      ],
+      "negative": {
+        "underdogBy3": 0.76
+      }
+    },
+    {
+      "name": "Raheim Sanders",
+      "team": "CLE",
+      "position": "RB",
+      "opponent": "CIN",
+      "games": 5,
+      "score": 2,
+      "implied": 20.15,
+      "signals": {
+        "redZoneShare": 0.0,
+        "inside10Share": 0.0,
+        "snapShareRising": true,
+        "opportunitiesRising": true
+      },
+      "flags": [
+        "underdog"
+      ],
+      "negative": {
+        "underdogBy3": 0.76
+      }
+    },
+    {
+      "name": "Kimani Vidal",
+      "team": "LAC",
+      "position": "RB",
+      "opponent": "TB",
+      "games": 9,
+      "score": 2,
+      "implied": 18.85,
+      "signals": {
+        "redZoneShare": 0.069,
+        "inside10Share": 0.054,
+        "snapShareRising": true,
+        "opportunitiesRising": true
+      },
+      "flags": [
+        "underdog"
+      ],
+      "negative": {
+        "underdogBy3": 0.76
+      }
+    },
+    {
+      "name": "Jaylen Wright",
+      "team": "MIA",
+      "position": "RB",
+      "opponent": "DEN",
+      "games": 8,
+      "score": 2,
+      "implied": 18.35,
+      "signals": {
+        "redZoneShare": 0.07,
+        "inside10Share": 0.059,
+        "snapShareRising": true,
+        "opportunitiesRising": true
+      },
+      "flags": [
+        "underdog",
+        "qbChange"
+      ],
+      "negative": {
+        "underdogBy3": 0.76,
+        "qbChange": 0.82
+      }
+    },
+    {
+      "name": "Kenny Gainwell",
+      "team": "TB",
+      "position": "RB",
+      "opponent": "LAC",
+      "games": 10,
+      "score": 1,
+      "implied": 24.45,
+      "signals": {
+        "redZoneShare": 0.099,
+        "inside10Share": 0.103,
+        "snapShareRising": false,
+        "opportunitiesRising": true
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "Pierre Strong",
+      "team": "GB",
+      "position": "RB",
+      "opponent": "NO",
+      "games": 4,
+      "score": 1,
+      "implied": 23.71,
+      "signals": {
+        "redZoneShare": 0.075,
+        "inside10Share": 0.038,
+        "snapShareRising": false,
+        "opportunitiesRising": true
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "David Montgomery",
+      "team": "HOU",
+      "position": "RB",
+      "opponent": "PIT",
+      "games": 6,
+      "score": 1,
+      "implied": 23.0,
+      "signals": {
+        "redZoneShare": 0.171,
+        "inside10Share": 0.233,
+        "snapShareRising": false,
+        "opportunitiesRising": true
+      },
+      "flags": [
+        "priorSpike"
+      ],
+      "negative": {
+        "priorSpike": 0.63
+      }
+    },
+    {
+      "name": "Jordan Mason",
+      "team": "MIN",
+      "position": "RB",
+      "opponent": "CAR",
+      "games": 6,
+      "score": 1,
+      "implied": 22.75,
+      "signals": {
+        "redZoneShare": 0.118,
+        "inside10Share": 0.12,
+        "snapShareRising": true,
+        "opportunitiesRising": false
+      },
+      "flags": [
+        "qbChange"
+      ],
+      "negative": {
+        "qbChange": 0.82
+      }
+    },
+    {
+      "name": "Tyjae Spears",
+      "team": "TEN",
+      "position": "RB",
+      "opponent": "WAS",
+      "games": 7,
+      "score": 1,
+      "implied": 22.0,
+      "signals": {
+        "redZoneShare": 0.023,
+        "inside10Share": 0.0,
+        "snapShareRising": false,
+        "opportunitiesRising": true
+      },
+      "flags": [
+        "underdog"
+      ],
+      "negative": {
+        "underdogBy3": 0.76
+      }
+    },
+    {
+      "name": "Travis Etienne",
+      "team": "NO",
+      "position": "RB",
+      "opponent": "GB",
+      "games": 5,
+      "score": 1,
+      "implied": 21.98,
+      "signals": {
+        "redZoneShare": 0.106,
+        "inside10Share": 0.096,
+        "snapShareRising": false,
+        "opportunitiesRising": true
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "Rico Dowdle",
+      "team": "PIT",
+      "position": "RB",
+      "opponent": "HOU",
+      "games": 7,
+      "score": 1,
+      "implied": 21.8,
+      "signals": {
+        "redZoneShare": 0.145,
+        "inside10Share": 0.138,
+        "snapShareRising": true,
+        "opportunitiesRising": false
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "Tyler Allgeier",
+      "team": "ARI",
+      "position": "RB",
+      "opponent": "PHI",
+      "games": 11,
+      "score": 1,
+      "implied": 21.18,
+      "signals": {
+        "redZoneShare": 0.189,
+        "inside10Share": 0.134,
+        "snapShareRising": true,
+        "opportunitiesRising": false
+      },
+      "flags": [
+        "qbChange"
+      ],
+      "negative": {
+        "qbChange": 0.82
+      }
+    },
+    {
+      "name": "AJ Dillon",
+      "team": "CAR",
+      "position": "RB",
+      "opponent": "MIN",
+      "games": 4,
+      "score": 1,
+      "implied": 20.75,
+      "signals": {
+        "redZoneShare": 0.01,
+        "inside10Share": 0.0,
+        "snapShareRising": true,
+        "opportunitiesRising": false
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "George Holani",
+      "team": "SEA",
+      "position": "RB",
+      "opponent": "DAL",
+      "games": 9,
+      "score": 0,
+      "implied": 25.77,
+      "signals": {
+        "redZoneShare": 0.126,
+        "inside10Share": 0.111,
+        "snapShareRising": false,
+        "opportunitiesRising": false
+      },
+      "flags": [
+        "qbChange"
+      ],
+      "negative": {
+        "qbChange": 0.82
+      }
+    },
+    {
+      "name": "Velus Jones Jr.",
+      "team": "SEA",
+      "position": "RB",
+      "opponent": "DAL",
+      "games": 3,
+      "score": 0,
+      "implied": 25.77,
+      "signals": {
+        "redZoneShare": 0.023,
+        "inside10Share": 0.022,
+        "snapShareRising": false,
+        "opportunitiesRising": false
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "Zach Charbonnet",
+      "team": "SEA",
+      "position": "RB",
+      "opponent": "DAL",
+      "games": 3,
+      "score": 0,
+      "implied": 25.77,
+      "signals": {
+        "redZoneShare": 0.057,
+        "inside10Share": 0.044,
+        "snapShareRising": false,
+        "opportunitiesRising": false
+      },
+      "flags": [
+        "qbChange"
+      ],
+      "negative": {
+        "qbChange": 0.82
+      }
+    },
+    {
+      "name": "Jacory Croskey-Merritt",
+      "team": "WAS",
+      "position": "RB",
+      "opponent": "TEN",
+      "games": 6,
+      "score": 0,
+      "implied": 25.4,
+      "signals": {
+        "redZoneShare": 0.143,
+        "inside10Share": 0.103,
+        "snapShareRising": false,
+        "opportunitiesRising": false
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "Rachaad White",
+      "team": "WAS",
+      "position": "RB",
+      "opponent": "TEN",
+      "games": 9,
+      "score": 0,
+      "implied": 25.4,
+      "signals": {
+        "redZoneShare": 0.171,
+        "inside10Share": 0.205,
+        "snapShareRising": false,
+        "opportunitiesRising": false
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "Sean Tucker",
+      "team": "TB",
+      "position": "RB",
+      "opponent": "LAC",
+      "games": 5,
+      "score": 0,
+      "implied": 24.45,
+      "signals": {
+        "redZoneShare": 0.05,
+        "inside10Share": 0.077,
+        "snapShareRising": false,
+        "opportunitiesRising": false
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "J.K. Dobbins",
+      "team": "DEN",
+      "position": "RB",
+      "opponent": "MIA",
+      "games": 10,
+      "score": 0,
+      "implied": 24.3,
+      "signals": {
+        "redZoneShare": 0.169,
+        "inside10Share": 0.185,
+        "snapShareRising": false,
+        "opportunitiesRising": false
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "RJ Harvey",
+      "team": "DEN",
+      "position": "RB",
+      "opponent": "MIA",
+      "games": 6,
+      "score": 0,
+      "implied": 24.3,
+      "signals": {
+        "redZoneShare": 0.056,
+        "inside10Share": 0.037,
+        "snapShareRising": false,
+        "opportunitiesRising": false
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "Dameon Pierce",
+      "team": "PHI",
+      "position": "RB",
+      "opponent": "ARI",
+      "games": 3,
+      "score": 0,
+      "implied": 24.05,
+      "signals": {
+        "redZoneShare": 0.123,
+        "inside10Share": 0.158,
+        "snapShareRising": false,
+        "opportunitiesRising": false
+      },
+      "flags": [
+        "qbChange"
+      ],
+      "negative": {
+        "qbChange": 0.82
+      }
+    },
+    {
+      "name": "Elijah Mitchell",
+      "team": "PHI",
+      "position": "RB",
+      "opponent": "ARI",
+      "games": 3,
+      "score": 0,
+      "implied": 24.05,
+      "signals": {
+        "redZoneShare": 0.031,
+        "inside10Share": 0.0,
+        "snapShareRising": false,
+        "opportunitiesRising": false
+      },
+      "flags": [
+        "qbChange"
+      ],
+      "negative": {
+        "qbChange": 0.82
+      }
+    },
+    {
+      "name": "Chris Brooks",
+      "team": "GB",
+      "position": "RB",
+      "opponent": "NO",
+      "games": 6,
+      "score": 0,
+      "implied": 23.71,
+      "signals": {
+        "redZoneShare": 0.075,
+        "inside10Share": 0.077,
+        "snapShareRising": false,
+        "opportunitiesRising": false
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "Josh Jacobs",
+      "team": "GB",
+      "position": "RB",
+      "opponent": "NO",
+      "games": 3,
+      "score": 0,
+      "implied": 23.71,
+      "signals": {
+        "redZoneShare": 0.159,
+        "inside10Share": 0.173,
+        "snapShareRising": false,
+        "opportunitiesRising": false
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "MarShawn Lloyd",
+      "team": "GB",
+      "position": "RB",
+      "opponent": "NO",
+      "games": 10,
+      "score": 0,
+      "implied": 23.71,
+      "signals": {
+        "redZoneShare": 0.15,
+        "inside10Share": 0.173,
+        "snapShareRising": false,
+        "opportunitiesRising": false
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "Emari Demercado",
+      "team": "HOU",
+      "position": "RB",
+      "opponent": "PIT",
+      "games": 3,
+      "score": 0,
+      "implied": 23.0,
+      "signals": {
+        "redZoneShare": 0.024,
+        "inside10Share": 0.0,
+        "snapShareRising": false,
+        "opportunitiesRising": false
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "Roschon Johnson",
+      "team": "CHI",
+      "position": "RB",
+      "opponent": "JAX",
+      "games": 7,
+      "score": 0,
+      "implied": 22.03,
+      "signals": {
+        "redZoneShare": 0.088,
+        "inside10Share": 0.065,
+        "snapShareRising": false,
+        "opportunitiesRising": false
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "Salvon Ahmed",
+      "team": "CHI",
+      "position": "RB",
+      "opponent": "JAX",
+      "games": 3,
+      "score": 0,
+      "implied": 22.03,
+      "signals": {
+        "redZoneShare": 0.014,
+        "inside10Share": 0.013,
+        "snapShareRising": false,
+        "opportunitiesRising": false
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "Alvin Kamara",
+      "team": "NO",
+      "position": "RB",
+      "opponent": "GB",
+      "games": 9,
+      "score": 0,
+      "implied": 21.98,
+      "signals": {
+        "redZoneShare": 0.138,
+        "inside10Share": 0.115,
+        "snapShareRising": false,
+        "opportunitiesRising": false
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "Brian Robinson",
+      "team": "ATL",
+      "position": "RB",
+      "opponent": "DET",
+      "games": 6,
+      "score": 0,
+      "implied": 21.82,
+      "signals": {
+        "redZoneShare": 0.09,
+        "inside10Share": 0.121,
+        "snapShareRising": false,
+        "opportunitiesRising": false
+      },
+      "flags": [
+        "underdog"
+      ],
+      "negative": {
+        "underdogBy3": 0.76
+      }
+    },
+    {
+      "name": "Najee Harris",
+      "team": "NYG",
+      "position": "RB",
+      "opponent": "SF",
+      "games": 5,
+      "score": 0,
+      "implied": 21.6,
+      "signals": {
+        "redZoneShare": 0.101,
+        "inside10Share": 0.125,
+        "snapShareRising": false,
+        "opportunitiesRising": false
+      },
+      "flags": [
+        "underdog"
+      ],
+      "negative": {
+        "underdogBy3": 0.76
+      }
+    },
+    {
+      "name": "TreVeyon Henderson",
+      "team": "NE",
+      "position": "RB",
+      "opponent": "BUF",
+      "games": 6,
+      "score": 0,
+      "implied": 21.45,
+      "signals": {
+        "redZoneShare": 0.043,
+        "inside10Share": 0.028,
+        "snapShareRising": false,
+        "opportunitiesRising": false
+      },
+      "flags": [
+        "underdog"
+      ],
+      "negative": {
+        "underdogBy3": 0.76
+      }
+    },
+    {
+      "name": "Bam Knight",
+      "team": "ARI",
+      "position": "RB",
+      "opponent": "PHI",
+      "games": 7,
+      "score": 0,
+      "implied": 21.18,
+      "signals": {
+        "redZoneShare": 0.074,
+        "inside10Share": 0.075,
+        "snapShareRising": false,
+        "opportunitiesRising": false
+      },
+      "flags": [
+        "qbChange"
+      ],
+      "negative": {
+        "qbChange": 0.82
+      }
+    },
+    {
+      "name": "Jeremiyah Love",
+      "team": "ARI",
+      "position": "RB",
+      "opponent": "PHI",
+      "games": 6,
+      "score": 0,
+      "implied": 21.18,
+      "signals": {
+        "redZoneShare": 0.139,
+        "inside10Share": 0.104,
+        "snapShareRising": false,
+        "opportunitiesRising": false
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "Ronnie Rivers",
+      "team": "LAR",
+      "position": "RB",
+      "opponent": "KC",
+      "games": 4,
+      "score": 0,
+      "implied": 20.6,
+      "signals": {
+        "redZoneShare": 0.017,
+        "inside10Share": 0.0,
+        "snapShareRising": false,
+        "opportunitiesRising": false
+      },
+      "flags": [],
+      "negative": {}
+    },
+    {
+      "name": "Keaton Mitchell",
+      "team": "LAC",
+      "position": "RB",
+      "opponent": "TB",
+      "games": 10,
+      "score": 0,
+      "implied": 18.85,
+      "signals": {
+        "redZoneShare": 0.097,
+        "inside10Share": 0.054,
+        "snapShareRising": false,
+        "opportunitiesRising": false
+      },
+      "flags": [
+        "underdog"
+      ],
+      "negative": {
+        "underdogBy3": 0.76
+      }
+    },
+    {
+      "name": "De'Von Achane",
+      "team": "MIA",
+      "position": "RB",
+      "opponent": "DEN",
+      "games": 3,
+      "score": 0,
+      "implied": 18.35,
+      "signals": {
+        "redZoneShare": 0.099,
+        "inside10Share": 0.088,
+        "snapShareRising": false,
+        "opportunitiesRising": false
+      },
+      "flags": [
+        "underdog"
+      ],
+      "negative": {
+        "underdogBy3": 0.76
+      }
+    }
+  ],
+  "unvalidated": [
+    {
+      "name": "Devin Duvernay",
+      "team": "ARI",
+      "position": "WR",
+      "opponent": "PHI",
+      "flags": [
+        "home",
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Elijah Higgins",
+      "team": "ARI",
+      "position": "TE",
+      "opponent": "PHI",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Hunter Long",
+      "team": "ARI",
+      "position": "TE",
+      "opponent": "PHI",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Jalen Brooks",
+      "team": "ARI",
+      "position": "WR",
+      "opponent": "PHI",
+      "flags": [
+        "home",
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Kendrick Bourne",
+      "team": "ARI",
+      "position": "WR",
+      "opponent": "PHI",
+      "flags": [
+        "home"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Michael Wilson",
+      "team": "ARI",
+      "position": "WR",
+      "opponent": "PHI",
+      "flags": [
+        "home"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Reggie Virgil",
+      "team": "ARI",
+      "position": "WR",
+      "opponent": "PHI",
+      "flags": [
+        "home",
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Simi Fehoko",
+      "team": "ARI",
+      "position": "WR",
+      "opponent": "PHI",
+      "flags": [
+        "home",
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Trey McBride",
+      "team": "ARI",
+      "position": "TE",
+      "opponent": "PHI",
+      "flags": [
+        "snap share"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Austin Hooper",
+      "team": "ATL",
+      "position": "TE",
+      "opponent": "DET",
+      "flags": [
+        "low baseline",
+        "game total"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Charlie Woerner",
+      "team": "ATL",
+      "position": "TE",
+      "opponent": "DET",
+      "flags": [
+        "low baseline",
+        "game total"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Chris Blair",
+      "team": "ATL",
+      "position": "WR",
+      "opponent": "DET",
+      "flags": [
+        "home",
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Drake London",
+      "team": "ATL",
+      "position": "WR",
+      "opponent": "DET",
+      "flags": [
+        "home"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Jahan Dotson",
+      "team": "ATL",
+      "position": "WR",
+      "opponent": "DET",
+      "flags": [
+        "home"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Kyle Pitts",
+      "team": "ATL",
+      "position": "TE",
+      "opponent": "DET",
+      "flags": [
+        "low baseline",
+        "game total"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Nick Muse",
+      "team": "ATL",
+      "position": "TE",
+      "opponent": "DET",
+      "flags": [
+        "low baseline",
+        "game total"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Olamide Zaccheaus",
+      "team": "ATL",
+      "position": "WR",
+      "opponent": "DET",
+      "flags": [
+        "home",
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Zachariah Branch",
+      "team": "ATL",
+      "position": "WR",
+      "opponent": "DET",
+      "flags": [
+        "home",
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "DJ Moore",
+      "team": "BUF",
+      "position": "WR",
+      "opponent": "NE",
+      "flags": [
+        "implied total",
+        "favorite"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Dalton Kincaid",
+      "team": "BUF",
+      "position": "TE",
+      "opponent": "NE",
+      "flags": [
+        "game total"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Dawson Knox",
+      "team": "BUF",
+      "position": "TE",
+      "opponent": "NE",
+      "flags": [
+        "low baseline",
+        "game total"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Greg Dortch",
+      "team": "BUF",
+      "position": "WR",
+      "opponent": "NE",
+      "flags": [
+        "implied total",
+        "favorite",
+        "low baseline"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Jackson Hawes",
+      "team": "BUF",
+      "position": "TE",
+      "opponent": "NE",
+      "flags": [
+        "low baseline",
+        "game total"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Josh Palmer",
+      "team": "BUF",
+      "position": "WR",
+      "opponent": "NE",
+      "flags": [
+        "implied total",
+        "favorite",
+        "low baseline"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Keleki Latu",
+      "team": "BUF",
+      "position": "TE",
+      "opponent": "NE",
+      "flags": [
+        "low baseline",
+        "game total"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Keon Coleman",
+      "team": "BUF",
+      "position": "WR",
+      "opponent": "NE",
+      "flags": [
+        "implied total",
+        "favorite"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Khalil Shakir",
+      "team": "BUF",
+      "position": "WR",
+      "opponent": "NE",
+      "flags": [
+        "implied total",
+        "favorite"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Brycen Tremayne",
+      "team": "CAR",
+      "position": "WR",
+      "opponent": "MIN",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "David Moore",
+      "team": "CAR",
+      "position": "WR",
+      "opponent": "MIN",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Feleipe Franks",
+      "team": "CAR",
+      "position": "TE",
+      "opponent": "MIN",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "John Metchie III",
+      "team": "CAR",
+      "position": "WR",
+      "opponent": "MIN",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Mitchell Evans",
+      "team": "CAR",
+      "position": "TE",
+      "opponent": "MIN",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Tommy Tremble",
+      "team": "CAR",
+      "position": "TE",
+      "opponent": "MIN",
+      "flags": [
+        "low baseline",
+        "snap share"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Cole Kmet",
+      "team": "CHI",
+      "position": "TE",
+      "opponent": "JAX",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Colston Loveland",
+      "team": "CHI",
+      "position": "TE",
+      "opponent": "JAX",
+      "flags": [
+        "snap share"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Jahdae Walker",
+      "team": "CHI",
+      "position": "WR",
+      "opponent": "JAX",
+      "flags": [
+        "home",
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Kalif Raymond",
+      "team": "CHI",
+      "position": "WR",
+      "opponent": "JAX",
+      "flags": [
+        "home",
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Luther Burden III",
+      "team": "CHI",
+      "position": "WR",
+      "opponent": "JAX",
+      "flags": [
+        "home"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Rome Odunze",
+      "team": "CHI",
+      "position": "WR",
+      "opponent": "JAX",
+      "flags": [
+        "home"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Sam Roush",
+      "team": "CHI",
+      "position": "TE",
+      "opponent": "JAX",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Zavion Thomas",
+      "team": "CHI",
+      "position": "WR",
+      "opponent": "JAX",
+      "flags": [
+        "home",
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Colbie Young",
+      "team": "CIN",
+      "position": "WR",
+      "opponent": "CLE",
+      "flags": [
+        "implied total",
+        "favorite",
+        "low baseline"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Dohnte Meyers",
+      "team": "CIN",
+      "position": "WR",
+      "opponent": "CLE",
+      "flags": [
+        "implied total",
+        "favorite",
+        "low baseline"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Drew Sample",
+      "team": "CIN",
+      "position": "TE",
+      "opponent": "CLE",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Erick All",
+      "team": "CIN",
+      "position": "TE",
+      "opponent": "CLE",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Ja'Marr Chase",
+      "team": "CIN",
+      "position": "WR",
+      "opponent": "CLE",
+      "flags": [
+        "implied total",
+        "favorite"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Jack Endries",
+      "team": "CIN",
+      "position": "TE",
+      "opponent": "CLE",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Mitchell Tinsley",
+      "team": "CIN",
+      "position": "WR",
+      "opponent": "CLE",
+      "flags": [
+        "implied total",
+        "favorite",
+        "low baseline"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Tanner Hudson",
+      "team": "CIN",
+      "position": "TE",
+      "opponent": "CLE",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Tee Higgins",
+      "team": "CIN",
+      "position": "WR",
+      "opponent": "CLE",
+      "flags": [
+        "implied total",
+        "favorite"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Blake Whiteheart",
+      "team": "CLE",
+      "position": "TE",
+      "opponent": "CIN",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Denzel Boston",
+      "team": "CLE",
+      "position": "WR",
+      "opponent": "CIN",
+      "flags": [
+        "home"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Harold Fannin Jr.",
+      "team": "CLE",
+      "position": "TE",
+      "opponent": "CIN",
+      "flags": [
+        "snap share"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Isaiah Bond",
+      "team": "CLE",
+      "position": "WR",
+      "opponent": "CIN",
+      "flags": [
+        "home",
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Jerry Jeudy",
+      "team": "CLE",
+      "position": "WR",
+      "opponent": "CIN",
+      "flags": [
+        "home"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "KC Concepcion",
+      "team": "CLE",
+      "position": "WR",
+      "opponent": "CIN",
+      "flags": [
+        "home"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Malachi Corley",
+      "team": "CLE",
+      "position": "WR",
+      "opponent": "CIN",
+      "flags": [
+        "home",
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Tylan Wallace",
+      "team": "CLE",
+      "position": "WR",
+      "opponent": "CIN",
+      "flags": [
+        "home",
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Brevyn Spann-Ford",
+      "team": "DAL",
+      "position": "TE",
+      "opponent": "SEA",
+      "flags": [
+        "low baseline",
+        "game total"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "CeeDee Lamb",
+      "team": "DAL",
+      "position": "WR",
+      "opponent": "SEA",
+      "flags": [
+        "implied total"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "George Pickens",
+      "team": "DAL",
+      "position": "WR",
+      "opponent": "SEA",
+      "flags": [
+        "implied total"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Jake Ferguson",
+      "team": "DAL",
+      "position": "TE",
+      "opponent": "SEA",
+      "flags": [
+        "low baseline",
+        "game total"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Jonathan Mingo",
+      "team": "DAL",
+      "position": "WR",
+      "opponent": "SEA",
+      "flags": [
+        "implied total",
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "KaVontae Turpin",
+      "team": "DAL",
+      "position": "WR",
+      "opponent": "SEA",
+      "flags": [
+        "implied total",
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Luke Schoonmaker",
+      "team": "DAL",
+      "position": "TE",
+      "opponent": "SEA",
+      "flags": [
+        "low baseline",
+        "game total"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Ryan Flournoy",
+      "team": "DAL",
+      "position": "WR",
+      "opponent": "SEA",
+      "flags": [
+        "implied total"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Adam Trautman",
+      "team": "DEN",
+      "position": "TE",
+      "opponent": "MIA",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Courtland Sutton",
+      "team": "DEN",
+      "position": "WR",
+      "opponent": "MIA",
+      "flags": [
+        "implied total",
+        "favorite",
+        "home",
+        "low baseline"
+      ],
+      "points": 4,
+      "ranked": false
+    },
+    {
+      "name": "Evan Engram",
+      "team": "DEN",
+      "position": "TE",
+      "opponent": "MIA",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Jaylen Waddle",
+      "team": "DEN",
+      "position": "WR",
+      "opponent": "MIA",
+      "flags": [
+        "implied total",
+        "favorite",
+        "home"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Lil'Jordan Humphrey",
+      "team": "DEN",
+      "position": "WR",
+      "opponent": "MIA",
+      "flags": [
+        "implied total",
+        "favorite",
+        "home",
+        "low baseline"
+      ],
+      "points": 4,
+      "ranked": false
+    },
+    {
+      "name": "Marvin Mims Jr.",
+      "team": "DEN",
+      "position": "WR",
+      "opponent": "MIA",
+      "flags": [
+        "implied total",
+        "favorite",
+        "home",
+        "low baseline"
+      ],
+      "points": 4,
+      "ranked": false
+    },
+    {
+      "name": "Nate Adkins",
+      "team": "DEN",
+      "position": "TE",
+      "opponent": "MIA",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Pat Bryant",
+      "team": "DEN",
+      "position": "WR",
+      "opponent": "MIA",
+      "flags": [
+        "implied total",
+        "favorite",
+        "home"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Troy Franklin",
+      "team": "DEN",
+      "position": "WR",
+      "opponent": "MIA",
+      "flags": [
+        "implied total",
+        "favorite",
+        "home",
+        "low baseline"
+      ],
+      "points": 4,
+      "ranked": false
+    },
+    {
+      "name": "Amon-Ra St. Brown",
+      "team": "DET",
+      "position": "WR",
+      "opponent": "ATL",
+      "flags": [
+        "implied total",
+        "favorite"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Brock Wright",
+      "team": "DET",
+      "position": "TE",
+      "opponent": "ATL",
+      "flags": [
+        "low baseline",
+        "game total"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "DeAndre Carter",
+      "team": "DET",
+      "position": "WR",
+      "opponent": "ATL",
+      "flags": [
+        "implied total",
+        "favorite",
+        "low baseline"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Isaac TeSlaa",
+      "team": "DET",
+      "position": "WR",
+      "opponent": "ATL",
+      "flags": [
+        "implied total",
+        "favorite",
+        "low baseline"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Jameson Williams",
+      "team": "DET",
+      "position": "WR",
+      "opponent": "ATL",
+      "flags": [
+        "implied total",
+        "favorite"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Sam LaPorta",
+      "team": "DET",
+      "position": "TE",
+      "opponent": "ATL",
+      "flags": [
+        "snap share",
+        "game total"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Tay Martin",
+      "team": "DET",
+      "position": "WR",
+      "opponent": "ATL",
+      "flags": [
+        "implied total",
+        "favorite",
+        "low baseline"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Tom Kennedy",
+      "team": "DET",
+      "position": "WR",
+      "opponent": "ATL",
+      "flags": [
+        "implied total",
+        "favorite",
+        "low baseline"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Tyler Conklin",
+      "team": "DET",
+      "position": "TE",
+      "opponent": "ATL",
+      "flags": [
+        "low baseline",
+        "game total"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Bo Melton",
+      "team": "GB",
+      "position": "WR",
+      "opponent": "NO",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Coleman Owen",
+      "team": "GB",
+      "position": "WR",
+      "opponent": "NO",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "J. Michael Sturdivant",
+      "team": "GB",
+      "position": "WR",
+      "opponent": "NO",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Jonnu Smith",
+      "team": "GB",
+      "position": "TE",
+      "opponent": "NO",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Mark Redman",
+      "team": "GB",
+      "position": "TE",
+      "opponent": "NO",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Savion Williams",
+      "team": "GB",
+      "position": "WR",
+      "opponent": "NO",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Skyy Moore",
+      "team": "GB",
+      "position": "WR",
+      "opponent": "NO",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Tucker Kraft",
+      "team": "GB",
+      "position": "TE",
+      "opponent": "NO",
+      "flags": [
+        "snap share"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Brevin Jordan",
+      "team": "HOU",
+      "position": "TE",
+      "opponent": "PIT",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Cade Stover",
+      "team": "HOU",
+      "position": "TE",
+      "opponent": "PIT",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Foster Moreau",
+      "team": "HOU",
+      "position": "TE",
+      "opponent": "PIT",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Marvin Harrison Jr.",
+      "team": "HOU",
+      "position": "WR",
+      "opponent": "PIT",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Brenton Strange",
+      "team": "JAX",
+      "position": "TE",
+      "opponent": "CHI",
+      "flags": [
+        "snap share"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Brian Thomas Jr.",
+      "team": "JAX",
+      "position": "WR",
+      "opponent": "CHI",
+      "flags": [
+        "implied total",
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Jakobi Meyers",
+      "team": "JAX",
+      "position": "WR",
+      "opponent": "CHI",
+      "flags": [
+        "implied total"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Josh Cameron",
+      "team": "JAX",
+      "position": "WR",
+      "opponent": "CHI",
+      "flags": [
+        "implied total",
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Nate Boerkircher",
+      "team": "JAX",
+      "position": "TE",
+      "opponent": "CHI",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Parker Washington",
+      "team": "JAX",
+      "position": "WR",
+      "opponent": "CHI",
+      "flags": [
+        "implied total"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Quintin Morris",
+      "team": "JAX",
+      "position": "TE",
+      "opponent": "CHI",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Tanner Koziol",
+      "team": "JAX",
+      "position": "TE",
+      "opponent": "CHI",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Andrew Armstrong",
+      "team": "KC",
+      "position": "WR",
+      "opponent": "LAR",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Cyrus Allen",
+      "team": "KC",
+      "position": "WR",
+      "opponent": "LAR",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Jake Briningstool",
+      "team": "KC",
+      "position": "TE",
+      "opponent": "LAR",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Jalen Royals",
+      "team": "KC",
+      "position": "WR",
+      "opponent": "LAR",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Noah Gray",
+      "team": "KC",
+      "position": "TE",
+      "opponent": "LAR",
+      "flags": [
+        "low baseline",
+        "snap share"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Charlie Kolar",
+      "team": "LAC",
+      "position": "TE",
+      "opponent": "TB",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "David Njoku",
+      "team": "LAC",
+      "position": "TE",
+      "opponent": "TB",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Derius Davis",
+      "team": "LAC",
+      "position": "WR",
+      "opponent": "TB",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Hayden Rucci",
+      "team": "LAC",
+      "position": "TE",
+      "opponent": "TB",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "KeAndre Lambert-Smith",
+      "team": "LAC",
+      "position": "WR",
+      "opponent": "TB",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Marquez Valdes-Scantling",
+      "team": "LAC",
+      "position": "WR",
+      "opponent": "TB",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Oronde Gadsden II",
+      "team": "LAC",
+      "position": "TE",
+      "opponent": "TB",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Theo Wease Jr.",
+      "team": "LAC",
+      "position": "WR",
+      "opponent": "TB",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Alex Bachman",
+      "team": "LAR",
+      "position": "WR",
+      "opponent": "KC",
+      "flags": [
+        "home",
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Colby Parkinson",
+      "team": "LAR",
+      "position": "TE",
+      "opponent": "KC",
+      "flags": [
+        "low baseline",
+        "snap share"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Davante Adams",
+      "team": "LAR",
+      "position": "WR",
+      "opponent": "KC",
+      "flags": [
+        "home"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Davis Allen",
+      "team": "LAR",
+      "position": "TE",
+      "opponent": "KC",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Jordan Whittington",
+      "team": "LAR",
+      "position": "WR",
+      "opponent": "KC",
+      "flags": [
+        "home",
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Konata Mumpfield",
+      "team": "LAR",
+      "position": "WR",
+      "opponent": "KC",
+      "flags": [
+        "home"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Puka Nacua",
+      "team": "LAR",
+      "position": "WR",
+      "opponent": "KC",
+      "flags": [
+        "home"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Terrance Ferguson",
+      "team": "LAR",
+      "position": "TE",
+      "opponent": "KC",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Tutu Atwell",
+      "team": "LAR",
+      "position": "WR",
+      "opponent": "KC",
+      "flags": [
+        "home",
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Xavier Smith",
+      "team": "LAR",
+      "position": "WR",
+      "opponent": "KC",
+      "flags": [
+        "home",
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Chris Bell",
+      "team": "MIA",
+      "position": "WR",
+      "opponent": "DEN",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Jalen Tolbert",
+      "team": "MIA",
+      "position": "WR",
+      "opponent": "DEN",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Kevin Coleman Jr.",
+      "team": "MIA",
+      "position": "WR",
+      "opponent": "DEN",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Seydou Traore",
+      "team": "MIA",
+      "position": "TE",
+      "opponent": "DEN",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Will Kacmarek",
+      "team": "MIA",
+      "position": "TE",
+      "opponent": "DEN",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Ben Yurosek",
+      "team": "MIN",
+      "position": "TE",
+      "opponent": "CAR",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Gavin Bartholomew",
+      "team": "MIN",
+      "position": "TE",
+      "opponent": "CAR",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Jauan Jennings",
+      "team": "MIN",
+      "position": "WR",
+      "opponent": "CAR",
+      "flags": [
+        "home",
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Jeshaun Jones",
+      "team": "MIN",
+      "position": "WR",
+      "opponent": "CAR",
+      "flags": [
+        "home",
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Jordan Addison",
+      "team": "MIN",
+      "position": "WR",
+      "opponent": "CAR",
+      "flags": [
+        "home"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Josh Oliver",
+      "team": "MIN",
+      "position": "TE",
+      "opponent": "CAR",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Justin Jefferson",
+      "team": "MIN",
+      "position": "WR",
+      "opponent": "CAR",
+      "flags": [
+        "home"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Myles Price",
+      "team": "MIN",
+      "position": "WR",
+      "opponent": "CAR",
+      "flags": [
+        "home",
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "T.J. Hockenson",
+      "team": "MIN",
+      "position": "TE",
+      "opponent": "CAR",
+      "flags": [
+        "snap share"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Tai Felton",
+      "team": "MIN",
+      "position": "WR",
+      "opponent": "CAR",
+      "flags": [
+        "home",
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "A.J. Brown",
+      "team": "NE",
+      "position": "WR",
+      "opponent": "BUF",
+      "flags": [
+        "home"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Cameron Latu",
+      "team": "NE",
+      "position": "TE",
+      "opponent": "BUF",
+      "flags": [
+        "low baseline",
+        "game total"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "DeMario Douglas",
+      "team": "NE",
+      "position": "WR",
+      "opponent": "BUF",
+      "flags": [
+        "home"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Efton Chism III",
+      "team": "NE",
+      "position": "WR",
+      "opponent": "BUF",
+      "flags": [
+        "home",
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Eli Raridon",
+      "team": "NE",
+      "position": "TE",
+      "opponent": "BUF",
+      "flags": [
+        "low baseline",
+        "snap share",
+        "game total"
+      ],
+      "points": 4,
+      "ranked": false
+    },
+    {
+      "name": "Hunter Henry",
+      "team": "NE",
+      "position": "TE",
+      "opponent": "BUF",
+      "flags": [
+        "game total"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Kyle Williams",
+      "team": "NE",
+      "position": "WR",
+      "opponent": "BUF",
+      "flags": [
+        "home",
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Mack Hollins",
+      "team": "NE",
+      "position": "WR",
+      "opponent": "BUF",
+      "flags": [
+        "home"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Romeo Doubs",
+      "team": "NE",
+      "position": "WR",
+      "opponent": "BUF",
+      "flags": [
+        "home"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Barion Brown",
+      "team": "NO",
+      "position": "WR",
+      "opponent": "GB",
+      "flags": [
+        "home",
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Bryce Lance",
+      "team": "NO",
+      "position": "WR",
+      "opponent": "GB",
+      "flags": [
+        "home",
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Chris Olave",
+      "team": "NO",
+      "position": "WR",
+      "opponent": "GB",
+      "flags": [
+        "home"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Devaughn Vele",
+      "team": "NO",
+      "position": "WR",
+      "opponent": "GB",
+      "flags": [
+        "home"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Jordyn Tyson",
+      "team": "NO",
+      "position": "WR",
+      "opponent": "GB",
+      "flags": [
+        "home"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Noah Fant",
+      "team": "NO",
+      "position": "TE",
+      "opponent": "GB",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Oscar Delp",
+      "team": "NO",
+      "position": "TE",
+      "opponent": "GB",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Braxton Berrios",
+      "team": "NYG",
+      "position": "WR",
+      "opponent": "SF",
+      "flags": [
+        "home",
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Charlie Jones",
+      "team": "NYG",
+      "position": "WR",
+      "opponent": "SF",
+      "flags": [
+        "home",
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Chris Manhertz",
+      "team": "NYG",
+      "position": "TE",
+      "opponent": "SF",
+      "flags": [
+        "low baseline",
+        "game total"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Darnell Mooney",
+      "team": "NYG",
+      "position": "WR",
+      "opponent": "SF",
+      "flags": [
+        "home",
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Isaiah Likely",
+      "team": "NYG",
+      "position": "TE",
+      "opponent": "SF",
+      "flags": [
+        "snap share",
+        "game total"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Malachi Fields",
+      "team": "NYG",
+      "position": "WR",
+      "opponent": "SF",
+      "flags": [
+        "home"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Malik Nabers",
+      "team": "NYG",
+      "position": "WR",
+      "opponent": "SF",
+      "flags": [
+        "home"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Theo Johnson",
+      "team": "NYG",
+      "position": "TE",
+      "opponent": "SF",
+      "flags": [
+        "low baseline",
+        "game total"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Britain Covey",
+      "team": "PHI",
+      "position": "WR",
+      "opponent": "ARI",
+      "flags": [
+        "implied total",
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Dallas Goedert",
+      "team": "PHI",
+      "position": "TE",
+      "opponent": "ARI",
+      "flags": [
+        "snap share"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Darius Cooper",
+      "team": "PHI",
+      "position": "WR",
+      "opponent": "ARI",
+      "flags": [
+        "implied total",
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "DeVonta Smith",
+      "team": "PHI",
+      "position": "WR",
+      "opponent": "ARI",
+      "flags": [
+        "implied total"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Dontayvion Wicks",
+      "team": "PHI",
+      "position": "WR",
+      "opponent": "ARI",
+      "flags": [
+        "implied total"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "E.J. Jenkins",
+      "team": "PHI",
+      "position": "TE",
+      "opponent": "ARI",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Eli Stowers",
+      "team": "PHI",
+      "position": "TE",
+      "opponent": "ARI",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Elijah Moore",
+      "team": "PHI",
+      "position": "WR",
+      "opponent": "ARI",
+      "flags": [
+        "implied total",
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Johnny Mundt",
+      "team": "PHI",
+      "position": "TE",
+      "opponent": "ARI",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Makai Lemon",
+      "team": "PHI",
+      "position": "WR",
+      "opponent": "ARI",
+      "flags": [
+        "implied total"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Marquise Brown",
+      "team": "PHI",
+      "position": "WR",
+      "opponent": "ARI",
+      "flags": [
+        "implied total",
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Zach Ertz",
+      "team": "PHI",
+      "position": "TE",
+      "opponent": "ARI",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Ben Skowronek",
+      "team": "PIT",
+      "position": "WR",
+      "opponent": "HOU",
+      "flags": [
+        "home",
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Brandon Smith",
+      "team": "PIT",
+      "position": "WR",
+      "opponent": "HOU",
+      "flags": [
+        "home",
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "DK Metcalf",
+      "team": "PIT",
+      "position": "WR",
+      "opponent": "HOU",
+      "flags": [
+        "home"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Darnell Washington",
+      "team": "PIT",
+      "position": "TE",
+      "opponent": "HOU",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Germie Bernard",
+      "team": "PIT",
+      "position": "WR",
+      "opponent": "HOU",
+      "flags": [
+        "home"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Kaden Wetjen",
+      "team": "PIT",
+      "position": "WR",
+      "opponent": "HOU",
+      "flags": [
+        "home",
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Michael Pittman",
+      "team": "PIT",
+      "position": "WR",
+      "opponent": "HOU",
+      "flags": [
+        "home",
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Roman Wilson",
+      "team": "PIT",
+      "position": "WR",
+      "opponent": "HOU",
+      "flags": [
+        "home"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "AJ Barner",
+      "team": "SEA",
+      "position": "TE",
+      "opponent": "DAL",
+      "flags": [
+        "low baseline",
+        "snap share",
+        "game total"
+      ],
+      "points": 4,
+      "ranked": false
+    },
+    {
+      "name": "Cooper Kupp",
+      "team": "SEA",
+      "position": "WR",
+      "opponent": "DAL",
+      "flags": [
+        "implied total",
+        "home",
+        "low baseline"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Eric Saubert",
+      "team": "SEA",
+      "position": "TE",
+      "opponent": "DAL",
+      "flags": [
+        "low baseline",
+        "game total"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Irvin Charles",
+      "team": "SEA",
+      "position": "WR",
+      "opponent": "DAL",
+      "flags": [
+        "implied total",
+        "home",
+        "low baseline"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Jaxon Smith-Njigba",
+      "team": "SEA",
+      "position": "WR",
+      "opponent": "DAL",
+      "flags": [
+        "implied total",
+        "home"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Rashid Shaheed",
+      "team": "SEA",
+      "position": "WR",
+      "opponent": "DAL",
+      "flags": [
+        "implied total",
+        "home",
+        "low baseline"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Tory Horton",
+      "team": "SEA",
+      "position": "WR",
+      "opponent": "DAL",
+      "flags": [
+        "implied total",
+        "home",
+        "low baseline"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Brandin Cooks",
+      "team": "SF",
+      "position": "WR",
+      "opponent": "NYG",
+      "flags": [
+        "implied total",
+        "favorite",
+        "low baseline"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Brayden Willis",
+      "team": "SF",
+      "position": "TE",
+      "opponent": "NYG",
+      "flags": [
+        "low baseline",
+        "game total"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Deebo Samuel Sr.",
+      "team": "SF",
+      "position": "WR",
+      "opponent": "NYG",
+      "flags": [
+        "implied total",
+        "favorite"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Demarcus Robinson",
+      "team": "SF",
+      "position": "WR",
+      "opponent": "NYG",
+      "flags": [
+        "implied total",
+        "favorite"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "George Kittle",
+      "team": "SF",
+      "position": "TE",
+      "opponent": "NYG",
+      "flags": [
+        "snap share",
+        "game total"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Jacob Cowing",
+      "team": "SF",
+      "position": "WR",
+      "opponent": "NYG",
+      "flags": [
+        "implied total",
+        "favorite",
+        "low baseline"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Jordan Watkins",
+      "team": "SF",
+      "position": "WR",
+      "opponent": "NYG",
+      "flags": [
+        "implied total",
+        "favorite"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "KhaDarel Hodge",
+      "team": "SF",
+      "position": "WR",
+      "opponent": "NYG",
+      "flags": [
+        "implied total",
+        "favorite",
+        "low baseline"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Luke Farrell",
+      "team": "SF",
+      "position": "TE",
+      "opponent": "NYG",
+      "flags": [
+        "low baseline",
+        "game total"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Mike Evans",
+      "team": "SF",
+      "position": "WR",
+      "opponent": "NYG",
+      "flags": [
+        "implied total",
+        "favorite"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Bauer Sharp",
+      "team": "TB",
+      "position": "TE",
+      "opponent": "LAC",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Cade Otton",
+      "team": "TB",
+      "position": "TE",
+      "opponent": "LAC",
+      "flags": [
+        "low baseline",
+        "snap share"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Chris Godwin Jr.",
+      "team": "TB",
+      "position": "WR",
+      "opponent": "LAC",
+      "flags": [
+        "implied total",
+        "favorite",
+        "home",
+        "low baseline"
+      ],
+      "points": 4,
+      "ranked": false
+    },
+    {
+      "name": "Emeka Egbuka",
+      "team": "TB",
+      "position": "WR",
+      "opponent": "LAC",
+      "flags": [
+        "implied total",
+        "favorite",
+        "home"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Kameron Johnson",
+      "team": "TB",
+      "position": "WR",
+      "opponent": "LAC",
+      "flags": [
+        "implied total",
+        "favorite",
+        "home",
+        "low baseline"
+      ],
+      "points": 4,
+      "ranked": false
+    },
+    {
+      "name": "Ko Kieft",
+      "team": "TB",
+      "position": "TE",
+      "opponent": "LAC",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Payne Durham",
+      "team": "TB",
+      "position": "TE",
+      "opponent": "LAC",
+      "flags": [
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Ted Hurst III",
+      "team": "TB",
+      "position": "WR",
+      "opponent": "LAC",
+      "flags": [
+        "implied total",
+        "favorite",
+        "home",
+        "low baseline"
+      ],
+      "points": 4,
+      "ranked": false
+    },
+    {
+      "name": "Tez Johnson",
+      "team": "TB",
+      "position": "WR",
+      "opponent": "LAC",
+      "flags": [
+        "implied total",
+        "favorite",
+        "home",
+        "low baseline"
+      ],
+      "points": 4,
+      "ranked": false
+    },
+    {
+      "name": "Calvin Ridley",
+      "team": "TEN",
+      "position": "WR",
+      "opponent": "WAS",
+      "flags": [
+        "home",
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Carnell Tate",
+      "team": "TEN",
+      "position": "WR",
+      "opponent": "WAS",
+      "flags": [
+        "home"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Chimere Dike",
+      "team": "TEN",
+      "position": "WR",
+      "opponent": "WAS",
+      "flags": [
+        "home",
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Daniel Bellinger",
+      "team": "TEN",
+      "position": "TE",
+      "opponent": "WAS",
+      "flags": [
+        "low baseline",
+        "game total"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Elic Ayomanor",
+      "team": "TEN",
+      "position": "WR",
+      "opponent": "WAS",
+      "flags": [
+        "home"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Gunnar Helm",
+      "team": "TEN",
+      "position": "TE",
+      "opponent": "WAS",
+      "flags": [
+        "low baseline",
+        "snap share",
+        "game total"
+      ],
+      "points": 4,
+      "ranked": false
+    },
+    {
+      "name": "Wan'Dale Robinson",
+      "team": "TEN",
+      "position": "WR",
+      "opponent": "WAS",
+      "flags": [
+        "home"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Xavier Restrepo",
+      "team": "TEN",
+      "position": "WR",
+      "opponent": "WAS",
+      "flags": [
+        "home",
+        "low baseline"
+      ],
+      "points": 2,
+      "ranked": false
+    },
+    {
+      "name": "Antonio Williams",
+      "team": "WAS",
+      "position": "WR",
+      "opponent": "TEN",
+      "flags": [
+        "implied total",
+        "favorite",
+        "soft defense"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Ben Sinnott",
+      "team": "WAS",
+      "position": "TE",
+      "opponent": "TEN",
+      "flags": [
+        "low baseline",
+        "game total"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Chig Okonkwo",
+      "team": "WAS",
+      "position": "TE",
+      "opponent": "TEN",
+      "flags": [
+        "game total"
+      ],
+      "points": 1,
+      "ranked": false
+    },
+    {
+      "name": "Colson Yankoff",
+      "team": "WAS",
+      "position": "TE",
+      "opponent": "TEN",
+      "flags": [
+        "low baseline",
+        "game total"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Dyami Brown",
+      "team": "WAS",
+      "position": "WR",
+      "opponent": "TEN",
+      "flags": [
+        "implied total",
+        "favorite",
+        "soft defense",
+        "low baseline"
+      ],
+      "points": 4,
+      "ranked": false
+    },
+    {
+      "name": "Jaylin Lane",
+      "team": "WAS",
+      "position": "WR",
+      "opponent": "TEN",
+      "flags": [
+        "implied total",
+        "favorite",
+        "soft defense",
+        "low baseline"
+      ],
+      "points": 4,
+      "ranked": false
+    },
+    {
+      "name": "John Bates",
+      "team": "WAS",
+      "position": "TE",
+      "opponent": "TEN",
+      "flags": [
+        "low baseline",
+        "game total"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Luke McCaffrey",
+      "team": "WAS",
+      "position": "WR",
+      "opponent": "TEN",
+      "flags": [
+        "implied total",
+        "favorite",
+        "soft defense",
+        "low baseline"
+      ],
+      "points": 4,
+      "ranked": false
+    },
+    {
+      "name": "Stefon Diggs",
+      "team": "WAS",
+      "position": "WR",
+      "opponent": "TEN",
+      "flags": [
+        "implied total",
+        "favorite",
+        "soft defense"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Terry McLaurin",
+      "team": "WAS",
+      "position": "WR",
+      "opponent": "TEN",
+      "flags": [
+        "implied total",
+        "favorite",
+        "soft defense"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Treylon Burks",
+      "team": "WAS",
+      "position": "WR",
+      "opponent": "TEN",
+      "flags": [
+        "implied total",
+        "favorite",
+        "soft defense"
+      ],
+      "points": 3,
+      "ranked": false
+    },
+    {
+      "name": "Van Jefferson",
+      "team": "WAS",
+      "position": "WR",
+      "opponent": "TEN",
+      "flags": [
+        "implied total",
+        "favorite",
+        "soft defense",
+        "low baseline"
+      ],
+      "points": 4,
+      "ranked": false
+    }
+  ]
+}

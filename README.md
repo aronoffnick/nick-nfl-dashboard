@@ -24,6 +24,8 @@ python pipeline/prices.py --season 2026 --week 12
 
 That saves a getoddy snapshot into the touchdown and parlay files. A price already on disk is left alone. If getoddy does not answer, or its line is not the model line, the price stays blank. The site never requests odds.
 
-GitHub Actions (`.github/workflows/weekly-slate.yml`) runs the tests, builds the week, saves that snapshot, and merges the data pull request. It does not push straight to `main`.
+GitHub Actions (`.github/workflows/weekly-slate.yml`) runs the tests, builds the week, saves that snapshot, writes the stocks, breakout, and momentum files, and merges the data pull request. `main` has no review rule, so the workflow merges that data pull request itself after the tests in the same run. It does not push straight to `main`.
+
+`python pipeline/stocks.py --week 13` writes half-PPR surplus, Sharpe, capture, beta, skew, tail rate, and quarterback correlation for running backs, receivers, and tight ends. `python pipeline/breakout.py --week 13` scores the validated running-back rule only. Receiver and tight-end environment flags are stored as unvalidated and are not ranked. `python pipeline/momentum.py --week 13` writes the shared momentum multiple for quarterbacks, backs, and receivers. The net nudge stays inside 8%. The weeks 9–12 holdout is stored on that file.
 
 The 2025 man/zone touchdown index is copied forward. There is no 2026 participation file, so a new week carries the latest real coverage mix and labels it stale. A defense with no earlier mix gets no coverage tweak.

@@ -37,7 +37,7 @@ jobs:
       - run: pip install -r pipeline/requirements.txt
       - name: Test the pipeline and the dashboard
         run: |
-          python -m unittest tests.test_logic tests.test_prices
+          python -m unittest tests.test_logic tests.test_prices tests.test_stocks tests.test_breakout tests.test_momentum
           cd ..
           npm ci --prefix dashboard
           node --test dashboard/tests/*.mjs
@@ -56,7 +56,28 @@ jobs:
           else
             python pipeline/prices.py --auto --season "${{ inputs.season || '2026' }}"
           fi
-      - name: Open a pull request
+      - name: Write skill-player stocks
+        run: |
+          if [ -n "${{ inputs.week }}" ]; then
+            python pipeline/stocks.py --season "${{ inputs.season || '2026' }}" --week "${{ inputs.week }}"
+          else
+            python pipeline/stocks.py --auto --season "${{ inputs.season || '2026' }}"
+          fi
+      - name: Score breakout watch
+        run: |
+          if [ -n "${{ inputs.week }}" ]; then
+            python pipeline/breakout.py --season "${{ inputs.season || '2026' }}" --week "${{ inputs.week }}"
+          else
+            python pipeline/breakout.py --auto --season "${{ inputs.season || '2026' }}"
+          fi
+      - name: Write momentum multiples
+        run: |
+          if [ -n "${{ inputs.week }}" ]; then
+            python pipeline/momentum.py --season "${{ inputs.season || '2026' }}" --week "${{ inputs.week }}"
+          else
+            python pipeline/momentum.py --auto --season "${{ inputs.season || '2026' }}"
+          fi
+      - name: Open a pull request and merge it
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -87,3 +108,9 @@ jobs:
           )")
           fi
           gh pr merge "$number" --merge
+          state=$(gh pr view "$number" --json state --jq .state)
+          if [ "$state" != "MERGED" ]; then
+            echo "Data pull request #$number is $state. main has no review requirement, so this merge does not wait for approval."
+            exit 1
+          fi
+          echo "Merged data pull request #$number with no review."

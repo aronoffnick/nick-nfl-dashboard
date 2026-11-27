@@ -12,16 +12,14 @@ import { roleBookForWeek } from '../data/weekFiles.js'
 const format=(n,key='')=>valid(n)?n.toFixed(key.endsWith('TD')?2:1):'—'
 const date=d=>new Date(d).toLocaleDateString('en-US',{timeZone:'America/New_York',month:'short',day:'numeric'})
 const average=(games,key)=>games.length&&games.every(game=>valid(game[key]))?games.reduce((sum,game)=>sum+game[key],0)/games.length:null
-export const projectionGroups={Passing:['passYds','passTD'],Rushing:['rushYds'],Receiving:['rec','recYds'],TDs:['passTD','totalTD']}
+export const projectionGroups={Passing:['passYds'],Rushing:['rushYds'],Receiving:['rec','recYds']}
 const fields=[
   ['rec','Receptions'],
   ['recYds','Receiving yards'],
   ['rushYds','Rush yards'],
   ['passYds','Pass yards'],
-  ['passTD','Pass TDs'],
-  ['totalTD','TD scored'],
 ]
-const fieldCategory={rec:['Receiving'],recYds:['Receiving'],rushYds:['Rushing'],passYds:['Passing'],passTD:['Passing','TDs'],totalTD:['TDs']}
+const fieldCategory={rec:['Receiving'],recYds:['Receiving'],rushYds:['Rushing'],passYds:['Passing']}
 const fieldLabel=Object.fromEntries(fields)
 function categoryAllows(key,categories){return fieldCategory[key].some(category=>categories.includes(category))}
 function logValue(log,key){
@@ -34,11 +32,11 @@ function projectedValue(player,key){
   return valid(rush)&&valid(rec)?rush+rec:null
 }
 const roleStats={
-  QB:['passYds','passTD','rushYds','totalTD'],
-  RB:['rushYds','rec','recYds','totalTD'],
-  FB:['rushYds','rec','recYds','totalTD'],
-  WR:['rec','recYds','totalTD'],
-  TE:['rec','recYds','totalTD'],
+  QB:['passYds','rushYds'],
+  RB:['rushYds','rec','recYds'],
+  FB:['rushYds','rec','recYds'],
+  WR:['rec','recYds'],
+  TE:['rec','recYds'],
 }
 function slotsFor(player,categories){
   return (roleStats[player.position]||[]).filter(key=>categoryAllows(key,categories))

@@ -14,6 +14,9 @@ const groups = {
   rb: import.meta.glob('../props/rb-starters-week*.json', { eager: true, import: 'default' }),
   usage: import.meta.glob('../props/rb-usage-week*.json', { eager: true, import: 'default' }),
   calibration: import.meta.glob('./calibration-wk*.json', { eager: true, import: 'default' }),
+  stocks: import.meta.glob('./stocks-wk*.json', { eager: true, import: 'default' }),
+  breakout: import.meta.glob('./breakout-wk*.json', { eager: true, import: 'default' }),
+  momentum: import.meta.glob('./momentum-wk*.json', { eager: true, import: 'default' }),
 }
 
 function index(modules) {
