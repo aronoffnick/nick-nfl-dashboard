@@ -3,7 +3,10 @@ import './App.css'
 import PickTracker from './PickTracker.jsx'
 import WeeklyGames from './WeeklyGames.jsx'
 import { bundledHistory, remember } from './data/historyFile.js'
+import { fileForWeek } from './data/weekFiles.js'
 import { boardSnapshot, compute, gradePick, preKickoffPick, usableSnapshot } from './boardModel.js'
+import { compareValue, gradeDisplayedPick, gradeValuePick, mergeOdds, resultClass, scoreMatchups } from './matchupValue.js'
+import { ValueBadge, ValueHelp } from './MatchupValue.jsx'
 import TeamParlay from './TeamParlay.jsx'
 import PositionRankings from './PositionRankings.jsx'
 import AccuracyNote from './props/AccuracyNote.jsx'
@@ -34,6 +37,23 @@ const kickoff = d => new Date(d).toLocaleString('en-US', {
   timeZone: 'America/New_York', weekday: 'short', month: 'short',
   day: 'numeric', hour: 'numeric', minute: '2-digit',
 })
+const kickoffHeading = d => {
+  const when = new Date(d)
+  const day = when.toLocaleDateString('en-US', {
+    timeZone: 'America/New_York', weekday: 'long', month: 'long', day: 'numeric',
+  })
+  const time = when.toLocaleTimeString('en-US', {
+    timeZone: 'America/New_York', hour: 'numeric', minute: '2-digit',
+  }).replace(':00', '')
+  return `${day}, ${time}`
+}
+function matchupStatus(row) {
+  if (row.final) return null
+  if (row.started) return 'In progress'
+  const text = String(row.status || '')
+  if (/delay|postpon|suspend|cancel/i.test(text)) return text
+  return row.neutral ? 'Scheduled · Neutral site' : 'Scheduled'
+}
 
 async function get(path) {
   const cacheKey = path.startsWith('summary?') ? SUMMARY_CACHE + path : null
@@ -308,8 +328,18 @@ export default function App() {
   const historicalPicks = useMemo(() => backtest(data), [data])
   const trackedPicks = useMemo(() => compute(data, 3, 2, 'season')?.matchups, [data])
   const days = [...new Set((data?.matchups || []).map(g => easternDay(g.date)))].sort()
+  const values = useMemo(() => {
+    const week = data?.week
+    if (week == null) return scoreMatchups(result?.matchups || [], null)
+    const teamOdds = fileForWeek('teamOdds', week)
+    const parlays = fileForWeek('parlays', week)
+    return scoreMatchups(
+      result?.matchups || [],
+      mergeOdds(teamOdds.matched ? teamOdds.data : null, parlays.matched ? parlays.data : null),
+    )
+  }, [result, data])
   function changeSort(key) {
-    setSort(s => ({ key, ascending: s.key === key ? !s.ascending : true }))
+    setSort(s => ({ key, ascending: s.key === key ? !s.ascending : key !== 'value' }))
   }
   const rows = useMemo(() => {
     if (!result) return []
@@ -329,10 +359,11 @@ export default function App() {
       return row.ranks?.[sort.key] || 0
     }
     return [...source].sort((a, b) => {
+      if (sort.key === 'value') return compareValue(values.byId[a.id], values.byId[b.id], sort.ascending)
       const av = value(a), bv = value(b)
       return (typeof av === 'string' ? av.localeCompare(bv) : av - bv) * (sort.ascending ? 1 : -1)
     })
-  }, [result, query, day, view, sort])
+  }, [result, query, day, view, sort, values])
 
   function header(label, key) {
     return <button className="sort" onClick={() => changeSort(key)}>{label} {sort.key === key ? (sort.ascending ? '↑' : '↓') : '↕'}</button>
@@ -364,13 +395,16 @@ export default function App() {
       </div>
       <label>{view === 'positions' ? 'Find a player' : 'Find a team'}<input placeholder={view === 'positions' ? 'Name or team…' : 'Giants, Jets, Chiefs…'} value={query} onChange={e => setQuery(e.target.value)} /></label>
       {view === 'matchups' && <label>Game day<select value={day} onChange={e => setDay(e.target.value)}><option value="all">All days</option>{days.map(d => <option key={d} value={d}>{new Date(`${d}T12:00:00Z`).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'America/New_York' })}</option>)}</select></label>}
+      {view === 'matchups' && <label>Order<select value={sort.key === 'value' ? 'value' : 'kickoff'} onChange={e => setSort(e.target.value === 'value' ? { key: 'value', ascending: false } : { key: 'date', ascending: true })}><option value="kickoff">Kickoff</option><option value="value">Best value first</option></select></label>}
       {view !== 'positions' && <label>Statistics<select value={mode} onChange={e => setMode(e.target.value)}><option value="season">Season averages</option><option value="recent">Recent weighted averages</option></select></label>}
       <button disabled={busy} onClick={refresh}>{busy ? 'Loading…' : 'Refresh data'}</button>
     </section>
     {view === 'positions'
       ? <PositionRankings week={data?.week} query={query} />
       : <>
-    <div className="table-note">Yards per game · #1 = most yards on offense / fewest allowed on defense · click column headings to sort{result ? ` · Pre-kickoff card ${card.wins}–${card.losses}` : ''}</div>
+    <div className="table-note">Yards per game · #1 = most yards on offense / fewest allowed on defense · click column headings to sort{result ? ` · Pre-kickoff card ${card.wins}–${card.losses}` : ''}
+      {view === 'matchups' && result && <ValueHelp meta={values.meta} matchups={result.matchups} byId={values.byId} />}
+    </div>
     {result && <div className="table-wrap"><table>
       <thead>{view === 'matchups' ? <tr>
         <th>{header('Away pass O', 'away.passO')}</th><th>{header('Away rush O', 'away.rushO')}</th>
@@ -379,17 +413,26 @@ export default function App() {
         <th>{header('Home pass D', 'home.passD')}</th><th>{header('Home rush D', 'home.rushD')}</th>
         <th>{header('Home pass O', 'home.passO')}</th><th>{header('Home rush O', 'home.rushO')}</th>
         <th>{header('Model pick / margin', 'margin')}</th>
+        <th>Explore</th>
+        <th>{header('Best value', 'value')}</th>
       </tr> : <tr><th>{header('Team', 'name')}</th>{metrics.map(([k, name]) => <th key={k}>{header(name, k)}</th>)}<th>Points / game</th><th>Allowed / game</th></tr>}</thead>
-      <tbody>{rows.map(row => view === 'matchups' ? <tr key={row.id}>
+      <tbody>{rows.map(row => {
+        if (view !== 'matchups') return <tr key={row.id}><td><Team team={row} /></td>{metrics.map(([k]) => <td key={k}><Rank value={row.ranks[k]} /><small>{fmt(row.display[k])} yd</small></td>)}<td>{fmt(row.ppg)}</td><td>{fmt(row.papg)}</td></tr>
+        const pickClass = resultClass(gradeDisplayedPick(row))
+        const value = values.byId[row.id]
+        const valueClass = resultClass(gradeValuePick(value, row))
+        return <tr key={row.id}>
         {['passO', 'rushO'].map(k => <td key={k}><Rank value={row.away.ranks[k]} /><small>{fmt(row.away.display[k])} yd</small></td>)}
         {['passD', 'rushD'].map(k => <td key={k}><Rank value={row.away.ranks[k]} /><small>{fmt(row.away.display[k])} yd</small></td>)}
         <td><Team team={row.away} /></td>
-        <td className="date">{row.final ? <span className="final-score"><span className="final-score-line">{row.away.abbr} {row.final.away.points} – {row.home.abbr} {row.final.home.points} Final</span><i className={`grade grade-${card.marks[row.id] === '–' ? 'push' : card.marks[row.id] || 'push'}`}>{card.marks[row.id] || '–'}</i></span> : <>{kickoff(row.date)}<small>{row.neutral ? 'Neutral site' : row.status}</small></>}</td>
+        <td className="date"><span className="kickoff-time">{kickoffHeading(row.date)}</span>{row.final ? <span className="final-score-line">{row.away.abbr} {row.final.away.points} – {row.home.abbr} {row.final.home.points}</span> : <small>{matchupStatus(row)}</small>}</td>
         <td><Team team={row.home} /></td>
         {['passD', 'rushD'].map(k => <td key={k}><Rank value={row.home.ranks[k]} /><small>{fmt(row.home.display[k])} yd</small></td>)}
         {['passO', 'rushO'].map(k => <td key={k}><Rank value={row.home.ranks[k]} /><small>{fmt(row.home.display[k])} yd</small></td>)}
-        <td><button className="pick" onClick={() => setSelected(row.id)}>{row.margin < .05 ? 'Toss-up' : `${row.winner.abbr} by ${fmt(row.margin)}`}<small>{row.qbOverride ? `${row.qbOverride.note} · Explore` : 'Explore matchup →'}</small></button></td>
-      </tr> : <tr key={row.id}><td><Team team={row} /></td>{metrics.map(([k]) => <td key={k}><Rank value={row.ranks[k]} /><small>{fmt(row.display[k])} yd</small></td>)}<td>{fmt(row.ppg)}</td><td>{fmt(row.papg)}</td></tr>)}</tbody>
+        <td className={pickClass}><span className={`pick-readout ${pickClass}`}>{row.margin < .05 ? 'Toss-up' : `${row.winner.abbr} by ${fmt(row.margin)}`}</span></td>
+        <td className={pickClass}><button type="button" className={`pick ${pickClass}`} onClick={() => setSelected(row.id)}>Explore matchup</button></td>
+        <td className={`value-cell ${valueClass}`}><ValueBadge value={value} game={row} /></td>
+      </tr>})}</tbody>
     </table>{!rows.length && <p className="notice">No teams or games match these filters.</p>}</div>}
     </>}
     <section className="method">
