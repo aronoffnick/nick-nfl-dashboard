@@ -27,6 +27,31 @@ export const weighted = (rows, key, halfLife) => {
   return total ? sum / total : null
 }
 
+// Season is the default sample. Last 4 and Last 6 remain optional slices.
+export const SEASON_WINDOW = 18
+export const isSeasonWindow = window => {
+  if (window == null || window === '') return true
+  const n = Number(window)
+  return !Number.isFinite(n) || n >= SEASON_WINDOW
+}
+export function sampleRows(rows, window) {
+  if (!Array.isArray(rows)) return []
+  return isSeasonWindow(window) ? rows : rows.slice(-Number(window))
+}
+/** Half-life weighted share of rows where predicate returns true. Null skips a row. Index weights match weighted(). */
+export function weightedShare(rows, halfLife, predicate) {
+  let sum = 0, total = 0, hits = 0, n = 0
+  rows.forEach((row, i) => {
+    const flag = predicate(row)
+    if (flag == null) return
+    const w = 2 ** (-(rows.length - 1 - i) / halfLife)
+    total += w
+    n += 1
+    if (flag) { sum += w; hits += 1 }
+  })
+  return { rate: total ? sum / total : null, n, hits }
+}
+
 // Missing categories stay null. A player appearing in a complete offensive category
 // gets zero in the other complete categories, never a fabricated missing-data zero.
 export function parsePlayers(detail, teamId) {
@@ -88,8 +113,9 @@ export function positionTotal(side, position, key, roster) {
   return players.reduce((sum,p) => sum + p[key],0)
 }
 
-export function defenseProfile(data, defenseId, position, key, roster, halfLife, window=4) {
-  const games = historyFor(data, defenseId).slice(-window)
+export function defenseProfile(data, defenseId, position, key, roster, halfLife, window=null) {
+  // Full season unless the caller picked Last 4 or Last 6. Shrinkage n/(n+4) and the 0.75–1.25 cap stay.
+  const games = sampleRows(historyFor(data, defenseId), window)
   const rows = games.map(g => {
     const [,opponent] = sides(g,defenseId)
     const allowed = positionTotal(opponent,position,key,roster)
@@ -120,13 +146,14 @@ export function playerLogs(data, teamId, playerId) {
   })
 }
 
-export function projectTeam(data, team, opponent, roster, halfLife, window=4) {
+export function projectTeam(data, team, opponent, roster, halfLife, window=null) {
   const latestGames = historyFor(data,team.id).slice(-2)
   const recentIds = new Set(latestGames.flatMap(g => sides(g,team.id)[0].playerBox?.players.map(p=>p.id) || []))
   const eligible = Object.values(roster).filter(p => p.teamId === team.id && ['QB','RB','FB','WR','TE'].includes(p.position) && recentIds.has(p.id))
   const profiles = new Map()
   return eligible.map(player => {
     const logs = playerLogs(data,team.id,player.id)
+    const ranged = sampleRows(logs, window)
     const stats = {}
     for (const [key] of METRICS) {
       const baseline = weighted(logs,key,halfLife)
@@ -134,14 +161,14 @@ export function projectTeam(data, team, opponent, roster, halfLife, window=4) {
       if (!profiles.has(profileKey)) profiles.set(profileKey,defenseProfile(data,opponent.id,player.position,key,roster,halfLife,window))
       const defense = profiles.get(profileKey)
       const sample = logs.filter(l => valid(l[key])).length
-      const values = logs.slice(-window).map(l=>l[key]).filter(valid)
+      const values = ranged.map(l=>l[key]).filter(valid)
       const rawProjection = sample >= 3 && valid(baseline) ? Math.max(0,baseline*defense.factor) : null
       stats[key] = { baseline, projection:valid(rawProjection) ? Math.round(rawProjection * 2) / 2 : null,
         sample, defense, min:values.length ? Math.min(...values):null, max:values.length ? Math.max(...values):null }
     }
     const unavailable = /inactive|injured|reserve|suspended|retired|out|doubtful/i.test(`${player.status} ${player.injury}`)
     return { ...player, logs, stats, unavailable,
-      lastFour:logs.slice(-window), limited:logs.length < 3,
+      lastFour:ranged, recentGames:logs.slice(-4), limited:logs.length < 3,
       stale:logs.at(-1)?.gameId !== latestGames.at(-1)?.id,
     }
   })

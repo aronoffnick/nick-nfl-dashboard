@@ -4,7 +4,7 @@ import { getRosters } from './data.js'
 import { bindHistoryPlayers } from './bindHistory.js'
 import { findTdGame } from './tdRiskBoard.js'
 import { fileForWeek } from '../data/weekFiles.js'
-import { valid, historyFor, sides, positionOf } from './model.js'
+import { valid, historyFor, sides, positionOf, sampleRows, isSeasonWindow } from './model.js'
 import AccuracyNote from './AccuracyNote.jsx'
 import Flyers from './Flyers.jsx'
 import Parlays from './Parlays.jsx'
@@ -21,9 +21,10 @@ const positions=['QB','RB','WR','TE']
 const boxStat=(p,k)=>k==='totalTD'?(valid(p.rushTD)&&valid(p.recTD)?p.rushTD+p.recTD:null):p[k]
 
 function Historical({data,defense,roster,window,selectedPositions}){
-  const games=historyFor(data,defense.id).slice(-window).reverse()
+  const games=sampleRows(historyFor(data,defense.id),window).reverse()
   const order=['QB','RB','WR','TE']
-  return <div className="prop-history"><div className="prop-section-title"><h3>Recent opponents of {defense.abbr}</h3><span>Actual box scores · most recent first</span></div>
+  const scope=isSeasonWindow(window)?'Season':'Recent'
+  return <div className="prop-history"><div className="prop-section-title"><h3>{scope} opponents of {defense.abbr}</h3><span>Actual box scores · most recent first</span></div>
     <div className="table-wrap"><table className="recent-opponents-table"><thead><tr><th>Position</th><th>Player</th><th>Pass yds · TD</th><th>Rush yds</th><th>Receptions · Rec yds</th><th>TDs</th></tr></thead>
       {games.map(g=>{
         const [,opponent]=sides(g,defense.id)
@@ -64,7 +65,7 @@ export default function MatchupExplorer({saveProp,data,matchup,halfLife,advantag
   const [statsView,setStatsView]=useState(opened.tab==='stats'?opened.view:'scatter')
   const [offenseId,setOffenseId]=useState(matchup.away.id)
   const [historyPositions,setHistoryPositions]=useState(['QB','RB','WR','TE'])
-  const [recentGames,setRecentGames]=useState(4)
+  const [recentGames,setRecentGames]=useState(18)
   const [projectionTeams,setProjectionTeams]=useState([matchup.away.id,matchup.home.id])
   const [projectionPositions,setProjectionPositions]=useState(positions)
   const [projectionCategories,setProjectionCategories]=useState(Object.keys(projectionGroups))
@@ -121,7 +122,7 @@ export default function MatchupExplorer({saveProp,data,matchup,halfLife,advantag
     {matchup.qbOverride && <p className="prop-help">{matchup.qbOverride.note}</p>}
     <nav className="prop-tabs" aria-label="Matchup analytics">{[['bets','Bets'],['stats','Stats']].map(([id,name])=><button key={id} aria-pressed={tab===id} className={tab===id?'active':''} onClick={()=>setTab(id)}>{name}</button>)}</nav>
     {tab==='bets'&&<nav className="prop-tabs prop-subtabs" aria-label="Bets views">{[['generator','Bet generator'],['flyers','Flyers'],['parlays','Parlays'],['projections','Player Projections'],['touchdowns','Touchdowns']].map(([id,name])=><button key={id} aria-pressed={betsView===id} className={betsView===id?'active':''} onClick={()=>setBetsView(id)}>{name}</button>)}</nav>}
-    {tab==='stats'&&<nav className="prop-tabs prop-subtabs" aria-label="Stats views">{[['scatter','Scatter Plot'],['stocks','Stat Metrics'],['history','Recent Opponents']].map(([id,name])=><button key={id} aria-pressed={statsView===id} className={statsView===id?'active':''} onClick={()=>setStatsView(id)}>{name}</button>)}</nav>}
+    {tab==='stats'&&<nav className="prop-tabs prop-subtabs" aria-label="Stats views">{[['scatter','Scatter Plot'],['stocks','Stat Metrics'],['history','Opponents']].map(([id,name])=><button key={id} aria-pressed={statsView===id} className={statsView===id?'active':''} onClick={()=>setStatsView(id)}>{name}</button>)}</nav>}
       {tab==='stats'&&statsView==='scatter'&&<ScatterTab away={matchup.away} home={matchup.home} week={data.week}/>}
       {tab==='bets'&&betsView==='generator'&&<BetGenerator matchup={matchup} week={data.week}/>}
       {tab==='bets'&&betsView==='touchdowns'&&<Touchdowns away={matchup.away} home={matchup.home} week={data.week} roster={rosters?.roster}/>}
@@ -130,7 +131,7 @@ export default function MatchupExplorer({saveProp,data,matchup,halfLife,advantag
       <ProjectionFilters title="Teams" items={[[matchup.away.id,matchup.away.name],[matchup.home.id,matchup.home.name]]} selected={projectionTeams} onToggle={key=>toggle(setProjectionTeams,projectionTeams,key)}/>
       <ProjectionFilters title="Positions" items={positions.map(value=>[value,value])} selected={projectionPositions} onToggle={key=>toggle(setProjectionPositions,projectionPositions,key)}/>
       <ProjectionFilters title="Stat categories" items={Object.keys(projectionGroups).map(key=>[key,key])} selected={projectionCategories} onToggle={key=>toggle(setProjectionCategories,projectionCategories,key)}/>
-      <div className="projection-window"><strong>Recent games</strong>{[[4,'Last 4'],[6,'Last 6'],[18,'Season']].map(([value,name])=><button key={value} aria-pressed={recentGames===value} onClick={()=>setRecentGames(value)}>{name}</button>)}</div>
+      <div className="projection-window"><strong>Games</strong>{[[18,'Season'],[4,'Last 4'],[6,'Last 6']].map(([value,name])=><button key={value} aria-pressed={recentGames===value} onClick={()=>setRecentGames(value)}>{name}</button>)}</div>
       <button className="prop-action" onClick={()=>{setProjectionTeams([matchup.away.id,matchup.home.id]);setProjectionPositions(positions);setProjectionCategories(Object.keys(projectionGroups))}}>Reset filters</button>
     </div>}
     {tab==='stats'&&statsView==='history'&&<div className="prop-controls history-controls">
@@ -148,8 +149,8 @@ export default function MatchupExplorer({saveProp,data,matchup,halfLife,advantag
     </>}
     <details className="prop-method"><summary>Team offense vs defense estimates</summary><div className="table-wrap"><table><thead><tr><th>Offense</th><th>Expected net pass yards</th><th>Expected rush yards</th></tr></thead><tbody>{[[matchup.away,matchup.home],[matchup.home,matchup.away]].map(([o,d])=><tr key={o.id}><td>{o.abbr} vs {d.abbr}</td><td>{format((o.recent.passO+d.recent.passD)/2)}</td><td>{format((o.recent.rushO+d.recent.rushD)/2)}</td></tr>)}</tbody></table></div></details>
     <details className="prop-method"><summary>Projection method, sources & limitations</summary>
-      <p>Player baseline = normalized exponential average of current-team recorded offensive appearances, using the dashboard's {halfLife}-game half-life. At least three appearances are required. Defense adjustment = recent position-group production allowed divided by those opponents' usual position-group production in their other prior games. Ratios shrink toward 1 using n/(n+4), require three usable defensive games, and are capped at 0.75–1.25. Projection = baseline × adjustment. When the opponent comparison is insufficient, use neutral adjustment.</p>
-      <p>Player passing yards are gross passing yards; the main team board uses net passing yards. TD columns show expected TD counts per appearance (e.g. 0.35), not a promise to score or a calibrated anytime-TD probability. Recent observed ranges are descriptive min/max, not confidence intervals. Prop lines are entered manually; no live odds, edge probabilities or expected-value claims.</p>
+      <p>Player baseline = normalized exponential average of every current-team recorded offensive appearance, using the dashboard's {halfLife}-game half-life. At least three appearances are required. Defense adjustment = season position-group production allowed, weighted with the same half-life, divided by those opponents' usual position-group production in their other games. Ratios shrink toward 1 using n/(n+4), require three usable defensive games, and are capped at 0.75–1.25. Projection = baseline × adjustment. When the opponent comparison is insufficient, use neutral adjustment. Last 4 and Last 6 are optional slices; Season is the default and uses every game on file.</p>
+      <p>Player passing yards are gross passing yards; the main team board uses net passing yards. TD columns show expected TD counts per appearance (e.g. 0.35), not a promise to score or a calibrated anytime-TD probability. Season ranges are the half-life-weighted 20th–80th percentiles of the selected games, not confidence intervals. Prop lines are entered manually; no live odds, edge probabilities or expected-value claims.</p>
       <p>Eligibility uses current ESPN rosters and an offensive box-score appearance in one of the last two team games. Unavailable/doubtful players have projections withheld; questionable status is displayed. Roster designations may lag. No confirmed starters, snap counts, injury role redistribution, weather or separate home/away player adjustment. Player projections are independent of the displayed team-score model and do not reconcile to its totals. Absence from a box score is not proof of injury or inactivity.</p>
       <p>Source: ESPN individual game box scores (24-hour cache) and current season team rosters (30-minute session cache). All inputs are prior-week games; current-week results are excluded. Historical positions are resolved from box-score position when available, otherwise current roster position, which can differ from historical roles. Coverage: {playerGames}/{data.games.length} historical games have individual player rows. Team snapshot: {new Date(data.updated).toLocaleString('en-US',{timeZone:'America/New_York'})} ET. Rosters: {rosters?new Date(rosters.time).toLocaleString('en-US',{timeZone:'America/New_York'}):'Loading'} ET.</p>
       <a href={matchup.source} target="_blank" rel="noreferrer">ESPN matchup source ↗</a>

@@ -1,4 +1,4 @@
-import { valid } from './model.js'
+import { valid, sampleRows, weightedShare } from './model.js'
 
 const LADDERS = {
   passYds: [150, 175, 200, 225, 250, 275, 300, 325],
@@ -38,19 +38,24 @@ export function modelLine(projection, key) {
 }
 
 /**
- * 60% of recent games clearing the line, 40% a sketch from how far the projection sits past it.
+ * 60% of the half-life-weighted season hit rate, 40% a sketch from how far the projection sits past it.
  * Touchdowns use 1 - e^(-expected) for the sketch. This is not a market price.
+ * A Last 4 or Last 6 window still slices first; the default is the full log.
  */
-export function legHitEstimate({ logs = [], key, line, projection, window = 4 }) {
-  const values = logs.slice(-Math.max(window, 8)).map(log => statValue(log, key)).filter(valid)
+export function legHitEstimate({ logs = [], key, line, projection, window = null, halfLife = 3 }) {
+  const rows = sampleRows(logs, window)
   const cleared = value => key === 'totalTD' ? value >= 1 : value > line
-  const recent = values.length >= 3 ? values.filter(cleared).length / values.length : null
+  const share = weightedShare(rows, halfLife, log => {
+    const value = statValue(log, key)
+    return valid(value) ? cleared(value) : null
+  })
+  const recent = share.n >= 3 ? share.rate : null
   const scale = key === 'passYds' ? 40 : key === 'rec' ? 1.5 : key === 'totalTD' ? 0.5 : 15
   const sketch = key === 'totalTD'
     ? clamp(1 - Math.exp(-(projection || 0)), 0.08, 0.85)
     : clamp(0.5 + ((projection || 0) - line) / scale, 0.12, 0.88)
   const hit = recent == null ? sketch : 0.6 * recent + 0.4 * sketch
-  return { hit, recent, sketch, n: values.length }
+  return { hit, recent, sketch, n: share.n }
 }
 
 /** A 7-point model favorite is about 73%. From the team-model margin only. */
@@ -62,11 +67,11 @@ export function independentJoint(legs) {
   return legs.reduce((product, leg) => product * leg.hit, 1)
 }
 
-function makePlayerLeg(player, key, window) {
+function makePlayerLeg(player, key, window, halfLife) {
   const projection = projectionFor(player, key)
   const line = modelLine(projection, key)
   if (line == null) return null
-  const estimate = legHitEstimate({ logs: player.logs, key, line, projection, window })
+  const estimate = legHitEstimate({ logs: player.logs, key, line, projection, window, halfLife })
   return {
     id: `${player.team.id}:${player.id}:${key}`,
     kind: 'player',
@@ -100,15 +105,15 @@ function teamLeg(matchup) {
   }
 }
 
-function anytimeLeg(player, window) {
+function anytimeLeg(player, window, halfLife) {
   const projection = projectionFor(player, 'totalTD')
   if (!valid(projection) || projection < 0.35) return null
-  const estimate = legHitEstimate({ logs: player.logs, key: 'totalTD', line: 0.5, projection, window })
+  const estimate = legHitEstimate({ logs: player.logs, key: 'totalTD', line: 0.5, projection, window, halfLife })
   return { id: `${player.team.id}:${player.id}:totalTD`, kind: 'player', player, team: player.team, key: 'totalTD', label: LABELS.totalTD, line: 0.5, projection, ...estimate }
 }
 
-function bestLeg(player, keys, window) {
-  return keys.map(key => makePlayerLeg(player, key, window)).filter(Boolean).sort((a, b) => b.hit - a.hit || b.projection - a.projection)[0] || null
+function bestLeg(player, keys, window, halfLife) {
+  return keys.map(key => makePlayerLeg(player, key, window, halfLife)).filter(Boolean).sort((a, b) => b.hit - a.hit || b.projection - a.projection)[0] || null
 }
 
 const TYPICAL = { passYds: 220, rushYds: 55, recYds: 45, rec: 4, totalTD: 0.45, win: 1 }
@@ -132,11 +137,11 @@ function overallParlay(playerLegs, favorite) {
   return { title: 'Overall favorite', legs, why, joint: independentJoint(legs) }
 }
 
-function correlatedParlay(team, players, window) {
+function correlatedParlay(team, players, window, halfLife) {
   const title = `${team.abbr} correlated`
   const qb = players.filter(player => player.team.id === team.id && player.position === 'QB')
     .sort((a, b) => (projectionFor(b, 'passYds') ?? -1) - (projectionFor(a, 'passYds') ?? -1))[0]
-  const pass = qb && makePlayerLeg(qb, 'passYds', window)
+  const pass = qb && makePlayerLeg(qb, 'passYds', window, halfLife)
   if (!pass) return { title, legs: [], why: `${team.abbr} has no quarterback with a pass-yards projection.`, joint: null }
   const catchers = players.filter(player => player.team.id === team.id && player.id !== qb.id && ['WR', 'TE', 'RB', 'FB'].includes(player.position))
     .map(player => ({ player, recYds: projectionFor(player, 'recYds') }))
@@ -144,9 +149,9 @@ function correlatedParlay(team, players, window) {
     .sort((a, b) => b.recYds - a.recYds)
   const receivers = catchers.filter(row => row.player.position === 'WR' || row.player.position === 'TE')
   const alpha = receivers[0]?.player
-  const yards = alpha && makePlayerLeg(alpha, 'recYds', window)
-  const catches = alpha && makePlayerLeg(alpha, 'rec', window)
-  const td = alpha && anytimeLeg(alpha, window)
+  const yards = alpha && makePlayerLeg(alpha, 'recYds', window, halfLife)
+  const catches = alpha && makePlayerLeg(alpha, 'rec', window, halfLife)
+  const td = alpha && anytimeLeg(alpha, window, halfLife)
   const legs = [pass, yards, catches, td].filter(Boolean)
   if (legs.length < 2) return { title, legs, why: `${team.abbr} does not have a pass-catcher with a projection next to ${qb.name.split(' ').at(-1)}.`, joint: legs.length ? independentJoint(legs) : null }
   const alphaName = alpha.name.split(' ').at(-1)
@@ -158,7 +163,7 @@ function correlatedParlay(team, players, window) {
   }
 }
 
-function scriptParlay(matchup, players, window) {
+function scriptParlay(matchup, players, window, halfLife) {
   const title = 'Game-script mix'
   if (!(matchup.margin >= 0.05) || !matchup.winner) return { title, legs: [], why: 'The team model is a toss-up, so neither side is a script favorite.', joint: null }
   const favorite = matchup.winner
@@ -167,8 +172,8 @@ function scriptParlay(matchup, players, window) {
     .sort((a, b) => (projectionFor(b, 'rushYds') ?? -1) - (projectionFor(a, 'rushYds') ?? -1))[0]
   const catcher = players.filter(player => player.team.id === dog.id && (player.position === 'WR' || player.position === 'TE' || player.position === 'RB'))
     .sort((a, b) => (projectionFor(b, 'rec') ?? -1) - (projectionFor(a, 'rec') ?? -1) || (projectionFor(b, 'recYds') ?? -1) - (projectionFor(a, 'recYds') ?? -1))[0]
-  const rush = back && bestLeg(back, ['rushYds'], window)
-  const receiving = catcher && bestLeg(catcher, catcher.position === 'RB' ? ['rec', 'recYds'] : ['rec', 'recYds'], window)
+  const rush = back && bestLeg(back, ['rushYds'], window, halfLife)
+  const receiving = catcher && bestLeg(catcher, catcher.position === 'RB' ? ['rec', 'recYds'] : ['rec', 'recYds'], window, halfLife)
   if (rush) rush.why = `${favorite.abbr} is favored by ${matchup.margin.toFixed(1)}. A lead usually means more carries for ${back.name.split(' ').at(-1)}.`
   if (receiving) receiving.why = `${dog.abbr} is the underdog by ${matchup.margin.toFixed(1)}. A deficit usually means more passes, and ${catcher.name.split(' ').at(-1)} is the top projected pass catcher.`
   const legs = [rush, receiving].filter(Boolean)
@@ -181,17 +186,17 @@ function scriptParlay(matchup, players, window) {
   }
 }
 
-export function buildDiversifiedParlays({ matchup, players, window = 4 }) {
+export function buildDiversifiedParlays({ matchup, players, window = null, halfLife = 3 }) {
   const usable = (players || []).filter(player => !player.unavailable && !player.stale)
   const keysFor = player => player.allowedKeys || (player.position === 'QB' ? ['passYds']
     : player.position === 'RB' || player.position === 'FB' ? ['rushYds', 'rec', 'recYds', 'totalTD']
     : ['recYds', 'rec', 'totalTD'])
-  const playerLegs = usable.flatMap(player => keysFor(player).map(key => makePlayerLeg(player, key, window)).filter(Boolean))
+  const playerLegs = usable.flatMap(player => keysFor(player).map(key => makePlayerLeg(player, key, window, halfLife)).filter(Boolean))
   const favorite = teamLeg(matchup)
   return [
     overallParlay(playerLegs, favorite, window),
-    correlatedParlay(matchup.away, usable, window),
-    correlatedParlay(matchup.home, usable, window),
-    scriptParlay(matchup, usable, window),
+    correlatedParlay(matchup.away, usable, window, halfLife),
+    correlatedParlay(matchup.home, usable, window, halfLife),
+    scriptParlay(matchup, usable, window, halfLife),
   ]
 }

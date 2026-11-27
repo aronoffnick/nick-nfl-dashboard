@@ -1,4 +1,4 @@
-import {valid} from './model.js'
+import {valid,sampleRows,isSeasonWindow} from './model.js'
 import {DISPLAY_METRICS,statFor,valueFor} from './analysis.js'
 import {ratingLevel} from './breakout.js'
 // One fixed set per role. Fullbacks use the running-back columns. Receivers never pick up a rush column from a one-off carry.
@@ -14,7 +14,7 @@ export function relevantMetrics(p){
 /** High breakout index only. The mark is the player's own weighted 90th percentile in the selected window, lifted up to 15% as the index goes from 70 to 100. */
 export function anticipatedBreakout(player,key,halfLife,lookback,score){
   if(ratingLevel(score)!=='high')return null
-  const raw=player.logs.slice(-lookback)
+  const raw=sampleRows(player.logs,lookback)
   const rows=raw.flatMap((log,i)=>{const value=valueFor(log,key);return valid(value)?[{value,weight:2**(-(raw.length-1-i)/halfLife)}]:[]})
   if(rows.length<3)return null
   const own=weightedQuantile(rows,.9)
@@ -36,17 +36,18 @@ export function weightedQuantile(rows,q){
   for(const row of sorted){sum+=row.weight;if(sum>=total*q)return row.value}
   return sorted.at(-1)?.value??null
 }
-export function performance(p,key,halfLife=3,lookback=4,benchmark=null){
-  const stat=statFor(p,key,halfLife,lookback),raw=p.logs.slice(-lookback),threshold=benchmark??bigGameThreshold(p,key)
+export function performance(p,key,halfLife=3,lookback=null,benchmark=null){
+  const stat=statFor(p,key,halfLife,lookback),raw=sampleRows(p.logs,lookback),threshold=benchmark??bigGameThreshold(p,key)
   const rows=raw.flatMap((log,i)=>{const value=valueFor(log,key);return valid(value)?[{value,weight:2**(-(raw.length-1-i)/halfLife)}]:[]})
   const hits=rows.filter(r=>r.value>=threshold),n=rows.length
   const blocked=p.unavailable||p.stale||/questionable|day.to.day/i.test(`${p.status} ${p.injury}`)
   const ready=n>=3&&valid(stat?.projection)&&!blocked
   const weightedRate=ready?hits.reduce((s,r)=>s+r.weight,0)/rows.reduce((s,r)=>s+r.weight,0):null
+  const scope=isSeasonWindow(lookback)?'season':'recent'
   // Descriptive observed range: no invented forecast distribution or independent-leg probability.
-  return {stat,threshold,n,hits:hits.length,weightedRate,low:n>=3?weightedQuantile(rows,.2):null,high:n>=3?weightedQuantile(rows,.8):null,
+  return {stat,threshold,n,hits:hits.length,weightedRate,scope,low:n>=3?weightedQuantile(rows,.2):null,high:n>=3?weightedQuantile(rows,.8):null,
     level:!ready?'unknown':weightedRate>=2/3?'high':weightedRate>=1/3?'medium':'low',
-    label:!ready?'Not rated':weightedRate>=2/3?'Higher recent support':weightedRate>=1/3?'Mixed recent support':'Lower recent support',
+    label:!ready?'Not rated':weightedRate>=2/3?`Higher ${scope} support`:weightedRate>=1/3?`Mixed ${scope} support`:`Lower ${scope} support`,
     reason:blocked?'Availability or recent-role concern':n<3?'Needs 3 valid appearances':!valid(stat?.projection)?'Projection unavailable':null}
 }
 export function groupCandidates(candidates){
@@ -55,7 +56,7 @@ export function groupCandidates(candidates){
   return [...grouped.values()].sort((a,b)=>b.score-a.score||a.player.name.localeCompare(b.player.name))
 }
 // Rank by the strongest single relevant benchmark, never an invented joint probability.
-export function rankPlayerGroups(groups,halfLife=3,lookback=4,stats=null){
+export function rankPlayerGroups(groups,halfLife=3,lookback=null,stats=null){
   return groups.map(group=>{
     const support=relevantMetrics(group.player).filter(([key])=>!stats||stats.includes(key)).map(([key])=>({key,...performance(group.player,key,halfLife,lookback)}))
       .filter(s=>s.weightedRate!=null).sort((a,b)=>b.weightedRate-a.weightedRate||b.n-a.n)

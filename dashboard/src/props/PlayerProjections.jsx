@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { valid } from './model.js'
+import { valid, sampleRows, isSeasonWindow } from './model.js'
 import { boardFor } from './gameBoard.js'
 import { breakoutRating, ratingLevel } from './breakout.js'
 import BreakoutScale from './BreakoutScale.jsx'
@@ -64,6 +64,7 @@ function dedupePlayers(list){
 function ProjectionCard({player,matchup,slots,chosen,onOpen,halfLife,window}){
   const score=player.breakoutScore
   const usageKey=player.position==='QB'?'passAtt':['RB','FB'].includes(player.position)?'carries':'targets'
+  // Trend signal only: last 3 appearances versus the prior 3. Not the stat window.
   const recent=average(player.logs.slice(-3),usageKey),prior=average(player.logs.slice(-6,-3),usageKey)
   const mainStat=player.position==='QB'?'passYds':['RB','FB'].includes(player.position)?'rushYds':'recYds'
   const factor=player.stats[mainStat]?.defense?.factor
@@ -94,7 +95,7 @@ function ProjectionCard({player,matchup,slots,chosen,onOpen,halfLife,window}){
         </section>
         <section className="breakout-matchup-cell"><h5>Matchup context</h5>
           <strong>{valid(factor)?`${factor>=1?'+':''}${((factor-1)*100).toFixed(0)}%`:'Neutral'}</strong>
-          <small>Recent {player.position} defense adjustment</small>
+          <small>{isSeasonWindow(window)?'Season':'Recent'} {player.position} defense adjustment</small>
           <p>Team model: {favored?'favored':ahead?'underdog':'near even'}{matchup.margin>=.05?` by ${matchup.margin.toFixed(1)}`:''}</p>
         </section>
       </div>
@@ -119,7 +120,7 @@ export default function PlayerProjections({matchup,saveProp,data,teams,roster,ha
   const selectedMetrics=selected?slotsFor(selected,categories).filter(Boolean):[]
   const validLine=line.trim()!==''&&Number.isFinite(Number(line))&&Number(line)>=0
   const selectedStat=selected&&lineMetric?projectedValue(selected,lineMetric):null
-  const sample=selected?.logs.slice(-window).map(log=>logValue(log,lineMetric)).filter(valid)||[]
+  const sample=sampleRows(selected?.logs,window).map(log=>logValue(log,lineMetric)).filter(valid)
   const over=validLine?sample.filter(value=>value>Number(line)).length:0
   const pushes=validLine?sample.filter(value=>value===Number(line)).length:0
   function choosePlayer(player,key){setChosen(`${player.team.id}:${player.id}`);setLineMetric(key||slotsFor(player,categories).find(Boolean)||'');setLine('');setTrackMessage('')}
@@ -135,7 +136,7 @@ export default function PlayerProjections({matchup,saveProp,data,teams,roster,ha
         try{saveProp(`${matchup.id}:${selected.id}:${lineMetric}`,{week:`${data.year} Week ${data.week}`,date:matchup.date,player:selected.name,position:selected.position,team:selected.team.abbr,teamName:selected.team.name,metric:fieldLabel[lineMetric],line:Number(line),pick,result:'Pending'});setTrackMessage(`Saved ${selected.name} ${pick.toLowerCase()} ${line}.`)}catch{setTrackMessage('This browser could not save the prop.')}
       }}>Track model pick</button>}
       {trackMessage&&<p role="status">{trackMessage}</p>}
-      {validLine&&<p>{valid(selectedStat)?<>Projection <b>{format(selectedStat,lineMetric)}</b> · difference from line <b>{format(selectedStat-Number(line),lineMetric)}</b> · </>:null}Over this line in <b>{over}/{sample.length}</b> recent appearances{pushes?` (${pushes} pushes)`:''}. Historical frequency is not a probability.</p>}
+      {validLine&&<p>{valid(selectedStat)?<>Projection <b>{format(selectedStat,lineMetric)}</b> · difference from line <b>{format(selectedStat-Number(line),lineMetric)}</b> · </>:null}Over this line in <b>{over}/{sample.length}</b> {isSeasonWindow(window)?'season':'recent'} appearances{pushes?` (${pushes} pushes)`:''}. Historical frequency is not a probability.</p>}
       <div className="table-wrap"><table><thead><tr><th>Date</th><th>Opponent</th>{selectedMetrics.map(key=><th key={key}>{fieldLabel[key]}</th>)}</tr></thead><tbody>{[...selected.logs].reverse().map(log=><tr key={log.gameId}><td>{date(log.date)}</td><td>{log.opponent}</td>{selectedMetrics.map(key=><td key={key}>{format(logValue(log,key),key)}</td>)}</tr>)}</tbody></table></div>
     </div>}
   </section>

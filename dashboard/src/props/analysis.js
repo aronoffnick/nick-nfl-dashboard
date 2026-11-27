@@ -1,11 +1,11 @@
-import { valid, weighted } from './model.js'
+import { valid, weighted, sampleRows } from './model.js'
 export const DISPLAY_METRICS = [['passYds','Pass yards'],['passTD','Pass TD'],['rushYds','Rush yards'],['rec','Receptions'],['recYds','Rec yards'],['totalTD','TD scored']]
 export const metricLabel = key => DISPLAY_METRICS.find(([k])=>k===key)?.[1] || key
 export const valueFor = (row,key) => key==='totalTD' ? (valid(row.rushTD)&&valid(row.recTD)?row.rushTD+row.recTD:null) : row[key]
-export function statFor(player,key,halfLife=3,lookback=4){
+export function statFor(player,key,halfLife=3,lookback=null){
   if(key!=='totalTD')return player.stats[key]
   const logs=player.logs.map(log=>({...log,totalTD:valueFor(log,'totalTD')}))
-  const values=logs.slice(-lookback).map(l=>l.totalTD).filter(valid)
+  const values=sampleRows(logs,lookback).map(l=>l.totalTD).filter(valid)
   const sample=logs.filter(l=>valid(l.totalTD)).length
   const baseline=weighted(logs,'totalTD',halfLife)
   const rush=player.stats.rushTD,rec=player.stats.recTD
@@ -13,9 +13,9 @@ export function statFor(player,key,halfLife=3,lookback=4){
   return {baseline,projection,sample,min:values.length?Math.min(...values):null,max:values.length?Math.max(...values):null,
     defense:{factor:baseline>0&&valid(projection)?projection/baseline:1,adjusted:!!rush?.defense?.adjusted||!!rec?.defense?.adjusted,sample:Math.min(rush?.defense?.sample||0,rec?.defense?.sample||0)}}
 }
-export function lineComparison(player,key,line,halfLife,lookback){
+export function lineComparison(player,key,line,halfLife,lookback=null){
   if(String(line).trim()===''||!valid(Number(line))||Number(line)<0)return null
-  const values=player.logs.slice(-lookback).map(log=>valueFor(log,key)).filter(valid)
+  const values=sampleRows(player.logs,lookback).map(log=>valueFor(log,key)).filter(valid)
   const s=statFor(player,key,halfLife,lookback)
   return {projection:player.unavailable?null:s.projection,delta:!player.unavailable&&valid(s.projection)?s.projection-Number(line):null,
     over:values.filter(v=>v>Number(line)).length,push:values.filter(v=>v===Number(line)).length,n:values.length}
@@ -37,6 +37,7 @@ export function buildCandidates(players,halfLife,lookback){
       const minimum={passYds:75,passTD:.1,rushYds:10,rec:1,recYds:10,totalTD:.1}[key]
       if(!valid(s.projection)||s.projection<minimum)continue
       const usageKey=['passYds','passTD'].includes(key)?'passAtt':key==='rushYds'?'carries':key==='totalTD'&&['RB','FB','QB'].includes(p.position)?'carries':'targets'
+      // Trend signal only: last 3 appearances versus the prior 3. Not the stat window.
       const recent=p.logs.slice(-3),prior=p.logs.slice(-6,-3)
       const now=average(recent,usageKey),before=prior.length===3?average(prior,usageKey):null
       const trend=valid(now)&&valid(before)&&before>0?(now-before)/before:null
