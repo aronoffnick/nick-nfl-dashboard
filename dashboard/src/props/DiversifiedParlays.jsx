@@ -60,7 +60,7 @@ function MixCard({ card, roster }) {
         <div>
           <strong>{lineText(leg)}</strong>
           {leg.quote || leg.price ? <span>{leg.quote || `${leg.price} ${leg.book}`}{leg.model ? ` · model ${leg.model}` : ''}{leg.lean === 'under' ? ' · model leans under' : ''}{leg.lean === 'over' ? ' · model leans over' : ''}</span> : <span>{leg.kind === 'team' ? `Model favorite by ${leg.margin.toFixed(1)}` : `Projection ${leg.projection.toFixed(leg.key === 'totalTD' ? 2 : 1)}`}</span>}
-          <span>Hit chance {show(leg.hit)}{leg.marketHit ? ` · market ${leg.marketHit}` : ''}{leg.season ? ` · ${leg.season}` : ''}{leg.flags ? ` · ${leg.flags}` : ''}{leg.kind === 'player' && leg.n >= 3 ? ` · recent ${leg.recent == null ? '—' : pct(leg.recent)} of ${leg.n}` : ''}</span>
+          <span>Hit chance {show(leg.hit)}{leg.marketHit ? ` · market ${leg.marketHit}` : ''}{leg.season ? ` · ${leg.season}` : ''}{leg.flags ? ` · ${leg.flags}` : ''}{leg.kind === 'player' && leg.n >= 3 ? ` · season weighted ${leg.recent == null ? '—' : pct(leg.recent)} of ${leg.n}` : ''}</span>
           {leg.why && <em>{leg.why}</em>}
         </div>
       </li>)}
@@ -83,17 +83,17 @@ function teamBook(matchup) {
   }
 }
 
-export default function DiversifiedParlays({ matchup, players, window, week, roster }) {
+export default function DiversifiedParlays({ matchup, players, window, week, roster, halfLife = 3 }) {
   const file = fileForWeek('parlays', week)
   const key = `${scatterAbbrev(matchup.away.abbr)}-${scatterAbbrev(matchup.home.abbr)}`
   const game = file.matched ? file.data?.games?.[key] : null
-  const cards = game ? cardsFromParlayFile(game, teamBook(matchup)) : buildDiversifiedParlays({ matchup, players, window })
+  const cards = game ? cardsFromParlayFile(game, teamBook(matchup)) : buildDiversifiedParlays({ matchup, players, window, halfLife })
   const gaps = [...(game?.gaps || []), ...(game?.conflicts || [])]
   return <section className="mix-board" aria-label="Diversified parlay estimates">
     <div className="prop-section-title"><h3>Diversified parlays</h3><span>Estimates · entertainment, not advice</span></div>
     <p className="mix-intro">{game
       ? parlayIntro(file.data, game)
-      : 'Four ways to read this game. Lines are model rungs under the projection. This matchup has no sportsbook snapshot yet. Hit chances mix how often the player recently cleared the rung with how far the projection sits past it.'}</p>
+      : 'Four ways to read this game. Lines are model rungs under the projection. This matchup has no sportsbook snapshot yet. Hit chances mix the half-life-weighted season rate at the rung with how far the projection sits past it.'}</p>
     <div className="mix-grid">{cards.map(card => <MixCard key={card.title} card={card} roster={roster} />)}</div>
     {gaps.length > 0 && <ul className="mix-gaps">{gaps.map(item => <li key={item}>{item}</li>)}</ul>}
   </section>

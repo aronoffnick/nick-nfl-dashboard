@@ -78,6 +78,7 @@ export function applyQbStarter(players, week) {
       injury: '',
       logs: [],
       lastFour: [],
+      recentGames: [],
       limited: true,
       stale: false,
       unavailable: false,

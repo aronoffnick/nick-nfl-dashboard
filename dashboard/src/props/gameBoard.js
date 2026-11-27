@@ -1,8 +1,11 @@
-import { projectTeam, valid } from './model.js'
+import { projectTeam } from './model.js'
+import { betSignalScore } from './signals.js'
 import { fileForWeek } from '../data/weekFiles.js'
 import { scatterAbbrev } from './scatterCheck.js'
 import { applyScatter } from './pipelineProjection.js'
 import { applyQbStarter } from './qbStarter.js'
+
+export { betSignalScore }
 
 export const THRESHOLDS = {
   QB: [
@@ -27,28 +30,6 @@ export const THRESHOLDS = {
     { key: 'recYds', title: 'Receiving yards', usage: 'targets', group: ['receiving'], safe: 40, breakout: 60 },
     { key: 'totalTD', title: 'TDs (rush + receiving)', usage: 'targets', group: ['rushing', 'receiving'], safe: 1, breakout: 2 },
   ],
-}
-
-const average = (games, key) => games.length && games.every(game => valid(game[key]))
-  ? games.reduce((sum, game) => sum + game[key], 0) / games.length : null
-
-function totalTD(game, position) {
-  const keys = position === 'QB' ? ['rushTD'] : ['rushTD', 'recTD']
-  return keys.every(key => valid(game[key])) ? keys.reduce((total, key) => total + game[key], 0) : null
-}
-
-export function betSignalScore(player) {
-  const usageKey = player.position === 'QB' ? 'passAtt' : ['RB', 'FB'].includes(player.position) ? 'carries' : 'targets'
-  const now = average(player.logs.slice(-3), usageKey), before = average(player.logs.slice(-6, -3), usageKey)
-  const stat = player.position === 'QB' ? 'passYds' : ['RB', 'FB'].includes(player.position) ? 'rushYds' : 'recYds'
-  const outputNow = average(player.logs.slice(-3), stat), outputBefore = average(player.logs.slice(-6, -3), stat)
-  const rising = valid(now) && valid(before) && before > 0 && now >= before * 1.15
-  const momentum = valid(outputNow) && valid(outputBefore) && outputBefore > 0 && outputNow >= outputBefore * 1.15
-  const bounce = valid(now) && valid(before) && before > 0 && now >= before * .9 && valid(outputNow) && valid(outputBefore) && outputBefore > 0 && outputNow <= outputBefore * .8
-  const defense = player.stats[stat]?.defense
-  const favorable = defense?.adjusted && defense.factor >= 1.05
-  const td = player.logs.slice(-4).some(game => totalTD(game, player.position) >= 1)
-  return (rising ? 2 : 0) + (momentum ? 2 : 0) + (bounce ? 1 : 0) + (favorable ? 2 : 0) + (td ? 1 : 0)
 }
 
 const cache = new Map()

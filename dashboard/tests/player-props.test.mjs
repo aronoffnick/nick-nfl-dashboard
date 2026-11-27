@@ -16,5 +16,24 @@ const game=(i,b,y)=>({id:String(i),date:`2026-09-0${i}T17:00:00Z`,away:side('O',
 const data={games:[game(1,'X',100),game(2,'D',200),game(3,'X',100),game(4,'D',200),game(5,'X',100),game(6,'D',200)]}
 test('Defense factor shrinks and caps; insufficient samples remain neutral',()=>{const p=defenseProfile(data,'D','WR','recYds',{},3,4);assert.equal(p.sample,3);assert(p.factor>1&&p.factor<=1.25);assert.equal(defenseProfile({games:data.games.slice(0,4)},'D','WR','recYds',{},3,4).factor,1)})
 test('Projections require three recorded appearances and recent roster eligibility',()=>{const r={Ow:{id:'Ow',name:'O receiver',position:'WR',teamId:'O',status:'Active'}};const p=projectTeam(data,{id:'O'},{id:'D'},r,3,4)[0];assert(p.stats.recYds.projection>=p.stats.recYds.baseline);assert.equal(projectTeam({games:data.games.slice(0,2)},{id:'O'},{id:'D'},r,3,4)[0].stats.recYds.projection,null);assert.equal(projectTeam(data,{id:'O'},{id:'D'},{},3,4).length,0)})
+test('Defense and ranges default to the season and still honor a Last 4 slice',()=>{
+  const yards=[10,200,30,40,50,60]
+  const varied={games:yards.map((y,i)=>game(i+1,'D',y))}
+  const roster={Ow:{id:'Ow',name:'O receiver',position:'WR',teamId:'O',status:'Active'}}
+  const seasonDefense=defenseProfile(varied,'D','WR','recYds',{},3)
+  const last4Defense=defenseProfile(varied,'D','WR','recYds',{},3,4)
+  assert.equal(seasonDefense.sample,6)
+  assert.equal(last4Defense.sample,4)
+  assert.notEqual(seasonDefense.observed,last4Defense.observed)
+  assert(seasonDefense.factor>=.75&&seasonDefense.factor<=1.25)
+  const season=projectTeam(varied,{id:'O'},{id:'D'},roster,3)[0]
+  const last4=projectTeam(varied,{id:'O'},{id:'D'},roster,3,4)[0]
+  assert.equal(season.stats.recYds.min,10)
+  assert.equal(season.stats.recYds.max,200)
+  assert.equal(last4.stats.recYds.min,30)
+  assert.equal(last4.stats.recYds.max,60)
+  assert.equal(season.lastFour.length,6)
+  assert.equal(season.recentGames.length,4)
+})
 test('Historical performance comparison excludes later games',()=>{assert.equal(historicalComparison(data,'O',{id:'Ow'},'recYds','2',3),null);const original=historicalComparison(data,'O',{id:'Ow'},'recYds','4',3);const changed=structuredClone(data);changed.games[5].away.playerBox.players[0].recYds=99999;assert.equal(historicalComparison(changed,'O',{id:'Ow'},'recYds','4',3),original)})
 test('Roster parser retains position and injury designation',()=>{const p=rosterPlayers({athletes:[{items:[{id:'1',displayName:'A',position:{abbreviation:'WR'},status:{name:'Active'},injuries:[{status:'Questionable'}]}]}]},'9')[0];assert.equal(p.position,'WR');assert.equal(p.injury,'Questionable');assert.equal(p.teamId,'9')})

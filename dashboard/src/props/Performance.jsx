@@ -3,7 +3,7 @@ import {valid} from './model.js'
 import {metricLabel} from './analysis.js'
 import './performance.css'
 const fmt=(n,key)=>valid(n)?n.toFixed(key.endsWith('TD')?2:1):'—'
-export function PerformanceLegend(){return <div className="performance-legend"><strong>Big-game support</strong><span className="support-low">Amber · lower</span><span className="support-medium">Blue · mixed</span><span className="support-high">Green · higher</span><span>Gray · not rated</span><p>Colors describe recent weighted frequency at the displayed benchmark: below one-third, one-third to under two-thirds, or two-thirds and above. They are not forecast probabilities. The range is the observed weighted 20th–80th percentile, not a floor, ceiling or prediction interval. Numbers below the scale mark range endpoints; labels above dashed markers show big-game benchmarks. TD scored also includes a separate 2+ marker and historical frequency in the expanded details. Missing stats stay missing; recorded zeros count. Expand a support headline for benchmark details and line/odds comparisons where available.</p></div>}
+export function PerformanceLegend(){return <div className="performance-legend"><strong>Big-game support</strong><span className="support-low">Amber · lower</span><span className="support-medium">Blue · mixed</span><span className="support-high">Green · higher</span><span>Gray · not rated</span><p>Colors describe the half-life-weighted frequency at the displayed benchmark, using the full season unless Last 4 or Last 6 is selected: below one-third, one-third to under two-thirds, or two-thirds and above. They are not forecast probabilities. The range is the observed weighted 20th–80th percentile, not a floor, ceiling or prediction interval. Numbers below the scale mark range endpoints; labels above dashed markers show big-game benchmarks. TD scored also includes a separate 2+ marker and historical frequency in the expanded details. Missing stats stay missing; recorded zeros count. Expand a support headline for benchmark details and line/odds comparisons where available.</p></div>}
 export default function Performance({player,metric,halfLife,lookback,children,label,breakoutScore=null}){
   const name=label||metricLabel(metric)
   const r=performance(player,metric,halfLife,lookback),projection=player.unavailable?null:r.stat?.projection
@@ -26,13 +26,13 @@ export default function Performance({player,metric,halfLife,lookback,children,la
     </div>:<p className="performance-range">Range unavailable</p>}
     <details className="performance-disclosure"><summary className="performance-support"><strong>{r.label}</strong><span className="support-chevron" aria-hidden="true"/></summary>
       <div className="performance-expanded"><p className="performance-evidence"><b>{r.threshold}+ benchmark</b> · {r.n} valid appearances</p>
-      <p className="performance-evidence">{r.weightedRate!=null?`${Math.round(r.weightedRate*100)}% recent weighted frequency · ${r.hits}/${r.n} appearances reached ${r.threshold}+`:`${r.reason}. Historical count: ${r.hits}/${r.n} reached ${r.threshold}+.`}</p>
-      {twoTD&&<p className={`performance-evidence support-${twoTD.level}`}><b>2+ touchdowns scored</b>: {twoTD.hits}/{twoTD.n} recent appearances{twoTD.weightedRate!=null?` · ${Math.round(twoTD.weightedRate*100)}% recent weighted frequency`:` · ${twoTD.reason}`}.</p>}
+      <p className="performance-evidence">{r.weightedRate!=null?`${Math.round(r.weightedRate*100)}% ${r.scope} weighted frequency · ${r.hits}/${r.n} appearances reached ${r.threshold}+`:`${r.reason}. Historical count: ${r.hits}/${r.n} reached ${r.threshold}+.`}</p>
+      {twoTD&&<p className={`performance-evidence support-${twoTD.level}`}><b>2+ touchdowns scored</b>: {twoTD.hits}/{twoTD.n} {twoTD.scope} appearances{twoTD.weightedRate!=null?` · ${Math.round(twoTD.weightedRate*100)}% ${twoTD.scope} weighted frequency`:` · ${twoTD.reason}`}.</p>}
       {children}</div>
     </details>
   </div>
 }
-export function StatScale({player,metric,halfLife=3,lookback=4,baseline=null}){
+export function StatScale({player,metric,halfLife=3,lookback=null,baseline=null}){
   const r=performance(player,metric,halfLife,lookback)
   const projection=player.unavailable?null:r.stat?.projection
   const base=valid(baseline)?baseline:r.stat?.baseline

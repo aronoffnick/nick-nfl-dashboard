@@ -1,4 +1,4 @@
-import { historyFor, sides, projectTeam, valid } from './model.js'
+import { historyFor, sides, projectTeam, valid, weightedShare } from './model.js'
 import { statFor, valueFor, metricLabel } from './analysis.js'
 const milestones={passYds:[150,175,200,225,250,275],rushYds:[25,50,75,100],recYds:[25,50,75,100],rec:[2,3,4,5,6],totalTD:[1]}
 // These are hypothetical at-least milestones, not sportsbook inventory or odds.
@@ -8,11 +8,12 @@ export function sgpLegs(players,halfLife=3){
     if(p.unavailable||p.stale||p.logs.length<6||/questionable|day.to.day/i.test(`${p.status} ${p.injury}`))continue
     for(const [key,thresholds] of Object.entries(milestones)){
       if(key==='passYds'&&p.position!=='QB')continue
-      const s=statFor(p,key,halfLife,6)
+      const s=statFor(p,key,halfLife,null)
       if(!valid(s?.projection)||s.projection<=0)continue
-      const observations=p.logs.slice(-6).map(l=>valueFor(l,key)).filter(valid)
+      const observations=p.logs.map(l=>valueFor(l,key)).filter(valid)
       if(observations.length<5)continue
       const usageKey=['passYds','passTD'].includes(key)?'passAtt':key==='rushYds'?'carries':key==='totalTD'&&['RB','FB','QB'].includes(p.position)?'carries':'targets'
+      // Trend signals only: last 3 appearances versus the prior 3. Not the stat window.
       const recentUsage=p.logs.slice(-3).map(g=>g[usageKey]).filter(valid),priorUsage=p.logs.slice(-6,-3).map(g=>g[usageKey]).filter(valid)
       const usageAvg=recentUsage.length===3?recentUsage.reduce((a,b)=>a+b,0)/3:null,priorAvg=priorUsage.length===3?priorUsage.reduce((a,b)=>a+b,0)/3:null
       const recentStat=p.logs.slice(-3).map(g=>valueFor(g,key)).filter(valid),priorStat=p.logs.slice(-6,-3).map(g=>valueFor(g,key)).filter(valid)
@@ -24,11 +25,11 @@ export function sgpLegs(players,halfLife=3){
         key==='totalTD'&&observations.some(n=>n>=1)?'TD involvement':null].filter(Boolean)
       if(!signals.length)continue
       const choices=thresholds.map(threshold=>{
-        const hits=observations.filter(n=>n>=threshold).length
-        const rate=hits/observations.length,cushion=(s.projection-threshold)/threshold
-        if(rate<2/3||cushion<.2)return null
-        const signal=rate*.55+Math.min(cushion,1)*.15+observations.length/6*.1+Math.min(signals.length,3)*.05+(s.defense.adjusted&&s.defense.factor>1?.05:0)
-        return {id:`${p.team.id}:${p.id}:${key}`,player:p,key,label:metricLabel(key),threshold,hits,n:observations.length,projection:s.projection,baseline:s.baseline,signal,signals,
+        const share=weightedShare(p.logs,halfLife,log=>{const value=valueFor(log,key);return valid(value)?value>=threshold:null})
+        const hits=share.hits,rate=share.rate,cushion=(s.projection-threshold)/threshold
+        if(rate==null||rate<2/3||cushion<.2)return null
+        const signal=rate*.55+Math.min(cushion,1)*.15+Math.min(share.n,6)/6*.1+Math.min(signals.length,3)*.05+(s.defense.adjusted&&s.defense.factor>1?.05:0)
+        return {id:`${p.team.id}:${p.id}:${key}`,player:p,key,label:metricLabel(key),threshold,hits,n:share.n,rate,projection:s.projection,baseline:s.baseline,signal,signals,
           text:`${p.name}: ${threshold}+ ${key==='totalTD'?'TD scored':metricLabel(key).toLowerCase()}`}
       }).filter(Boolean)
       // Retain the highest milestone satisfying both the historical and projection checks.
@@ -64,7 +65,7 @@ export function quarterbackConcern(data,team,roster){
   if(earlier&&latest.id!==earlier.id)return `${team.abbr}: recent quarterback change needs review`
   return null
 }
-export function sameGameFavorite(data,matchup,roster,halfLife=3,lookback=4,now=Date.now(),existingPlayers=null){
+export function sameGameFavorite(data,matchup,roster,halfLife=3,lookback=null,now=Date.now(),existingPlayers=null){
   if(matchup.started||Date.parse(matchup.date)<=now)return {pair:null,reason:'Game has started or finished.'}
   for(const team of [matchup.away,matchup.home]){
     const concern=quarterbackConcern(data,team,roster)
@@ -72,9 +73,9 @@ export function sameGameFavorite(data,matchup,roster,halfLife=3,lookback=4,now=D
   }
   const players=existingPlayers||[[matchup.away,matchup.home],[matchup.home,matchup.away]].flatMap(([team,opponent])=>projectTeam(data,team,opponent,roster,halfLife,lookback).map(p=>({...p,team,opponent})))
   const pair=chooseSGPPair(sgpLegs(players,halfLife))
-  return {pair,reason:pair?null:'Fewer than two different players meet the recent-history and projection checks.'}
+  return {pair,reason:pair?null:'Fewer than two different players meet the season-weighted history and projection checks.'}
 }
-export function weeklySGPFavorites(data,matchups,roster,halfLife=3,lookback=4,now=Date.now()){
+export function weeklySGPFavorites(data,matchups,roster,halfLife=3,lookback=null,now=Date.now()){
   const reviewed=(matchups||[]).map(matchup=>({...sameGameFavorite(data,matchup,roster,halfLife,lookback,now),matchup}))
   return {favorites:reviewed.filter(r=>r.pair).sort((a,b)=>b.pair.signal-a.pair.signal).slice(0,3),skipped:reviewed.filter(r=>!r.pair)}
 }

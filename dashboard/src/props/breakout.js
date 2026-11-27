@@ -7,6 +7,7 @@ const average = (games,key) => games.length && games.every(game=>valid(game[key]
 export function breakoutRating(player){
   if(player.unavailable||player.stale||player.logs.length<6)return null
   const usageKey=player.position==='QB'?'passAtt':['RB','FB'].includes(player.position)?'carries':'targets'
+  // Trend signal only: last 3 appearances versus the prior 3. Not the stat window.
   const recent=average(player.logs.slice(-3),usageKey),prior=average(player.logs.slice(-6,-3),usageKey)
   const mainStat=player.position==='QB'?'passYds':['RB','FB'].includes(player.position)?'rushYds':'recYds'
   const factor=player.stats[mainStat]?.defense.factor,sample=player.stats[mainStat]?.sample||0

@@ -1,5 +1,5 @@
 import {useMemo,useState} from 'react'
-import {historyFor,sides,positionOf,valid,weighted} from './model.js'
+import {historyFor,sides,positionOf,valid,weighted,sampleRows,isSeasonWindow} from './model.js'
 import {THRESHOLDS,boardFor} from './gameBoard.js'
 import {rbStarter} from './roleData.js'
 import {findRb,roleDecision} from './roleEligibility.js'
@@ -18,7 +18,7 @@ function posMatch(player,pos,roster){const actual=positionOf(player,roster);retu
 function boxValue(player,key){return key==='totalTD'?(valid(player.rushTD)&&valid(player.recTD)?player.rushTD+player.recTD:null):player[key]}
 function gameEligible(side,spec){return !!side.playerBox&&spec.group.every(group=>side.playerBox.available.includes(group))}
 function mean(values){const validValues=values.filter(valid);return validValues.length?validValues.reduce((a,b)=>a+b,0)/validValues.length:null}
-function recentDefenseGames(data,defense,window,matchup){return historyFor(data,defense.id).filter(g=>new Date(g.date)<new Date(matchup.date)).slice(-window)}
+function recentDefenseGames(data,defense,window,matchup){return sampleRows(historyFor(data,defense.id).filter(g=>new Date(g.date)<new Date(matchup.date)),window)}
 function rateForTheme(games,defense,pos,spec,threshold,roster){
   const outcomes=[]
   for(const game of games){
@@ -128,7 +128,7 @@ function FlyerTheme({theme,index,window,view}){
       <h4>{theme.spec.title} · {fmt(view.line)}+</h4>
       <strong className="flyer-rate">{view.rate==null?'—':`${Math.round(view.rate*100)}%`}</strong>
       <span className="flyer-count">{view.hits}/{view.n} recent opponent games</span>
-      <small>Defense: {theme.defense.name} · most recent {window} usable games with this stat data</small>
+      <small>Defense: {theme.defense.name} · {isSeasonWindow(window)?'this season':'the most recent '+window+' games'} with this stat data</small>
       {view.note?<small className="flyer-line-note">{view.note}</small>:null}
     </div>
   </article>
@@ -161,8 +161,8 @@ export default function Flyers({data,matchup,roster,halfLife,window}){
     .sort((a,b)=>(b.view.rate??-1)-(a.view.rate??-1)||b.view.hits-a.view.hits||a.theme.position.localeCompare(b.theme.position)||a.theme.spec.title.localeCompare(b.theme.spec.title))
 
   return <section className="flyers-section" aria-label="Flyers threshold themes">
-    <div className="prop-section-title"><h3>Flyers · most common opponent themes</h3><span>Position + stat + threshold · ranked by recent hit rate</span></div>
-    <p className="prop-help">Each row shows how often a player at that position crossed the <b>Breakout</b> line in the defense’s recent games, then identifies the closest-role player on the upcoming offense. Safe thresholds are retained as background support for the PARLAYS overlap range. The hit rate is historical evidence, not a forecast probability. QB “TDs” means rushing TDs; other positions’ TDs combine rushing and receiving.</p>
+    <div className="prop-section-title"><h3>Flyers · most common opponent themes</h3><span>Position + stat + threshold · ranked by {isSeasonWindow(window)?'season':'recent'} hit rate</span></div>
+    <p className="prop-help">Each row shows how often a player at that position crossed the <b>Breakout</b> line in the defense’s selected games (the season, unless Last 4 or Last 6 is on), then identifies the closest-role player on the upcoming offense. Safe thresholds are retained as background support for the PARLAYS overlap range. The hit rate is historical evidence, not a forecast probability. QB “TDs” means rushing TDs; other positions’ TDs combine rushing and receiving.</p>
     <div className="flyers-filters" aria-label="Filter Flyers themes">
       <label>Team<select value={teamFilter} onChange={event=>setTeamFilter(event.target.value)}><option value="all">All teams</option>{teams.map(team=><option key={team.id} value={team.id}>{team.name}</option>)}</select></label>
       <label>Position<select value={positionFilter} onChange={event=>setPositionFilter(event.target.value)}><option value="all">All positions</option>{Object.keys(THRESHOLDS).map(pos=><option key={pos} value={pos}>{roleName(pos)}</option>)}</select></label>
@@ -172,7 +172,7 @@ export default function Flyers({data,matchup,roster,halfLife,window}){
     {!items.length?<p className="prop-warning">No themes match these filters.</p>:<div className="flyers-board">{items.map(({theme,view},index)=><FlyerTheme key={`${theme.defense.id}:${theme.position}:${theme.spec.key}:${theme.tier}`} theme={theme} view={view} index={index} window={window}/>)}</div>}
     <details className="prop-method"><summary>Threshold rules and data sources</summary>
       <p>Thresholds come from your supplied reference: QB pass yards 260/300, pass TDs 2/3, rush yards 20/35, rushing TDs 1/2; RB rush yards 90/110, receptions 4/6, receiving yards 15/25, total TDs 1/2; WR receptions 6/8, receiving yards 90/110, total TDs 1/2; TE receptions 5/7, receiving yards 40/60, total TDs 1/2. “Safe” and “Breakout” list first and second values respectively.</p>
-      <p>For each game, the position group counts as crossing when at least one player at that position reaches the threshold. Hit rates use only recent games with complete box-score categories and position data. A theme enters the ranking with at least two usable games and one crossing; all qualifying themes are shown, ordered by percentage and hit count. Closest player selection uses current-team recent workload compared with the workloads of historical players who crossed the threshold. WR role matching also consults the Week {data.week} starter sheet (slot/depth/alignment fields marked inferred in that source); it is a supplemental role hint, not tracking data.</p>
+      <p>For each game, the position group counts as crossing when at least one player at that position reaches the threshold. Hit rates use the selected games (every prior game this season, unless Last 4 or Last 6 is on) with complete box-score categories and position data. A theme enters the ranking with at least two usable games and one crossing; all qualifying themes are shown, ordered by percentage and hit count. Closest player selection uses current-team workload, weighted with a 3-game half-life, compared with the workloads of historical players who crossed the threshold. WR role matching also consults the Week {data.week} starter sheet (slot/depth/alignment fields marked inferred in that source); it is a supplemental role hint, not tracking data.</p>
       <p>Source: ESPN prior-week individual box scores and current roster positions. WR and RB starter files are built from ESPN depth charts and box scores for the current week when that week's file is in the app; slot, alignment, and goal-line fields ESPN does not publish are marked Uncertain. No sportsbook prices, confirmed starters, snap counts, or route participation are modeled.</p>
       <p>Role gate: a WR must be WR1, WR2, or WR3 for his current team. An RB receiving theme requires at least 25% of team RB targets or a pass-catching or 3rd-down tag. Rush closest-match ties prefer the higher Wks 8–11 carry share. Questionable backs stay and are flagged on the card; Doubtful and Out are excluded. Depth or minimal-use backs are excluded. A back missing from the sheet stays in and is marked “No role data.” WR3 target-share fringe is not applied, because the WR sheet has no target shares. RB and WR breakout cards show max(sheet breakout line, that player’s Week {data.week} scatter projection rounded to the nearest 0.5). The hit rate on those cards is recomputed at the line shown. The Top Three favorites board is archived in props/archive and is not rendered.</p>
     </details>
