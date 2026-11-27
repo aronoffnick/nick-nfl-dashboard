@@ -14,6 +14,7 @@ from nflboard.logic import (  # noqa: E402
     display_scale,
     game_has_price,
     poisson_at_least,
+    role_tables,
     score_week,
     select_weeks,
     shrink_factor,
@@ -59,6 +60,14 @@ def _row(pid, name, pos, team, opp, week, **stats):
         "carries": stats.get("carries", 0), "rushing_yards": stats.get("rush_yds", 0), "rushing_tds": stats.get("rush_td", 0),
         "receptions": stats.get("rec", 0), "targets": stats.get("targets", 0), "receiving_yards": stats.get("rec_yds", 0),
         "receiving_tds": stats.get("rec_td", 0),
+    }
+
+
+def _back(pid, name, weeks, carries, targets):
+    return {
+        "id": pid, "name": name, "pos": "RB", "team": "BUF",
+        "carries": float(sum(carries)), "targets": float(targets * len(weeks)),
+        "weeks": weeks, "series": {"carries": carries},
     }
 
 
@@ -139,6 +148,55 @@ class LogicTest(unittest.TestCase):
         self.assertEqual(rolled["weeks"], [11, 12])
         self.assertEqual(rolled["byStat"]["RB:rushYds"]["n"], 15)
         self.assertEqual(rolled["tiers"]["confident"]["hits"], 4)
+
+    def test_rb_carry_share_uses_the_full_season_weighted_toward_recent_games(self):
+        # Early fades and Late takes over. The old table kept only weeks 3–6.
+        weeks = [1, 2, 3, 4, 5, 6]
+        early = [20, 18, 10, 8, 6, 4]
+        late = [2, 4, 10, 12, 14, 16]
+        players = [
+            _back("e", "Early Back", weeks, early, targets=2),
+            _back("l", "Late Back", weeks, late, targets=8),
+            {"id": "w", "name": "Wide Out", "pos": "WR", "team": "BUF", "carries": 0, "targets": 10,
+             "weeks": weeks, "series": {"carries": [0] * 6}, "avg": {"recYds": 40}},
+        ]
+        stats = pd.DataFrame([{"team": "BUF", "week": week} for week in weeks])
+        _rb, usage, wr = role_tables(players, stats, None)
+        by_name = {row["name"]: row for row in usage}
+        weights = [2 ** (-(len(weeks) - 1 - index) / 3) for index in range(len(weeks))]
+        early_w = sum(carries * weight for carries, weight in zip(early, weights))
+        late_w = sum(carries * weight for carries, weight in zip(late, weights))
+        total = early_w + late_w
+        last4_early = sum(early[-4:]) / (sum(early[-4:]) + sum(late[-4:]))
+        plain_early = sum(early) / (sum(early) + sum(late))
+        self.assertEqual(by_name["Early Back"]["seasonCarryShare"], round(early_w / total, 2))
+        self.assertEqual(by_name["Late Back"]["seasonCarryShare"], round(late_w / total, 2))
+        self.assertNotEqual(by_name["Early Back"]["seasonCarryShare"], round(last4_early, 2))
+        self.assertNotEqual(by_name["Early Back"]["seasonCarryShare"], round(plain_early, 2))
+        self.assertNotIn("recentCarryShare", by_name["Early Back"])
+        self.assertAlmostEqual(
+            by_name["Early Back"]["seasonCarryShare"] + by_name["Late Back"]["seasonCarryShare"],
+            1.0,
+            places=2,
+        )
+        roles = {row["name"]: row["primary"] for row in _rb}
+        self.assertEqual(roles["Late Back"], "Workhorse")
+        self.assertEqual(roles["Early Back"], "Committee")
+        self.assertEqual(wr, [{"team": "Buffalo Bills", "name": "Wide Out", "rank": "WR1", "slot": None, "alignment": "", "side": ""}])
+        # A bye is not a game, and a missed week counts as zero carries that week.
+        skipped = [1, 2, 4, 5, 6, 7]
+        partial = [
+            _back("a", "Alpha", skipped, [10, 10, 10, 10, 10, 10], targets=1),
+            _back("b", "Bravo", [4, 5, 6, 7], [0, 0, 0, 30], targets=1),
+        ]
+        partial_stats = pd.DataFrame([{"team": "BUF", "week": week} for week in skipped])
+        _, partial_usage, _ = role_tables(partial, partial_stats, None)
+        partial_by = {row["name"]: row["seasonCarryShare"] for row in partial_usage}
+        skipped_weights = [2 ** (-(len(skipped) - 1 - index) / 3) for index in range(len(skipped))]
+        alpha_w = 10 * sum(skipped_weights)
+        bravo_w = 30 * skipped_weights[-1]
+        self.assertEqual(partial_by["Alpha"], round(alpha_w / (alpha_w + bravo_w), 2))
+        self.assertGreater(partial_by["Bravo"], 0)
 
     def test_tuesday_targets_the_open_week_only(self):
         _, schedule = frames()

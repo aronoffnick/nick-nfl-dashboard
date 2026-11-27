@@ -39,6 +39,9 @@ FACTOR_LO = 0.75
 FACTOR_HI = 1.35
 SCALE_LO = 0.90
 SCALE_HI = 1.10
+# Same decay as dashboard/src/props/model.js `weighted`: latest game weighs 1,
+# and a game this many appearances earlier weighs half. Byes are not games.
+CARRY_HALF_LIFE = 3
 TD_RULES = {
     "questionableRankFactor": 0.85,
     "relativelySafeMinProb": 0.22,
@@ -317,6 +320,37 @@ def _gl_role(share):
     return "none"
 
 
+def _game_weight(index: int, count: int, half_life: float = CARRY_HALF_LIFE) -> float:
+    """Weight of one game in a chronological list. Matches model.js `weighted`."""
+    if count <= 0 or half_life <= 0:
+        return 0.0
+    return 2 ** (-(count - 1 - index) / half_life)
+
+
+def _weighted_carries(players: list[dict], weeks: list[int]) -> tuple[dict[str, float], float]:
+    """Season carry totals, weighted toward recent team games.
+
+    Each team game weighs 2^(-games ago / half-life). A week the back did not
+    play counts as zero carries, so his share is his weighted carries divided
+    by the team's weighted RB carries. Byes are not in `weeks`.
+    """
+    ordered = [int(week) for week in weeks]
+    weights = {week: _game_weight(index, len(ordered)) for index, week in enumerate(ordered)}
+    totals: dict[str, float] = {}
+    grand = 0.0
+    for player in players:
+        total = 0.0
+        series = (player.get("series") or {}).get("carries") or []
+        for week, carries in zip(player.get("weeks") or [], series):
+            weight = weights.get(int(week))
+            if weight is None:
+                continue
+            total += float(carries or 0) * weight
+        totals[player["id"]] = total
+        grand += total
+    return totals, grand
+
+
 def role_tables(players: list[dict], stats: pd.DataFrame, inside5: dict[str, float] | None):
     by_team: dict[str, list[dict]] = {}
     for player in players:
@@ -324,33 +358,23 @@ def role_tables(players: list[dict], stats: pd.DataFrame, inside5: dict[str, flo
     team_weeks = stats.groupby("team")["week"].apply(lambda s: sorted(set(int(v) for v in s))).to_dict() if len(stats) else {}
     rb_rows, usage_rows, wr_rows = [], [], []
     for team, group in sorted(by_team.items()):
-        recent = set(team_weeks.get(team, [])[-4:])
         rbs = [p for p in group if p["pos"] == "RB"]
         wrs = [p for p in group if p["pos"] == "WR"]
-        rb_carries = sum(p["carries"] for p in rbs) or 0
         rb_targets = sum(p["targets"] for p in rbs) or 0
-        recent_carries = {}
-        recent_total = 0.0
-        for player in rbs:
-            total = 0.0
-            for week, carries in zip(player["weeks"], player["series"]["carries"]):
-                if week in recent:
-                    total += carries
-            recent_carries[player["id"]] = total
-            recent_total += total
+        season_carries, season_total = _weighted_carries(rbs, team_weeks.get(team, []))
         rbs_sorted = sorted(rbs, key=lambda p: (-p["carries"], -p["targets"], p["name"]))
         for index, player in enumerate(rbs_sorted, start=1):
             if player["carries"] + player["targets"] <= 0:
                 continue
             target_share = player["targets"] / rb_targets if rb_targets else 0.0
-            recent_share = recent_carries[player["id"]] / recent_total if recent_total else 0.0
+            season_share = season_carries.get(player["id"], 0.0) / season_total if season_total else 0.0
             inside = None if inside5 is None else inside5.get(player["id"])
             gl = _gl_role(inside)
-            if recent_share >= 0.55:
+            if season_share >= 0.55:
                 primary = "Workhorse"
-            elif target_share >= 0.30 and recent_share < 0.40:
+            elif target_share >= 0.30 and season_share < 0.40:
                 primary = "Pass-catching back"
-            elif recent_share < 0.12 and target_share < 0.15 and index > 1:
+            elif season_share < 0.12 and target_share < 0.15 and index > 1:
                 primary = "Depth / minimal-use"
             else:
                 primary = "Committee"
@@ -379,7 +403,7 @@ def role_tables(players: list[dict], stats: pd.DataFrame, inside5: dict[str, flo
                 "name": player["name"],
                 "team": TEAM_NAMES.get(team, team),
                 "targetShare": round_num(target_share, 2),
-                "recentCarryShare": round_num(recent_share, 2),
+                "seasonCarryShare": round_num(season_share, 2),
                 "inside5Share": None if inside is None else round_num(inside, 2),
                 "injury": "",
             })

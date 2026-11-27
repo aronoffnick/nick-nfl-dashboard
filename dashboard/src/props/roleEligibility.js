@@ -1,7 +1,9 @@
-// Shared Week 12 role gate for Flyers, Player Projections, Parlays, and Scatter Plot.
-// RB shares come from rb-usage-week12.json (parsed from rb-starters-2026-wk12.csv):
-// targetShare = "N% of team RB targets", recentCarryShare = "Wks 8-11 RB carry share",
+// Shared role gate for Flyers, Player Projections, Parlays, and Scatter Plot.
+// RB shares come from that week's rb-usage file:
+// targetShare = share of team RB targets this season,
+// seasonCarryShare = season RB carry share, weighted toward recent games with a 3-game half-life,
 // inside5Share = the percent inside "Inside-5 carries (share)".
+// Older files may still say recentCarryShare; that value is the same field.
 // WR rows have rank and alignment only. A WR3 under 10% team target share is not
 // treated as fringe, because the WR sheet has no target shares and the logs are
 // not a second source of truth for this gate.
@@ -23,7 +25,8 @@ export function bookFrom(rbSource = [], usageSource = [], wrSource = [], { match
   const rbByName = new Map()
   for (const row of rbSource) {
     const usage = usageByName.get(nameKey(row.name)) || usageByName.get(nameKey(row.sheetName)) || {}
-    const merged = { ...row, targetShare: usage.targetShare ?? null, recentCarryShare: usage.recentCarryShare ?? null, inside5Share: usage.inside5Share ?? null, injury: row.injury || usage.injury || '' }
+    const seasonCarryShare = usage.seasonCarryShare ?? usage.recentCarryShare ?? null
+    const merged = { ...row, targetShare: usage.targetShare ?? null, seasonCarryShare, inside5Share: usage.inside5Share ?? null, injury: row.injury || usage.injury || '' }
     rbByName.set(nameKey(row.name), merged)
     if (row.sheetName) rbByName.set(nameKey(row.sheetName), merged)
   }
@@ -71,10 +74,10 @@ export function receivingEligible(rb) {
   return hasReceivingRole(rb)
 }
 
-// Rush favorite score × clamp(Wks 8-11 carry share / 0.50, 0.40, 1.20).
+// Rush favorite score × clamp(season carry share / 0.50, 0.40, 1.20).
 export function rushWeight(rb) {
-  if (!rb || rb.recentCarryShare == null) return 1
-  return clamp(rb.recentCarryShare / 0.5, 0.4, 1.2)
+  if (!rb || rb.seasonCarryShare == null) return 1
+  return clamp(rb.seasonCarryShare / 0.5, 0.4, 1.2)
 }
 
 // TD favorite score × goal-line weight × inside-5 weight.
@@ -118,7 +121,7 @@ export function roleDecision(player, { statKey = null, book = null } = {}) {
     return { eligible: false, weight: 1, flag, note: null, reason: 'Under 25% of team RB targets, with no pass-catching or 3rd-down tag', sheet: true }
   }
   const weight = statKey === 'rushYds' ? rushWeight(rb) : statKey === 'totalTD' || statKey === 'rushTD' ? tdWeight(rb) : 1
-  return { eligible: true, weight, flag, note: null, reason: null, carryShare: rb.recentCarryShare ?? null, sheet: true }
+  return { eligible: true, weight, flag, note: null, reason: null, carryShare: rb.seasonCarryShare ?? null, sheet: true }
 }
 
 export function scatterNoRole(player, book = null) {
