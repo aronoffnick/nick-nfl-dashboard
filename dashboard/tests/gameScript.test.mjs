@@ -220,6 +220,18 @@ test('the side follows the line when one exists, and the arrow still follows the
   assert.equal(stafford.lineSource, 'model')
 })
 
+test('a zero that still displays as zero is left off the list', () => {
+  const back = makePlayer({
+    id: 'rb-a', name: 'Josh Jacobs', position: 'RB', team: away,
+    stats: { rushYds: 80, rushTD: 0 },
+  })
+  const result = buildGameScript({
+    matchup, players: [back], selection: { ...emptyScript(), win: 'gb' }, halfLife: 3,
+  })
+  assert.equal(result.props.some(prop => prop.key === 'rushTD'), false)
+  assert.ok(find(result, 'Josh Jacobs', 'rushYds'))
+})
+
 test('unavailable players are left out', () => {
   const players = roster().map(player => player.id === 'rb-a' ? { ...player, unavailable: true } : player)
   const result = buildGameScript({ matchup, players, selection: { ...emptyScript(), win: 'gb' }, halfLife: 3 })
