@@ -13,6 +13,7 @@ import ScatterTab from './ScatterTab.js'
 import Touchdowns from './Touchdowns.jsx'
 import BetGenerator from './BetGenerator.jsx'
 import Stocks from './Stocks.jsx'
+import GameScript from './GameScript.jsx'
 import { formatMatchupHash, parseMatchupHash } from './matchupTabs.js'
 import './props.css'
 const format=(n,key='')=>valid(n)?n.toFixed(key.endsWith('TD')?2:1):'—'
@@ -94,7 +95,7 @@ export default function MatchupExplorer({saveProp,data,matchup,halfLife,advantag
       if(window.location.hash!==previous) window.history.replaceState(null,'',previous||window.location.pathname+window.location.search)
     }
   },[tab,betsView,statsView])
-  useEffect(()=>{ if (rosters?.roster) bindHistoryPlayers(data, rosters.roster) }, [rosters, data])
+  if (rosters?.roster) bindHistoryPlayers(data, rosters.roster)
   useEffect(()=>{
     const previous=document.activeElement
     const original=document.body.style.overflow
@@ -121,7 +122,7 @@ export default function MatchupExplorer({saveProp,data,matchup,halfLife,advantag
     <p className="prop-help">{(() => { const td = findTdGame(fileForWeek('tdRisk', data.week).data, matchup.away.abbr, matchup.home.abbr); const prices = td?.priceSnapshot?.asOf && td.priceSnapshot.playersPriced ? `Prices ${td.priceSnapshot.asOf}` : 'No price snapshot'; const through = bundledHistory(data.year)?.asOf; return [prices, through ? `Data ${through}` : null].filter(Boolean).join(' · ') })()}</p>
     {matchup.qbOverride && <p className="prop-help">{matchup.qbOverride.note}</p>}
     <nav className="prop-tabs" aria-label="Matchup analytics">{[['bets','Bets'],['stats','Stats']].map(([id,name])=><button key={id} aria-pressed={tab===id} className={tab===id?'active':''} onClick={()=>setTab(id)}>{name}</button>)}</nav>
-    {tab==='bets'&&<nav className="prop-tabs prop-subtabs" aria-label="Bets views">{[['generator','Bet generator'],['flyers','Flyers'],['parlays','Parlays'],['projections','Player Projections'],['touchdowns','Touchdowns']].map(([id,name])=><button key={id} aria-pressed={betsView===id} className={betsView===id?'active':''} onClick={()=>setBetsView(id)}>{name}</button>)}</nav>}
+    {tab==='bets'&&<nav className="prop-tabs prop-subtabs" aria-label="Bets views">{[['generator','Bet generator'],['flyers','Flyers'],['parlays','Parlays'],['script','Game script'],['projections','Player Projections'],['touchdowns','Touchdowns']].map(([id,name])=><button key={id} aria-pressed={betsView===id} className={betsView===id?'active':''} onClick={()=>setBetsView(id)}>{name}</button>)}</nav>}
     {tab==='stats'&&<nav className="prop-tabs prop-subtabs" aria-label="Stats views">{[['scatter','Scatter Plot'],['stocks','Stat Metrics'],['history','Opponents']].map(([id,name])=><button key={id} aria-pressed={statsView===id} className={statsView===id?'active':''} onClick={()=>setStatsView(id)}>{name}</button>)}</nav>}
       {tab==='stats'&&statsView==='scatter'&&<ScatterTab away={matchup.away} home={matchup.home} week={data.week}/>}
       {tab==='bets'&&betsView==='generator'&&<BetGenerator matchup={matchup} week={data.week}/>}
@@ -145,6 +146,7 @@ export default function MatchupExplorer({saveProp,data,matchup,halfLife,advantag
       {tab==='bets'&&betsView==='projections'&&<PlayerProjections matchup={matchup} saveProp={saveProp} data={data} teams={projectionTeamsList} roster={rosters.roster} halfLife={halfLife} window={recentGames} positions={projectionPositions} categories={projectionCategories}/>}
       {tab==='bets'&&betsView==='flyers'&&<Flyers data={data} matchup={matchup} roster={rosters.roster} halfLife={halfLife} window={recentGames}/>}
       {tab==='bets'&&betsView==='parlays'&&<Parlays data={data} matchup={matchup} roster={rosters.roster} halfLife={halfLife} window={recentGames}/>}
+      {tab==='bets'&&betsView==='script'&&<GameScript data={data} matchup={matchup} roster={rosters.roster} halfLife={halfLife} window={recentGames}/>}
       {tab==='stats'&&statsView==='history'&&<Historical data={data} defense={defense} roster={rosters.roster} window={recentGames} selectedPositions={historyPositions}/>}
     </>}
     <details className="prop-method"><summary>Team offense vs defense estimates</summary><div className="table-wrap"><table><thead><tr><th>Offense</th><th>Expected net pass yards</th><th>Expected rush yards</th></tr></thead><tbody>{[[matchup.away,matchup.home],[matchup.home,matchup.away]].map(([o,d])=><tr key={o.id}><td>{o.abbr} vs {d.abbr}</td><td>{format((o.recent.passO+d.recent.passD)/2)}</td><td>{format((o.recent.rushO+d.recent.rushD)/2)}</td></tr>)}</tbody></table></div></details>

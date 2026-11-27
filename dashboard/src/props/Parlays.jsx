@@ -6,6 +6,7 @@ import {buildFlyerThemes,rateAtLine} from './Flyers.jsx'
 import {fileForWeek} from '../data/weekFiles.js'
 import {decideScatterLine,scatterAbbrev,scatterProjection} from './scatterCheck.js'
 import {boardGame,filePropCandidates,legHit,uniqueProps} from './parlayBoard.js'
+import GameScript from './GameScript.jsx'
 import './parlays.css'
 
 const fmt=(value,key)=>valid(value)?value.toFixed(key.toLowerCase().includes('td')?2:1):'—'
@@ -104,7 +105,8 @@ export default function Parlays({data,matchup,roster,halfLife,window}){
     skipped:reviewed.filter(item=>item.decision.kind==='skipped'),
     'no-data':reviewed.filter(item=>item.decision.kind==='no-data'),
   }
-  return <><section className="parlays-section" aria-label="Candidate props ranked by hit chance">
+  return <><GameScript data={data} matchup={matchup} roster={roster} halfLife={halfLife} window={window} embedded />
+  <section className="parlays-section" aria-label="Candidate props ranked by hit chance">
     <div className="prop-section-title"><h3>Props · ranked by hit chance</h3><span>{game?`Week ${data.week} matchup model lines${game.snapshot?.props_asof?` · snapshot ${game.snapshot.props_asof}`:''}`:'Bets signals + FLYERS Safe history'}</span></div>
     <p className="prop-help">{game
       ? `Each player, stat, and line from the Week ${data.week} file is listed once, highest model hit chance first. That chance is the shrunk rate of recent games on this side of the line, the same number the parlay builder stored as the leg rating. If both sides of one line are present, the higher chance is kept. Prices are a saved snapshot, not live odds.`
