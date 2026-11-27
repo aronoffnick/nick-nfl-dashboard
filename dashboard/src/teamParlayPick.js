@@ -1,3 +1,8 @@
+/** Chance the home team covers homeLine, using the same margin curve as a win. */
+export function coverProb(signedHome, homeLine) {
+  return 1 / (1 + Math.exp(-((signedHome || 0) + homeLine) / 7))
+}
+
 export function chooseGroup(pool, count, lo, hi) {
   let best = null
   const walk = (start, picked) => {

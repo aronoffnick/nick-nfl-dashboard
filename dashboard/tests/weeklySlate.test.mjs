@@ -46,7 +46,11 @@ test('pipeline games leave prices blank and the saved Thanksgiving prices stay',
   for (const game of week13.games) assert.ok(pricesOf(game).every(pick => pick.price == null))
   const parlays = read('../src/data/parlays-wk13.json')
   for (const game of Object.values(parlays.games)) {
-    assert.ok(game.legs.every(leg => leg.price == null && leg.priced === false))
+    for (const leg of game.legs) {
+      if (leg.market === 'ML') continue
+      assert.equal(leg.price, null)
+      assert.equal(leg.priced, false)
+    }
   }
 })
 

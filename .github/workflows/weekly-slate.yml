@@ -37,7 +37,7 @@ jobs:
       - run: pip install -r pipeline/requirements.txt
       - name: Test the pipeline and the dashboard
         run: |
-          python -m unittest tests.test_logic tests.test_prices tests.test_stocks tests.test_breakout tests.test_momentum
+          python -m unittest tests.test_logic tests.test_prices tests.test_stocks tests.test_breakout tests.test_momentum tests.test_team_odds
           cd ..
           npm ci --prefix dashboard
           node --test dashboard/tests/*.mjs
@@ -55,6 +55,13 @@ jobs:
             python pipeline/prices.py --season "${{ inputs.season || '2026' }}" --week "${{ inputs.week }}"
           else
             python pipeline/prices.py --auto --season "${{ inputs.season || '2026' }}"
+          fi
+      - name: Save team moneylines and spreads
+        run: |
+          if [ -n "${{ inputs.week }}" ]; then
+            python pipeline/team_odds.py --season "${{ inputs.season || '2026' }}" --week "${{ inputs.week }}"
+          else
+            python pipeline/team_odds.py --auto --season "${{ inputs.season || '2026' }}"
           fi
       - name: Write stat metrics for every position
         run: |
