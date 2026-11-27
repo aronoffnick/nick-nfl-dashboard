@@ -1,4 +1,4 @@
-export const BET_VIEWS = ['generator', 'flyers', 'parlays', 'script', 'projections', 'touchdowns']
+export const BET_VIEWS = ['generator', 'flyers', 'parlays', 'projections', 'touchdowns']
 export const STAT_VIEWS = ['scatter', 'stocks', 'history']
 
 const ALIAS = {
@@ -13,9 +13,10 @@ const ALIAS = {
   generator: ['bets', 'generator'],
   flyers: ['bets', 'flyers'],
   parlays: ['bets', 'parlays'],
-  script: ['bets', 'script'],
-  'game script': ['bets', 'script'],
-  'game-script': ['bets', 'script'],
+  script: ['bets', 'parlays'],
+  'bets/script': ['bets', 'parlays'],
+  'game script': ['bets', 'parlays'],
+  'game-script': ['bets', 'parlays'],
   projections: ['bets', 'projections'],
   touchdowns: ['bets', 'touchdowns'],
 }
