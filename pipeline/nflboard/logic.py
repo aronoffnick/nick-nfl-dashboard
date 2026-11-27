@@ -8,6 +8,7 @@ from __future__ import annotations
 import itertools
 import math
 from datetime import datetime
+from pathlib import Path
 from zoneinfo import ZoneInfo
 
 import pandas as pd
@@ -40,13 +41,17 @@ SCALE_LO = 0.90
 SCALE_HI = 1.10
 TD_RULES = {
     "questionableRankFactor": 0.85,
-    "relativelySafeMinProb": 0.15,
-    "upside2plusMinProb": 0.03,
-    "upside3plusMinProb": 0.05,
+    "relativelySafeMinProb": 0.22,
+    "upside2plusMinProb": 0.12,
+    "upside3plusMinProb": 0.06,
+    "longShotMinProb": 0.04,
     "maxBackups": 2,
     "probability": (
         "Poisson from expected rushing plus receiving touchdowns. "
-        "Team totals are rescaled toward season scoring (points divided by 7), not a sportsbook total. "
+        "Relatively safe starts at 22%. A 2+ look is upside only at 12% or higher, and 3+ only at 6% or higher. "
+        "Below that, down to 4%, the label is Long shot. "
+        "The Week 12 tier check is three finished games, so these floors are deliberately higher than that small sample. "
+        "Team totals use season scoring (points divided by 7), not a sportsbook total. "
         "estimate=true means fewer than 4 games."
     ),
 }
@@ -481,6 +486,62 @@ def _td_allowed(stats: pd.DataFrame, defense: str) -> dict:
     return {"games": games, "byPos": by_pos, "byRole": by_role}
 
 
+def rules_for(path=None) -> dict:
+    """Defaults, overridden by pipeline/td-rules.json when that file exists."""
+    rules = dict(TD_RULES)
+    if path is not None and Path(path).exists():
+        import json
+        loaded = json.loads(Path(path).read_text())
+        rules.update({key: loaded[key] for key in loaded if key in rules or key == "probability"})
+    return rules
+
+
+def _band_scale(prob, adjustments) -> float:
+    for band in (adjustments or {}).get("bands") or []:
+        if band.get("lo") is None:
+            continue
+        if float(band["lo"]) <= float(prob) < float(band["hi"]):
+            return float(band.get("scale") or 1)
+    return 1.0
+
+
+def display_scale(prob, tier, adjustments) -> float:
+    """Tier and probability-band scales, with the product clipped to 0.90–1.10."""
+    if not adjustments or prob is None:
+        return 1.0
+    tier_scale = float((adjustments.get("tiers") or {}).get(tier) or 1)
+    combined = tier_scale * _band_scale(prob, adjustments)
+    if not math.isfinite(combined):
+        return 1.0
+    return max(SCALE_LO, min(SCALE_HI, combined))
+
+
+def _scaled(pick, tier, adjustments):
+    if not pick or pick.get("modelProb") is None:
+        return pick
+    scale = display_scale(pick["modelProb"], tier, adjustments)
+    if abs(scale - 1) < 0.005:
+        return pick
+    updated = dict(pick)
+    updated["modelProb"] = round_num(max(0.01, min(0.95, float(pick["modelProb"]) * scale)), 3)
+    return updated
+
+
+def _multi_looks(top, offense, two, three, adjustments):
+    looks = []
+    rules = TD_RULES
+    player, _lam, _anytime, _reason, role = top
+    if two >= rules["upside2plusMinProb"]:
+        looks.append(_scaled({**_pick(player, offense, "2+ TDs", two, "Same expected touchdowns, Poisson chance of two or more.", role), "flavor": "safer_2plus"}, "upside", adjustments))
+    elif two >= rules["longShotMinProb"]:
+        looks.append(_scaled({**_pick(player, offense, "2+ TDs", two, "Below the upside floor. Long shot, not a relatively safe or upside look.", role), "flavor": "long_shot"}, "longShot", adjustments))
+    if three >= rules["upside3plusMinProb"]:
+        looks.append(_scaled({**_pick(player, offense, "3+ TDs", three, "Same expected touchdowns, Poisson chance of three or more.", role), "flavor": "safer_3plus"}, "upside", adjustments))
+    elif three >= rules["longShotMinProb"]:
+        looks.append(_scaled({**_pick(player, offense, "3+ TDs", three, "Below the upside floor. Long shot, not a relatively safe or upside look.", role), "flavor": "long_shot"}, "longShot", adjustments))
+    return looks
+
+
 def _pick(player, team, prop, prob, reason, role):
     return {
         "player": player["name"],
@@ -548,18 +609,15 @@ def touchdown_game(away, home, meta, players, factors, scoring, stats, adjustmen
             upside = []
             two = poisson_at_least(top[1], 2)
             three = poisson_at_least(top[1], 3)
-            if two >= TD_RULES["upside2plusMinProb"]:
-                upside.append({**_pick(top[0], offense, "2+ TDs", two, "Same expected touchdowns, Poisson chance of two or more.", top[4]), "flavor": "safer_2plus"})
-            if three >= TD_RULES["upside3plusMinProb"]:
-                upside.append({**_pick(top[0], offense, "3+ TDs", three, "Same expected touchdowns, Poisson chance of three or more.", top[4]), "flavor": "safer_3plus"})
+            upside.extend(_multi_looks(top, offense, two, three, adjustments))
             for player, lam, anytime, reason, role in backups:
-                upside.append({**_pick(player, offense, "Anytime TD", anytime, reason, role), "flavor": "backup_1td"})
+                upside.append(_scaled({**_pick(player, offense, "Anytime TD", anytime, reason, role), "flavor": "backup_1td"}, "upside", adjustments))
             rows.append({
                 "position": pos,
                 "tdsAllowed": info["byPos"].get(pos, 0),
                 "byRole": info["byRole"].get(pos) or {},
-                "confident": _pick(top[0], offense, "Anytime TD", top[2], top[3], top[4]),
-                "relativelySafe": None if second is None else _pick(second[0], offense, "Anytime TD", second[2], second[3], second[4]),
+                "confident": _scaled(_pick(top[0], offense, "Anytime TD", top[2], top[3], top[4]), "confident", adjustments),
+                "relativelySafe": None if second is None else _scaled(_pick(second[0], offense, "Anytime TD", second[2], second[3], second[4]), "relativelySafe", adjustments),
                 "upside": upside,
             })
         rows.sort(key=lambda row: (-row["tdsAllowed"], row["position"]))
@@ -948,7 +1006,7 @@ def game_has_price(game: dict) -> bool:
     return False
 
 
-def score_week(scatter, td_board, coverage, td_coverage, wr_rows, stats, schedule, season, week, partial_prior=40):
+def score_week(scatter, td_board, coverage, td_coverage, wr_rows, stats, schedule, season, week, partial_prior=40, prior_rollup=None):
     """Compare published projections to actuals for final games. Does not invent missing actuals."""
     stats, schedule, _ = _season_slice(stats, schedule, None, season)
     stats, schedule, _ = prepare(stats, schedule, None)
@@ -996,20 +1054,16 @@ def score_week(scatter, td_board, coverage, td_coverage, wr_rows, stats, schedul
     slots = _slot_block(td_rows)
     coverage_block = _coverage_block(td_rows, coverage, td_coverage, final_keys)
     prior = partial_prior if len(final_keys) < _slate_count(schedule, season, week) else 20
-    adjustments = {"projection": {}, "tdLambda": {}, "coverageDamp": coverage_block["damp"]}
-    for (pos, stat), item in by_stat.items():
-        if stat == "td":
-            continue
-        ratio = item["meanActual"] / item["meanPred"] if item["meanPred"] else None
-        adjustments["projection"].setdefault(pos, {})[stat] = round_num(bounded_scale(ratio, item["n"], prior=prior), 3)
-    for pos in POSITIONS:
-        subset = [row for row in td_rows if row["pos"] == pos]
-        pred = sum(row["pred"] for row in subset)
-        act = sum(row["actual"] for row in subset)
-        ratio = act / pred if pred else None
-        adjustments["tdLambda"][pos] = round_num(bounded_scale(ratio, len(subset), prior=prior), 3)
+    fresh = _fresh_rollup(rows, tiers, poisson, week)
+    rollup = add_rollups(prior_rollup, fresh)
+    adjustments = scales_from_rollup(rollup, prior, coverage_block["damp"])
     partial = len(final_keys) < _slate_count(schedule, season, week)
     lines = _lines(week, len(final_keys), _slate_count(schedule, season, week), by_stat, poisson, tiers, slots, coverage_block, adjustments, partial)
+    if rollup.get("weeks") and len(rollup["weeks"]) < 3:
+        lines.append(
+            "Tier and probability-band scales use a small finished sample so far, including the Week 12 games. "
+            "They stay inside 10% and carry forward when the next week is scored."
+        )
     return {
         "season": season,
         "week": week,
@@ -1021,12 +1075,106 @@ def score_week(scatter, td_board, coverage, td_coverage, wr_rows, stats, schedul
         "touchdowns": {"anytime": poisson, "byTier": tiers, "bySlot": slots},
         "coverage": coverage_block,
         "adjustments": adjustments,
+        "rollup": rollup,
         "lines": lines,
         "note": (
             "Scored only where a final score and a player stat row both exist. "
+            "The rollup adds this week to every earlier calibration. "
             "Scales shrink toward 1 and are clipped to 0.90–1.10. They feed the next week, not this one."
         ),
     }
+
+
+def _fresh_rollup(rows, tiers, poisson, week):
+    by_stat = {}
+    for row in rows:
+        key = f"{row['pos']}:{row['stat']}"
+        bucket = by_stat.setdefault(key, {"n": 0, "sumPred": 0.0, "sumActual": 0.0, "sumAbs": 0.0})
+        bucket["n"] += 1
+        bucket["sumPred"] += float(row["pred"])
+        bucket["sumActual"] += float(row["actual"])
+        bucket["sumAbs"] += abs(float(row["actual"]) - float(row["pred"]))
+    tier_roll = {}
+    for name, item in (tiers or {}).items():
+        n = int(item.get("n") or 0)
+        predicted = item.get("predicted")
+        tier_roll[name] = {
+            "n": n,
+            "hits": int(item.get("hits") or 0),
+            "sumPred": float(predicted) * n if predicted is not None and n else 0.0,
+        }
+    bands = []
+    for band in poisson.get("bins") or []:
+        n = int(band.get("n") or 0)
+        bands.append({
+            "lo": band["lo"], "hi": band["hi"], "n": n,
+            "hits": int(band.get("hits") if band.get("hits") is not None else round((band.get("actual") or 0) * n)),
+            "sumPred": float(band["sumPred"]) if band.get("sumPred") is not None else float(band.get("predicted") or 0) * n,
+        })
+    return {"weeks": [week], "byStat": by_stat, "tiers": tier_roll, "bands": bands}
+
+
+def add_rollups(prior, fresh):
+    if not prior:
+        return fresh
+    if not fresh:
+        return prior
+    by_stat = {}
+    for source in (prior.get("byStat") or {}, fresh.get("byStat") or {}):
+        for key, item in source.items():
+            bucket = by_stat.setdefault(key, {"n": 0, "sumPred": 0.0, "sumActual": 0.0, "sumAbs": 0.0})
+            for field in bucket:
+                bucket[field] += item.get(field) or 0
+    tiers = {}
+    names = set((prior.get("tiers") or {}) | (fresh.get("tiers") or {}))
+    for name in names:
+        left = (prior.get("tiers") or {}).get(name) or {}
+        right = (fresh.get("tiers") or {}).get(name) or {}
+        tiers[name] = {
+            "n": (left.get("n") or 0) + (right.get("n") or 0),
+            "hits": (left.get("hits") or 0) + (right.get("hits") or 0),
+            "sumPred": (left.get("sumPred") or 0) + (right.get("sumPred") or 0),
+        }
+    bands = []
+    for lo, hi in ((0, 0.2), (0.2, 0.4), (0.4, 0.6), (0.6, 1.01)):
+        left = next((band for band in prior.get("bands") or [] if band.get("lo") == lo), {})
+        right = next((band for band in fresh.get("bands") or [] if band.get("lo") == lo), {})
+        n = (left.get("n") or 0) + (right.get("n") or 0)
+        if not n:
+            continue
+        bands.append({
+            "lo": lo, "hi": min(hi, 1), "n": n,
+            "hits": (left.get("hits") or 0) + (right.get("hits") or 0),
+            "sumPred": (left.get("sumPred") or 0) + (right.get("sumPred") or 0),
+        })
+    weeks = list(prior.get("weeks") or []) + [week for week in fresh.get("weeks") or [] if week not in (prior.get("weeks") or [])]
+    return {"weeks": weeks, "byStat": by_stat, "tiers": tiers, "bands": bands}
+
+
+def scales_from_rollup(rollup, prior, coverage_damp):
+    adjustments = {"projection": {}, "tdLambda": {}, "tiers": {}, "bands": [], "coverageDamp": coverage_damp}
+    for key, item in (rollup.get("byStat") or {}).items():
+        pos, stat = key.split(":", 1)
+        if stat == "td":
+            ratio = item["sumActual"] / item["sumPred"] if item["sumPred"] else None
+            adjustments["tdLambda"][pos] = round_num(bounded_scale(ratio, item["n"], prior=prior), 3)
+            continue
+        ratio = item["sumActual"] / item["sumPred"] if item["sumPred"] else None
+        adjustments["projection"].setdefault(pos, {})[stat] = round_num(bounded_scale(ratio, item["n"], prior=prior), 3)
+    for pos in POSITIONS:
+        adjustments["tdLambda"].setdefault(pos, 1.0)
+    for name, item in (rollup.get("tiers") or {}).items():
+        n = item.get("n") or 0
+        ratio = (item.get("hits") or 0) / item["sumPred"] if item.get("sumPred") else None
+        adjustments["tiers"][name] = round_num(bounded_scale(ratio, n, prior=max(prior, 30)), 3)
+    for band in rollup.get("bands") or []:
+        n = band.get("n") or 0
+        ratio = (band.get("hits") or 0) / band["sumPred"] if band.get("sumPred") else None
+        adjustments["bands"].append({
+            "lo": band["lo"], "hi": band["hi"],
+            "scale": round_num(bounded_scale(ratio, n, prior=max(prior, 30)), 3),
+        })
+    return adjustments
 
 
 def _slate_count(schedule, season, week):
@@ -1071,6 +1219,8 @@ def _poisson_block(td_rows):
             continue
         bins.append({
             "lo": lo, "hi": min(hi, 1), "n": len(group),
+            "hits": int(sum(hit for _, hit in group)),
+            "sumPred": float(sum(prob for prob, _ in group)),
             "predicted": round_num(sum(prob for prob, _ in group) / len(group), 3),
             "actual": round_num(sum(hit for _, hit in group) / len(group), 3),
         })

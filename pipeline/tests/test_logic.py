@@ -8,8 +8,10 @@ import pandas as pd
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from nflboard.logic import (  # noqa: E402
+    add_rollups,
     bounded_scale,
     build_week,
+    display_scale,
     game_has_price,
     poisson_at_least,
     score_week,
@@ -126,6 +128,17 @@ class LogicTest(unittest.TestCase):
         for value in report["adjustments"]["tdLambda"].values():
             self.assertGreaterEqual(value, 0.9)
             self.assertLessEqual(value, 1.1)
+
+    def test_tier_and_band_scales_stay_inside_ten_percent_and_roll_forward(self):
+        self.assertEqual(display_scale(0.4, "confident", {"tiers": {"confident": 1.2}, "bands": [{"lo": 0.2, "hi": 0.6, "scale": 1.2}]}), 1.1)
+        self.assertEqual(display_scale(0.4, "confident", None), 1.0)
+        rolled = add_rollups(
+            {"weeks": [11], "byStat": {"RB:rushYds": {"n": 10, "sumPred": 100, "sumActual": 90, "sumAbs": 20}}, "tiers": {"confident": {"n": 4, "hits": 2, "sumPred": 2}}, "bands": [{"lo": 0, "hi": 0.2, "n": 3, "hits": 1, "sumPred": 0.4}]},
+            {"weeks": [12], "byStat": {"RB:rushYds": {"n": 5, "sumPred": 40, "sumActual": 50, "sumAbs": 12}}, "tiers": {"confident": {"n": 2, "hits": 2, "sumPred": 1}}, "bands": [{"lo": 0, "hi": 0.2, "n": 1, "hits": 0, "sumPred": 0.1}]},
+        )
+        self.assertEqual(rolled["weeks"], [11, 12])
+        self.assertEqual(rolled["byStat"]["RB:rushYds"]["n"], 15)
+        self.assertEqual(rolled["tiers"]["confident"]["hits"], 4)
 
     def test_tuesday_targets_the_open_week_only(self):
         _, schedule = frames()

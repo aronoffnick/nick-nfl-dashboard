@@ -85,6 +85,54 @@ def _merge_parlays(existing, generated):
     return merged
 
 
+def _latest_real_coverage(data: Path, before_week: int):
+    chosen = None
+    chosen_week = -1
+    for path in data.glob("coverage-wk*.json"):
+        digits = "".join(ch for ch in path.stem if ch.isdigit())
+        if not digits or int(digits) >= before_week:
+            continue
+        payload = read_json(path)
+        if _coverage_has_mix(payload) and int(digits) > chosen_week:
+            chosen = payload
+            chosen_week = int(digits)
+    return chosen
+
+
+def carry_coverage_mix(coverage: dict, prior: dict | None) -> dict:
+    """Copy the latest real defensive mix forward and mark it stale. No mix is invented."""
+    if not prior or _coverage_has_mix(coverage):
+        return coverage
+    by_defense = {}
+    for game in (prior.get("games") or {}).values():
+        for info in (game.get("offenses") or {}).values():
+            if info.get("mix") and info.get("defense"):
+                by_defense[info["defense"]] = info["mix"]
+    if not by_defense:
+        return coverage
+    carried = json.loads(json.dumps(coverage))
+    used = 0
+    for game in (carried.get("games") or {}).values():
+        for info in (game.get("offenses") or {}).values():
+            mix = by_defense.get(info.get("defense"))
+            if not mix:
+                info["mix"] = None
+                info["mixNote"] = "unavailable"
+                continue
+            info["mix"] = mix
+            info["mixNote"] = "stale"
+            info["staleFrom"] = f"week {prior.get('week')}"
+            used += 1
+    carried["stale"] = True
+    carried["staleFromWeek"] = prior.get("week")
+    carried["unavailable"] = None if used else carried.get("unavailable")
+    carried["staleNote"] = (
+        f"2026 participation is not published. Mixes are the week {prior.get('week')} "
+        "defensive mix, carried forward and labeled stale. Defenses with no earlier mix stay blank."
+    )
+    return carried
+
+
 def _coverage_has_mix(payload) -> bool:
     for game in (payload or {}).get("games", {}).values():
         for offense in (game.get("offenses") or {}).values():
@@ -137,14 +185,9 @@ def write_bundle(root: Path, season: int, week: int, bundle: dict, mode: str) ->
         coverage_path = data / f"coverage-wk{week}.json"
         existing_coverage = read_json(coverage_path)
         if not _coverage_has_mix(existing_coverage):
-            write_json(coverage_path, bundle["coverage"])
+            carried = carry_coverage_mix(bundle["coverage"], _latest_real_coverage(data, week))
+            write_json(coverage_path, carried)
             written.append(str(coverage_path.relative_to(root)))
-
-        snapshot_path = data / f"parlay-snapshot-wk{week}.json"
-        existing_snapshot = read_json(snapshot_path)
-        if not _snapshot_has_price(existing_snapshot):
-            write_json(snapshot_path, bundle["snapshot"])
-            written.append(str(snapshot_path.relative_to(root)))
 
         _copy_td_coverage(data, week)
         written.append(f"dashboard/src/data/td-coverage-wk{week}.json")

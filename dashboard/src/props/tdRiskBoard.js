@@ -19,6 +19,8 @@ const FLAVOR_LABEL = {
   safer3plus: 'Safer 3+',
   backup_1td: 'Backup',
   backup1: 'Backup',
+  long_shot: 'Long shot',
+  longShot: 'Long shot',
 }
 
 export function flavorLabel(pick) {

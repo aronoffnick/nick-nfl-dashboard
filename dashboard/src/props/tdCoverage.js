@@ -210,6 +210,7 @@ function sideContext(side, game, coverage, tdCoverage) {
     manLg: league,
     zoneLg: league == null ? null : 1 - league,
     clipped: entry?.mixNote === 'clipped',
+    stale: entry?.mixNote === 'stale',
     hasMix: man != null && league != null,
   }
 }
@@ -278,12 +279,15 @@ export function mergeTouchdownSides(sides) {
 export function applyCoverage(game, coverage, tdCoverage, rules, options) {
   if (!game || !coverage?.games || !tdCoverage?.players) return game
   const extraDamp = options?.coverageDamp ?? options?.extraDamp ?? 1
-  return {
-    ...game,
-    coverageApplied: true,
-    sides: (game.sides || []).map(side => ({
-      ...side,
-      rows: (side.rows || []).map(row => adjustRow(row, { ...sideContext(side, game, coverage, tdCoverage), rules, extraDamp })),
-    })),
-  }
+  let applied = false
+  let stale = false
+  const sides = (game.sides || []).map(side => {
+    const context = { ...sideContext(side, game, coverage, tdCoverage), rules, extraDamp }
+    if (!context.hasMix) return side
+    applied = true
+    if (context.stale) stale = true
+    return { ...side, rows: (side.rows || []).map(row => adjustRow(row, context)) }
+  })
+  if (!applied) return game
+  return { ...game, coverageApplied: true, coverageStale: stale, sides }
 }

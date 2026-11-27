@@ -14,6 +14,7 @@ on:
     # 11:00 UTC is 6:00 AM Eastern Standard Time and 7:00 AM Eastern Daylight Time.
     - cron: "0 11 * * 2" # Tuesday, the new week
     - cron: "0 11 * * 4" # Thursday refresh
+    - cron: "0 15 * * 5" # Friday game-day price snapshot, 10:00 AM Eastern Standard Time
     - cron: "0 11 * * 0" # Sunday refresh
 
 permissions:
@@ -30,13 +31,30 @@ jobs:
           python-version: "3.12"
           cache: pip
           cache-dependency-path: pipeline/requirements.txt
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
       - run: pip install -r pipeline/requirements.txt
+      - name: Test the pipeline and the dashboard
+        run: |
+          python -m unittest tests.test_logic tests.test_prices
+          cd ..
+          npm ci --prefix dashboard
+          node --test dashboard/tests/*.mjs
+        working-directory: pipeline
       - name: Build the week
         run: |
           if [ -n "${{ inputs.week }}" ]; then
             python pipeline/run.py --season "${{ inputs.season || '2026' }}" --week "${{ inputs.week }}"
           else
             python pipeline/run.py --auto --season "${{ inputs.season || '2026' }}"
+          fi
+      - name: Save the price snapshot
+        run: |
+          if [ -n "${{ inputs.week }}" ]; then
+            python pipeline/prices.py --season "${{ inputs.season || '2026' }}" --week "${{ inputs.week }}"
+          else
+            python pipeline/prices.py --auto --season "${{ inputs.season || '2026' }}"
           fi
       - name: Open a pull request
         env:
@@ -56,14 +74,16 @@ jobs:
           existing=$(gh pr list --head "$branch" --json number --jq '.[0].number // empty')
           if [ -n "$existing" ]; then
             echo "Updated the open pull request for $branch."
+            number="$existing"
           else
-            gh pr create --base main --head "$branch" --title "Refresh the weekly NFL slate" --body "$(cat <<'EOF'
+            number=$(gh pr create --base main --head "$branch" --title "Refresh the weekly NFL slate" --json number --jq .number --body "$(cat <<'EOF'
           ## Summary
           - Regenerates the week files from public nflverse stats and the schedule.
-          - Scores finished games and applies bounded scales to the next week.
-          - Leaves sportsbook prices blank when no snapshot is available. Saved priced games are kept.
+          - Scores finished games, rolling the calibration forward, and applies scales inside 10%.
+          - Saves a getoddy snapshot when that source answers. Existing prices stay. A missed fetch leaves the price blank.
 
-          This workflow does not push to main.
+          Tests in this workflow already passed. The data pull request is merged from here.
           EOF
-          )"
+          )")
           fi
+          gh pr merge "$number" --merge

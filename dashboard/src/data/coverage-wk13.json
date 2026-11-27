@@ -1,7 +1,7 @@
 {
   "week": 13,
   "estimate": true,
-  "unavailable": "nflverse has no 2026 participation file, so coverage mixes are left blank rather than copied from another season.",
+  "unavailable": null,
   "coverages": [
     {
       "key": "COVER_0",
@@ -44,13 +44,31 @@
       "offenses": {
         "KC": {
           "defense": "LAR",
-          "mix": null,
-          "mixNote": "unavailable"
+          "mix": {
+            "COVER_0": 0.0418,
+            "COVER_1": 0.1364,
+            "2_MAN": 0.0669,
+            "COVER_2": 0.3,
+            "COVER_3": 0.2167,
+            "COVER_4": 0.1401,
+            "COVER_6": 0.0979
+          },
+          "mixNote": "stale",
+          "staleFrom": "week 12"
         },
         "LAR": {
           "defense": "KC",
-          "mix": null,
-          "mixNote": "unavailable"
+          "mix": {
+            "COVER_0": 0.0615,
+            "COVER_1": 0.1796,
+            "2_MAN": 0.085,
+            "COVER_2": 0.3108,
+            "COVER_3": 0.1713,
+            "COVER_4": 0.1457,
+            "COVER_6": 0.0461
+          },
+          "mixNote": "stale",
+          "staleFrom": "week 12"
         }
       }
     },
@@ -58,13 +76,31 @@
       "offenses": {
         "CIN": {
           "defense": "CLE",
-          "mix": null,
-          "mixNote": "unavailable"
+          "mix": {
+            "COVER_0": 0.0467,
+            "COVER_1": 0.3944,
+            "2_MAN": 0.0164,
+            "COVER_2": 0.1573,
+            "COVER_3": 0.3089,
+            "COVER_4": 0.0498,
+            "COVER_6": 0.0265
+          },
+          "mixNote": "stale",
+          "staleFrom": "week 12"
         },
         "CLE": {
           "defense": "CIN",
-          "mix": null,
-          "mixNote": "unavailable"
+          "mix": {
+            "COVER_0": 0.0564,
+            "COVER_1": 0.2213,
+            "2_MAN": 0.0585,
+            "COVER_2": 0.2713,
+            "COVER_3": 0.2848,
+            "COVER_4": 0.0439,
+            "COVER_6": 0.0638
+          },
+          "mixNote": "stale",
+          "staleFrom": "week 12"
         }
       }
     },
@@ -72,13 +108,31 @@
       "offenses": {
         "DET": {
           "defense": "ATL",
-          "mix": null,
-          "mixNote": "unavailable"
+          "mix": {
+            "COVER_0": 0.0278,
+            "COVER_1": 0.3228,
+            "2_MAN": 0.0216,
+            "COVER_2": 0.1415,
+            "COVER_3": 0.2916,
+            "COVER_4": 0.1415,
+            "COVER_6": 0.0532
+          },
+          "mixNote": "stale",
+          "staleFrom": "week 12"
         },
         "ATL": {
           "defense": "DET",
-          "mix": null,
-          "mixNote": "unavailable"
+          "mix": {
+            "COVER_0": 0.0192,
+            "COVER_1": 0.243,
+            "2_MAN": 0.1339,
+            "COVER_2": 0.2133,
+            "COVER_3": 0.243,
+            "COVER_4": 0.093,
+            "COVER_6": 0.0546
+          },
+          "mixNote": "stale",
+          "staleFrom": "week 12"
         }
       }
     },
@@ -86,13 +140,31 @@
       "offenses": {
         "GB": {
           "defense": "NO",
-          "mix": null,
-          "mixNote": "unavailable"
+          "mix": {
+            "COVER_0": 0.0355,
+            "COVER_1": 0.183,
+            "2_MAN": 0.0219,
+            "COVER_2": 0.1448,
+            "COVER_3": 0.4481,
+            "COVER_4": 0.0876,
+            "COVER_6": 0.079
+          },
+          "mixNote": "stale",
+          "staleFrom": "week 12"
         },
         "NO": {
           "defense": "GB",
-          "mix": null,
-          "mixNote": "unavailable"
+          "mix": {
+            "COVER_0": 0.0515,
+            "COVER_1": 0.1031,
+            "2_MAN": 0.0103,
+            "COVER_2": 0.2165,
+            "COVER_3": 0.2474,
+            "COVER_4": 0.268,
+            "COVER_6": 0.1031
+          },
+          "mixNote": "stale",
+          "staleFrom": "week 12"
         }
       }
     },
@@ -100,13 +172,31 @@
       "offenses": {
         "JAX": {
           "defense": "CHI",
-          "mix": null,
-          "mixNote": "unavailable"
+          "mix": {
+            "COVER_0": 0.0437,
+            "COVER_1": 0.2738,
+            "2_MAN": 0.0754,
+            "COVER_2": 0.3077,
+            "COVER_3": 0.2033,
+            "COVER_4": 0.0547,
+            "COVER_6": 0.0413
+          },
+          "mixNote": "stale",
+          "staleFrom": "week 12"
         },
         "CHI": {
           "defense": "JAX",
-          "mix": null,
-          "mixNote": "unavailable"
+          "mix": {
+            "COVER_0": 0.0084,
+            "COVER_1": 0.1717,
+            "2_MAN": 0.0722,
+            "COVER_2": 0.1968,
+            "COVER_3": 0.3065,
+            "COVER_4": 0.1248,
+            "COVER_6": 0.1197
+          },
+          "mixNote": "stale",
+          "staleFrom": "week 12"
         }
       }
     },
@@ -114,13 +204,31 @@
       "offenses": {
         "LAC": {
           "defense": "TB",
-          "mix": null,
-          "mixNote": "unavailable"
+          "mix": {
+            "COVER_0": 0.0562,
+            "COVER_1": 0.2062,
+            "2_MAN": 0.058,
+            "COVER_2": 0.1766,
+            "COVER_3": 0.3702,
+            "COVER_4": 0.0912,
+            "COVER_6": 0.0415
+          },
+          "mixNote": "stale",
+          "staleFrom": "week 12"
         },
         "TB": {
           "defense": "LAC",
-          "mix": null,
-          "mixNote": "unavailable"
+          "mix": {
+            "COVER_0": 0.04,
+            "COVER_1": 0.1279,
+            "2_MAN": 0.0555,
+            "COVER_2": 0.2795,
+            "COVER_3": 0.3057,
+            "COVER_4": 0.1261,
+            "COVER_6": 0.0652
+          },
+          "mixNote": "stale",
+          "staleFrom": "week 12"
         }
       }
     },
@@ -128,13 +236,31 @@
       "offenses": {
         "SF": {
           "defense": "NYG",
-          "mix": null,
-          "mixNote": "unavailable"
+          "mix": {
+            "COVER_0": 0.0,
+            "COVER_1": 0.2512,
+            "2_MAN": 0.1274,
+            "COVER_2": 0.2015,
+            "COVER_3": 0.1732,
+            "COVER_4": 0.1894,
+            "COVER_6": 0.0574
+          },
+          "mixNote": "stale",
+          "staleFrom": "week 12"
         },
         "NYG": {
           "defense": "SF",
-          "mix": null,
-          "mixNote": "unavailable"
+          "mix": {
+            "COVER_0": 0.0266,
+            "COVER_1": 0.2182,
+            "2_MAN": 0.016,
+            "COVER_2": 0.1743,
+            "COVER_3": 0.3385,
+            "COVER_4": 0.1392,
+            "COVER_6": 0.0871
+          },
+          "mixNote": "stale",
+          "staleFrom": "week 12"
         }
       }
     },
@@ -142,13 +268,31 @@
       "offenses": {
         "WAS": {
           "defense": "TEN",
-          "mix": null,
-          "mixNote": "unavailable"
+          "mix": {
+            "COVER_0": 0.0353,
+            "COVER_1": 0.2017,
+            "2_MAN": 0.0377,
+            "COVER_2": 0.2952,
+            "COVER_3": 0.2734,
+            "COVER_4": 0.0957,
+            "COVER_6": 0.0611
+          },
+          "mixNote": "stale",
+          "staleFrom": "week 12"
         },
         "TEN": {
           "defense": "WAS",
-          "mix": null,
-          "mixNote": "unavailable"
+          "mix": {
+            "COVER_0": 0.0192,
+            "COVER_1": 0.1687,
+            "2_MAN": 0.0542,
+            "COVER_2": 0.2842,
+            "COVER_3": 0.1632,
+            "COVER_4": 0.2271,
+            "COVER_6": 0.0835
+          },
+          "mixNote": "stale",
+          "staleFrom": "week 12"
         }
       }
     },
@@ -156,13 +300,31 @@
       "offenses": {
         "MIA": {
           "defense": "DEN",
-          "mix": null,
-          "mixNote": "unavailable"
+          "mix": {
+            "COVER_0": 0.0541,
+            "COVER_1": 0.2572,
+            "2_MAN": 0.0982,
+            "COVER_2": 0.2195,
+            "COVER_3": 0.1939,
+            "COVER_4": 0.12,
+            "COVER_6": 0.0573
+          },
+          "mixNote": "stale",
+          "staleFrom": "week 12"
         },
         "DEN": {
           "defense": "MIA",
-          "mix": null,
-          "mixNote": "unavailable"
+          "mix": {
+            "COVER_0": 0.0242,
+            "COVER_1": 0.1954,
+            "2_MAN": 0.0513,
+            "COVER_2": 0.3835,
+            "COVER_3": 0.2331,
+            "COVER_4": 0.0776,
+            "COVER_6": 0.035
+          },
+          "mixNote": "stale",
+          "staleFrom": "week 12"
         }
       }
     },
@@ -170,13 +332,31 @@
       "offenses": {
         "PHI": {
           "defense": "ARI",
-          "mix": null,
-          "mixNote": "unavailable"
+          "mix": {
+            "COVER_0": 0.0265,
+            "COVER_1": 0.1341,
+            "2_MAN": 0.0906,
+            "COVER_2": 0.2619,
+            "COVER_3": 0.2011,
+            "COVER_4": 0.1687,
+            "COVER_6": 0.1171
+          },
+          "mixNote": "stale",
+          "staleFrom": "week 12"
         },
         "ARI": {
           "defense": "PHI",
-          "mix": null,
-          "mixNote": "unavailable"
+          "mix": {
+            "COVER_0": 0.0,
+            "COVER_1": 0.2777,
+            "2_MAN": 0.1704,
+            "COVER_2": 0.1595,
+            "COVER_3": 0.1907,
+            "COVER_4": 0.1259,
+            "COVER_6": 0.0759
+          },
+          "mixNote": "stale",
+          "staleFrom": "week 12"
         }
       }
     },
@@ -184,13 +364,31 @@
       "offenses": {
         "BUF": {
           "defense": "NE",
-          "mix": null,
-          "mixNote": "unavailable"
+          "mix": {
+            "COVER_0": 0.0263,
+            "COVER_1": 0.2195,
+            "2_MAN": 0.0213,
+            "COVER_2": 0.3308,
+            "COVER_3": 0.2542,
+            "COVER_4": 0.1178,
+            "COVER_6": 0.0301
+          },
+          "mixNote": "stale",
+          "staleFrom": "week 12"
         },
         "NE": {
           "defense": "BUF",
-          "mix": null,
-          "mixNote": "unavailable"
+          "mix": {
+            "COVER_0": 0.0386,
+            "COVER_1": 0.1932,
+            "2_MAN": 0.1035,
+            "COVER_2": 0.2473,
+            "COVER_3": 0.2523,
+            "COVER_4": 0.1035,
+            "COVER_6": 0.0614
+          },
+          "mixNote": "stale",
+          "staleFrom": "week 12"
         }
       }
     },
@@ -198,13 +396,31 @@
       "offenses": {
         "CAR": {
           "defense": "MIN",
-          "mix": null,
-          "mixNote": "unavailable"
+          "mix": {
+            "COVER_0": 0.0413,
+            "COVER_1": 0.0615,
+            "2_MAN": 0.0652,
+            "COVER_2": 0.44,
+            "COVER_3": 0.1951,
+            "COVER_4": 0.1423,
+            "COVER_6": 0.0546
+          },
+          "mixNote": "stale",
+          "staleFrom": "week 12"
         },
         "MIN": {
           "defense": "CAR",
-          "mix": null,
-          "mixNote": "unavailable"
+          "mix": {
+            "COVER_0": 0.0231,
+            "COVER_1": 0.2038,
+            "2_MAN": 0.0086,
+            "COVER_2": 0.2088,
+            "COVER_3": 0.3668,
+            "COVER_4": 0.1326,
+            "COVER_6": 0.0563
+          },
+          "mixNote": "stale",
+          "staleFrom": "week 12"
         }
       }
     },
@@ -212,13 +428,31 @@
       "offenses": {
         "HOU": {
           "defense": "PIT",
-          "mix": null,
-          "mixNote": "unavailable"
+          "mix": {
+            "COVER_0": 0.0536,
+            "COVER_1": 0.1857,
+            "2_MAN": 0.0458,
+            "COVER_2": 0.2765,
+            "COVER_3": 0.227,
+            "COVER_4": 0.1335,
+            "COVER_6": 0.078
+          },
+          "mixNote": "stale",
+          "staleFrom": "week 12"
         },
         "PIT": {
           "defense": "HOU",
-          "mix": null,
-          "mixNote": "unavailable"
+          "mix": {
+            "COVER_0": 0.0194,
+            "COVER_1": 0.3076,
+            "2_MAN": 0.0109,
+            "COVER_2": 0.227,
+            "COVER_3": 0.2387,
+            "COVER_4": 0.1204,
+            "COVER_6": 0.076
+          },
+          "mixNote": "stale",
+          "staleFrom": "week 12"
         }
       }
     },
@@ -226,15 +460,36 @@
       "offenses": {
         "DAL": {
           "defense": "SEA",
-          "mix": null,
-          "mixNote": "unavailable"
+          "mix": {
+            "COVER_0": 0.032,
+            "COVER_1": 0.1608,
+            "2_MAN": 0.0781,
+            "COVER_2": 0.3508,
+            "COVER_3": 0.2256,
+            "COVER_4": 0.0781,
+            "COVER_6": 0.0747
+          },
+          "mixNote": "stale",
+          "staleFrom": "week 12"
         },
         "SEA": {
           "defense": "DAL",
-          "mix": null,
-          "mixNote": "unavailable"
+          "mix": {
+            "COVER_0": 0.0373,
+            "COVER_1": 0.2387,
+            "2_MAN": 0.0054,
+            "COVER_2": 0.2212,
+            "COVER_3": 0.3281,
+            "COVER_4": 0.1128,
+            "COVER_6": 0.0564
+          },
+          "mixNote": "stale",
+          "staleFrom": "week 12"
         }
       }
     }
-  }
+  },
+  "stale": true,
+  "staleFromWeek": 12,
+  "staleNote": "2026 participation is not published. Mixes are the week 12 defensive mix, carried forward and labeled stale. Defenses with no earlier mix stay blank."
 }
