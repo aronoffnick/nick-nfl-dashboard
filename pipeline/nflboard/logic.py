@@ -887,7 +887,15 @@ def build_week(stats, schedule, pbp, season: int, week: int, adjustments=None):
             if player["team"] not in {away, home}:
                 continue
             defense = home if player["team"] == away else away
-            player = {**player, "projected": project_player(player, defense, factors, adjustments)}
+            projected = project_player(player, defense, factors, adjustments)
+            try:
+                from nflboard.qb_starters import starter_for, scale_projection
+                spec = starter_for(season, week, player["team"])
+                if spec:
+                    projected = scale_projection(player, projected, spec)
+            except Exception:
+                pass
+            player = {**player, "projected": projected}
             projected.append(player)
             stat_map = {}
             for stat, triple in player["projected"].items():

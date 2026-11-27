@@ -2,6 +2,7 @@ import { projectTeam, valid } from './model.js'
 import { fileForWeek } from '../data/weekFiles.js'
 import { scatterAbbrev } from './scatterCheck.js'
 import { applyScatter } from './pipelineProjection.js'
+import { applyQbStarter } from './qbStarter.js'
 
 export const THRESHOLDS = {
   QB: [
@@ -64,7 +65,8 @@ export function boardFor(data, matchup, roster, halfLife, window) {
   const gameKey = `${scatterAbbrev(matchup.away.abbr)}-${scatterAbbrev(matchup.home.abbr)}`
   const scatterPlayers = file.matched ? file.data?.games?.[gameKey]?.players : null
   const used = scatterPlayers ? applyScatter(players, scatterPlayers) : 0
-  const result = { players, source: used ? 'pipeline' : 'browser', asOf: file.data?.source || null }
+  const adjusted = applyQbStarter(players, data?.week)
+  const result = { players: adjusted, source: used ? 'pipeline' : 'browser', asOf: file.data?.source || null }
   cache.set(key, result)
   return result
 }
