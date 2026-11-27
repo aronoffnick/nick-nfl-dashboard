@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { fileForWeek } from '../data/weekFiles.js'
-import { scatterAbbrev } from './scatterCheck.js'
+import { statMetricPlayers } from './statMetrics.js'
 import './ScatterTab.css'
 
 const METRICS = [
@@ -44,7 +44,6 @@ export default function Stocks({ week, away, home }) {
   const [sortKey, setSortKey] = useState('sharpe')
   const [ascending, setAscending] = useState(false)
   const [picked, setPicked] = useState(null)
-  const teams = new Set([scatterAbbrev(away), scatterAbbrev(home)])
   const rows = useMemo(() => {
     const stockRows = new Map((data?.players || []).map(player => [joinKey(player), player]))
     const scores = new Map((breakout?.players || []).map(player => [joinKey(player), player.score]))
@@ -56,14 +55,14 @@ export default function Stocks({ week, away, home }) {
       merged.set(key, { ...prior, ...player, sharpe: prior.sharpe, meanExcess: prior.meanExcess, volatility: prior.volatility, upsideCapture: prior.upsideCapture, downsideCapture: prior.downsideCapture, beta: prior.beta, skew: prior.skew, tailRate: prior.tailRate, qbCorrelation: prior.qbCorrelation, games: prior.games || player.games, breakoutScore: scores.get(key) })
     }
     for (const [key, player] of merged) if (player.breakoutScore == null) player.breakoutScore = scores.get(key)
-    const source = [...merged.values()].filter(player => (position === 'All' || player.position === position) && (scope === 'all' || teams.has(player.team)))
+    const source = statMetricPlayers([...merged.values()], { away, home, position })
     return source.sort((a, b) => {
       const av = a[sortKey], bv = b[sortKey]
       if (!Number.isFinite(av)) return 1
       if (!Number.isFinite(bv)) return -1
       return (av - bv) * (ascending ? 1 : -1) || a.name.localeCompare(b.name)
     })
-  }, [data, momentum, breakout, position, scope, sortKey, ascending, away, home])
+  }, [data, momentum, breakout, position, sortKey, ascending, away, home])
   function header(key, label, tip = data?.tooltips?.[key] || '') {
     return <button className="sort" title={tip} onClick={() => { if (sortKey === key) setAscending(value => !value); else { setSortKey(key); setAscending(false) } }}>{label} {sortKey === key ? (ascending ? '↑' : '↓') : '↕'}</button>
   }
