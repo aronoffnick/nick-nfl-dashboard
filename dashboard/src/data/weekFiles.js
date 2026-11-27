@@ -9,6 +9,7 @@ const groups = {
   tdCoverage: import.meta.glob('./td-coverage-wk*.json', { eager: true, import: 'default' }),
   coverage: import.meta.glob('./coverage-wk*.json', { eager: true, import: 'default' }),
   parlays: import.meta.glob('./parlays-wk*.json', { eager: true, import: 'default' }),
+  teamOdds: import.meta.glob('./team-odds-wk*.json', { eager: true, import: 'default' }),
   defense: import.meta.glob('./defense-vs-opponents-wk*.json', { eager: true, import: 'default' }),
   wr: import.meta.glob('../props/wr-starters-week*.json', { eager: true, import: 'default' }),
   rb: import.meta.glob('../props/rb-starters-week*.json', { eager: true, import: 'default' }),

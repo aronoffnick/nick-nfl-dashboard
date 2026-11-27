@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
 import { gradePick, preKickoffPick, usableSnapshot } from '../src/boardModel.js'
-import { chooseGroup } from '../src/teamParlayPick.js'
+import { chooseGroup, coverProb } from '../src/teamParlayPick.js'
 
 const team = (id, abbr) => ({ id, abbr, name: abbr, pass: 200, rush: 100, points: 20 })
 
@@ -20,6 +20,11 @@ test('the pre-kickoff pick ignores a game played after the kickoff', () => {
   const before = preKickoffPick(data, { id: 'm', date: '2026-11-01T17:00:00Z', away: 'a', home: 'h', neutral: false })
   const after = preKickoffPick(data, { id: 'm2', date: '2026-11-27T17:00:00Z', away: 'a', home: 'h', neutral: false })
   assert.notEqual(before.winnerId, after.winnerId)
+})
+
+test('a home dog covers more often when the model is a pickem', () => {
+  assert.ok(coverProb(0, 3.5) > 0.5)
+  assert.ok(coverProb(0, -3.5) < 0.5)
 })
 
 test('a parlay outside the odds range is dropped', () => {

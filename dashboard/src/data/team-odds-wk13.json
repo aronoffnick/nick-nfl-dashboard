@@ -1,0 +1,456 @@
+{
+  "season": 2026,
+  "week": 13,
+  "source": "ESPN scoreboard odds",
+  "asOf": "Nov 27, 2:23 PM ET",
+  "games": {
+    "KC-LAR": {
+      "away": "KC",
+      "home": "LAR",
+      "status": "pre",
+      "source": "ESPN scoreboard odds",
+      "book": "DraftKings",
+      "asOf": "Nov 27, 2:23 PM ET",
+      "moneyline": {
+        "KC": {
+          "price": -108,
+          "book": "DraftKings"
+        },
+        "LAR": {
+          "price": -109,
+          "book": "DraftKings"
+        }
+      },
+      "spread": {
+        "homeLine": -1.5,
+        "awayLine": 1.5,
+        "KC": {
+          "line": 1.5,
+          "price": -121,
+          "book": "DraftKings"
+        },
+        "LAR": {
+          "line": -1.5,
+          "price": 101,
+          "book": "DraftKings"
+        }
+      }
+    },
+    "DET-ATL": {
+      "away": "DET",
+      "home": "ATL",
+      "status": "pre",
+      "source": "ESPN scoreboard odds",
+      "book": "DraftKings",
+      "asOf": "Nov 27, 2:23 PM ET",
+      "moneyline": {
+        "DET": {
+          "price": -188,
+          "book": "DraftKings"
+        },
+        "ATL": {
+          "price": 157,
+          "book": "DraftKings"
+        }
+      },
+      "spread": {
+        "homeLine": 3.5,
+        "awayLine": -3.5,
+        "DET": {
+          "line": -3.5,
+          "price": -104,
+          "book": "DraftKings"
+        },
+        "ATL": {
+          "line": 3.5,
+          "price": -115,
+          "book": "DraftKings"
+        }
+      }
+    },
+    "JAX-CHI": {
+      "away": "JAX",
+      "home": "CHI",
+      "status": "pre",
+      "source": "ESPN scoreboard odds",
+      "book": "DraftKings",
+      "asOf": "Nov 27, 2:23 PM ET",
+      "moneyline": {
+        "JAX": {
+          "price": 130,
+          "book": "DraftKings"
+        },
+        "CHI": {
+          "price": -154,
+          "book": "DraftKings"
+        }
+      },
+      "spread": {
+        "homeLine": -3.0,
+        "awayLine": 3.0,
+        "JAX": {
+          "line": 3.0,
+          "price": -115,
+          "book": "DraftKings"
+        },
+        "CHI": {
+          "line": -3.0,
+          "price": -104,
+          "book": "DraftKings"
+        }
+      }
+    },
+    "CIN-CLE": {
+      "away": "CIN",
+      "home": "CLE",
+      "status": "pre",
+      "source": "ESPN scoreboard odds",
+      "book": "DraftKings",
+      "asOf": "Nov 27, 2:23 PM ET",
+      "moneyline": {
+        "CIN": {
+          "price": -257,
+          "book": "DraftKings"
+        },
+        "CLE": {
+          "price": 212,
+          "book": "DraftKings"
+        }
+      },
+      "spread": {
+        "homeLine": 6.0,
+        "awayLine": -6.0,
+        "CIN": {
+          "line": -6.0,
+          "price": -110,
+          "book": "DraftKings"
+        },
+        "CLE": {
+          "line": 6.0,
+          "price": -110,
+          "book": "DraftKings"
+        }
+      }
+    },
+    "WAS-TEN": {
+      "away": "WAS",
+      "home": "TEN",
+      "status": "pre",
+      "source": "ESPN scoreboard odds",
+      "book": "DraftKings",
+      "asOf": "Nov 27, 2:23 PM ET",
+      "moneyline": {
+        "WAS": {
+          "price": -230,
+          "book": "DraftKings"
+        },
+        "TEN": {
+          "price": 191,
+          "book": "DraftKings"
+        }
+      },
+      "spread": {
+        "homeLine": 4.5,
+        "awayLine": -4.5,
+        "WAS": {
+          "line": -4.5,
+          "price": -109,
+          "book": "DraftKings"
+        },
+        "TEN": {
+          "line": 4.5,
+          "price": -110,
+          "book": "DraftKings"
+        }
+      }
+    },
+    "GB-NO": {
+      "away": "GB",
+      "home": "NO",
+      "status": "pre",
+      "source": "ESPN scoreboard odds",
+      "book": "DraftKings",
+      "asOf": "Nov 27, 2:23 PM ET",
+      "moneyline": {
+        "GB": {
+          "price": -227,
+          "book": "DraftKings"
+        },
+        "NO": {
+          "price": 189,
+          "book": "DraftKings"
+        }
+      },
+      "spread": {
+        "homeLine": 4.5,
+        "awayLine": -4.5,
+        "GB": {
+          "line": -4.5,
+          "price": -118,
+          "book": "DraftKings"
+        },
+        "NO": {
+          "line": 4.5,
+          "price": -102,
+          "book": "DraftKings"
+        }
+      }
+    },
+    "SF-NYG": {
+      "away": "SF",
+      "home": "NYG",
+      "status": "pre",
+      "source": "ESPN scoreboard odds",
+      "book": "DraftKings",
+      "asOf": "Nov 27, 2:23 PM ET",
+      "moneyline": {
+        "SF": {
+          "price": -295,
+          "book": "DraftKings"
+        },
+        "NYG": {
+          "price": 241,
+          "book": "DraftKings"
+        }
+      },
+      "spread": {
+        "homeLine": 6.5,
+        "awayLine": -6.5,
+        "SF": {
+          "line": -6.5,
+          "price": -110,
+          "book": "DraftKings"
+        },
+        "NYG": {
+          "line": 6.5,
+          "price": -110,
+          "book": "DraftKings"
+        }
+      }
+    },
+    "LAC-TB": {
+      "away": "LAC",
+      "home": "TB",
+      "status": "pre",
+      "source": "ESPN scoreboard odds",
+      "book": "DraftKings",
+      "asOf": "Nov 27, 2:23 PM ET",
+      "moneyline": {
+        "LAC": {
+          "price": 209,
+          "book": "DraftKings"
+        },
+        "TB": {
+          "price": -253,
+          "book": "DraftKings"
+        }
+      },
+      "spread": {
+        "homeLine": -5.5,
+        "awayLine": 5.5,
+        "LAC": {
+          "line": 5.5,
+          "price": -110,
+          "book": "DraftKings"
+        },
+        "TB": {
+          "line": -5.5,
+          "price": -110,
+          "book": "DraftKings"
+        }
+      }
+    },
+    "MIA-DEN": {
+      "away": "MIA",
+      "home": "DEN",
+      "status": "pre",
+      "source": "ESPN scoreboard odds",
+      "book": "DraftKings",
+      "asOf": "Nov 27, 2:23 PM ET",
+      "moneyline": {
+        "MIA": {
+          "price": 710,
+          "book": "DraftKings"
+        },
+        "DEN": {
+          "price": -1100,
+          "book": "DraftKings"
+        }
+      },
+      "spread": {
+        "homeLine": -14.5,
+        "awayLine": 14.5,
+        "MIA": {
+          "line": 14.5,
+          "price": -114,
+          "book": "DraftKings"
+        },
+        "DEN": {
+          "line": -14.5,
+          "price": -106,
+          "book": "DraftKings"
+        }
+      }
+    },
+    "PHI-ARI": {
+      "away": "PHI",
+      "home": "ARI",
+      "status": "pre",
+      "source": "ESPN scoreboard odds",
+      "book": "DraftKings",
+      "asOf": "Nov 27, 2:23 PM ET",
+      "moneyline": {
+        "PHI": {
+          "price": -167,
+          "book": "DraftKings"
+        },
+        "ARI": {
+          "price": 141,
+          "book": "DraftKings"
+        }
+      },
+      "spread": {
+        "homeLine": 3.0,
+        "awayLine": -3.0,
+        "PHI": {
+          "line": -3.0,
+          "price": -115,
+          "book": "DraftKings"
+        },
+        "ARI": {
+          "line": 3.0,
+          "price": -104,
+          "book": "DraftKings"
+        }
+      }
+    },
+    "CAR-MIN": {
+      "away": "CAR",
+      "home": "MIN",
+      "status": "pre",
+      "source": "ESPN scoreboard odds",
+      "book": "DraftKings",
+      "asOf": "Nov 27, 2:23 PM ET",
+      "moneyline": {
+        "CAR": {
+          "price": 201,
+          "book": "DraftKings"
+        },
+        "MIN": {
+          "price": -243,
+          "book": "DraftKings"
+        }
+      },
+      "spread": {
+        "homeLine": -5.5,
+        "awayLine": 5.5,
+        "CAR": {
+          "line": 5.5,
+          "price": -110,
+          "book": "DraftKings"
+        },
+        "MIN": {
+          "line": -5.5,
+          "price": -109,
+          "book": "DraftKings"
+        }
+      }
+    },
+    "BUF-NE": {
+      "away": "BUF",
+      "home": "NE",
+      "status": "pre",
+      "source": "ESPN scoreboard odds",
+      "book": "DraftKings",
+      "asOf": "Nov 27, 2:23 PM ET",
+      "moneyline": {
+        "BUF": {
+          "price": -790,
+          "book": "DraftKings"
+        },
+        "NE": {
+          "price": 555,
+          "book": "DraftKings"
+        }
+      },
+      "spread": {
+        "homeLine": 12.5,
+        "awayLine": -12.5,
+        "BUF": {
+          "line": -12.5,
+          "price": -110,
+          "book": "DraftKings"
+        },
+        "NE": {
+          "line": 12.5,
+          "price": -110,
+          "book": "DraftKings"
+        }
+      }
+    },
+    "HOU-PIT": {
+      "away": "HOU",
+      "home": "PIT",
+      "status": "pre",
+      "source": "ESPN scoreboard odds",
+      "book": "DraftKings",
+      "asOf": "Nov 27, 2:23 PM ET",
+      "moneyline": {
+        "HOU": {
+          "price": -221,
+          "book": "DraftKings"
+        },
+        "PIT": {
+          "price": 183,
+          "book": "DraftKings"
+        }
+      },
+      "spread": {
+        "homeLine": 4.5,
+        "awayLine": -4.5,
+        "HOU": {
+          "line": -4.5,
+          "price": -108,
+          "book": "DraftKings"
+        },
+        "PIT": {
+          "line": 4.5,
+          "price": -111,
+          "book": "DraftKings"
+        }
+      }
+    },
+    "DAL-SEA": {
+      "away": "DAL",
+      "home": "SEA",
+      "status": "pre",
+      "source": "ESPN scoreboard odds",
+      "book": "DraftKings",
+      "asOf": "Nov 27, 2:23 PM ET",
+      "moneyline": {
+        "DAL": {
+          "price": 223,
+          "book": "DraftKings"
+        },
+        "SEA": {
+          "price": -272,
+          "book": "DraftKings"
+        }
+      },
+      "spread": {
+        "homeLine": -6.0,
+        "awayLine": 6.0,
+        "DAL": {
+          "line": 6.0,
+          "price": -110,
+          "book": "DraftKings"
+        },
+        "SEA": {
+          "line": -6.0,
+          "price": -109,
+          "book": "DraftKings"
+        }
+      }
+    }
+  }
+}

@@ -1,7 +1,7 @@
 import { fileForWeek } from './data/weekFiles.js'
 import { scatterAbbrev } from './props/scatterCheck.js'
 import { americanToDecimal, decimalToAmerican } from './props/betGenerator.js'
-import { chooseGroup } from './teamParlayPick.js'
+import { chooseGroup, coverProb } from './teamParlayPick.js'
 import { favoriteWinEstimate } from './props/diversifiedParlays.js'
 
 export function americanImplied(price) {
@@ -24,48 +24,68 @@ function moneylineIndex(week) {
     let asOf = game.snapshot?.game_asof || game.snapshot?.props_asof || null
     for (const leg of game.legs || []) {
       if (leg.market !== 'ML' || !leg.priced || leg.price == null) continue
-      prices[leg.team] = { price: Number(leg.price), book: leg.book || '', asOf: leg.asof || asOf }
+      prices[leg.team] = { price: Number(leg.price), book: leg.book || '', asOf: leg.asof || asOf, source: 'getoddy snapshot' }
       if (leg.asof) asOf = leg.asof
     }
-    byKey.set(key, { prices, asOf, source: 'getoddy snapshot' })
+    byKey.set(key, { prices, asOf })
   }
-  return { byKey, matched: file.matched }
+  return byKey
+}
+
+function espnIndex(week) {
+  return fileForWeek('teamOdds', week).data?.games || {}
+}
+
+function consider(legs, game, side, quote, prob, bet) {
+  if (!quote || quote.price == null) return
+  const implied = americanImplied(quote.price)
+  if (implied == null) return
+  const edge = prob - implied
+  if (edge <= 0) return
+  const team = game[side]
+  legs.push({
+    gameId: game.id,
+    team: team.abbr,
+    teamName: team.name,
+    side,
+    bet,
+    line: quote.line,
+    price: quote.price,
+    book: quote.book,
+    asOf: quote.asOf,
+    source: quote.source,
+    prob,
+    edge,
+    decimal: americanToDecimal(quote.price),
+  })
 }
 
 export function teamCandidates(matchups, week) {
-  const { byKey } = moneylineIndex(week)
+  const saved = moneylineIndex(week)
+  const espn = espnIndex(week)
   const legs = []
   for (const game of matchups || []) {
     if (game.started || game.final) continue
-    const book = byKey.get(`${scatterAbbrev(game.away.abbr)}-${scatterAbbrev(game.home.abbr)}`)
-    if (!book) continue
+    const key = `${scatterAbbrev(game.away.abbr)}-${scatterAbbrev(game.home.abbr)}`
+    const prior = saved.get(key)
+    const board = espn[key]
     const favorite = game.margin < 0.05 ? 0.5 : favoriteWinEstimate(game.margin)
-    const model = {
+    const win = {
       away: game.margin < 0.05 ? 0.5 : (game.winner.id === game.away.id ? favorite : 1 - favorite),
       home: game.margin < 0.05 ? 0.5 : (game.winner.id === game.home.id ? favorite : 1 - favorite),
     }
+    const signed = (game.homePoints ?? 0) - (game.awayPoints ?? 0)
+    const homeCover = board?.spread ? coverProb(signed, board.spread.homeLine) : null
     for (const side of ['away', 'home']) {
-      const team = game[side]
-      const quote = book.prices[scatterAbbrev(team.abbr)] || book.prices[team.abbr]
-      if (!quote) continue
-      const implied = americanImplied(quote.price)
-      if (implied == null) continue
-      const edge = model[side] - implied
-      if (edge <= 0) continue
-      legs.push({
-        gameId: game.id,
-        team: team.abbr,
-        teamName: team.name,
-        side,
-        bet: 'Moneyline',
-        price: quote.price,
-        book: quote.book,
-        asOf: quote.asOf || book.asOf,
-        source: book.source || 'getoddy snapshot',
-        prob: model[side],
-        edge,
-        decimal: americanToDecimal(quote.price),
-      })
+      const abbr = scatterAbbrev(game[side].abbr)
+      const kept = prior?.prices?.[abbr] || prior?.prices?.[game[side].abbr]
+      const fresh = board?.moneyline?.[abbr]
+      const quote = kept || (fresh ? { ...fresh, asOf: board.asOf, source: board.source } : null)
+      consider(legs, game, side, quote, win[side], 'ML')
+      const spread = board?.spread?.[abbr]
+      if (spread && homeCover != null) {
+        consider(legs, game, side, { ...spread, asOf: board.asOf, source: board.source }, side === 'home' ? homeCover : 1 - homeCover, 'Spread')
+      }
     }
   }
   const best = new Map()
@@ -97,7 +117,7 @@ export function buildTeamParlay(matchups, week, { legs = 2, minOdds, maxOdds } =
   const [lo, hi] = bounds
   const pool = teamCandidates(matchups, week)
   if (pool.length < count) {
-    return { parlay: null, reason: pool.length ? `Only ${pool.length} unstarted game${pool.length === 1 ? '' : 's'} with a priced edge.` : 'No unstarted game has a saved moneyline the model likes.', pool }
+    return { parlay: null, reason: pool.length ? `Only ${pool.length} unstarted game${pool.length === 1 ? '' : 's'} with a priced edge.` : 'No unstarted game has a saved moneyline or spread the model likes.', pool }
   }
   const best = chooseGroup(pool, count, lo, hi)
   if (!best) return { parlay: null, reason: 'No parlay of that length lands inside the odds range.', pool }
