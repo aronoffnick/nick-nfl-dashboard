@@ -65,7 +65,7 @@ export default function MatchupExplorer({saveProp,data,matchup,halfLife,advantag
   const [statsView,setStatsView]=useState(opened.tab==='stats'?opened.view:'scatter')
   const [offenseId,setOffenseId]=useState(matchup.away.id)
   const [historyPositions,setHistoryPositions]=useState(['QB','RB','WR','TE'])
-  const [window,setWindow]=useState(4)
+  const [recentGames,setRecentGames]=useState(4)
   const [projectionTeams,setProjectionTeams]=useState([matchup.away.id,matchup.home.id])
   const [projectionPositions,setProjectionPositions]=useState(positions)
   const [projectionCategories,setProjectionCategories]=useState(Object.keys(projectionGroups))
@@ -131,7 +131,7 @@ export default function MatchupExplorer({saveProp,data,matchup,halfLife,advantag
       <ProjectionFilters title="Teams" items={[[matchup.away.id,matchup.away.name],[matchup.home.id,matchup.home.name]]} selected={projectionTeams} onToggle={key=>toggle(setProjectionTeams,projectionTeams,key)}/>
       <ProjectionFilters title="Positions" items={positions.map(value=>[value,value])} selected={projectionPositions} onToggle={key=>toggle(setProjectionPositions,projectionPositions,key)}/>
       <ProjectionFilters title="Stat categories" items={Object.keys(projectionGroups).map(key=>[key,key])} selected={projectionCategories} onToggle={key=>toggle(setProjectionCategories,projectionCategories,key)}/>
-      <div className="projection-window"><strong>Recent games</strong>{[[4,'Last 4'],[6,'Last 6'],[18,'Season']].map(([value,name])=><button key={value} aria-pressed={window===value} onClick={()=>setWindow(value)}>{name}</button>)}</div>
+      <div className="projection-window"><strong>Recent games</strong>{[[4,'Last 4'],[6,'Last 6'],[18,'Season']].map(([value,name])=><button key={value} aria-pressed={recentGames===value} onClick={()=>setRecentGames(value)}>{name}</button>)}</div>
       <button className="prop-action" onClick={()=>{setProjectionTeams([matchup.away.id,matchup.home.id]);setProjectionPositions(positions);setProjectionCategories(Object.keys(projectionGroups))}}>Reset filters</button>
     </div>}
     {tab==='stats'&&statsView==='history'&&<div className="prop-controls history-controls">
@@ -142,10 +142,10 @@ export default function MatchupExplorer({saveProp,data,matchup,halfLife,advantag
     {error&&<p role="alert" className="prop-warning">{error} <button onClick={()=>load(true)}>Retry</button></p>}
     {rosters&&<>
       {rosters.failed.length>0&&<p className="prop-warning">{rosters.failed.length} team rosters unavailable. Unknown positions are labeled; incomplete position groups are excluded from adjustments. <button onClick={()=>load(true)}>Retry rosters</button></p>}
-      {tab==='bets'&&betsView==='projections'&&<PlayerProjections matchup={matchup} saveProp={saveProp} data={data} teams={projectionTeamsList} roster={rosters.roster} halfLife={halfLife} window={window} positions={projectionPositions} categories={projectionCategories}/>}
-      {tab==='bets'&&betsView==='flyers'&&<Flyers data={data} matchup={matchup} roster={rosters.roster} halfLife={halfLife} window={window}/>}
-      {tab==='bets'&&betsView==='parlays'&&<Parlays data={data} matchup={matchup} roster={rosters.roster} halfLife={halfLife} window={window}/>}
-      {tab==='stats'&&statsView==='history'&&<Historical data={data} defense={defense} roster={rosters.roster} window={window} selectedPositions={historyPositions}/>}
+      {tab==='bets'&&betsView==='projections'&&<PlayerProjections matchup={matchup} saveProp={saveProp} data={data} teams={projectionTeamsList} roster={rosters.roster} halfLife={halfLife} window={recentGames} positions={projectionPositions} categories={projectionCategories}/>}
+      {tab==='bets'&&betsView==='flyers'&&<Flyers data={data} matchup={matchup} roster={rosters.roster} halfLife={halfLife} window={recentGames}/>}
+      {tab==='bets'&&betsView==='parlays'&&<Parlays data={data} matchup={matchup} roster={rosters.roster} halfLife={halfLife} window={recentGames}/>}
+      {tab==='stats'&&statsView==='history'&&<Historical data={data} defense={defense} roster={rosters.roster} window={recentGames} selectedPositions={historyPositions}/>}
     </>}
     <details className="prop-method"><summary>Team offense vs defense estimates</summary><div className="table-wrap"><table><thead><tr><th>Offense</th><th>Expected net pass yards</th><th>Expected rush yards</th></tr></thead><tbody>{[[matchup.away,matchup.home],[matchup.home,matchup.away]].map(([o,d])=><tr key={o.id}><td>{o.abbr} vs {d.abbr}</td><td>{format((o.recent.passO+d.recent.passD)/2)}</td><td>{format((o.recent.rushO+d.recent.rushD)/2)}</td></tr>)}</tbody></table></div></details>
     <details className="prop-method"><summary>Projection method, sources & limitations</summary>
