@@ -1,0 +1,220 @@
+{
+  "season": 2026,
+  "week": 12,
+  "partial": true,
+  "gamesScored": 3,
+  "gamesOnSlate": 16,
+  "matchedPlayers": 28,
+  "byStat": {
+    "QB:passYds": {
+      "n": 4,
+      "mae": 79.15,
+      "bias": -11.0,
+      "meanPred": 260.0,
+      "meanActual": 249.0,
+      "clearedProjection": 0.5
+    },
+    "QB:rushYds": {
+      "n": 4,
+      "mae": 6.02,
+      "bias": -0.57,
+      "meanPred": 8.57,
+      "meanActual": 8.0,
+      "clearedProjection": 0.5
+    },
+    "RB:rec": {
+      "n": 8,
+      "mae": 1.25,
+      "bias": 0.45,
+      "meanPred": 2.42,
+      "meanActual": 2.88,
+      "clearedProjection": 0.5
+    },
+    "RB:recYds": {
+      "n": 8,
+      "mae": 18.53,
+      "bias": 7.85,
+      "meanPred": 19.52,
+      "meanActual": 27.38,
+      "clearedProjection": 0.625
+    },
+    "RB:rushYds": {
+      "n": 8,
+      "mae": 43.04,
+      "bias": 20.41,
+      "meanPred": 49.21,
+      "meanActual": 69.62,
+      "clearedProjection": 0.5
+    },
+    "TE:rec": {
+      "n": 6,
+      "mae": 1.8,
+      "bias": -1.67,
+      "meanPred": 3.83,
+      "meanActual": 2.17,
+      "clearedProjection": 0.333
+    },
+    "TE:recYds": {
+      "n": 6,
+      "mae": 21.63,
+      "bias": -21.63,
+      "meanPred": 38.3,
+      "meanActual": 16.67,
+      "clearedProjection": 0.167
+    },
+    "TE:rushYds": {
+      "n": 6,
+      "mae": 0.0,
+      "bias": 0.0,
+      "meanPred": 0.0,
+      "meanActual": 0.0,
+      "clearedProjection": 1.0
+    },
+    "WR:rec": {
+      "n": 10,
+      "mae": 1.91,
+      "bias": -0.81,
+      "meanPred": 4.31,
+      "meanActual": 3.5,
+      "clearedProjection": 0.4
+    },
+    "WR:recYds": {
+      "n": 10,
+      "mae": 29.97,
+      "bias": -3.81,
+      "meanPred": 57.91,
+      "meanActual": 54.1,
+      "clearedProjection": 0.4
+    },
+    "WR:rushYds": {
+      "n": 10,
+      "mae": 3.1,
+      "bias": 3.1,
+      "meanPred": 0.0,
+      "meanActual": 3.1,
+      "clearedProjection": 1.0
+    }
+  },
+  "touchdowns": {
+    "anytime": {
+      "n": 28,
+      "predictedRate": 0.272,
+      "actualRate": 0.286,
+      "brier": 0.1429,
+      "bins": [
+        {
+          "lo": 0,
+          "hi": 0.2,
+          "n": 10,
+          "predicted": 0.128,
+          "actual": 0.0
+        },
+        {
+          "lo": 0.2,
+          "hi": 0.4,
+          "n": 13,
+          "predicted": 0.282,
+          "actual": 0.385
+        },
+        {
+          "lo": 0.4,
+          "hi": 0.6,
+          "n": 4,
+          "predicted": 0.501,
+          "actual": 0.5
+        },
+        {
+          "lo": 0.6,
+          "hi": 1,
+          "n": 1,
+          "predicted": 0.677,
+          "actual": 1.0
+        }
+      ]
+    },
+    "byTier": {
+      "confident": {
+        "n": 13,
+        "hits": 5,
+        "predicted": 0.352
+      },
+      "relativelySafe": {
+        "n": 6,
+        "hits": 3,
+        "predicted": 0.316
+      },
+      "upside": {
+        "n": 15,
+        "hits": 0,
+        "predicted": 0.105
+      }
+    },
+    "bySlot": {
+      "slot": {
+        "n": 4,
+        "hits": 0,
+        "predicted": 0.211
+      },
+      "boundary": {
+        "n": 6,
+        "hits": 2,
+        "predicted": 0.279
+      },
+      "unknown": {
+        "n": 0,
+        "hits": 0,
+        "predicted": null
+      }
+    }
+  },
+  "coverage": {
+    "compared": 22,
+    "brierBase": 0.1732,
+    "brierAdjusted": 0.1734,
+    "helped": false,
+    "damp": 0.999
+  },
+  "adjustments": {
+    "projection": {
+      "QB": {
+        "passYds": 0.996,
+        "rushYds": 0.994
+      },
+      "RB": {
+        "rushYds": 1.069,
+        "recYds": 1.067,
+        "rec": 1.032
+      },
+      "WR": {
+        "rushYds": 1.0,
+        "recYds": 0.987,
+        "rec": 0.962
+      },
+      "TE": {
+        "rushYds": 1.0,
+        "recYds": 0.926,
+        "rec": 0.943
+      }
+    },
+    "tdLambda": {
+      "QB": 1.0,
+      "RB": 1.1,
+      "WR": 0.999,
+      "TE": 0.948
+    },
+    "coverageDamp": 0.999
+  },
+  "lines": [
+    "Week 12 check (3 of 16 games final).",
+    "Anytime chance from expected touchdowns: predicted 27% versus actual 29% on 28 players (Brier 0.1429).",
+    "Touchdown-board tiers that scored: confident 5/13, relatively safe 3/6, upside 0/15.",
+    "Receiver touchdowns by listed slot: slot 0/4, boundary 2/6.",
+    "Receiving yards: RB bias +7.8 (n=8); WR bias -3.8 (n=10). Bias is actual minus projection.",
+    "Receptions: RB bias +0.5 (n=8); WR bias -0.8 (n=10). Bias is actual minus projection.",
+    "Rushing yards: RB bias +20.4 (n=8); WR bias +3.1 (n=10). Bias is actual minus projection.",
+    "Poisson bins: 0\u201320% predicted 13% actual 0% (n=10); 20\u201340% predicted 28% actual 38% (n=13); 40\u201360% predicted 50% actual 50% (n=4); 60\u2013100% predicted 68% actual 100% (n=1).",
+    "Coverage multiplier Brier 0.1734 versus 0.1732 without it on 22 players.",
+    "Next week uses bounded scales: QB rushYds \u00d70.99, RB rushYds \u00d71.07, RB recYds \u00d71.07, RB rec \u00d71.03, WR recYds \u00d70.99, WR rec \u00d70.96, TE recYds \u00d70.93, TE rec \u00d70.94, RB TDs \u00d71.10, TE TDs \u00d70.95."
+  ],
+  "note": "Scored only where a final score and a player stat row both exist. Scales shrink toward 1 and are clipped to 0.90\u20131.10. They feed the next week, not this one."
+}

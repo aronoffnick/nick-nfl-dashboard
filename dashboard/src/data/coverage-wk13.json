@@ -1,0 +1,240 @@
+{
+  "week": 13,
+  "estimate": true,
+  "unavailable": "nflverse has no 2026 participation file, so coverage mixes are left blank rather than copied from another season.",
+  "coverages": [
+    {
+      "key": "COVER_0",
+      "label": "Cover 0",
+      "scheme": "man"
+    },
+    {
+      "key": "COVER_1",
+      "label": "Cover 1",
+      "scheme": "man"
+    },
+    {
+      "key": "2_MAN",
+      "label": "2-Man",
+      "scheme": "man"
+    },
+    {
+      "key": "COVER_2",
+      "label": "Cover 2",
+      "scheme": "zone"
+    },
+    {
+      "key": "COVER_3",
+      "label": "Cover 3",
+      "scheme": "zone"
+    },
+    {
+      "key": "COVER_4",
+      "label": "Cover 4",
+      "scheme": "zone"
+    },
+    {
+      "key": "COVER_6",
+      "label": "Cover 6",
+      "scheme": "zone"
+    }
+  ],
+  "games": {
+    "KC-LAR": {
+      "offenses": {
+        "KC": {
+          "defense": "LAR",
+          "mix": null,
+          "mixNote": "unavailable"
+        },
+        "LAR": {
+          "defense": "KC",
+          "mix": null,
+          "mixNote": "unavailable"
+        }
+      }
+    },
+    "CIN-CLE": {
+      "offenses": {
+        "CIN": {
+          "defense": "CLE",
+          "mix": null,
+          "mixNote": "unavailable"
+        },
+        "CLE": {
+          "defense": "CIN",
+          "mix": null,
+          "mixNote": "unavailable"
+        }
+      }
+    },
+    "DET-ATL": {
+      "offenses": {
+        "DET": {
+          "defense": "ATL",
+          "mix": null,
+          "mixNote": "unavailable"
+        },
+        "ATL": {
+          "defense": "DET",
+          "mix": null,
+          "mixNote": "unavailable"
+        }
+      }
+    },
+    "GB-NO": {
+      "offenses": {
+        "GB": {
+          "defense": "NO",
+          "mix": null,
+          "mixNote": "unavailable"
+        },
+        "NO": {
+          "defense": "GB",
+          "mix": null,
+          "mixNote": "unavailable"
+        }
+      }
+    },
+    "JAX-CHI": {
+      "offenses": {
+        "JAX": {
+          "defense": "CHI",
+          "mix": null,
+          "mixNote": "unavailable"
+        },
+        "CHI": {
+          "defense": "JAX",
+          "mix": null,
+          "mixNote": "unavailable"
+        }
+      }
+    },
+    "LAC-TB": {
+      "offenses": {
+        "LAC": {
+          "defense": "TB",
+          "mix": null,
+          "mixNote": "unavailable"
+        },
+        "TB": {
+          "defense": "LAC",
+          "mix": null,
+          "mixNote": "unavailable"
+        }
+      }
+    },
+    "SF-NYG": {
+      "offenses": {
+        "SF": {
+          "defense": "NYG",
+          "mix": null,
+          "mixNote": "unavailable"
+        },
+        "NYG": {
+          "defense": "SF",
+          "mix": null,
+          "mixNote": "unavailable"
+        }
+      }
+    },
+    "WAS-TEN": {
+      "offenses": {
+        "WAS": {
+          "defense": "TEN",
+          "mix": null,
+          "mixNote": "unavailable"
+        },
+        "TEN": {
+          "defense": "WAS",
+          "mix": null,
+          "mixNote": "unavailable"
+        }
+      }
+    },
+    "MIA-DEN": {
+      "offenses": {
+        "MIA": {
+          "defense": "DEN",
+          "mix": null,
+          "mixNote": "unavailable"
+        },
+        "DEN": {
+          "defense": "MIA",
+          "mix": null,
+          "mixNote": "unavailable"
+        }
+      }
+    },
+    "PHI-ARI": {
+      "offenses": {
+        "PHI": {
+          "defense": "ARI",
+          "mix": null,
+          "mixNote": "unavailable"
+        },
+        "ARI": {
+          "defense": "PHI",
+          "mix": null,
+          "mixNote": "unavailable"
+        }
+      }
+    },
+    "BUF-NE": {
+      "offenses": {
+        "BUF": {
+          "defense": "NE",
+          "mix": null,
+          "mixNote": "unavailable"
+        },
+        "NE": {
+          "defense": "BUF",
+          "mix": null,
+          "mixNote": "unavailable"
+        }
+      }
+    },
+    "CAR-MIN": {
+      "offenses": {
+        "CAR": {
+          "defense": "MIN",
+          "mix": null,
+          "mixNote": "unavailable"
+        },
+        "MIN": {
+          "defense": "CAR",
+          "mix": null,
+          "mixNote": "unavailable"
+        }
+      }
+    },
+    "HOU-PIT": {
+      "offenses": {
+        "HOU": {
+          "defense": "PIT",
+          "mix": null,
+          "mixNote": "unavailable"
+        },
+        "PIT": {
+          "defense": "HOU",
+          "mix": null,
+          "mixNote": "unavailable"
+        }
+      }
+    },
+    "DAL-SEA": {
+      "offenses": {
+        "DAL": {
+          "defense": "SEA",
+          "mix": null,
+          "mixNote": "unavailable"
+        },
+        "SEA": {
+          "defense": "DAL",
+          "mix": null,
+          "mixNote": "unavailable"
+        }
+      }
+    }
+  }
+}

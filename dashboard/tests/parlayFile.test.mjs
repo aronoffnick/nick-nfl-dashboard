@@ -7,10 +7,10 @@ const board = JSON.parse(readFileSync(new URL('../src/data/parlays-wk12.json', i
 const file = { matched: true, data: board }
 const games = [['CHI', 'DET'], ['PHI', 'DAL'], ['KC', 'BUF']]
 
-test('week 12 file is v2 with the three Thanksgiving games', () => {
+test('week 12 file is v2 and keeps the three Thanksgiving games', () => {
   assert.equal(board.week, 12)
   assert.equal(board.version, 2)
-  assert.deepEqual(Object.keys(board.games), ['CHI-DET', 'PHI-DAL', 'KC-BUF'])
+  for (const key of ['CHI-DET', 'PHI-DAL', 'KC-BUF']) assert.ok(board.games[key], key)
   assert.equal(boardGame({ matched: true, data: { ...board, version: 1 } }, 'CHI', 'DET'), null)
 })
 

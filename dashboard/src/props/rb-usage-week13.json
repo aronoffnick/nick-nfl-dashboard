@@ -2,1081 +2,1033 @@
   {
     "name": "Tyler Allgeier",
     "team": "Arizona Cardinals",
-    "targetShare": 0.49,
+    "targetShare": 0.5,
     "recentCarryShare": 0.62,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "inside5Share": 0.5,
+    "injury": ""
+  },
+  {
+    "name": "Jeremiyah Love",
+    "team": "Arizona Cardinals",
+    "targetShare": 0.27,
+    "recentCarryShare": 0.14,
+    "inside5Share": 0.25,
+    "injury": ""
   },
   {
     "name": "Bam Knight",
     "team": "Arizona Cardinals",
     "targetShare": 0.23,
     "recentCarryShare": 0.23,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
-  },
-  {
-    "name": "Evan Hull",
-    "team": "Arizona Cardinals",
-    "targetShare": 0.02,
-    "recentCarryShare": 0.0,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "inside5Share": 0.25,
+    "injury": ""
   },
   {
     "name": "Bijan Robinson",
     "team": "Atlanta Falcons",
     "targetShare": 0.76,
-    "recentCarryShare": 0.92,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "recentCarryShare": 0.91,
+    "inside5Share": 0.9,
+    "injury": ""
+  },
+  {
+    "name": "Brian Robinson",
+    "team": "Atlanta Falcons",
+    "targetShare": 0.1,
+    "recentCarryShare": 0.0,
+    "inside5Share": 0.1,
+    "injury": ""
   },
   {
     "name": "Khalil Herbert",
     "team": "Atlanta Falcons",
     "targetShare": 0.14,
-    "recentCarryShare": 0.08,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "recentCarryShare": 0.09,
+    "inside5Share": 0.0,
+    "injury": ""
   },
   {
     "name": "Derrick Henry",
     "team": "Baltimore Ravens",
     "targetShare": 0.38,
     "recentCarryShare": 0.69,
-    "inside5Share": null,
-    "injury": "Questionable",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "inside5Share": 1.0,
+    "injury": ""
   },
   {
     "name": "Justice Hill",
     "team": "Baltimore Ravens",
     "targetShare": 0.62,
     "recentCarryShare": 0.28,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "inside5Share": 0.0,
+    "injury": ""
   },
   {
     "name": "Rasheen Ali",
     "team": "Baltimore Ravens",
     "targetShare": 0.0,
     "recentCarryShare": 0.03,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "inside5Share": 0.0,
+    "injury": ""
   },
   {
-    "name": "James Cook III",
+    "name": "James Cook",
     "team": "Buffalo Bills",
     "targetShare": 0.4,
     "recentCarryShare": 0.84,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
-  },
-  {
-    "name": "Ty Johnson",
-    "team": "Buffalo Bills",
-    "targetShare": 0.49,
-    "recentCarryShare": 0.05,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "inside5Share": 0.81,
+    "injury": ""
   },
   {
     "name": "Ray Davis",
     "team": "Buffalo Bills",
     "targetShare": 0.11,
     "recentCarryShare": 0.11,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "inside5Share": 0.06,
+    "injury": ""
+  },
+  {
+    "name": "Ty Johnson",
+    "team": "Buffalo Bills",
+    "targetShare": 0.49,
+    "recentCarryShare": 0.05,
+    "inside5Share": 0.12,
+    "injury": ""
   },
   {
     "name": "Chuba Hubbard",
     "team": "Carolina Panthers",
     "targetShare": 0.78,
     "recentCarryShare": 0.88,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "inside5Share": 1.0,
+    "injury": ""
   },
   {
     "name": "Trevor Etienne",
     "team": "Carolina Panthers",
     "targetShare": 0.11,
     "recentCarryShare": 0.12,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "inside5Share": 0.0,
+    "injury": ""
+  },
+  {
+    "name": "AJ Dillon",
+    "team": "Carolina Panthers",
+    "targetShare": 0.04,
+    "recentCarryShare": 0.0,
+    "inside5Share": 0.0,
+    "injury": ""
+  },
+  {
+    "name": "Jonathon Brooks",
+    "team": "Carolina Panthers",
+    "targetShare": 0.07,
+    "recentCarryShare": 0.0,
+    "inside5Share": 0.0,
+    "injury": ""
   },
   {
     "name": "Anthony Tyus III",
     "team": "Carolina Panthers",
     "targetShare": 0.0,
     "recentCarryShare": 0.0,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "inside5Share": 0.0,
+    "injury": ""
   },
   {
     "name": "D'Andre Swift",
     "team": "Chicago Bears",
     "targetShare": 0.65,
-    "recentCarryShare": 0.68,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "recentCarryShare": 0.64,
+    "inside5Share": 0.59,
+    "injury": ""
   },
   {
     "name": "Kyle Monangai",
     "team": "Chicago Bears",
-    "targetShare": 0.12,
-    "recentCarryShare": 0.11,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "targetShare": 0.13,
+    "recentCarryShare": 0.17,
+    "inside5Share": 0.28,
+    "injury": ""
+  },
+  {
+    "name": "Roschon Johnson",
+    "team": "Chicago Bears",
+    "targetShare": 0.18,
+    "recentCarryShare": 0.05,
+    "inside5Share": 0.12,
+    "injury": ""
   },
   {
     "name": "Salvon Ahmed",
     "team": "Chicago Bears",
-    "targetShare": 0.0,
-    "recentCarryShare": 0.14,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "targetShare": 0.03,
+    "recentCarryShare": 0.15,
+    "inside5Share": 0.0,
+    "injury": ""
   },
   {
     "name": "Chase Brown",
     "team": "Cincinnati Bengals",
     "targetShare": 0.77,
     "recentCarryShare": 0.55,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "inside5Share": 0.67,
+    "injury": ""
   },
   {
     "name": "Samaje Perine",
     "team": "Cincinnati Bengals",
     "targetShare": 0.23,
     "recentCarryShare": 0.4,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "inside5Share": 0.33,
+    "injury": ""
   },
   {
     "name": "Tahj Brooks",
     "team": "Cincinnati Bengals",
     "targetShare": 0.0,
     "recentCarryShare": 0.04,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "inside5Share": 0.0,
+    "injury": ""
   },
   {
     "name": "Quinshon Judkins",
     "team": "Cleveland Browns",
-    "targetShare": 0.41,
-    "recentCarryShare": 0.73,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "targetShare": 0.4,
+    "recentCarryShare": 0.74,
+    "inside5Share": 0.9,
+    "injury": ""
   },
   {
     "name": "Dylan Sampson",
     "team": "Cleveland Browns",
-    "targetShare": 0.31,
-    "recentCarryShare": 0.27,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "targetShare": 0.32,
+    "recentCarryShare": 0.26,
+    "inside5Share": 0.0,
+    "injury": ""
   },
   {
     "name": "Jaleel McLaughlin",
     "team": "Cleveland Browns",
     "targetShare": 0.08,
     "recentCarryShare": 0.0,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "inside5Share": 0.0,
+    "injury": ""
+  },
+  {
+    "name": "Raheim Sanders",
+    "team": "Cleveland Browns",
+    "targetShare": 0.17,
+    "recentCarryShare": 0.0,
+    "inside5Share": 0.0,
+    "injury": ""
+  },
+  {
+    "name": "Michael Burton",
+    "team": "Cleveland Browns",
+    "targetShare": 0.03,
+    "recentCarryShare": 0.0,
+    "inside5Share": 0.0,
+    "injury": ""
   },
   {
     "name": "Javonte Williams",
     "team": "Dallas Cowboys",
-    "targetShare": 0.54,
-    "recentCarryShare": 0.74,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "targetShare": 0.72,
+    "recentCarryShare": 0.8,
+    "inside5Share": 1.0,
+    "injury": ""
   },
   {
-    "name": "Jashaun Corbin",
+    "name": "Tyler Goodson",
     "team": "Dallas Cowboys",
-    "targetShare": 0.02,
-    "recentCarryShare": 0.05,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "targetShare": 0.17,
+    "recentCarryShare": 0.19,
+    "inside5Share": 0.0,
+    "injury": ""
+  },
+  {
+    "name": "Hunter Luepke",
+    "team": "Dallas Cowboys",
+    "targetShare": 0.11,
+    "recentCarryShare": 0.01,
+    "inside5Share": 0.0,
+    "injury": ""
+  },
+  {
+    "name": "J.K. Dobbins",
+    "team": "Denver Broncos",
+    "targetShare": 0.15,
+    "recentCarryShare": 0.21,
+    "inside5Share": 0.44,
+    "injury": ""
   },
   {
     "name": "Jonah Coleman",
     "team": "Denver Broncos",
     "targetShare": 0.29,
-    "recentCarryShare": 0.79,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "recentCarryShare": 0.73,
+    "inside5Share": 0.44,
+    "injury": ""
+  },
+  {
+    "name": "RJ Harvey",
+    "team": "Denver Broncos",
+    "targetShare": 0.42,
+    "recentCarryShare": 0.04,
+    "inside5Share": 0.06,
+    "injury": ""
+  },
+  {
+    "name": "Tyler Badie",
+    "team": "Denver Broncos",
+    "targetShare": 0.11,
+    "recentCarryShare": 0.0,
+    "inside5Share": 0.06,
+    "injury": ""
+  },
+  {
+    "name": "Adam Prentice",
+    "team": "Denver Broncos",
+    "targetShare": 0.03,
+    "recentCarryShare": 0.01,
+    "inside5Share": 0.0,
+    "injury": ""
+  },
+  {
+    "name": "Cody Schrader",
+    "team": "Denver Broncos",
+    "targetShare": 0.0,
+    "recentCarryShare": 0.01,
+    "inside5Share": 0.0,
+    "injury": ""
   },
   {
     "name": "Jahmyr Gibbs",
     "team": "Detroit Lions",
-    "targetShare": 0.85,
-    "recentCarryShare": 0.79,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "targetShare": 0.83,
+    "recentCarryShare": 0.83,
+    "inside5Share": 0.96,
+    "injury": ""
   },
   {
     "name": "Sione Vaki",
     "team": "Detroit Lions",
-    "targetShare": 0.15,
-    "recentCarryShare": 0.19,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "targetShare": 0.17,
+    "recentCarryShare": 0.15,
+    "inside5Share": 0.04,
+    "injury": ""
   },
   {
     "name": "Jacob Saylors",
     "team": "Detroit Lions",
     "targetShare": 0.0,
     "recentCarryShare": 0.02,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
-  },
-  {
-    "name": "Josh Jacobs",
-    "team": "Green Bay Packers",
-    "targetShare": 0.24,
-    "recentCarryShare": 0.37,
-    "inside5Share": null,
-    "injury": "Questionable",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
-  },
-  {
-    "name": "Kaleb Johnson",
-    "team": "Green Bay Packers",
-    "targetShare": 0.06,
-    "recentCarryShare": 0.36,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "inside5Share": 0.0,
+    "injury": ""
   },
   {
     "name": "MarShawn Lloyd",
     "team": "Green Bay Packers",
-    "targetShare": 0.37,
+    "targetShare": 0.34,
     "recentCarryShare": 0.1,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "inside5Share": 0.27,
+    "injury": ""
   },
   {
-    "name": "David Montgomery",
-    "team": "Houston Texans",
-    "targetShare": 0.28,
-    "recentCarryShare": 0.35,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "name": "Kaleb Johnson",
+    "team": "Green Bay Packers",
+    "targetShare": 0.08,
+    "recentCarryShare": 0.42,
+    "inside5Share": 0.27,
+    "injury": ""
+  },
+  {
+    "name": "Josh Jacobs",
+    "team": "Green Bay Packers",
+    "targetShare": 0.21,
+    "recentCarryShare": 0.32,
+    "inside5Share": 0.27,
+    "injury": ""
+  },
+  {
+    "name": "Pierre Strong",
+    "team": "Green Bay Packers",
+    "targetShare": 0.19,
+    "recentCarryShare": 0.12,
+    "inside5Share": 0.09,
+    "injury": ""
+  },
+  {
+    "name": "Chris Brooks",
+    "team": "Green Bay Packers",
+    "targetShare": 0.18,
+    "recentCarryShare": 0.04,
+    "inside5Share": 0.09,
+    "injury": ""
   },
   {
     "name": "Woody Marks",
     "team": "Houston Texans",
-    "targetShare": 0.55,
-    "recentCarryShare": 0.41,
-    "inside5Share": null,
-    "injury": "Questionable",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "targetShare": 0.54,
+    "recentCarryShare": 0.52,
+    "inside5Share": 0.5,
+    "injury": ""
+  },
+  {
+    "name": "David Montgomery",
+    "team": "Houston Texans",
+    "targetShare": 0.27,
+    "recentCarryShare": 0.28,
+    "inside5Share": 0.5,
+    "injury": ""
   },
   {
     "name": "Emari Demercado",
     "team": "Houston Texans",
     "targetShare": 0.15,
-    "recentCarryShare": 0.24,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "recentCarryShare": 0.19,
+    "inside5Share": 0.0,
+    "injury": ""
+  },
+  {
+    "name": "Dare Ogunbowale",
+    "team": "Houston Texans",
+    "targetShare": 0.05,
+    "recentCarryShare": 0.01,
+    "inside5Share": 0.0,
+    "injury": ""
   },
   {
     "name": "Jonathan Taylor",
     "team": "Indianapolis Colts",
     "targetShare": 0.85,
     "recentCarryShare": 0.59,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "inside5Share": 0.89,
+    "injury": ""
+  },
+  {
+    "name": "Seth McGowan",
+    "team": "Indianapolis Colts",
+    "targetShare": 0.13,
+    "recentCarryShare": 0.32,
+    "inside5Share": 0.11,
+    "injury": ""
   },
   {
     "name": "DJ Giddens",
     "team": "Indianapolis Colts",
     "targetShare": 0.02,
     "recentCarryShare": 0.09,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "inside5Share": 0.0,
+    "injury": ""
   },
   {
     "name": "Bhayshul Tuten",
     "team": "Jacksonville Jaguars",
     "targetShare": 0.56,
     "recentCarryShare": 0.63,
-    "inside5Share": null,
-    "injury": "Questionable",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "inside5Share": 0.57,
+    "injury": ""
   },
   {
     "name": "Chris Rodriguez Jr.",
     "team": "Jacksonville Jaguars",
     "targetShare": 0.15,
     "recentCarryShare": 0.24,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "inside5Share": 0.43,
+    "injury": ""
+  },
+  {
+    "name": "Ameer Abdullah",
+    "team": "Jacksonville Jaguars",
+    "targetShare": 0.07,
+    "recentCarryShare": 0.13,
+    "inside5Share": 0.0,
+    "injury": ""
   },
   {
     "name": "LeQuint Allen Jr.",
     "team": "Jacksonville Jaguars",
     "targetShare": 0.22,
     "recentCarryShare": 0.0,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "inside5Share": 0.0,
+    "injury": ""
+  },
+  {
+    "name": "Kenneth Walker III",
+    "team": "Kansas City Chiefs",
+    "targetShare": 0.57,
+    "recentCarryShare": 0.39,
+    "inside5Share": 0.94,
+    "injury": ""
   },
   {
     "name": "Emmett Johnson",
     "team": "Kansas City Chiefs",
-    "targetShare": 0.42,
-    "recentCarryShare": 0.51,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "targetShare": 0.43,
+    "recentCarryShare": 0.53,
+    "inside5Share": 0.06,
+    "injury": ""
   },
   {
     "name": "Jaydn Ott",
     "team": "Kansas City Chiefs",
     "targetShare": 0.0,
     "recentCarryShare": 0.08,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
-  },
-  {
-    "name": "Ashton Jeanty",
-    "team": "Las Vegas Raiders",
-    "targetShare": 0.82,
-    "recentCarryShare": 0.36,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
-  },
-  {
-    "name": "Mike Washington Jr.",
-    "team": "Las Vegas Raiders",
-    "targetShare": 0.09,
-    "recentCarryShare": 0.62,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
-  },
-  {
-    "name": "Dylan Laube",
-    "team": "Las Vegas Raiders",
-    "targetShare": 0.05,
-    "recentCarryShare": 0.0,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "inside5Share": 0.0,
+    "injury": ""
   },
   {
     "name": "Omarion Hampton",
     "team": "Los Angeles Chargers",
     "targetShare": 0.25,
     "recentCarryShare": 0.6,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "inside5Share": 1.0,
+    "injury": ""
   },
   {
     "name": "Keaton Mitchell",
     "team": "Los Angeles Chargers",
     "targetShare": 0.37,
     "recentCarryShare": 0.15,
-    "inside5Share": null,
-    "injury": "Questionable",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "inside5Share": 0.0,
+    "injury": ""
   },
   {
     "name": "Kimani Vidal",
     "team": "Los Angeles Chargers",
     "targetShare": 0.32,
     "recentCarryShare": 0.25,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "inside5Share": 0.0,
+    "injury": ""
+  },
+  {
+    "name": "Alec Ingold",
+    "team": "Los Angeles Chargers",
+    "targetShare": 0.06,
+    "recentCarryShare": 0.0,
+    "inside5Share": 0.0,
+    "injury": ""
   },
   {
     "name": "Kyren Williams",
     "team": "Los Angeles Rams",
-    "targetShare": 0.7,
-    "recentCarryShare": 0.44,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "targetShare": 0.69,
+    "recentCarryShare": 0.39,
+    "inside5Share": 0.47,
+    "injury": ""
   },
   {
     "name": "Blake Corum",
     "team": "Los Angeles Rams",
-    "targetShare": 0.29,
-    "recentCarryShare": 0.4,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "targetShare": 0.3,
+    "recentCarryShare": 0.5,
+    "inside5Share": 0.53,
+    "injury": ""
   },
   {
     "name": "Ronnie Rivers",
     "team": "Los Angeles Rams",
     "targetShare": 0.01,
-    "recentCarryShare": 0.15,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "recentCarryShare": 0.11,
+    "inside5Share": 0.0,
+    "injury": ""
+  },
+  {
+    "name": "Ashton Jeanty",
+    "team": "Las Vegas Raiders",
+    "targetShare": 0.82,
+    "recentCarryShare": 0.36,
+    "inside5Share": 0.56,
+    "injury": ""
+  },
+  {
+    "name": "Mike Washington Jr.",
+    "team": "Las Vegas Raiders",
+    "targetShare": 0.09,
+    "recentCarryShare": 0.62,
+    "inside5Share": 0.39,
+    "injury": ""
+  },
+  {
+    "name": "Connor Heyward",
+    "team": "Las Vegas Raiders",
+    "targetShare": 0.05,
+    "recentCarryShare": 0.01,
+    "inside5Share": 0.0,
+    "injury": ""
+  },
+  {
+    "name": "Dylan Laube",
+    "team": "Las Vegas Raiders",
+    "targetShare": 0.05,
+    "recentCarryShare": 0.0,
+    "inside5Share": 0.06,
+    "injury": ""
   },
   {
     "name": "Ollie Gordon II",
     "team": "Miami Dolphins",
-    "targetShare": 0.43,
+    "targetShare": 0.44,
     "recentCarryShare": 0.85,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "inside5Share": 0.91,
+    "injury": ""
+  },
+  {
+    "name": "De'Von Achane",
+    "team": "Miami Dolphins",
+    "targetShare": 0.29,
+    "recentCarryShare": 0.0,
+    "inside5Share": 0.09,
+    "injury": ""
   },
   {
     "name": "Jaylen Wright",
     "team": "Miami Dolphins",
     "targetShare": 0.1,
     "recentCarryShare": 0.13,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "inside5Share": 0.0,
+    "injury": ""
   },
   {
     "name": "Kaytron Allen",
     "team": "Miami Dolphins",
     "targetShare": 0.05,
     "recentCarryShare": 0.03,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "inside5Share": 0.12,
+    "injury": ""
+  },
+  {
+    "name": "DJ Herman",
+    "team": "Miami Dolphins",
+    "targetShare": 0.12,
+    "recentCarryShare": 0.0,
+    "inside5Share": 0.0,
+    "injury": ""
+  },
+  {
+    "name": "Aaron Jones",
+    "team": "Minnesota Vikings",
+    "targetShare": 0.59,
+    "recentCarryShare": 0.41,
+    "inside5Share": 0.75,
+    "injury": ""
   },
   {
     "name": "Jordan Mason",
     "team": "Minnesota Vikings",
     "targetShare": 0.17,
     "recentCarryShare": 0.58,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "inside5Share": 0.25,
+    "injury": ""
   },
   {
-    "name": "Aaron Jones Sr.",
+    "name": "Demond Claiborne",
     "team": "Minnesota Vikings",
-    "targetShare": 0.59,
-    "recentCarryShare": 0.41,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "targetShare": 0.05,
+    "recentCarryShare": 0.0,
+    "inside5Share": 0.0,
+    "injury": ""
   },
   {
     "name": "DeeJay Dallas",
     "team": "Minnesota Vikings",
     "targetShare": 0.15,
     "recentCarryShare": 0.01,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "inside5Share": 0.0,
+    "injury": ""
+  },
+  {
+    "name": "Max Bredeson",
+    "team": "Minnesota Vikings",
+    "targetShare": 0.05,
+    "recentCarryShare": 0.0,
+    "inside5Share": 0.0,
+    "injury": ""
   },
   {
     "name": "Rhamondre Stevenson",
     "team": "New England Patriots",
-    "targetShare": 0.64,
-    "recentCarryShare": 0.52,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "targetShare": 0.68,
+    "recentCarryShare": 0.51,
+    "inside5Share": 0.75,
+    "injury": ""
   },
   {
     "name": "Corey Kiner",
     "team": "New England Patriots",
     "targetShare": 0.04,
-    "recentCarryShare": 0.42,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "recentCarryShare": 0.4,
+    "inside5Share": 0.25,
+    "injury": ""
+  },
+  {
+    "name": "TreVeyon Henderson",
+    "team": "New England Patriots",
+    "targetShare": 0.15,
+    "recentCarryShare": 0.04,
+    "inside5Share": 0.0,
+    "injury": ""
   },
   {
     "name": "Lan Larison",
     "team": "New England Patriots",
-    "targetShare": 0.12,
-    "recentCarryShare": 0.07,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "targetShare": 0.13,
+    "recentCarryShare": 0.05,
+    "inside5Share": 0.0,
+    "injury": ""
   },
   {
-    "name": "Travis Etienne Jr.",
+    "name": "Kendre Miller",
     "team": "New Orleans Saints",
-    "targetShare": 0.28,
-    "recentCarryShare": 0.4,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "targetShare": 0.16,
+    "recentCarryShare": 0.12,
+    "inside5Share": 0.33,
+    "injury": ""
   },
   {
-    "name": "CJ Donaldson",
+    "name": "Travis Etienne",
     "team": "New Orleans Saints",
-    "targetShare": 0.15,
-    "recentCarryShare": 0.02,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "targetShare": 0.23,
+    "recentCarryShare": 0.32,
+    "inside5Share": 0.27,
+    "injury": ""
   },
   {
     "name": "Alvin Kamara",
     "team": "New Orleans Saints",
-    "targetShare": 0.54,
-    "recentCarryShare": 0.16,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "targetShare": 0.46,
+    "recentCarryShare": 0.22,
+    "inside5Share": 0.2,
+    "injury": ""
+  },
+  {
+    "name": "Audric Estime",
+    "team": "New Orleans Saints",
+    "targetShare": 0.02,
+    "recentCarryShare": 0.32,
+    "inside5Share": 0.13,
+    "injury": ""
+  },
+  {
+    "name": "CJ Donaldson",
+    "team": "New Orleans Saints",
+    "targetShare": 0.12,
+    "recentCarryShare": 0.01,
+    "inside5Share": 0.07,
+    "injury": ""
   },
   {
     "name": "Cam Skattebo",
     "team": "New York Giants",
-    "targetShare": 0.5,
-    "recentCarryShare": 0.55,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "targetShare": 0.53,
+    "recentCarryShare": 0.59,
+    "inside5Share": 0.45,
+    "injury": ""
   },
   {
     "name": "Devin Singletary",
     "team": "New York Giants",
-    "targetShare": 0.28,
-    "recentCarryShare": 0.4,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "targetShare": 0.29,
+    "recentCarryShare": 0.34,
+    "inside5Share": 0.09,
+    "injury": ""
   },
   {
-    "name": "Greg Desrosiers Jr.",
+    "name": "Najee Harris",
     "team": "New York Giants",
-    "targetShare": 0.0,
-    "recentCarryShare": 0.05,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "targetShare": 0.02,
+    "recentCarryShare": 0.0,
+    "inside5Share": 0.27,
+    "injury": ""
   },
   {
-    "name": "Breece Hall",
-    "team": "New York Jets",
-    "targetShare": 0.4,
-    "recentCarryShare": 0.44,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "name": "Tyrone Tracy Jr.",
+    "team": "New York Giants",
+    "targetShare": 0.16,
+    "recentCarryShare": 0.07,
+    "inside5Share": 0.18,
+    "injury": ""
   },
   {
     "name": "Braelon Allen",
     "team": "New York Jets",
     "targetShare": 0.49,
     "recentCarryShare": 0.5,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "inside5Share": 0.44,
+    "injury": ""
+  },
+  {
+    "name": "Breece Hall",
+    "team": "New York Jets",
+    "targetShare": 0.4,
+    "recentCarryShare": 0.44,
+    "inside5Share": 0.44,
+    "injury": ""
   },
   {
     "name": "Isaiah Davis",
     "team": "New York Jets",
     "targetShare": 0.11,
     "recentCarryShare": 0.05,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "inside5Share": 0.0,
+    "injury": ""
+  },
+  {
+    "name": "Andrew Beck",
+    "team": "New York Jets",
+    "targetShare": 0.0,
+    "recentCarryShare": 0.01,
+    "inside5Share": 0.11,
+    "injury": ""
   },
   {
     "name": "Saquon Barkley",
     "team": "Philadelphia Eagles",
     "targetShare": 0.22,
-    "recentCarryShare": 0.7,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "recentCarryShare": 0.59,
+    "inside5Share": 0.46,
+    "injury": ""
+  },
+  {
+    "name": "Dameon Pierce",
+    "team": "Philadelphia Eagles",
+    "targetShare": 0.22,
+    "recentCarryShare": 0.16,
+    "inside5Share": 0.31,
+    "injury": ""
+  },
+  {
+    "name": "Tank Bigsby",
+    "team": "Philadelphia Eagles",
+    "targetShare": 0.08,
+    "recentCarryShare": 0.0,
+    "inside5Share": 0.08,
+    "injury": ""
   },
   {
     "name": "Will Shipley",
     "team": "Philadelphia Eagles",
     "targetShare": 0.16,
-    "recentCarryShare": 0.07,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "recentCarryShare": 0.05,
+    "inside5Share": 0.15,
+    "injury": ""
+  },
+  {
+    "name": "Elijah Mitchell",
+    "team": "Philadelphia Eagles",
+    "targetShare": 0.29,
+    "recentCarryShare": 0.2,
+    "inside5Share": 0.0,
+    "injury": ""
   },
   {
     "name": "Jaydon Blue",
     "team": "Philadelphia Eagles",
     "targetShare": 0.02,
     "recentCarryShare": 0.0,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "inside5Share": 0.0,
+    "injury": ""
   },
   {
     "name": "Jaylen Warren",
     "team": "Pittsburgh Steelers",
     "targetShare": 0.63,
-    "recentCarryShare": 0.51,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "recentCarryShare": 0.55,
+    "inside5Share": 0.75,
+    "injury": ""
   },
   {
     "name": "Rico Dowdle",
     "team": "Pittsburgh Steelers",
     "targetShare": 0.34,
-    "recentCarryShare": 0.38,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "recentCarryShare": 0.37,
+    "inside5Share": 0.25,
+    "injury": ""
   },
   {
-    "name": "Lew Nichols",
+    "name": "Lew Nichols III",
     "team": "Pittsburgh Steelers",
     "targetShare": 0.01,
-    "recentCarryShare": 0.09,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "recentCarryShare": 0.07,
+    "inside5Share": 0.0,
+    "injury": ""
+  },
+  {
+    "name": "Travis Homer",
+    "team": "Pittsburgh Steelers",
+    "targetShare": 0.0,
+    "recentCarryShare": 0.01,
+    "inside5Share": 0.0,
+    "injury": ""
+  },
+  {
+    "name": "Riley Nowakowski",
+    "team": "Pittsburgh Steelers",
+    "targetShare": 0.01,
+    "recentCarryShare": 0.0,
+    "inside5Share": 0.0,
+    "injury": ""
+  },
+  {
+    "name": "Emanuel Wilson",
+    "team": "Seattle Seahawks",
+    "targetShare": 0.18,
+    "recentCarryShare": 0.23,
+    "inside5Share": 0.54,
+    "injury": ""
+  },
+  {
+    "name": "Jadarian Price",
+    "team": "Seattle Seahawks",
+    "targetShare": 0.32,
+    "recentCarryShare": 0.27,
+    "inside5Share": 0.08,
+    "injury": ""
+  },
+  {
+    "name": "Zach Charbonnet",
+    "team": "Seattle Seahawks",
+    "targetShare": 0.12,
+    "recentCarryShare": 0.4,
+    "inside5Share": 0.0,
+    "injury": ""
+  },
+  {
+    "name": "George Holani",
+    "team": "Seattle Seahawks",
+    "targetShare": 0.3,
+    "recentCarryShare": 0.06,
+    "inside5Share": 0.38,
+    "injury": ""
+  },
+  {
+    "name": "Velus Jones Jr.",
+    "team": "Seattle Seahawks",
+    "targetShare": 0.02,
+    "recentCarryShare": 0.05,
+    "inside5Share": 0.0,
+    "injury": ""
+  },
+  {
+    "name": "Brady Russell",
+    "team": "Seattle Seahawks",
+    "targetShare": 0.06,
+    "recentCarryShare": 0.0,
+    "inside5Share": 0.0,
+    "injury": ""
   },
   {
     "name": "Christian McCaffrey",
     "team": "San Francisco 49ers",
     "targetShare": 0.69,
-    "recentCarryShare": 0.56,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "recentCarryShare": 0.52,
+    "inside5Share": 0.78,
+    "injury": ""
   },
   {
     "name": "Kaelon Black",
     "team": "San Francisco 49ers",
     "targetShare": 0.12,
-    "recentCarryShare": 0.36,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "recentCarryShare": 0.41,
+    "inside5Share": 0.17,
+    "injury": ""
   },
   {
     "name": "Jordan James",
     "team": "San Francisco 49ers",
     "targetShare": 0.01,
     "recentCarryShare": 0.06,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "inside5Share": 0.0,
+    "injury": ""
   },
   {
-    "name": "Zach Charbonnet",
-    "team": "Seattle Seahawks",
-    "targetShare": 0.12,
-    "recentCarryShare": 0.59,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
-  },
-  {
-    "name": "Jadarian Price",
-    "team": "Seattle Seahawks",
-    "targetShare": 0.32,
-    "recentCarryShare": 0.39,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
-  },
-  {
-    "name": "Emanuel Wilson",
-    "team": "Seattle Seahawks",
-    "targetShare": 0.18,
-    "recentCarryShare": 0.0,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "name": "Kyle Juszczyk",
+    "team": "San Francisco 49ers",
+    "targetShare": 0.17,
+    "recentCarryShare": 0.01,
+    "inside5Share": 0.06,
+    "injury": ""
   },
   {
     "name": "Bucky Irving",
     "team": "Tampa Bay Buccaneers",
     "targetShare": 0.55,
-    "recentCarryShare": 0.66,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "recentCarryShare": 0.62,
+    "inside5Share": 0.69,
+    "injury": ""
   },
   {
     "name": "Kenny Gainwell",
     "team": "Tampa Bay Buccaneers",
     "targetShare": 0.45,
-    "recentCarryShare": 0.34,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "recentCarryShare": 0.33,
+    "inside5Share": 0.08,
+    "injury": ""
   },
   {
     "name": "Sean Tucker",
     "team": "Tampa Bay Buccaneers",
     "targetShare": 0.0,
-    "recentCarryShare": 0.0,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "recentCarryShare": 0.05,
+    "inside5Share": 0.23,
+    "injury": ""
   },
   {
     "name": "Tony Pollard",
     "team": "Tennessee Titans",
     "targetShare": 0.61,
-    "recentCarryShare": 0.86,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "recentCarryShare": 0.87,
+    "inside5Share": 1.0,
+    "injury": ""
   },
   {
-    "name": "Julius Chestnut",
+    "name": "Tyjae Spears",
     "team": "Tennessee Titans",
-    "targetShare": 0.0,
-    "recentCarryShare": 0.0,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "targetShare": 0.35,
+    "recentCarryShare": 0.05,
+    "inside5Share": 0.0,
+    "injury": ""
   },
   {
-    "name": "Nicholas Singleton",
+    "name": "Michael Carter",
     "team": "Tennessee Titans",
-    "targetShare": 0.0,
-    "recentCarryShare": 0.0,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "targetShare": 0.04,
+    "recentCarryShare": 0.08,
+    "inside5Share": 0.0,
+    "injury": ""
   },
   {
     "name": "Jacory Croskey-Merritt",
     "team": "Washington Commanders",
     "targetShare": 0.2,
     "recentCarryShare": 0.16,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "inside5Share": 0.25,
+    "injury": ""
   },
   {
     "name": "Rachaad White",
     "team": "Washington Commanders",
     "targetShare": 0.47,
-    "recentCarryShare": 0.36,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "recentCarryShare": 0.37,
+    "inside5Share": 0.38,
+    "injury": ""
   },
   {
     "name": "Austin Ekeler",
     "team": "Washington Commanders",
     "targetShare": 0.31,
-    "recentCarryShare": 0.4,
-    "inside5Share": null,
-    "injury": "Active",
-    "recentWindow": "weeks 8-11; Week 12 games were not final",
-    "uncertain": [
-      "inside5Share"
-    ]
+    "recentCarryShare": 0.41,
+    "inside5Share": 0.12,
+    "injury": ""
+  },
+  {
+    "name": "Jeremy McNichols",
+    "team": "Washington Commanders",
+    "targetShare": 0.02,
+    "recentCarryShare": 0.06,
+    "inside5Share": 0.12,
+    "injury": ""
   }
 ]

@@ -9,6 +9,14 @@ const root = new URL('../', import.meta.url)
 const tdCoverage = JSON.parse(readFileSync(new URL('../src/data/td-coverage-wk12.json', import.meta.url)))
 const coverage = readFileSync(new URL('../src/data/coverage-wk12.json', import.meta.url))
 
+test('extra damp pulls a coverage move toward 1', () => {
+  const base = { idxMan: 1.2, idxZone: 0.8, manDef: 0.5, zoneDef: 0.5, manLg: 0.3, zoneLg: 0.7, position: 'WR' }
+  const full = coverageMultiplier(base)
+  const half = coverageMultiplier({ ...base, extraDamp: 0.5 })
+  assert.ok(Math.abs(half.mAdj - 1) < Math.abs(full.mAdj - 1))
+  assert.equal(coverageMultiplier({ ...base, extraDamp: 1 }).mAdj, full.mAdj)
+})
+
 test('multiplier damps, clamps, shrinks receiving backs, and halves a clipped mix', () => {
   const base = { idxMan: 1.2, idxZone: 0.8, manDef: 0.5, zoneDef: 0.5, manLg: 0.3, zoneLg: 0.7, position: 'WR' }
   const raw = (0.5 * 1.2 + 0.5 * 0.8) / (0.3 * 1.2 + 0.7 * 0.8)

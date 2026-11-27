@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { calibrationBefore } from '../data/accuracy.js'
 import { fileForWeek } from '../data/weekFiles.js'
 import { scatterAbbrev } from './scatterCheck.js'
 import { applyCoverage, DEFAULT_TOUCHDOWN_VIEW, mergeTouchdownSides } from './tdCoverage.js'
@@ -85,7 +86,8 @@ export default function Touchdowns({ away, home, week, roster }) {
   const file = fileForWeek('tdRisk', week)
   const coverage = fileForWeek('coverage', week)
   const tdCoverage = fileForWeek('tdCoverage', week)
-  const game = applyCoverage(findTdGame(file.data, away?.abbr, home?.abbr), coverage.matched ? coverage.data : null, tdCoverage.matched ? tdCoverage.data : null, file.data?.rules)
+  const prior = calibrationBefore(week)
+  const game = applyCoverage(findTdGame(file.data, away?.abbr, home?.abbr), coverage.matched ? coverage.data : null, tdCoverage.matched ? tdCoverage.data : null, file.data?.rules, { coverageDamp: prior?.adjustments?.coverageDamp ?? 1 })
   const ids = idsByName(roster)
   const matchKey = game?.key || `${away?.abbr}@${home?.abbr}`
   const [selection, setSelection] = useState({ key: matchKey, mode: DEFAULT_TOUCHDOWN_VIEW })
