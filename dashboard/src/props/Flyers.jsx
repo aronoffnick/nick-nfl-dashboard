@@ -6,7 +6,10 @@ import {findRb,roleDecision} from './roleEligibility.js'
 import RoleTags from './RoleTags.jsx'
 import {fileForWeek,roleBookForWeek} from '../data/weekFiles.js'
 import {raisedBreakoutLine,scatterProjection} from './scatterCheck.js'
+import {FLYER_MIN_HIT_RATE,MIN_SIMILARITY,flyersEmptyNote,qualifyClosest,selectFlyerRows} from './flyersView.js'
 import './flyers.css'
+
+export {FLYER_MIN_HIT_RATE,MIN_SIMILARITY}
 
 const wrLookupFor=week=>{
   const file=fileForWeek('wr',week)
@@ -69,7 +72,7 @@ export function closestPlayer(candidates,theme,pos,week){
   const book=roleBookForWeek(week)
   const referenceWrRoles=pos==='WR'?theme.hitPlayers.map(row=>wrLookup.get(row.player.name.trim().toLowerCase())).filter(Boolean):[]
   const referenceRbRoles=pos==='RB'?theme.hitPlayers.map(row=>rbStarter(row.player.name,week)).filter(Boolean):[]
-  return candidates.map(player=>{
+  const ranked=candidates.map(player=>{
     const usage=weighted(player.logs,theme.spec.usage,3)
     const usageScore=valid(referenceUsage)&&referenceUsage>0&&valid(usage)?Math.max(0,1-Math.abs(usage-referenceUsage)/referenceUsage):valid(usage)?Math.min(usage/10,1):0
     let roleScore=null,matchedRole=null
@@ -86,7 +89,8 @@ export function closestPlayer(candidates,theme,pos,week){
     const similarity=roleScore==null?usageScore:usageScore*.65+roleScore*.35
     const sheet=pos==='RB'?findRb(player.name,book):null
     return {...player,similarity,usage,role:matchedRole,carryShare:sheet?.seasonCarryShare??null}
-  }).sort((a,b)=>b.similarity-a.similarity||(theme.spec.key==='rushYds'?(b.carryShare??-1)-(a.carryShare??-1):0)||(b.breakoutScore??-1)-(a.breakoutScore??-1))[0]
+  }).sort((a,b)=>b.similarity-a.similarity||(theme.spec.key==='rushYds'?(b.carryShare??-1)-(a.carryShare??-1):0)||(b.breakoutScore??-1)-(a.breakoutScore??-1))
+  return qualifyClosest(ranked[0])
 }
 function matchEvidence(theme,closest){
   const pos=theme.position
@@ -155,24 +159,24 @@ export default function Flyers({data,matchup,roster,halfLife,window}){
   const offenses=[{offense:matchup.away,defense:matchup.home},{offense:matchup.home,defense:matchup.away}]
   const themes=useMemo(()=>buildFlyerThemes(data,matchup,roster,halfLife,window),[data,matchup,roster,halfLife,window])
   const teams=[...new Map(offenses.map(side=>[side.offense.id,side.offense])).values()]
-  const filtered=themes.filter(theme=>theme.tier==='Breakout'&&(teamFilter==='all'||theme.offense.id===teamFilter)&&
-    (positionFilter==='all'||theme.position===positionFilter))
-  const items=filtered.map(theme=>({theme,view:breakoutView(theme,matchup)}))
-    .sort((a,b)=>(b.view.rate??-1)-(a.view.rate??-1)||b.view.hits-a.view.hits||a.theme.position.localeCompare(b.theme.position)||a.theme.spec.title.localeCompare(b.theme.spec.title))
+  const viewed=useMemo(()=>themes.filter(theme=>theme.tier==='Breakout').map(theme=>({theme,view:breakoutView(theme,matchup)}))
+    .sort((a,b)=>(b.view.rate??-1)-(a.view.rate??-1)||b.view.hits-a.view.hits||a.theme.position.localeCompare(b.theme.position)||a.theme.spec.title.localeCompare(b.theme.spec.title)),[themes,matchup])
+  const {shown:items,scoped}=selectFlyerRows(viewed,{teamFilter,positionFilter})
+  const emptyNote=flyersEmptyNote({shown:items,matchupRows:viewed,scoped,teamFilter,positionFilter})
 
   return <section className="flyers-section" aria-label="Flyers threshold themes">
     <div className="prop-section-title"><h3>Flyers · most common opponent themes</h3><span>Position + stat + threshold · ranked by {isSeasonWindow(window)?'season':'recent'} hit rate</span></div>
-    <p className="prop-help">Each row shows how often a player at that position crossed the <b>Breakout</b> line in the defense’s selected games (the season, unless Last 4 or Last 6 is on), then identifies the closest-role player on the upcoming offense. Safe thresholds are retained as background support for the PARLAYS overlap range. The hit rate is historical evidence, not a forecast probability. QB “TDs” means rushing TDs; other positions’ TDs combine rushing and receiving.</p>
+    <p className="prop-help">Each row shows how often a player at that position crossed the <b>Breakout</b> line in the defense’s selected games (the season, unless Last 4 or Last 6 is on), then identifies the closest-role player on the upcoming offense. This board keeps rows at a {Math.round(FLYER_MIN_HIT_RATE*100)}% hit rate or higher. A theme whose closest role match is under {Math.round(MIN_SIMILARITY*100)}% is left off. Safe thresholds are retained as background support for the PARLAYS overlap range. The hit rate is historical evidence, not a forecast probability. QB “TDs” means rushing TDs; other positions’ TDs combine rushing and receiving.</p>
     <div className="flyers-filters" aria-label="Filter Flyers themes">
       <label>Team<select value={teamFilter} onChange={event=>setTeamFilter(event.target.value)}><option value="all">All teams</option>{teams.map(team=><option key={team.id} value={team.id}>{team.name}</option>)}</select></label>
       <label>Position<select value={positionFilter} onChange={event=>setPositionFilter(event.target.value)}><option value="all">All positions</option>{Object.keys(THRESHOLDS).map(pos=><option key={pos} value={pos}>{roleName(pos)}</option>)}</select></label>
       <button type="button" onClick={()=>{setTeamFilter('all');setPositionFilter('all')}}>Reset</button>
     </div>
     <div className="flyers-legend"><span className="flyer-breakout-swatch">Breakout · green</span><span>Safe thresholds remain as background support for PARLAYS overlap ranges. RB and WR lines use the higher of the sheet threshold and that player’s Week {data.week} scatter projection.</span></div>
-    {!items.length?<p className="prop-warning">No themes match these filters.</p>:<div className="flyers-board">{items.map(({theme,view},index)=><FlyerTheme key={`${theme.defense.id}:${theme.position}:${theme.spec.key}:${theme.tier}`} theme={theme} view={view} index={index} window={window}/>)}</div>}
+    {!items.length?<p className="prop-warning">{emptyNote}</p>:<div className="flyers-board">{items.map(({theme,view},index)=><FlyerTheme key={`${theme.defense.id}:${theme.position}:${theme.spec.key}:${theme.tier}`} theme={theme} view={view} index={index} window={window}/>)}</div>}
     <details className="prop-method"><summary>Threshold rules and data sources</summary>
       <p>Thresholds come from your supplied reference: QB pass yards 260/300, pass TDs 2/3, rush yards 20/35, rushing TDs 1/2; RB rush yards 90/110, receptions 4/6, receiving yards 15/25, total TDs 1/2; WR receptions 6/8, receiving yards 90/110, total TDs 1/2; TE receptions 5/7, receiving yards 40/60, total TDs 1/2. “Safe” and “Breakout” list first and second values respectively.</p>
-      <p>For each game, the position group counts as crossing when at least one player at that position reaches the threshold. Hit rates use the selected games (every prior game this season, unless Last 4 or Last 6 is on) with complete box-score categories and position data. A theme enters the ranking with at least two usable games and one crossing; all qualifying themes are shown, ordered by percentage and hit count. Closest player selection uses current-team workload, weighted with a 3-game half-life, compared with the workloads of historical players who crossed the threshold. WR role matching also consults the Week {data.week} starter sheet (slot/depth/alignment fields marked inferred in that source); it is a supplemental role hint, not tracking data.</p>
+      <p>For each game, the position group counts as crossing when at least one player at that position reaches the threshold. Hit rates use the selected games (every prior game this season, unless Last 4 or Last 6 is on) with complete box-score categories and position data. A theme enters the shared ranking with at least two usable games and one crossing. This board then keeps Breakout rows at a {Math.round(FLYER_MIN_HIT_RATE*100)}% hit rate or higher, ordered by percentage and hit count. PARLAYS still reads every Safe theme from that ranking. Closest player selection uses current-team workload, weighted with a 3-game half-life, compared with the workloads of historical players who crossed the threshold. A match under {Math.round(MIN_SIMILARITY*100)}% similar is left off this board. WR role matching also consults the Week {data.week} starter sheet (slot/depth/alignment fields marked inferred in that source); it is a supplemental role hint, not tracking data.</p>
       <p>Source: ESPN prior-week individual box scores and current roster positions. WR and RB starter files are built from ESPN depth charts and box scores for the current week when that week's file is in the app; slot, alignment, and goal-line fields ESPN does not publish are marked Uncertain. No sportsbook prices, confirmed starters, snap counts, or route participation are modeled.</p>
       <p>Role gate: a WR must be WR1, WR2, or WR3 for his current team. An RB receiving theme requires at least 25% of team RB targets or a pass-catching or 3rd-down tag. Rush closest-match ties prefer the higher season carry share. Questionable backs stay and are flagged on the card; Doubtful and Out are excluded. Depth or minimal-use backs are excluded. A back missing from the sheet stays in and is marked “No role data.” WR3 target-share fringe is not applied, because the WR sheet has no target shares. RB and WR breakout cards show max(sheet breakout line, that player’s Week {data.week} scatter projection rounded to the nearest 0.5). The hit rate on those cards is recomputed at the line shown. The Top Three favorites board is archived in props/archive and is not rendered.</p>
     </details>
