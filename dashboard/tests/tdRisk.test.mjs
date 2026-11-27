@@ -12,6 +12,11 @@ test('week 12 touchdown file keeps the Thanksgiving board and covers the rest of
     assert.ok(findTdGame(board, ...key.split('@')), key)
   }
   assert.equal(board.games.length >= 16, true)
+  const broncos = findTdGame(board, 'DEN', 'PIT')
+  assert.equal(broncos.priceSnapshot.asOf, 'Nov 27, 8:46 AM ET')
+  assert.equal(broncos.sides[0].rows[0].confident.player, 'Jonah Coleman')
+  assert.equal(broncos.sides[0].rows[0].confident.modelProb, 0.642)
+  assert.equal(priceText(broncos.sides[0].rows[0].confident), '-125 Polymarket')
 })
 
 test('Chicago at Detroit uses the refreshed prices', () => {

@@ -1,7 +1,7 @@
 {
   "season": 2026,
   "week": 12,
-  "generatedAt": "2026-11-26 11:16 AM ET",
+  "generatedAt": "2026-11-27 9:35 AM ET",
   "disclaimer": "Model estimates for entertainment only, not betting advice. Prices are a snapshot, not live.",
   "rules": {
     "questionableRankFactor": 0.85,
@@ -3154,27 +3154,32 @@
       "espnEventId": "401873083",
       "kickoff": "Fri Nov 27, 3:00 PM ET",
       "kickoffUtc": "2026-11-27T20:00Z",
-      "line": null,
+      "line": {
+        "spread": "DEN -4.5",
+        "total": 37.5,
+        "provider": "Draft Kings",
+        "pulled": "Nov 27, 9:35 AM ET"
+      },
       "priceSnapshot": {
-        "source": null,
-        "url": null,
-        "asOf": null,
-        "playersPriced": 0,
-        "note": "No price source available. Prices left blank."
+        "source": "getoddy.com best price across books",
+        "url": "https://getoddy.com/nfl/games/broncos-steelers-2026-11-27/props",
+        "asOf": "Nov 27, 8:46 AM ET",
+        "playersPriced": 32
       },
       "sides": [
         {
           "offense": "DEN",
           "defense": "PIT",
-          "impliedTeamPoints": 21.9,
+          "impliedTeamPoints": 21.0,
           "defenseGames": 10,
           "tdsAllowedByPosition": {
-            "QB": 1,
             "RB": 8,
-            "WR": 6,
-            "TE": 8
+            "TE": 4,
+            "WR": 5
           },
-          "positionsSkipped": [],
+          "positionsSkipped": [
+            "QB"
+          ],
           "rows": [
             {
               "position": "RB",
@@ -3189,26 +3194,14 @@
                 "position": "RB",
                 "role": "RB1",
                 "prop": "Anytime TD",
-                "modelProb": 0.638,
-                "price": null,
-                "book": null,
+                "modelProb": 0.642,
+                "price": "-125",
+                "book": "Polymarket",
                 "estimate": false,
-                "reason": "6 rushing plus receiving TDs in 6 games (1.01 expected this week). PIT allowed 8 RB TDs in 10 games.",
+                "reason": "17 red-zone carries (13 inside the 10, 8 inside the 5); 1 red-zone target (1 inside the 10); 6 TDs in 6 games. RB1 players scored 5 on PIT.",
                 "status": null
               },
-              "relativelySafe": {
-                "player": "RJ Harvey",
-                "team": "DEN",
-                "position": "RB",
-                "role": "RB2",
-                "prop": "Anytime TD",
-                "modelProb": 0.29,
-                "price": null,
-                "book": null,
-                "estimate": false,
-                "reason": "2 rushing plus receiving TDs in 6 games (0.34 expected this week). PIT allowed 8 RB TDs in 10 games.",
-                "status": null
-              },
+              "relativelySafe": null,
               "upside": [
                 {
                   "player": "Jonah Coleman",
@@ -3216,11 +3209,11 @@
                   "position": "RB",
                   "role": "RB1",
                   "prop": "2+ TDs",
-                  "modelProb": 0.27,
-                  "price": null,
-                  "book": null,
+                  "modelProb": 0.274,
+                  "price": "+490",
+                  "book": "FanDuel",
                   "estimate": false,
-                  "reason": "Same expected touchdowns, Poisson chance of two or more.",
+                  "reason": "Safer player for two scores: same red-zone role as the confident pick.",
                   "status": null,
                   "flavor": "safer_2plus"
                 },
@@ -3230,125 +3223,65 @@
                   "position": "RB",
                   "role": "RB1",
                   "prop": "3+ TDs",
-                  "modelProb": 0.083,
+                  "modelProb": 0.085,
                   "price": null,
                   "book": null,
                   "estimate": false,
-                  "reason": "Same expected touchdowns, Poisson chance of three or more.",
+                  "reason": "Model only; no 3+ TD market in the snapshot.",
                   "status": null,
                   "flavor": "safer_3plus"
                 },
                 {
-                  "player": "J.K. Dobbins",
+                  "player": "Tyler Badie",
                   "team": "DEN",
                   "position": "RB",
-                  "role": "RB3",
+                  "role": "RB2",
                   "prop": "Anytime TD",
-                  "modelProb": 0.266,
-                  "price": null,
-                  "book": null,
-                  "estimate": false,
-                  "reason": "3 rushing plus receiving TDs in 10 games (0.31 expected this week). PIT allowed 8 RB TDs in 10 games.",
-                  "status": null,
+                  "modelProb": 0.107,
+                  "price": "+1100",
+                  "book": "FanDuel",
+                  "estimate": true,
+                  "reason": "2 red-zone targets (1 inside the 10); 0 TDs in 5 games. RB2+ players scored 3 on PIT.",
+                  "status": "Questionable",
                   "flavor": "backup_1td"
                 }
-              ]
-            },
-            {
-              "position": "TE",
-              "tdsAllowed": 8,
-              "byRole": {
-                "TE1": 4,
-                "TE2+": 4
-              },
-              "confident": {
-                "player": "Nate Adkins",
-                "team": "DEN",
-                "position": "TE",
-                "role": "TE1",
-                "prop": "Anytime TD",
-                "modelProb": 0.342,
-                "price": null,
-                "book": null,
-                "estimate": false,
-                "reason": "3 rushing plus receiving TDs in 7 games (0.42 expected this week). PIT allowed 8 TE TDs in 10 games.",
-                "status": null
-              },
-              "relativelySafe": {
-                "player": "Adam Trautman",
-                "team": "DEN",
-                "position": "TE",
-                "role": "TE2",
-                "prop": "Anytime TD",
-                "modelProb": 0.152,
-                "price": null,
-                "book": null,
-                "estimate": false,
-                "reason": "1 rushing plus receiving TDs in 6 games (0.17 expected this week). PIT allowed 8 TE TDs in 10 games.",
-                "status": null
-              },
-              "upside": [
-                {
-                  "player": "Nate Adkins",
-                  "team": "DEN",
-                  "position": "TE",
-                  "role": "TE1",
-                  "prop": "2+ TDs",
-                  "modelProb": 0.067,
-                  "price": null,
-                  "book": null,
-                  "estimate": false,
-                  "reason": "Same expected touchdowns, Poisson chance of two or more.",
-                  "status": null,
-                  "flavor": "safer_2plus"
-                },
-                {
-                  "player": "Evan Engram",
-                  "team": "DEN",
-                  "position": "TE",
-                  "role": "TE3",
-                  "prop": "Anytime TD",
-                  "modelProb": 0.095,
-                  "price": null,
-                  "book": null,
-                  "estimate": false,
-                  "reason": "1 rushing plus receiving TDs in 10 games (0.10 expected this week). PIT allowed 8 TE TDs in 10 games.",
-                  "status": null,
-                  "flavor": "backup_1td"
-                }
+              ],
+              "notes": [
+                "No second qualifying RB reaches 15%."
               ]
             },
             {
               "position": "WR",
-              "tdsAllowed": 6,
+              "tdsAllowed": 5,
               "byRole": {
-                "WR2+": 5,
-                "WR1": 1
+                "WR1": 2,
+                "WR2": 2,
+                "WR3": 1
               },
               "confident": {
-                "player": "Pat Bryant",
+                "player": "Courtland Sutton",
                 "team": "DEN",
                 "position": "WR",
                 "role": "WR1",
                 "prop": "Anytime TD",
-                "modelProb": 0.241,
-                "price": null,
-                "book": null,
+                "modelProb": 0.223,
+                "price": "+425",
+                "book": "BetMGM",
                 "estimate": false,
-                "reason": "2 rushing plus receiving TDs in 6 games (0.28 expected this week). PIT allowed 6 WR TDs in 10 games.",
+                "reason": "9 red-zone targets (5 inside the 10); 2 TDs in 10 games. WR1 players scored 2 on PIT.",
                 "status": null
               },
               "relativelySafe": {
-                "player": "Courtland Sutton",
+                "player": "Jaylen Waddle",
                 "team": "DEN",
                 "position": "WR",
                 "role": "WR2",
                 "prop": "Anytime TD",
-                "modelProb": 0.152,
-                "price": null,
-                "book": null,
+                "modelProb": 0.182,
+                "price": "+330",
+                "book": "Fanatics",
                 "estimate": false,
-                "reason": "2 rushing plus receiving TDs in 10 games (0.17 expected this week). PIT allowed 6 WR TDs in 10 games.",
+                "reason": "6 red-zone targets (1 inside the 10); 2 TDs in 10 games. WR2 players scored 2 on PIT.",
                 "status": null
               },
               "upside": [
@@ -3356,200 +3289,18 @@
                   "player": "Pat Bryant",
                   "team": "DEN",
                   "position": "WR",
-                  "role": "WR1",
-                  "prop": "2+ TDs",
-                  "modelProb": 0.032,
-                  "price": null,
-                  "book": null,
-                  "estimate": false,
-                  "reason": "Same expected touchdowns, Poisson chance of two or more.",
-                  "status": null,
-                  "flavor": "safer_2plus"
-                },
-                {
-                  "player": "Jaylen Waddle",
-                  "team": "DEN",
-                  "position": "WR",
                   "role": "WR3",
                   "prop": "Anytime TD",
-                  "modelProb": 0.152,
-                  "price": null,
-                  "book": null,
+                  "modelProb": 0.137,
+                  "price": "+500",
+                  "book": "Fanatics",
                   "estimate": false,
-                  "reason": "2 rushing plus receiving TDs in 10 games (0.17 expected this week). PIT allowed 6 WR TDs in 10 games.",
+                  "reason": "2 red-zone targets (2 inside the 10); 2 TDs in 6 games. WR3 players scored 1 on PIT.",
                   "status": null,
                   "flavor": "backup_1td"
                 }
-              ]
-            },
-            {
-              "position": "QB",
-              "tdsAllowed": 1,
-              "byRole": {
-                "QB1": 1
-              },
-              "confident": {
-                "player": "Bo Nix",
-                "team": "DEN",
-                "position": "QB",
-                "role": "QB1",
-                "prop": "Anytime TD",
-                "modelProb": 0.152,
-                "price": null,
-                "book": null,
-                "estimate": false,
-                "reason": "2 rushing plus receiving TDs in 10 games (0.17 expected this week). PIT allowed 1 QB TDs in 10 games.",
-                "status": null
-              },
-              "relativelySafe": null,
-              "upside": []
-            }
-          ]
-        },
-        {
-          "offense": "PIT",
-          "defense": "DEN",
-          "impliedTeamPoints": 21.2,
-          "defenseGames": 10,
-          "tdsAllowedByPosition": {
-            "QB": 0,
-            "RB": 8,
-            "WR": 5,
-            "TE": 4
-          },
-          "positionsSkipped": [
-            "QB"
-          ],
-          "rows": [
-            {
-              "position": "RB",
-              "tdsAllowed": 8,
-              "byRole": {
-                "RB1": 4,
-                "RB2+": 4
-              },
-              "confident": {
-                "player": "Jaylen Warren",
-                "team": "PIT",
-                "position": "RB",
-                "role": "RB1",
-                "prop": "Anytime TD",
-                "modelProb": 0.295,
-                "price": null,
-                "book": null,
-                "estimate": false,
-                "reason": "3 rushing plus receiving TDs in 10 games (0.35 expected this week). DEN allowed 8 RB TDs in 10 games.",
-                "status": null
-              },
-              "relativelySafe": null,
-              "upside": [
-                {
-                  "player": "Jaylen Warren",
-                  "team": "PIT",
-                  "position": "RB",
-                  "role": "RB1",
-                  "prop": "2+ TDs",
-                  "modelProb": 0.049,
-                  "price": null,
-                  "book": null,
-                  "estimate": false,
-                  "reason": "Same expected touchdowns, Poisson chance of two or more.",
-                  "status": null,
-                  "flavor": "safer_2plus"
-                },
-                {
-                  "player": "Rico Dowdle",
-                  "team": "PIT",
-                  "position": "RB",
-                  "role": "RB2",
-                  "prop": "Anytime TD",
-                  "modelProb": 0.15,
-                  "price": null,
-                  "book": null,
-                  "estimate": false,
-                  "reason": "1 rushing plus receiving TDs in 7 games (0.16 expected this week). DEN allowed 8 RB TDs in 10 games.",
-                  "status": null,
-                  "flavor": "backup_1td"
-                }
-              ]
-            },
-            {
-              "position": "WR",
-              "tdsAllowed": 5,
-              "byRole": {
-                "WR2+": 3,
-                "WR1": 2
-              },
-              "confident": {
-                "player": "Roman Wilson",
-                "team": "PIT",
-                "position": "WR",
-                "role": "WR1",
-                "prop": "Anytime TD",
-                "modelProb": 0.268,
-                "price": null,
-                "book": null,
-                "estimate": false,
-                "reason": "2 rushing plus receiving TDs in 6 games (0.31 expected this week). DEN allowed 5 WR TDs in 10 games.",
-                "status": null
-              },
-              "relativelySafe": {
-                "player": "DK Metcalf",
-                "team": "PIT",
-                "position": "WR",
-                "role": "WR2",
-                "prop": "Anytime TD",
-                "modelProb": 0.171,
-                "price": null,
-                "book": null,
-                "estimate": false,
-                "reason": "2 rushing plus receiving TDs in 10 games (0.19 expected this week). DEN allowed 5 WR TDs in 10 games.",
-                "status": null
-              },
-              "upside": [
-                {
-                  "player": "Roman Wilson",
-                  "team": "PIT",
-                  "position": "WR",
-                  "role": "WR1",
-                  "prop": "2+ TDs",
-                  "modelProb": 0.04,
-                  "price": null,
-                  "book": null,
-                  "estimate": false,
-                  "reason": "Same expected touchdowns, Poisson chance of two or more.",
-                  "status": null,
-                  "flavor": "safer_2plus"
-                },
-                {
-                  "player": "Ben Skowronek",
-                  "team": "PIT",
-                  "position": "WR",
-                  "role": "WR3",
-                  "prop": "Anytime TD",
-                  "modelProb": 0.171,
-                  "price": null,
-                  "book": null,
-                  "estimate": false,
-                  "reason": "1 rushing plus receiving TDs in 5 games (0.19 expected this week). DEN allowed 5 WR TDs in 10 games.",
-                  "status": null,
-                  "flavor": "backup_1td"
-                },
-                {
-                  "player": "Germie Bernard",
-                  "team": "PIT",
-                  "position": "WR",
-                  "role": "WR4",
-                  "prop": "Anytime TD",
-                  "modelProb": 0.095,
-                  "price": null,
-                  "book": null,
-                  "estimate": false,
-                  "reason": "1 rushing plus receiving TDs in 9 games (0.10 expected this week). DEN allowed 5 WR TDs in 10 games.",
-                  "status": null,
-                  "flavor": "backup_1td"
-                }
-              ]
+              ],
+              "notes": []
             },
             {
               "position": "TE",
@@ -3559,16 +3310,316 @@
                 "TE2+": 1
               },
               "confident": {
+                "player": "Nate Adkins",
+                "team": "DEN",
+                "position": "TE",
+                "role": "TE2",
+                "prop": "Anytime TD",
+                "modelProb": 0.217,
+                "price": "+1200",
+                "book": "BetMGM",
+                "estimate": true,
+                "reason": "4 red-zone targets (4 inside the 10); 3 TDs in 7 games. TE2+ players scored 1 on PIT.",
+                "status": null
+              },
+              "relativelySafe": {
+                "player": "Evan Engram",
+                "team": "DEN",
+                "position": "TE",
+                "role": "TE1",
+                "prop": "Anytime TD",
+                "modelProb": 0.158,
+                "price": "+550",
+                "book": "DraftKings",
+                "estimate": false,
+                "reason": "4 red-zone targets (1 inside the 10); 1 TD in 10 games. TE1 players scored 3 on PIT.",
+                "status": null
+              },
+              "upside": [
+                {
+                  "player": "Adam Trautman",
+                  "team": "DEN",
+                  "position": "TE",
+                  "role": "TE3",
+                  "prop": "Anytime TD",
+                  "modelProb": 0.149,
+                  "price": "+1600",
+                  "book": "DraftKings",
+                  "estimate": true,
+                  "reason": "3 red-zone targets (1 inside the 10); 1 TD in 6 games. TE2+ players scored 1 on PIT.",
+                  "status": null,
+                  "flavor": "backup_1td"
+                }
+              ],
+              "notes": []
+            }
+          ],
+          "evidence": [
+            {
+              "week": 1,
+              "offense": "ATL",
+              "scorer": "Bi.Robinson",
+              "pos": "RB",
+              "role": "RB1",
+              "type": "Rec",
+              "yardline": 23
+            },
+            {
+              "week": 2,
+              "offense": "NE",
+              "scorer": "T.Henderson",
+              "pos": "RB",
+              "role": "RB2",
+              "type": "Rush",
+              "yardline": 39
+            },
+            {
+              "week": 3,
+              "offense": "CIN",
+              "scorer": "J.Chase",
+              "pos": "WR",
+              "role": "WR1",
+              "type": "Rec",
+              "yardline": 3
+            },
+            {
+              "week": 3,
+              "offense": "CIN",
+              "scorer": "T.Higgins",
+              "pos": "WR",
+              "role": "WR2",
+              "type": "Rec",
+              "yardline": 28
+            },
+            {
+              "week": 3,
+              "offense": "CIN",
+              "scorer": "M.Gesicki",
+              "pos": "TE",
+              "role": "TE1",
+              "type": "Rec",
+              "yardline": 25
+            },
+            {
+              "week": 4,
+              "offense": "CLE",
+              "scorer": "J.McLaughlin",
+              "pos": "RB",
+              "role": "RB3",
+              "type": "Rush",
+              "yardline": 28
+            },
+            {
+              "week": 4,
+              "offense": "CLE",
+              "scorer": "Q.Judkins",
+              "pos": "RB",
+              "role": "RB1",
+              "type": "Rush",
+              "yardline": 2
+            },
+            {
+              "week": 4,
+              "offense": "CLE",
+              "scorer": "H.Fannin",
+              "pos": "TE",
+              "role": "TE1",
+              "type": "Rec",
+              "yardline": 2
+            },
+            {
+              "week": 5,
+              "offense": "IND",
+              "scorer": "T.Warren",
+              "pos": "TE",
+              "role": "TE1",
+              "type": "Rush",
+              "yardline": 1
+            },
+            {
+              "week": 6,
+              "offense": "TB",
+              "scorer": "E.Egbuka",
+              "pos": "WR",
+              "role": "WR1",
+              "type": "Rec",
+              "yardline": 2
+            },
+            {
+              "week": 7,
+              "offense": "NO",
+              "scorer": "D.Vele",
+              "pos": "WR",
+              "role": "WR2",
+              "type": "Rec",
+              "yardline": 1
+            },
+            {
+              "week": 10,
+              "offense": "CIN",
+              "scorer": "D.Sample",
+              "pos": "TE",
+              "role": "TE2",
+              "type": "Rec",
+              "yardline": 3
+            },
+            {
+              "week": 10,
+              "offense": "CIN",
+              "scorer": "C.Brown",
+              "pos": "RB",
+              "role": "RB1",
+              "type": "Rec",
+              "yardline": 2
+            },
+            {
+              "week": 10,
+              "offense": "CIN",
+              "scorer": "D.Meyers",
+              "pos": "WR",
+              "role": "WR3",
+              "type": "Rec",
+              "yardline": 15
+            },
+            {
+              "week": 10,
+              "offense": "CIN",
+              "scorer": "C.Brown",
+              "pos": "RB",
+              "role": "RB1",
+              "type": "Rec",
+              "yardline": 4
+            },
+            {
+              "week": 10,
+              "offense": "CIN",
+              "scorer": "S.Perine",
+              "pos": "RB",
+              "role": "RB2",
+              "type": "Rush",
+              "yardline": 1
+            },
+            {
+              "week": 11,
+              "offense": "PHI",
+              "scorer": "S.Barkley",
+              "pos": "RB",
+              "role": "RB1",
+              "type": "Rush",
+              "yardline": 38
+            }
+          ]
+        },
+        {
+          "offense": "PIT",
+          "defense": "DEN",
+          "impliedTeamPoints": 16.5,
+          "defenseGames": 10,
+          "tdsAllowedByPosition": {
+            "QB": 1,
+            "RB": 8,
+            "TE": 8,
+            "WR": 6
+          },
+          "positionsSkipped": [],
+          "rows": [
+            {
+              "position": "RB",
+              "tdsAllowed": 8,
+              "byRole": {
+                "RB1": 5,
+                "RB2+": 3
+              },
+              "confident": {
+                "player": "Jaylen Warren",
+                "team": "PIT",
+                "position": "RB",
+                "role": "RB1",
+                "prop": "Anytime TD",
+                "modelProb": 0.303,
+                "price": "+200",
+                "book": "Fanatics",
+                "estimate": false,
+                "reason": "11 red-zone carries (3 inside the 10, 3 inside the 5); 5 red-zone targets (2 inside the 10); 3 TDs in 10 games. RB1 players scored 5 on DEN.",
+                "status": null
+              },
+              "relativelySafe": {
+                "player": "Rico Dowdle",
+                "team": "PIT",
+                "position": "RB",
+                "role": "RB2",
+                "prop": "Anytime TD",
+                "modelProb": 0.225,
+                "price": "+400",
+                "book": "Fanatics",
+                "estimate": false,
+                "reason": "9 red-zone carries (3 inside the 10, 1 inside the 5); 2 red-zone targets (1 inside the 10); 1 TD in 7 games. RB2+ players scored 3 on DEN.",
+                "status": null
+              },
+              "upside": [
+                {
+                  "player": "Jaylen Warren",
+                  "team": "PIT",
+                  "position": "RB",
+                  "role": "RB1",
+                  "prop": "2+ TDs",
+                  "modelProb": 0.051,
+                  "price": "+1600",
+                  "book": "FanDuel",
+                  "estimate": false,
+                  "reason": "Safer player for two scores: same red-zone role as the confident pick.",
+                  "status": null,
+                  "flavor": "safer_2plus"
+                },
+                {
+                  "player": "Lew Nichols III",
+                  "team": "PIT",
+                  "position": "RB",
+                  "role": "RB3",
+                  "prop": "Anytime TD",
+                  "modelProb": 0.045,
+                  "price": "+7500",
+                  "book": "Hard Rock",
+                  "estimate": true,
+                  "reason": "2 red-zone carries (1 inside the 10, 0 inside the 5); 1 red-zone target (0 inside the 10); 0 TDs in 7 games. RB2+ players scored 3 on DEN.",
+                  "status": null,
+                  "flavor": "backup_1td"
+                },
+                {
+                  "player": "Travis Homer",
+                  "team": "PIT",
+                  "position": "RB",
+                  "role": "RB4",
+                  "prop": "Anytime TD",
+                  "modelProb": 0.029,
+                  "price": "+7500",
+                  "book": "Hard Rock",
+                  "estimate": true,
+                  "reason": "3 red-zone carries (1 inside the 10, 0 inside the 5); 0 TDs in 6 games. RB2+ players scored 3 on DEN.",
+                  "status": null,
+                  "flavor": "backup_1td"
+                }
+              ],
+              "notes": []
+            },
+            {
+              "position": "TE",
+              "tdsAllowed": 8,
+              "byRole": {
+                "TE1": 4,
+                "TE2+": 4
+              },
+              "confident": {
                 "player": "Pat Freiermuth",
                 "team": "PIT",
                 "position": "TE",
                 "role": "TE1",
                 "prop": "Anytime TD",
-                "modelProb": 0.637,
-                "price": null,
-                "book": null,
+                "modelProb": 0.218,
+                "price": "+650",
+                "book": "Fanatics",
                 "estimate": false,
-                "reason": "6 rushing plus receiving TDs in 10 games (1.01 expected this week). DEN allowed 4 TE TDs in 10 games.",
+                "reason": "1 red-zone carry (1 inside the 10, 1 inside the 5); 7 red-zone targets (3 inside the 10); 6 TDs in 10 games. TE1 players scored 4 on DEN.",
                 "status": null
               },
               "relativelySafe": {
@@ -3577,43 +3628,291 @@
                 "position": "TE",
                 "role": "TE2",
                 "prop": "Anytime TD",
-                "modelProb": 0.401,
-                "price": null,
-                "book": null,
+                "modelProb": 0.208,
+                "price": "+574",
+                "book": "Polymarket",
                 "estimate": false,
-                "reason": "3 rushing plus receiving TDs in 10 games (0.51 expected this week). DEN allowed 4 TE TDs in 10 games.",
+                "reason": "7 red-zone targets (4 inside the 10); 3 TDs in 10 games. TE2+ players scored 4 on DEN.",
                 "status": null
               },
               "upside": [
                 {
-                  "player": "Pat Freiermuth",
+                  "player": "Robert Tonyan",
                   "team": "PIT",
                   "position": "TE",
-                  "role": "TE1",
-                  "prop": "2+ TDs",
-                  "modelProb": 0.269,
-                  "price": null,
-                  "book": null,
-                  "estimate": false,
-                  "reason": "Same expected touchdowns, Poisson chance of two or more.",
-                  "status": null,
-                  "flavor": "safer_2plus"
-                },
-                {
-                  "player": "Pat Freiermuth",
-                  "team": "PIT",
-                  "position": "TE",
-                  "role": "TE1",
-                  "prop": "3+ TDs",
+                  "role": "TE3",
+                  "prop": "Anytime TD",
                   "modelProb": 0.083,
-                  "price": null,
-                  "book": null,
-                  "estimate": false,
-                  "reason": "Same expected touchdowns, Poisson chance of three or more.",
+                  "price": "+6000",
+                  "book": "betPARX",
+                  "estimate": true,
+                  "reason": "1 red-zone target (0 inside the 10); 0 TDs in 2 games. TE2+ players scored 4 on DEN.",
                   "status": null,
-                  "flavor": "safer_3plus"
+                  "flavor": "backup_1td"
                 }
-              ]
+              ],
+              "notes": []
+            },
+            {
+              "position": "WR",
+              "tdsAllowed": 6,
+              "byRole": {
+                "WR1": 1,
+                "WR2": 4,
+                "WR3": 1
+              },
+              "confident": {
+                "player": "DK Metcalf",
+                "team": "PIT",
+                "position": "WR",
+                "role": "WR1",
+                "prop": "Anytime TD",
+                "modelProb": 0.17,
+                "price": "+426",
+                "book": "Polymarket",
+                "estimate": false,
+                "reason": "5 red-zone targets (4 inside the 10); 2 TDs in 10 games. WR1 players scored 1 on DEN.",
+                "status": null
+              },
+              "relativelySafe": {
+                "player": "Germie Bernard",
+                "team": "PIT",
+                "position": "WR",
+                "role": "WR2",
+                "prop": "Anytime TD",
+                "modelProb": 0.161,
+                "price": "+600",
+                "book": "DraftKings",
+                "estimate": false,
+                "reason": "10 red-zone targets (2 inside the 10); 1 TD in 9 games. WR2 players scored 4 on DEN.",
+                "status": null
+              },
+              "upside": [
+                {
+                  "player": "Roman Wilson",
+                  "team": "PIT",
+                  "position": "WR",
+                  "role": "WR3",
+                  "prop": "Anytime TD",
+                  "modelProb": 0.113,
+                  "price": "+841",
+                  "book": "Polymarket",
+                  "estimate": false,
+                  "reason": "3 red-zone targets (1 inside the 10); 2 TDs in 6 games. WR3 players scored 1 on DEN.",
+                  "status": null,
+                  "flavor": "backup_1td"
+                }
+              ],
+              "notes": []
+            }
+          ],
+          "evidence": [
+            {
+              "week": 1,
+              "offense": "KC",
+              "scorer": "P.Mahomes",
+              "pos": "QB",
+              "role": "QB rush",
+              "type": "Rush",
+              "yardline": 15
+            },
+            {
+              "week": 1,
+              "offense": "KC",
+              "scorer": "R.Rice",
+              "pos": "WR",
+              "role": "WR2",
+              "type": "Rec",
+              "yardline": 13
+            },
+            {
+              "week": 1,
+              "offense": "KC",
+              "scorer": "K.Walker",
+              "pos": "RB",
+              "role": "RB1",
+              "type": "Rush",
+              "yardline": 60
+            },
+            {
+              "week": 1,
+              "offense": "KC",
+              "scorer": "K.Walker",
+              "pos": "RB",
+              "role": "RB1",
+              "type": "Rec",
+              "yardline": 2
+            },
+            {
+              "week": 2,
+              "offense": "JAX",
+              "scorer": "B.Tuten",
+              "pos": "RB",
+              "role": "RB1",
+              "type": "Rush",
+              "yardline": 1
+            },
+            {
+              "week": 3,
+              "offense": "LA",
+              "scorer": "T.Higbee",
+              "pos": "TE",
+              "role": "TE1",
+              "type": "Rec",
+              "yardline": 5
+            },
+            {
+              "week": 3,
+              "offense": "LA",
+              "scorer": "K.Mumpfield",
+              "pos": "WR",
+              "role": "WR2",
+              "type": "Rec",
+              "yardline": 48
+            },
+            {
+              "week": 4,
+              "offense": "SF",
+              "scorer": "D.Samuel",
+              "pos": "WR",
+              "role": "WR2",
+              "type": "Rec",
+              "yardline": 1
+            },
+            {
+              "week": 4,
+              "offense": "SF",
+              "scorer": "C.McCaffrey",
+              "pos": "RB",
+              "role": "RB1",
+              "type": "Rush",
+              "yardline": 1
+            },
+            {
+              "week": 4,
+              "offense": "SF",
+              "scorer": "G.Kittle",
+              "pos": "TE",
+              "role": "TE1",
+              "type": "Rec",
+              "yardline": 56
+            },
+            {
+              "week": 5,
+              "offense": "LAC",
+              "scorer": "H.Rucci",
+              "pos": "TE",
+              "role": "TE4",
+              "type": "Rec",
+              "yardline": 7
+            },
+            {
+              "week": 5,
+              "offense": "LAC",
+              "scorer": "K.Vidal",
+              "pos": "RB",
+              "role": "RB3",
+              "type": "Rush",
+              "yardline": 42
+            },
+            {
+              "week": 6,
+              "offense": "SEA",
+              "scorer": "G.Holani",
+              "pos": "RB",
+              "role": "RB2",
+              "type": "Rush",
+              "yardline": 1
+            },
+            {
+              "week": 7,
+              "offense": "ARI",
+              "scorer": "T.McBride",
+              "pos": "TE",
+              "role": "TE1",
+              "type": "Rec",
+              "yardline": 7
+            },
+            {
+              "week": 8,
+              "offense": "KC",
+              "scorer": "R.Rice",
+              "pos": "WR",
+              "role": "WR2",
+              "type": "Rec",
+              "yardline": 11
+            },
+            {
+              "week": 8,
+              "offense": "KC",
+              "scorer": "E.Johnson",
+              "pos": "RB",
+              "role": "RB2",
+              "type": "Rec",
+              "yardline": 73
+            },
+            {
+              "week": 8,
+              "offense": "KC",
+              "scorer": "N.Gray",
+              "pos": "TE",
+              "role": "TE2",
+              "type": "Rec",
+              "yardline": 4
+            },
+            {
+              "week": 9,
+              "offense": "CAR",
+              "scorer": "T.Tremble",
+              "pos": "TE",
+              "role": "TE2",
+              "type": "Rec",
+              "yardline": 10
+            },
+            {
+              "week": 9,
+              "offense": "CAR",
+              "scorer": "D.Waller",
+              "pos": "TE",
+              "role": "TE1",
+              "type": "Rec",
+              "yardline": 15
+            },
+            {
+              "week": 9,
+              "offense": "CAR",
+              "scorer": "T.McMillan",
+              "pos": "WR",
+              "role": "WR1",
+              "type": "Rec",
+              "yardline": 4
+            },
+            {
+              "week": 11,
+              "offense": "LV",
+              "scorer": "A.Jeanty",
+              "pos": "RB",
+              "role": "RB1",
+              "type": "Rec",
+              "yardline": 68
+            },
+            {
+              "week": 11,
+              "offense": "LV",
+              "scorer": "I.Thomas",
+              "pos": "TE",
+              "role": "TE3",
+              "type": "Rec",
+              "yardline": 19
+            },
+            {
+              "week": 11,
+              "offense": "LV",
+              "scorer": "J.Bech",
+              "pos": "WR",
+              "role": "WR3",
+              "type": "Rec",
+              "yardline": 7
             }
           ]
         }

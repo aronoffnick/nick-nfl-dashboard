@@ -5,12 +5,13 @@ import { boardGame, fileCards, tableConflict } from '../src/props/parlayBoard.js
 
 const board = JSON.parse(readFileSync(new URL('../src/data/parlays-wk12.json', import.meta.url)))
 const file = { matched: true, data: board }
-const games = [['CHI', 'DET'], ['PHI', 'DAL'], ['KC', 'BUF']]
+const games = [['CHI', 'DET'], ['PHI', 'DAL'], ['KC', 'BUF'], ['DEN', 'PIT']]
 
 test('week 12 file is v2 and keeps the three Thanksgiving games', () => {
   assert.equal(board.week, 12)
   assert.equal(board.version, 2)
-  for (const key of ['CHI-DET', 'PHI-DAL', 'KC-BUF']) assert.ok(board.games[key], key)
+  for (const key of ['CHI-DET', 'PHI-DAL', 'KC-BUF', 'DEN-PIT']) assert.ok(board.games[key], key)
+  assert.equal(board.games['DEN-PIT'].snapshot.props_asof, 'Nov 27, 9:17 AM ET')
   assert.equal(boardGame({ matched: true, data: { ...board, version: 1 } }, 'CHI', 'DET'), null)
 })
 
