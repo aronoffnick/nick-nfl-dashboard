@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { remember } from './data/historyFile.js'
 
 const storageKey = 'nfl-moneyline-picks-v1'
 
@@ -57,8 +58,8 @@ export default function PickTracker({ data, matchups, historicalPicks, props, sa
   }, [data, matchups, currentWeek])
 
   useEffect(() => {
-    try { localStorage.setItem(storageKey, JSON.stringify(records)); setStorageError(false) }
-    catch { setStorageError(true) }
+    if (!remember(storageKey, JSON.stringify(records))) setStorageError(true)
+    else setStorageError(false)
   }, [records])
 
   const entries = Object.entries({ ...Object.fromEntries(historicalPicks), ...records })

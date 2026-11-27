@@ -1,5 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
+import { bundledHistory } from '../data/historyFile.js'
 import { getRosters } from './data.js'
+import { bindHistoryPlayers } from './bindHistory.js'
+import { findTdGame } from './tdRiskBoard.js'
+import { fileForWeek } from '../data/weekFiles.js'
 import { valid, historyFor, sides, positionOf } from './model.js'
 import AccuracyNote from './AccuracyNote.jsx'
 import Flyers from './Flyers.jsx'
@@ -68,6 +72,7 @@ export default function MatchupExplorer({saveProp,data,matchup,halfLife,advantag
     try{setRosters(await getRosters(data,setMessage,force))}catch(e){setError(e.message)}
   }
   useEffect(()=>{load()},[data.year])
+  useEffect(()=>{ if (rosters?.roster) bindHistoryPlayers(data, rosters.roster) }, [rosters, data])
   useEffect(()=>{
     const previous=document.activeElement
     const original=document.body.style.overflow
@@ -91,6 +96,7 @@ export default function MatchupExplorer({saveProp,data,matchup,halfLife,advantag
     <header className="prop-header"><div><p className="eyebrow">MATCHUP LAB · WEEK {data.week} · {date(matchup.date)}</p><h2 id="prop-title">{matchup.away.name} <span>at</span> {matchup.home.name}</h2></div><button className="close" onClick={onClose}>Close ✕</button></header>
     <div className="prop-score"><div><small>TEAM MODEL</small><b>{matchup.margin<.05?'Toss-up':`${matchup.winner.abbr} by ${format(matchup.margin)}`}</b></div><div><small>PROJECTED SCORE</small><b>{matchup.away.abbr} {format(matchup.awayPoints)} · {matchup.home.abbr} {format(matchup.homePoints)}</b></div><div><small>VENUE</small><b>{matchup.neutral?'Neutral · no home boost':`Home advantage +${advantage.toFixed(1)}`}</b></div></div>
     <AccuracyNote compact />
+    <p className="prop-help">{(() => { const td = findTdGame(fileForWeek('tdRisk', data.week).data, matchup.away.abbr, matchup.home.abbr); const prices = td?.priceSnapshot?.asOf && td.priceSnapshot.playersPriced ? `Prices ${td.priceSnapshot.asOf}` : 'No price snapshot'; const through = bundledHistory(data.year)?.asOf; return [prices, through ? `Data ${through}` : null].filter(Boolean).join(' · ') })()}</p>
     <nav className="prop-tabs" aria-label="Matchup analytics">{[['bets','Bets'],['scatter','Scatter Plot'],['history','Recent opponents']].map(([id,name])=><button key={id} aria-pressed={tab===id} className={tab===id?'active':''} onClick={()=>setTab(id)}>{name}</button>)}</nav>
     {tab==='bets'&&<nav className="prop-tabs prop-subtabs" aria-label="Bets views">{[['generator','Bet generator'],['flyers','Flyers'],['parlays','Parlays'],['projections','Player Projections'],['touchdowns','Touchdowns']].map(([id,name])=><button key={id} aria-pressed={betsView===id} className={betsView===id?'active':''} onClick={()=>setBetsView(id)}>{name}</button>)}</nav>}
       {tab==='scatter'&&<ScatterTab away={matchup.away} home={matchup.home} week={data.week}/>}

@@ -1,5 +1,6 @@
 import {useMemo,useState} from 'react'
-import {historyFor,sides,positionOf,projectTeam,valid,weighted} from './model.js'
+import {historyFor,sides,positionOf,valid,weighted} from './model.js'
+import {THRESHOLDS,boardFor} from './gameBoard.js'
 import {rbStarter} from './roleData.js'
 import {findRb,roleDecision} from './roleEligibility.js'
 import RoleTags from './RoleTags.jsx'
@@ -7,30 +8,6 @@ import {fileForWeek,roleBookForWeek} from '../data/weekFiles.js'
 import {raisedBreakoutLine,scatterProjection} from './scatterCheck.js'
 import './flyers.css'
 
-const THRESHOLDS={
-  QB:[
-    {key:'passYds',title:'Pass yards',usage:'passAtt',group:['passing'],safe:260,breakout:300},
-    {key:'passTD',title:'Pass TDs',usage:'passAtt',group:['passing'],safe:2,breakout:3},
-    {key:'rushYds',title:'Rush yards',usage:'carries',group:['rushing'],safe:20,breakout:35},
-    {key:'rushTD',title:'TDs (rushing)',usage:'carries',group:['rushing'],safe:1,breakout:2},
-  ],
-  RB:[
-    {key:'rushYds',title:'Rush yards',usage:'carries',group:['rushing'],safe:90,breakout:110},
-    {key:'rec',title:'Receptions',usage:'targets',group:['receiving'],safe:4,breakout:6},
-    {key:'recYds',title:'Receiving yards',usage:'targets',group:['receiving'],safe:15,breakout:25},
-    {key:'totalTD',title:'TDs (rush + receiving)',usage:'carries',group:['rushing','receiving'],safe:1,breakout:2},
-  ],
-  WR:[
-    {key:'rec',title:'Receptions',usage:'targets',group:['receiving'],safe:6,breakout:8},
-    {key:'recYds',title:'Receiving yards',usage:'targets',group:['receiving'],safe:90,breakout:110},
-    {key:'totalTD',title:'TDs (rush + receiving)',usage:'targets',group:['rushing','receiving'],safe:1,breakout:2},
-  ],
-  TE:[
-    {key:'rec',title:'Receptions',usage:'targets',group:['receiving'],safe:5,breakout:7},
-    {key:'recYds',title:'Receiving yards',usage:'targets',group:['receiving'],safe:40,breakout:60},
-    {key:'totalTD',title:'TDs (rush + receiving)',usage:'targets',group:['rushing','receiving'],safe:1,breakout:2},
-  ],
-}
 const wrLookupFor=week=>{
   const file=fileForWeek('wr',week)
   return file.matched?new Map(file.data.map(row=>[row.name.trim().toLowerCase(),row])):new Map()
@@ -161,7 +138,7 @@ export function buildFlyerThemes(data,matchup,roster,halfLife,window){
   const rows=[]
   for(const side of offenses){
     const games=recentDefenseGames(data,side.defense,window,matchup)
-    const currentPlayers=projectTeam(data,side.offense,side.defense,roster,halfLife,window)
+    const currentPlayers=boardFor(data,matchup,roster,halfLife,window).players.filter(player=>player.offense.id===side.offense.id)
     for(const position of Object.keys(THRESHOLDS))for(const spec of THRESHOLDS[position])for(const tier of ['Safe','Breakout']){
       const threshold=tier==='Safe'?spec.safe:spec.breakout
       const result=rateForTheme(games,side.defense,position,spec,threshold,roster)
