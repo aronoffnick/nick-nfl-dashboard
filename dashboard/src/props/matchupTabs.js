@@ -1,4 +1,4 @@
-export const BET_VIEWS = ['generator', 'flyers', 'parlays', 'projections', 'touchdowns', 'breakout']
+export const BET_VIEWS = ['generator', 'flyers', 'parlays', 'projections', 'touchdowns']
 export const STAT_VIEWS = ['scatter', 'stocks', 'history']
 
 const ALIAS = {
@@ -15,7 +15,6 @@ const ALIAS = {
   parlays: ['bets', 'parlays'],
   projections: ['bets', 'projections'],
   touchdowns: ['bets', 'touchdowns'],
-  breakout: ['bets', 'breakout'],
 }
 
 export function parseMatchupHash(hash) {

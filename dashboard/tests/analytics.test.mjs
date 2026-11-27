@@ -15,15 +15,6 @@ test('stocks keep a four-game floor and football-term tooltips', () => {
   assert.match(data.tooltips.beta, /points his team scores/)
 })
 
-test('breakout watch ranks running backs only', () => {
-  const data = read('breakout-wk13.json')
-  assert.ok(data.candidates.length > 0)
-  assert.ok(data.candidates.every(player => player.position === 'RB' && player.score >= 3))
-  assert.ok(data.unvalidated.every(player => player.position !== 'RB' && player.ranked === false))
-  assert.equal(data.prices, 'blank')
-  assert.match(data.study.notes.join(' '), /24\.7%/)
-})
-
 test('momentum multiples stay inside the caps and the holdout is flagged', () => {
   const data = read('momentum-wk13.json')
   for (const player of data.players) {
