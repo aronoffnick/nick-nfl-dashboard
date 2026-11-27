@@ -3,6 +3,7 @@ import './App.css'
 import PickTracker from './PickTracker.jsx'
 import WeeklyGames from './WeeklyGames.jsx'
 import { bundledHistory, remember } from './data/historyFile.js'
+import { applyTeamStarter } from './props/qbStarter.js'
 import AccuracyNote from './props/AccuracyNote.jsx'
 import MatchupExplorer from './props/MatchupExplorer.jsx'
 import { parsePlayers } from './props/model.js'
@@ -229,15 +230,18 @@ function compute(data, halfLife, advantage, mode) {
   }
   const matchups = data.matchups.map(g => {
     const away = teams[g.away], home = teams[g.home]
+    const awayScored = applyTeamStarter(away, data.week)
+    const homeScored = applyTeamStarter(home, data.week)
     const hfa = g.neutral ? 0 : advantage
     const halfPoint = value => Math.round(value * 2) / 2
-    const awayPoints = halfPoint(Math.max(0, expected(away, home) - hfa / 2))
-    const homePoints = halfPoint(Math.max(0, expected(home, away) + hfa / 2))
+    const awayPoints = halfPoint(Math.max(0, expected(awayScored, home) - hfa / 2))
+    const homePoints = halfPoint(Math.max(0, expected(homeScored, away) + hfa / 2))
     const signedMargin = homePoints - awayPoints
     return {
       ...g, away, home, awayPoints, homePoints,
       margin: halfPoint(Math.abs(signedMargin)),
       winner: signedMargin >= 0 ? home : away,
+      qbOverride: awayScored.qbOverride || homeScored.qbOverride || null,
     }
   })
   return { teams: all, matchups }
@@ -402,7 +406,7 @@ export default function App() {
         <td><Team team={row.home} /></td>
         {['passD', 'rushD'].map(k => <td key={k}><Rank value={row.home.ranks[k]} /><small>{fmt(row.home.display[k])} yd</small></td>)}
         {['passO', 'rushO'].map(k => <td key={k}><Rank value={row.home.ranks[k]} /><small>{fmt(row.home.display[k])} yd</small></td>)}
-        <td><button className="pick" onClick={() => setSelected(row.id)}>{row.margin < .05 ? 'Toss-up' : `${row.winner.abbr} by ${fmt(row.margin)}`}<small>Explore matchup →</small></button></td>
+        <td><button className="pick" onClick={() => setSelected(row.id)}>{row.margin < .05 ? 'Toss-up' : `${row.winner.abbr} by ${fmt(row.margin)}`}<small>{row.qbOverride ? `${row.qbOverride.note} · Explore` : 'Explore matchup →'}</small></button></td>
       </tr> : <tr key={row.id}><td><Team team={row} /></td>{metrics.map(([k]) => <td key={k}><Rank value={row.ranks[k]} /><small>{fmt(row.display[k])} yd</small></td>)}<td>{fmt(row.ppg)}</td><td>{fmt(row.papg)}</td></tr>)}</tbody>
     </table>{!rows.length && <p className="notice">No teams or games match these filters.</p>}</div>}
     <section className="method">
