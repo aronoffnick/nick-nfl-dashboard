@@ -456,6 +456,6 @@ export default function App() {
         <p>Last fetched: {data ? kickoff(data.updated) + ' ET' : 'Not yet loaded'} · Schedule and rankings refresh on opening and every 30 minutes while open. Completed box scores are cached for 24 hours. After every current-week game is final, the dashboard advances to ESPN's next valid schedule; this is a pregame model and excludes the displayed week's results.</p>
       </footer>
     </details>
-    {detail && <MatchupExplorer key={detail.id} data={data} matchup={detail} saveProp={saveProp} halfLife={halfLife} advantage={advantage} onClose={() => setSelected(null)} />}
+    {detail && <MatchupExplorer key={detail.id} data={data} matchup={detail} matchups={result.matchups} saveProp={saveProp} halfLife={halfLife} advantage={advantage} onClose={() => setSelected(null)} />}
   </main>
 }

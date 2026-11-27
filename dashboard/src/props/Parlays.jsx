@@ -6,7 +6,7 @@ import {buildFlyerThemes,rateAtLine} from './Flyers.jsx'
 import {fileForWeek} from '../data/weekFiles.js'
 import {decideScatterLine,scatterAbbrev,scatterProjection} from './scatterCheck.js'
 import {boardGame,filePropCandidates,legHit,uniqueProps} from './parlayBoard.js'
-import GameScript from './GameScript.jsx'
+import CustomParlay from './CustomParlay.jsx'
 import './parlays.css'
 
 const fmt=(value,key)=>valid(value)?value.toFixed(key.toLowerCase().includes('td')?2:1):'—'
@@ -87,7 +87,7 @@ function PropRow({leg,matchup,gameLabel,scope}){
     </div>
   </li>
 }
-export default function Parlays({data,matchup,roster,halfLife,window}){
+export default function Parlays({data,matchup,matchups,roster,halfLife,window}){
   const game=useMemo(()=>boardGame(fileForWeek('parlays',data.week),matchup.away.abbr,matchup.home.abbr),[data.week,matchup.away.abbr,matchup.home.abbr])
   const reviewed=useMemo(()=>buildFlyerThemes(data,matchup,roster,halfLife,window)
     .filter(theme=>theme.tier==='Safe')
@@ -105,7 +105,7 @@ export default function Parlays({data,matchup,roster,halfLife,window}){
     skipped:reviewed.filter(item=>item.decision.kind==='skipped'),
     'no-data':reviewed.filter(item=>item.decision.kind==='no-data'),
   }
-  return <><GameScript data={data} matchup={matchup} roster={roster} halfLife={halfLife} window={window} embedded />
+  return <><CustomParlay data={data} matchup={matchup} matchups={matchups} roster={roster} halfLife={halfLife} window={window} />
   <section className="parlays-section" aria-label="Candidate props ranked by hit chance">
     <div className="prop-section-title"><h3>Props · ranked by hit chance</h3><span>{game?`Week ${data.week} matchup model lines${game.snapshot?.props_asof?` · snapshot ${game.snapshot.props_asof}`:''}`:'Bets signals + FLYERS Safe history'}</span></div>
     <p className="prop-help">{game

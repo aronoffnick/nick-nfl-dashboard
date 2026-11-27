@@ -11,9 +11,8 @@ import Parlays from './Parlays.jsx'
 import PlayerProjections, {projectionGroups} from './PlayerProjections.jsx'
 import ScatterTab from './ScatterTab.js'
 import Touchdowns from './Touchdowns.jsx'
-import BetGenerator from './BetGenerator.jsx'
 import Stocks from './Stocks.jsx'
-import { formatMatchupHash, parseMatchupHash } from './matchupTabs.js'
+import { BET_VIEWS, formatMatchupHash, parseMatchupHash } from './matchupTabs.js'
 import './props.css'
 const format=(n,key='')=>valid(n)?n.toFixed(key.endsWith('TD')?2:1):'—'
 const date=d=>new Date(d).toLocaleDateString('en-US',{timeZone:'America/New_York',month:'short',day:'numeric'})
@@ -55,13 +54,13 @@ function ProjectionFilters({title,items,selected,onToggle}){
   return <fieldset className="projection-filter-group"><legend>{title}</legend>{items.map(([key,name])=><label key={key}><input type="checkbox" checked={selected.includes(key)} onChange={()=>onToggle(key)}/>{name}</label>)}</fieldset>
 }
 
-export default function MatchupExplorer({saveProp,data,matchup,halfLife,advantage,onClose}){
+export default function MatchupExplorer({saveProp,data,matchup,matchups,halfLife,advantage,onClose}){
   const [rosters,setRosters]=useState(null)
   const [error,setError]=useState('')
   const [message,setMessage]=useState('Loading player positions…')
   const opened=parseMatchupHash(typeof window==='undefined'?'':window.location.hash)
   const [tab,setTab]=useState(opened.tab)
-  const [betsView,setBetsView]=useState(opened.tab==='bets'?opened.view:'generator')
+  const [betsView,setBetsView]=useState(opened.tab==='bets'&&BET_VIEWS.includes(opened.view)?opened.view:'parlays')
   const [statsView,setStatsView]=useState(opened.tab==='stats'?opened.view:'scatter')
   const [offenseId,setOffenseId]=useState(matchup.away.id)
   const [historyPositions,setHistoryPositions]=useState(['QB','RB','WR','TE'])
@@ -121,10 +120,9 @@ export default function MatchupExplorer({saveProp,data,matchup,halfLife,advantag
     <p className="prop-help">{(() => { const td = findTdGame(fileForWeek('tdRisk', data.week).data, matchup.away.abbr, matchup.home.abbr); const prices = td?.priceSnapshot?.asOf && td.priceSnapshot.playersPriced ? `Prices ${td.priceSnapshot.asOf}` : 'No price snapshot'; const through = bundledHistory(data.year)?.asOf; return [prices, through ? `Data ${through}` : null].filter(Boolean).join(' · ') })()}</p>
     {matchup.qbOverride && <p className="prop-help">{matchup.qbOverride.note}</p>}
     <nav className="prop-tabs" aria-label="Matchup analytics">{[['bets','Bets'],['stats','Stats']].map(([id,name])=><button key={id} aria-pressed={tab===id} className={tab===id?'active':''} onClick={()=>setTab(id)}>{name}</button>)}</nav>
-    {tab==='bets'&&<nav className="prop-tabs prop-subtabs" aria-label="Bets views">{[['generator','Bet generator'],['flyers','Flyers'],['parlays','Parlays'],['projections','Player Projections'],['touchdowns','Touchdowns']].map(([id,name])=><button key={id} aria-pressed={betsView===id} className={betsView===id?'active':''} onClick={()=>setBetsView(id)}>{name}</button>)}</nav>}
+    {tab==='bets'&&<nav className="prop-tabs prop-subtabs" aria-label="Bets views">{[['parlays','Parlays'],['projections','Player Projections'],['touchdowns','Touchdowns'],['flyers','Flyers']].map(([id,name])=><button key={id} aria-pressed={betsView===id} className={betsView===id?'active':''} onClick={()=>setBetsView(id)}>{name}</button>)}</nav>}
     {tab==='stats'&&<nav className="prop-tabs prop-subtabs" aria-label="Stats views">{[['scatter','Scatter Plot'],['stocks','Stat Metrics'],['history','Opponents']].map(([id,name])=><button key={id} aria-pressed={statsView===id} className={statsView===id?'active':''} onClick={()=>setStatsView(id)}>{name}</button>)}</nav>}
       {tab==='stats'&&statsView==='scatter'&&<ScatterTab away={matchup.away} home={matchup.home} week={data.week}/>}
-      {tab==='bets'&&betsView==='generator'&&<BetGenerator matchup={matchup} week={data.week}/>}
       {tab==='bets'&&betsView==='touchdowns'&&<Touchdowns away={matchup.away} home={matchup.home} week={data.week} roster={rosters?.roster}/>}
       {tab==='stats'&&statsView==='stocks'&&<Stocks week={data.week} away={matchup.away.abbr} home={matchup.home.abbr}/>}
     {tab==='bets'&&betsView==='projections'&&<div className="projection-filters" aria-label="Player projection filters">
@@ -144,7 +142,7 @@ export default function MatchupExplorer({saveProp,data,matchup,halfLife,advantag
       {rosters.failed.length>0&&<p className="prop-warning">{rosters.failed.length} team rosters unavailable. Unknown positions are labeled; incomplete position groups are excluded from adjustments. <button onClick={()=>load(true)}>Retry rosters</button></p>}
       {tab==='bets'&&betsView==='projections'&&<PlayerProjections matchup={matchup} saveProp={saveProp} data={data} teams={projectionTeamsList} roster={rosters.roster} halfLife={halfLife} window={recentGames} positions={projectionPositions} categories={projectionCategories}/>}
       {tab==='bets'&&betsView==='flyers'&&<Flyers data={data} matchup={matchup} roster={rosters.roster} halfLife={halfLife} window={recentGames}/>}
-      {tab==='bets'&&betsView==='parlays'&&<Parlays data={data} matchup={matchup} roster={rosters.roster} halfLife={halfLife} window={recentGames}/>}
+      {tab==='bets'&&betsView==='parlays'&&<Parlays data={data} matchup={matchup} matchups={matchups} roster={rosters.roster} halfLife={halfLife} window={recentGames}/>}
       {tab==='stats'&&statsView==='history'&&<Historical data={data} defense={defense} roster={rosters.roster} window={recentGames} selectedPositions={historyPositions}/>}
     </>}
     <details className="prop-method"><summary>Team offense vs defense estimates</summary><div className="table-wrap"><table><thead><tr><th>Offense</th><th>Expected net pass yards</th><th>Expected rush yards</th></tr></thead><tbody>{[[matchup.away,matchup.home],[matchup.home,matchup.away]].map(([o,d])=><tr key={o.id}><td>{o.abbr} vs {d.abbr}</td><td>{format((o.recent.passO+d.recent.passD)/2)}</td><td>{format((o.recent.rushO+d.recent.rushD)/2)}</td></tr>)}</tbody></table></div></details>

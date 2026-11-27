@@ -1,3 +1,5 @@
+// Kept for the priced-leg helpers and tests. The Bets sub-nav no longer mounts this screen.
+// The live generator is the panel at the top of Parlays.
 import { useMemo, useState } from 'react'
 import { boardGame, pctText } from './parlayBoard.js'
 import { generateBets, POSITIONS } from './betGenerator.js'

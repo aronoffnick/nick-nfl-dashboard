@@ -70,6 +70,25 @@ export function scriptActive(selection) {
   return Boolean(selection?.win || selection?.early || selection?.rush || selection?.pass || selection?.scoring)
 }
 
+// Two linked controls: a predicted result, then one game-flow. Both write the same script.
+export function selectionFromChoices(outcome, flow, { awayId, homeId } = {}) {
+  const selection = emptyScript()
+  const teamId = side => side === 'home' ? homeId : side === 'away' ? awayId : null
+  const [kind, side] = String(outcome || '').split(':')
+  if ((kind === 'win' || kind === 'big' || kind === 'close') && teamId(side) != null) {
+    selection.win = teamId(side)
+    selection.margin = kind === 'win' ? null : kind
+  }
+  if (flow === 'shootout' || flow === 'low') selection.scoring = flow
+  else {
+    const [flowKind, flowSide] = String(flow || '').split(':')
+    if ((flowKind === 'early' || flowKind === 'rush' || flowKind === 'pass') && teamId(flowSide) != null) {
+      selection[flowKind] = teamId(flowSide)
+    }
+  }
+  return selection
+}
+
 function same(a, b) {
   return a != null && b != null && String(a) === String(b)
 }
