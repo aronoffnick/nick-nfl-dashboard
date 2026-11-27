@@ -1211,7 +1211,8 @@
           "market_p": null,
           "direction": "over",
           "rating": 64,
-          "flags": ""
+          "flags": "",
+          "source": "ESPN scoreboard odds"
         },
         {
           "id": "ml:LAR",
@@ -1236,7 +1237,8 @@
           "market_p": null,
           "direction": "over",
           "rating": 36,
-          "flags": ""
+          "flags": "",
+          "source": "ESPN scoreboard odds"
         }
       ],
       "safe_overlap_cards": [
@@ -2462,7 +2464,8 @@
           "market_p": null,
           "direction": "over",
           "rating": 84,
-          "flags": ""
+          "flags": "",
+          "source": "ESPN scoreboard odds"
         },
         {
           "id": "ml:CLE",
@@ -2487,7 +2490,8 @@
           "market_p": null,
           "direction": "over",
           "rating": 16,
-          "flags": ""
+          "flags": "",
+          "source": "ESPN scoreboard odds"
         }
       ],
       "safe_overlap_cards": [
@@ -3489,7 +3493,8 @@
           "market_p": null,
           "direction": "over",
           "rating": 84,
-          "flags": ""
+          "flags": "",
+          "source": "ESPN scoreboard odds"
         },
         {
           "id": "ml:ATL",
@@ -3514,7 +3519,8 @@
           "market_p": null,
           "direction": "over",
           "rating": 16,
-          "flags": ""
+          "flags": "",
+          "source": "ESPN scoreboard odds"
         }
       ],
       "safe_overlap_cards": [
@@ -4796,7 +4802,8 @@
           "market_p": null,
           "direction": "over",
           "rating": 62,
-          "flags": ""
+          "flags": "",
+          "source": "ESPN scoreboard odds"
         },
         {
           "id": "ml:NO",
@@ -4821,7 +4828,8 @@
           "market_p": null,
           "direction": "over",
           "rating": 38,
-          "flags": ""
+          "flags": "",
+          "source": "ESPN scoreboard odds"
         }
       ],
       "safe_overlap_cards": [
@@ -6075,7 +6083,8 @@
           "market_p": null,
           "direction": "over",
           "rating": 69,
-          "flags": ""
+          "flags": "",
+          "source": "ESPN scoreboard odds"
         },
         {
           "id": "ml:CHI",
@@ -6100,7 +6109,8 @@
           "market_p": null,
           "direction": "over",
           "rating": 31,
-          "flags": ""
+          "flags": "",
+          "source": "ESPN scoreboard odds"
         }
       ],
       "safe_overlap_cards": [
@@ -7354,7 +7364,8 @@
           "market_p": null,
           "direction": "over",
           "rating": 17,
-          "flags": ""
+          "flags": "",
+          "source": "ESPN scoreboard odds"
         },
         {
           "id": "ml:TB",
@@ -7379,7 +7390,8 @@
           "market_p": null,
           "direction": "over",
           "rating": 83,
-          "flags": ""
+          "flags": "",
+          "source": "ESPN scoreboard odds"
         }
       ],
       "safe_overlap_cards": [
@@ -8605,7 +8617,8 @@
           "market_p": null,
           "direction": "over",
           "rating": 80,
-          "flags": ""
+          "flags": "",
+          "source": "ESPN scoreboard odds"
         },
         {
           "id": "ml:NYG",
@@ -8630,7 +8643,8 @@
           "market_p": null,
           "direction": "over",
           "rating": 20,
-          "flags": ""
+          "flags": "",
+          "source": "ESPN scoreboard odds"
         }
       ],
       "safe_overlap_cards": [
@@ -10052,7 +10066,8 @@
           "market_p": null,
           "direction": "over",
           "rating": 73,
-          "flags": ""
+          "flags": "",
+          "source": "ESPN scoreboard odds"
         },
         {
           "id": "ml:TEN",
@@ -10077,7 +10092,8 @@
           "market_p": null,
           "direction": "over",
           "rating": 27,
-          "flags": ""
+          "flags": "",
+          "source": "ESPN scoreboard odds"
         }
       ],
       "safe_overlap_cards": [
@@ -11275,7 +11291,8 @@
           "market_p": null,
           "direction": "over",
           "rating": 15,
-          "flags": ""
+          "flags": "",
+          "source": "ESPN scoreboard odds"
         },
         {
           "id": "ml:DEN",
@@ -11300,7 +11317,8 @@
           "market_p": null,
           "direction": "over",
           "rating": 85,
-          "flags": ""
+          "flags": "",
+          "source": "ESPN scoreboard odds"
         }
       ],
       "safe_overlap_cards": [
@@ -12302,7 +12320,8 @@
           "market_p": null,
           "direction": "over",
           "rating": 69,
-          "flags": ""
+          "flags": "",
+          "source": "ESPN scoreboard odds"
         },
         {
           "id": "ml:ARI",
@@ -12327,7 +12346,8 @@
           "market_p": null,
           "direction": "over",
           "rating": 31,
-          "flags": ""
+          "flags": "",
+          "source": "ESPN scoreboard odds"
         }
       ],
       "safe_overlap_cards": [
@@ -13609,7 +13629,8 @@
           "market_p": null,
           "direction": "over",
           "rating": 86,
-          "flags": ""
+          "flags": "",
+          "source": "ESPN scoreboard odds"
         },
         {
           "id": "ml:NE",
@@ -13634,7 +13655,8 @@
           "market_p": null,
           "direction": "over",
           "rating": 14,
-          "flags": ""
+          "flags": "",
+          "source": "ESPN scoreboard odds"
         }
       ],
       "safe_overlap_cards": [
@@ -14832,7 +14854,8 @@
           "market_p": null,
           "direction": "over",
           "rating": 36,
-          "flags": ""
+          "flags": "",
+          "source": "ESPN scoreboard odds"
         },
         {
           "id": "ml:MIN",
@@ -14857,7 +14880,8 @@
           "market_p": null,
           "direction": "over",
           "rating": 64,
-          "flags": ""
+          "flags": "",
+          "source": "ESPN scoreboard odds"
         }
       ],
       "safe_overlap_cards": [
@@ -16083,7 +16107,8 @@
           "market_p": null,
           "direction": "over",
           "rating": 58,
-          "flags": ""
+          "flags": "",
+          "source": "ESPN scoreboard odds"
         },
         {
           "id": "ml:PIT",
@@ -16108,7 +16133,8 @@
           "market_p": null,
           "direction": "over",
           "rating": 42,
-          "flags": ""
+          "flags": "",
+          "source": "ESPN scoreboard odds"
         }
       ],
       "safe_overlap_cards": [
@@ -17334,7 +17360,8 @@
           "market_p": null,
           "direction": "over",
           "rating": 40,
-          "flags": ""
+          "flags": "",
+          "source": "ESPN scoreboard odds"
         },
         {
           "id": "ml:SEA",
@@ -17359,7 +17386,8 @@
           "market_p": null,
           "direction": "over",
           "rating": 60,
-          "flags": ""
+          "flags": "",
+          "source": "ESPN scoreboard odds"
         }
       ],
       "safe_overlap_cards": [

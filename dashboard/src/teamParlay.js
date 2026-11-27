@@ -24,7 +24,7 @@ function moneylineIndex(week) {
     let asOf = game.snapshot?.game_asof || game.snapshot?.props_asof || null
     for (const leg of game.legs || []) {
       if (leg.market !== 'ML' || !leg.priced || leg.price == null) continue
-      prices[leg.team] = { price: Number(leg.price), book: leg.book || '', asOf: leg.asof || asOf, source: 'getoddy snapshot' }
+      prices[leg.team] = { price: Number(leg.price), book: leg.book || '', asOf: leg.asof || asOf, source: leg.source || 'getoddy snapshot' }
       if (leg.asof) asOf = leg.asof
     }
     byKey.set(key, { prices, asOf })

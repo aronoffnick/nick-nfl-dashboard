@@ -121,6 +121,7 @@ def fill_parlay_moneylines(root: Path, week: int, snapshot: dict) -> int:
             price = quote["price"]
             leg["price"] = price
             leg["book"] = quote["book"]
+            leg["source"] = book.get("source") or "ESPN scoreboard odds"
             leg["price_str"] = f"{price:+d} {quote['book']}".replace("+-", "-") if price > 0 else f"{price} {quote['book']}"
             if price > 0:
                 leg["price_str"] = f"+{price} {quote['book']}"
