@@ -46,3 +46,27 @@ td.date:has(.final-score){max-width:none;width:12.75rem;min-width:12.75rem;text-
 .team-parlay input,.team-parlay select{background:#0d1411;color:#e8edf1;border:1px solid #3c5348;border-radius:6px;padding:8px 10px}
 .team-parlay-summary{margin:0 0 8px}.team-parlay-legs{list-style:none;margin:0}.team-parlay small{color:#8ea097}
 @media (max-width:700px){.team-parlay{padding:12px}.team-parlay form label{flex:1 1 calc(50% - 12px);min-width:0}}
+
+td.date{max-width:none;vertical-align:middle}
+.kickoff-time{display:block;white-space:nowrap;font-size:11px;font-weight:600;color:#d5dee6}
+td.date small,td.date .final-score-line{display:block;margin-top:4px;text-align:center}
+td.date .final-score-line{font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;color:#e8edf1}
+.pick,.pick-readout{box-sizing:border-box;height:42px;border:1px solid #35523e;color:#b4efc9;background:#182e22;border-radius:7px;font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden}
+.pick{display:inline-flex;align-items:center;justify-content:center;width:148px;min-width:148px;max-width:148px;padding:0 12px;text-align:center}
+.pick-readout{display:inline-flex;align-items:center;justify-content:center;width:124px;min-width:124px;max-width:124px;padding:0 8px}
+.pick.is-win,.pick-readout.is-win,.value-badge.is-win{background:#1e4a34;border-color:#3f8f62;color:#d7ffe6}
+.pick.is-loss,.pick-readout.is-loss,.value-badge.is-loss{background:#4a2a24;border-color:#a15a48;color:#ffd2c6}
+tbody td.is-win{box-shadow:inset 0 0 0 999px rgba(46,140,90,.16)}
+tbody td.is-loss{box-shadow:inset 0 0 0 999px rgba(176,72,52,.18)}
+.value-cell{vertical-align:middle}
+.value-badge{display:inline-flex;align-items:center;gap:6px;box-sizing:border-box;height:42px;padding:0 10px;border:1px solid #35523e;border-radius:7px;background:#182e22;color:#b4efc9;font-size:11px;font-weight:700}
+.value-tag{font-size:9px;font-weight:800;letter-spacing:.04em}
+.value-team{font-size:12px}
+.value-dots{display:inline-flex;gap:3px}
+.value-dots i{width:6px;height:6px;border-radius:50%;border:1px solid currentColor;opacity:.4}
+.value-dots i.on{background:currentColor;opacity:1}
+.value-empty{color:#7e8d99;font-size:12px;font-weight:600}
+.value-help{margin-top:10px;max-width:760px;white-space:normal}
+.value-help summary{cursor:pointer;color:#a5e6bd;font-weight:700;width:fit-content}
+.value-help p,.value-help li{color:#a4b0ba;font-size:12px;line-height:1.6}
+.value-help ul{margin:8px 0 0;padding-left:18px}
