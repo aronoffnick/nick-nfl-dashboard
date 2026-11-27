@@ -7,6 +7,7 @@ function nickname(name, abbr) {
 }
 
 function signedSpread(value) {
+  if (value == null || value === '') return null
   const n = Number(value)
   if (!Number.isFinite(n)) return null
   const rounded = Math.round(n * 10) / 10
@@ -28,6 +29,15 @@ function legUpset(leg) {
   return Number(leg.price) > 0
 }
 
+function ValueMark({ leg }) {
+  if (!leg.dots) return null
+  const marketLabel = leg.market === 'ATS' ? 'Against the spread' : 'Moneyline'
+  return <span className="parlay-value" aria-label={`${marketLabel}, strength ${leg.dots} of 3`}>
+    <span>{leg.market}</span>
+    <span className="value-dots" aria-hidden="true">{[1, 2, 3].map(dot => <i key={dot} className={dot <= leg.dots ? 'on' : ''} />)}</span>
+  </span>
+}
+
 function LegCard({ leg }) {
   const spread = signedSpread(legSpread(leg))
   const upset = legUpset(leg)
@@ -40,6 +50,7 @@ function LegCard({ leg }) {
     <span className="pick-card-copy">
       <span className="pick-card-name">{label}</span>
       {upset ? <span className="pick-card-tag">(upset)</span> : null}
+      <ValueMark leg={leg} />
     </span>
   </li>
 }
@@ -48,11 +59,13 @@ export default function TeamParlay({ matchups, week }) {
   const [legs, setLegs] = useState(3)
   const [minOdds, setMinOdds] = useState('+200')
   const [maxOdds, setMaxOdds] = useState('+600')
+  const [bestValue, setBestValue] = useState(false)
   const parsed = useMemo(() => ({
     legs: Number(legs),
     minOdds: Number(String(minOdds).replace(/^\+/, '')),
     maxOdds: Number(String(maxOdds).replace(/^\+/, '')),
-  }), [legs, minOdds, maxOdds])
+    bestValue,
+  }), [legs, minOdds, maxOdds, bestValue])
   const result = useMemo(() => buildTeamParlay(matchups, week, parsed), [matchups, week, parsed])
   const parlay = result.parlay
   return <section className="team-parlay" aria-label="Team parlay builder">
@@ -61,6 +74,7 @@ export default function TeamParlay({ matchups, week }) {
       <label>Legs<select value={legs} onChange={event => setLegs(event.target.value)}>{[2, 3, 4, 5, 6, 7, 8].map(n => <option key={n} value={n}>{n}</option>)}</select></label>
       <label>Min American<input value={minOdds} onChange={event => setMinOdds(event.target.value)} inputMode="text" /></label>
       <label>Max American<input value={maxOdds} onChange={event => setMaxOdds(event.target.value)} inputMode="text" /></label>
+      <label className="team-parlay-filter"><input type="checkbox" checked={bestValue} onChange={event => setBestValue(event.target.checked)} />Best value</label>
     </form>
     {!parlay ? <p className="team-parlay-empty">{result.reason}</p> : <>
       <p className="team-parlay-summary"><strong>{parlay.priceText}</strong> combined · <strong>{Math.round(parlay.hit * 1000) / 10}%</strong> model hit{parlay.asOf ? ` · snapshot ${parlay.asOf}` : ''}</p>

@@ -1,9 +1,10 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
 import { readFileSync } from 'node:fs'
+import { chooseGroup, chooseValueGroup } from '../src/teamParlayPick.js'
 import {
   KELLY_DOTS, americanImplied, compareValue, gradeDisplayedPick, gradeValuePick,
-  mergeOdds, scoreGame, scoreMatchups, strengthDots,
+  mergeOdds, scoreGame, scoreMatchups, strengthDots, valueParlayLegs,
 } from '../src/matchupValue.js'
 
 const team = (id, abbr) => ({ id, abbr, name: abbr })
@@ -144,6 +145,50 @@ test('a missing ESPN game can use a saved parlay moneyline, and a written spread
   assert.equal(scored.ats, null)
   assert.ok(scored.ml)
   assert.equal(scored.noLine, false)
+})
+
+test('best-value parlay legs keep the stronger line and skip started games', () => {
+  const flat = {
+    ...coinFlip,
+    spread: {
+      homeLine: -0.5, awayLine: 0.5,
+      AAA: { line: 0.5, price: -110 },
+      HHH: { line: -0.5, price: -110 },
+    },
+  }
+  const live = game({ id: 'live', started: true, margin: 7, awayPoints: 17, homePoints: 24, winner: team('h', 'HHH') })
+  const quiet = game({ id: 'quiet', margin: 0.5, awayPoints: 20, homePoints: 20.5 })
+  const loud = game({ id: 'loud', margin: 7, awayPoints: 17, homePoints: 24, winner: team('h', 'HHH') })
+  const skipped = valueParlayLegs([live, quiet], { games: { 'AAA-HHH': flat } })
+  assert.equal(skipped.length, 0)
+  const priced = {
+    games: {
+      'AAA-HHH': {
+        ...coinFlip,
+        spread: { homeLine: 3, awayLine: -3, AAA: { line: -3, price: -110 }, HHH: { line: 3, price: -110 } },
+      },
+    },
+  }
+  const [leg] = valueParlayLegs([loud], priced)
+  assert.equal(leg.market, 'ATS')
+  assert.equal(leg.team, 'HHH')
+  assert.equal(leg.bet, 'Spread')
+  assert.ok(leg.dots >= 1)
+  assert.ok(leg.kelly >= 0.03)
+  assert.equal(Object.hasOwn(leg, 'edge'), false)
+})
+
+test('a best-value parlay prefers the stronger Kelly total inside the odds window', () => {
+  const pool = [
+    { decimal: 1.5, prob: 0.8, kelly: 0.02 },
+    { decimal: 1.5, prob: 0.7, kelly: 0.2 },
+    { decimal: 1.5, prob: 0.9, kelly: 0.04 },
+  ]
+  const byHit = chooseGroup(pool, 2, 100, 300)
+  const byValue = chooseValueGroup(pool, 2, 100, 300)
+  assert.ok(byHit.hit >= byValue.hit)
+  assert.ok(byValue.value > byHit.legs.reduce((sum, leg) => sum + leg.kelly, 0) || byValue.legs.includes(pool[1]))
+  assert.equal(byValue.legs[0].kelly >= byValue.legs[1].kelly, true)
 })
 
 test('every saved week 13 price can be scored without inventing a side', () => {

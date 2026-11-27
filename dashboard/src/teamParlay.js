@@ -1,8 +1,9 @@
 import { fileForWeek } from './data/weekFiles.js'
 import { scatterAbbrev } from './props/scatterCheck.js'
 import { americanToDecimal, decimalToAmerican } from './props/betGenerator.js'
-import { chooseGroup, coverProb } from './teamParlayPick.js'
+import { chooseGroup, chooseValueGroup, coverProb } from './teamParlayPick.js'
 import { favoriteWinEstimate } from './props/diversifiedParlays.js'
+import { mergeOdds, valueParlayLegs } from './matchupValue.js'
 
 export function americanImplied(price) {
   const a = Number(price)
@@ -113,17 +114,27 @@ export function combinations(pool, size) {
   return found
 }
 
-export function buildTeamParlay(matchups, week, { legs = 2, minOdds, maxOdds } = {}) {
+function valuePool(matchups, week) {
+  const teamOdds = fileForWeek('teamOdds', week)
+  const parlays = fileForWeek('parlays', week)
+  return valueParlayLegs(matchups, mergeOdds(teamOdds.matched ? teamOdds.data : null, parlays.matched ? parlays.data : null))
+}
+
+export function buildTeamParlay(matchups, week, { legs = 2, minOdds, maxOdds, bestValue = false } = {}) {
   const count = Number(legs)
   const bounds = [Number(minOdds), Number(maxOdds)].filter(Number.isFinite).sort((a, b) => a - b)
   if (!Number.isFinite(count) || count < 2 || count > 8) return { parlay: null, reason: 'Choose 2 to 8 legs.' }
   if (bounds.length < 2) return { parlay: null, reason: 'Enter a minimum and a maximum American price.' }
   const [lo, hi] = bounds
-  const pool = teamCandidates(matchups, week)
+  const pool = bestValue ? valuePool(matchups, week) : teamCandidates(matchups, week)
   if (pool.length < count) {
-    return { parlay: null, reason: pool.length ? `Only ${pool.length} unstarted game${pool.length === 1 ? '' : 's'} with a priced edge.` : 'No unstarted game has a saved moneyline or spread the model likes.', pool }
+    const noun = `unstarted game${pool.length === 1 ? '' : 's'}`
+    const reason = bestValue
+      ? (pool.length ? `Only ${pool.length} ${noun} clear the best-value line.` : 'No unstarted game has a best-value moneyline or spread.')
+      : (pool.length ? `Only ${pool.length} ${noun} with a priced edge.` : 'No unstarted game has a saved moneyline or spread the model likes.')
+    return { parlay: null, reason, pool }
   }
-  const best = chooseGroup(pool, count, lo, hi)
+  const best = bestValue ? chooseValueGroup(pool, count, lo, hi) : chooseGroup(pool, count, lo, hi)
   if (!best) return { parlay: null, reason: 'No parlay of that length lands inside the odds range.', pool }
   best.priceText = decimalToAmerican(best.legs.reduce((product, leg) => product * leg.decimal, 1))
   const times = [...new Set(best.legs.map(leg => leg.asOf).filter(Boolean))]

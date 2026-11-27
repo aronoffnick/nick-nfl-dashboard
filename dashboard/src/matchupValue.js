@@ -260,3 +260,40 @@ export function gradeValuePick(value, game) {
   if (Math.abs(cover) < 1e-6) return 'push'
   return cover > 0 ? 'win' : 'loss'
 }
+
+// Unstarted games only, one leg each: the same moneyline-or-spread signal the Matchups column shows.
+export function valueParlayLegs(matchups, oddsFile) {
+  const { byId } = scoreMatchups(matchups, oddsFile)
+  const legs = []
+  for (const game of matchups || []) {
+    if (game?.started || game?.final) continue
+    const value = byId[game.id]
+    if (!value?.show) continue
+    const quote = value.market === 'ATS' ? value.ats : value.ml
+    const team = game[value.side]
+    if (!quote || !team) continue
+    const decimal = americanToDecimal(quote.price)
+    if (!Number.isFinite(decimal) || decimal <= 1) continue
+    const spreadLine = value.market === 'ATS' ? Number(quote.line) : null
+    legs.push({
+      gameId: game.id,
+      team: team.abbr,
+      teamName: team.name,
+      logo: team.logo || null,
+      side: value.side,
+      bet: value.market === 'ATS' ? 'Spread' : 'ML',
+      market: value.market,
+      dots: value.dots,
+      line: quote.line,
+      spreadLine: value.market === 'ATS' && Number.isFinite(spreadLine) ? spreadLine : null,
+      price: quote.price,
+      book: quote.book || value.book || '',
+      asOf: value.asOf,
+      source: value.source,
+      prob: quote.model,
+      kelly: quote.kelly,
+      decimal,
+    })
+  }
+  return legs.sort((a, b) => b.kelly - a.kelly || b.dots - a.dots)
+}
