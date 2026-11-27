@@ -5653,11 +5653,11 @@
                 "position": "RB",
                 "role": "RB1",
                 "prop": "Anytime TD",
-                "modelProb": 0.338,
+                "modelProb": 0.315,
                 "price": null,
                 "book": null,
                 "estimate": false,
-                "reason": "3 rushing plus receiving TDs in 10 games (0.41 expected this week). HOU allowed 8 RB TDs in 10 games.",
+                "reason": "3 rushing plus receiving TDs in 10 games (0.41 expected this week). HOU allowed 8 RB TDs in 10 games. QB override: Rudolph starting (Rodgers out).",
                 "status": null
               },
               "relativelySafe": {
@@ -5666,11 +5666,11 @@
                 "position": "RB",
                 "role": "RB2",
                 "prop": "Anytime TD",
-                "modelProb": 0.175,
+                "modelProb": 0.163,
                 "price": null,
                 "book": null,
                 "estimate": false,
-                "reason": "1 rushing plus receiving TDs in 7 games (0.19 expected this week). HOU allowed 8 RB TDs in 10 games.",
+                "reason": "1 rushing plus receiving TDs in 7 games (0.19 expected this week). HOU allowed 8 RB TDs in 10 games. QB override: Rudolph starting (Rodgers out).",
                 "status": null
               },
               "upside": [
@@ -5680,7 +5680,7 @@
                   "position": "RB",
                   "role": "RB1",
                   "prop": "2+ TDs",
-                  "modelProb": 0.065,
+                  "modelProb": 0.06,
                   "price": null,
                   "book": null,
                   "estimate": false,
@@ -5703,11 +5703,11 @@
                 "position": "WR",
                 "role": "WR1",
                 "prop": "Anytime TD",
-                "modelProb": 0.338,
+                "modelProb": 0.315,
                 "price": null,
                 "book": null,
                 "estimate": false,
-                "reason": "2 rushing plus receiving TDs in 6 games (0.41 expected this week). HOU allowed 5 WR TDs in 10 games.",
+                "reason": "2 rushing plus receiving TDs in 6 games (0.41 expected this week). HOU allowed 5 WR TDs in 10 games. QB override: Rudolph starting (Rodgers out).",
                 "status": null
               },
               "relativelySafe": {
@@ -5716,11 +5716,11 @@
                 "position": "WR",
                 "role": "WR2",
                 "prop": "Anytime TD",
-                "modelProb": 0.221,
+                "modelProb": 0.206,
                 "price": null,
                 "book": null,
                 "estimate": false,
-                "reason": "2 rushing plus receiving TDs in 10 games (0.25 expected this week). HOU allowed 5 WR TDs in 10 games.",
+                "reason": "2 rushing plus receiving TDs in 10 games (0.25 expected this week). HOU allowed 5 WR TDs in 10 games. QB override: Rudolph starting (Rodgers out).",
                 "status": null
               },
               "upside": [
@@ -5730,7 +5730,7 @@
                   "position": "WR",
                   "role": "WR1",
                   "prop": "2+ TDs",
-                  "modelProb": 0.065,
+                  "modelProb": 0.06,
                   "price": null,
                   "book": null,
                   "estimate": false,
@@ -5744,7 +5744,7 @@
                   "position": "WR",
                   "role": "WR3",
                   "prop": "Anytime TD",
-                  "modelProb": 0.221,
+                  "modelProb": 0.206,
                   "price": null,
                   "book": null,
                   "estimate": false,
@@ -5758,7 +5758,7 @@
                   "position": "WR",
                   "role": "WR4",
                   "prop": "Anytime TD",
-                  "modelProb": 0.128,
+                  "modelProb": 0.119,
                   "price": null,
                   "book": null,
                   "estimate": false,
@@ -5781,11 +5781,11 @@
                 "position": "TE",
                 "role": "TE1",
                 "prop": "Anytime TD",
-                "modelProb": 0.413,
+                "modelProb": 0.384,
                 "price": null,
                 "book": null,
                 "estimate": false,
-                "reason": "6 rushing plus receiving TDs in 10 games (0.53 expected this week). HOU allowed 4 TE TDs in 10 games.",
+                "reason": "6 rushing plus receiving TDs in 10 games (0.53 expected this week). HOU allowed 4 TE TDs in 10 games. QB override: Rudolph starting (Rodgers out).",
                 "status": null
               },
               "relativelySafe": {
@@ -5794,11 +5794,11 @@
                 "position": "TE",
                 "role": "TE2",
                 "prop": "Anytime TD",
-                "modelProb": 0.229,
+                "modelProb": 0.213,
                 "price": null,
                 "book": null,
                 "estimate": false,
-                "reason": "3 rushing plus receiving TDs in 10 games (0.26 expected this week). HOU allowed 4 TE TDs in 10 games.",
+                "reason": "3 rushing plus receiving TDs in 10 games (0.26 expected this week). HOU allowed 4 TE TDs in 10 games. QB override: Rudolph starting (Rodgers out).",
                 "status": null
               },
               "upside": [
@@ -5808,7 +5808,7 @@
                   "position": "TE",
                   "role": "TE1",
                   "prop": "2+ TDs",
-                  "modelProb": 0.1,
+                  "modelProb": 0.093,
                   "price": null,
                   "book": null,
                   "estimate": false,
@@ -5818,7 +5818,8 @@
                 }
               ]
             }
-          ]
+          ],
+          "qbOverride": "QB override: Rudolph starting (Rodgers out)"
         }
       ]
     },

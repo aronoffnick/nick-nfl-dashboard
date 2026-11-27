@@ -15144,7 +15144,7 @@
           "label": "Pat Freiermuth over 26.5 Rec yds",
           "card_label": "Pat Freiermuth \u00b7 over 26.5 receiving yards",
           "p": 0.643,
-          "center": 26.6,
+          "center": 24.75,
           "center_kind": "mean",
           "season": "Over in 7 of 10",
           "price": null,
@@ -15157,7 +15157,7 @@
           "rating": 64,
           "flags": "",
           "confidence": "",
-          "model_edge_pct": 0.4,
+          "model_edge_pct": -6.6,
           "defense": "HOU"
         },
         {
@@ -15312,7 +15312,7 @@
           "label": "Germie Bernard under 39.5 Rec yds",
           "card_label": "Germie Bernard \u00b7 under 39.5 receiving yards",
           "p": 0.615,
-          "center": 39.4,
+          "center": 36.66,
           "center_kind": "mean",
           "season": "Under in 6 of 9",
           "price": null,
@@ -15325,7 +15325,7 @@
           "rating": 62,
           "flags": "",
           "confidence": "",
-          "model_edge_pct": -0.3,
+          "model_edge_pct": -7.2,
           "defense": "HOU"
         },
         {
@@ -15564,7 +15564,7 @@
           "label": "Darnell Washington under 24.5 Rec yds",
           "card_label": "Darnell Washington \u00b7 under 24.5 receiving yards",
           "p": 0.571,
-          "center": 24.2,
+          "center": 22.52,
           "center_kind": "mean",
           "season": "Under in 6 of 10",
           "price": null,
@@ -15577,7 +15577,7 @@
           "rating": 57,
           "flags": "",
           "confidence": "",
-          "model_edge_pct": -1.2,
+          "model_edge_pct": -8.1,
           "defense": "HOU"
         },
         {
@@ -15620,7 +15620,7 @@
           "label": "Rico Dowdle under 14.5 Rec yds",
           "card_label": "Rico Dowdle \u00b7 under 14.5 receiving yards",
           "p": 0.545,
-          "center": 14.4,
+          "center": 13.4,
           "center_kind": "mean",
           "season": "Under in 4 of 7",
           "price": null,
@@ -15633,7 +15633,7 @@
           "rating": 55,
           "flags": "",
           "confidence": "",
-          "model_edge_pct": -0.7,
+          "model_edge_pct": -7.6,
           "defense": "HOU"
         },
         {
@@ -15788,7 +15788,7 @@
           "label": "Jaylen Warren over 29.5 Rec yds",
           "card_label": "Jaylen Warren \u00b7 over 29.5 receiving yards",
           "p": 0.5,
-          "center": 29.6,
+          "center": 27.54,
           "center_kind": "mean",
           "season": "Over in 5 of 10",
           "price": null,
@@ -15801,7 +15801,7 @@
           "rating": 50,
           "flags": "",
           "confidence": "",
-          "model_edge_pct": 0.3,
+          "model_edge_pct": -6.6,
           "defense": "HOU"
         },
         {
@@ -15844,7 +15844,7 @@
           "label": "Roman Wilson under 42.5 Rec yds",
           "card_label": "Roman Wilson \u00b7 under 42.5 receiving yards",
           "p": 0.5,
-          "center": 42.2,
+          "center": 39.27,
           "center_kind": "mean",
           "season": "Under in 3 of 6",
           "price": null,
@@ -15857,7 +15857,7 @@
           "rating": 50,
           "flags": "",
           "confidence": "",
-          "model_edge_pct": -0.7,
+          "model_edge_pct": -7.6,
           "defense": "HOU"
         },
         {
@@ -15917,34 +15917,6 @@
           "defense": "PIT"
         },
         {
-          "id": "prop:aaron rodgers:Pass yds:Over:234.5",
-          "kind": "prop",
-          "player": "Aaron Rodgers",
-          "team": "PIT",
-          "pos": "QB",
-          "market": "Pass yds",
-          "side": "Over",
-          "line": 234.5,
-          "label": "Aaron Rodgers over 234.5 Pass yds",
-          "card_label": "Aaron Rodgers \u00b7 over 234.5 passing yards",
-          "p": 0.429,
-          "center": 234.9,
-          "center_kind": "mean",
-          "season": "Over in 4 of 10",
-          "price": null,
-          "book": null,
-          "price_str": "No price in the snapshot",
-          "asof": null,
-          "priced": false,
-          "market_p": null,
-          "direction": "over",
-          "rating": 43,
-          "flags": "",
-          "confidence": "",
-          "model_edge_pct": 0.2,
-          "defense": "HOU"
-        },
-        {
           "id": "prop:dk metcalf:Rec yds:Over:47.5",
           "kind": "prop",
           "player": "DK Metcalf",
@@ -15956,7 +15928,7 @@
           "label": "DK Metcalf over 47.5 Rec yds",
           "card_label": "DK Metcalf \u00b7 over 47.5 receiving yards",
           "p": 0.429,
-          "center": 47.5,
+          "center": 44.2,
           "center_kind": "mean",
           "season": "Over in 4 of 10",
           "price": null,
@@ -15969,7 +15941,7 @@
           "rating": 43,
           "flags": "",
           "confidence": "",
-          "model_edge_pct": 0.0,
+          "model_edge_pct": -6.9,
           "defense": "HOU"
         },
         {
@@ -16217,7 +16189,8 @@
       "scoringRecord": {
         "away": "4-6",
         "home": "6-4"
-      }
+      },
+      "qbOverride": "QB override: Rudolph starting (Rodgers out)"
     },
     "DAL-SEA": {
       "game": "DAL-SEA",

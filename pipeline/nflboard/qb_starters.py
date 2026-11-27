@@ -16,10 +16,22 @@ def load_starters(path: Path | None = None) -> dict:
 
 
 def starter_for(season: int, week: int, team: str, path: Path | None = None) -> dict | None:
-    spec = load_starters(path).get("weeks", {}).get(str(week), {}).get(team)
-    if not spec or spec.get("season") not in (None, season):
-        return spec if spec else None
-    return spec
+    """The latest override for this team at or before `week`. A later week replaces it."""
+    chosen = None
+    chosen_week = -1
+    for key, teams in (load_starters(path).get("weeks") or {}).items():
+        try:
+            number = int(key)
+        except (TypeError, ValueError):
+            continue
+        if number > int(week) or number < chosen_week:
+            continue
+        spec = (teams or {}).get(team)
+        if not spec or spec.get("season") not in (None, season):
+            continue
+        chosen = spec
+        chosen_week = number
+    return chosen
 
 
 def scale_projection(player: dict, projected: dict, spec: dict) -> dict:
@@ -30,9 +42,10 @@ def scale_projection(player: dict, projected: dict, spec: dict) -> dict:
     ratio = float(spec["efficiency"])
     if player.get("pos") == "QB" and player.get("name") == spec.get("qb"):
         base = float(spec["passYdsBeforeDefense"])
-        yards = float(spec["passYds"])
-        factor = updated.get("passYds", [None, None, None])[2]
-        updated["passYds"] = [round(base, 1), round(yards, 1), factor if factor is not None else spec.get("defenseFactor")]
+        triple = updated.get("passYds") or [None, None, None]
+        factor = triple[2] if len(triple) > 2 and triple[2] is not None else spec.get("defenseFactor")
+        yards = round(base * float(factor), 1) if factor is not None else float(spec["passYds"])
+        updated["passYds"] = [round(base, 1), yards, factor]
     elif player.get("pos") in {"WR", "TE", "RB"}:
         for stat in ("recYds", "td"):
             triple = updated.get(stat)

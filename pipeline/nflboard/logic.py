@@ -882,36 +882,38 @@ def build_week(stats, schedule, pbp, season: int, week: int, adjustments=None):
     coverage_games = {}
     for away, home, meta in games:
         key = f"{away}-{home}"
-        projected = []
+        roster = []
+        named = {player["name"] for player in players if player["team"] in {away, home}}
         for player in players:
             if player["team"] not in {away, home}:
                 continue
             defense = home if player["team"] == away else away
-            projected = project_player(player, defense, factors, adjustments)
-            try:
-                from nflboard.qb_starters import starter_for, scale_projection
-                spec = starter_for(season, week, player["team"])
-                if spec:
-                    projected = scale_projection(player, projected, spec)
-            except Exception:
-                pass
-            player = {**player, "projected": projected}
-            projected.append(player)
-            stat_map = {}
-            for stat, triple in player["projected"].items():
-                stat_map[stat] = triple
+            stats = project_player(player, defense, factors, adjustments)
+            from nflboard.qb_starters import starter_for, scale_projection
+            spec = starter_for(season, week, player["team"])
+            if spec and player.get("pos") == "QB" and player.get("name") == spec.get("out"):
+                if spec.get("qb") in named:
+                    continue
+                player = {**player, "name": spec["qb"], "games": spec.get("careerAttempts") or player["games"]}
+                stats["rushYds"] = [0.0, 0.0, None]
+                stats["td"] = [0.0, 0.0, None]
+            if spec:
+                stats = scale_projection(player, stats, spec)
+            row = {**player, "projected": stats}
+            roster.append(row)
             scatter_games.setdefault(key, {"players": []})
             scatter_games[key]["players"].append({
-                "n": player["name"],
-                "p": player["pos"],
-                "t": player["team"],
+                "n": row["name"],
+                "p": row["pos"],
+                "t": row["team"],
                 "o": defense,
-                "g": player["games"],
-                "s": stat_map,
-                **({"uncertain": True} if player["games"] < 3 else {}),
+                "g": row["games"],
+                "s": stats,
+                **({"uncertain": True} if row["games"] < 3 else {}),
+                **({"qbOverride": spec["note"]} if spec and row["pos"] == "QB" and row["name"] == spec.get("qb") else {}),
             })
-        td_games.append(touchdown_game(away, home, meta, projected, factors, scoring, hist, adjustments))
-        parlay_games[key] = parlay_game(away, home, meta, projected, scoring)
+        td_games.append(touchdown_game(away, home, meta, roster, factors, scoring, hist, adjustments))
+        parlay_games[key] = parlay_game(away, home, meta, roster, scoring)
         coverage_games[key] = {"offenses": {
             away: {"defense": home, "mix": None, "mixNote": "unavailable"},
             home: {"defense": away, "mix": None, "mixNote": "unavailable"},
