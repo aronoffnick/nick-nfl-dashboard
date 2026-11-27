@@ -10,7 +10,7 @@
 .custom-parlay-form input::placeholder{color:#7d9088}
 .custom-parlay-include{grid-column:1 / -1;margin:0;padding:10px 12px;border:1px solid #365344;border-radius:10px;display:flex;flex-wrap:wrap;gap:8px 16px}
 .custom-parlay-include legend{padding:0 6px;color:#9fe2b4;font-size:.72rem;font-weight:800;letter-spacing:.06em}
-.custom-parlay-include label,.custom-parlay-value{flex-direction:row;align-items:center;gap:8px;min-height:44px;font-weight:600}
+.custom-parlay-include label,.custom-parlay-form label.custom-parlay-value{flex-direction:row;align-items:center;gap:8px;min-height:44px;font-weight:600}
 .custom-parlay-include input,.custom-parlay-value input{width:18px;height:18px;accent-color:#a5e6bd}
 .custom-parlay-value{grid-column:1 / -1}
 .custom-parlay-error{margin:12px 0 0;padding:10px 12px;border-radius:8px;background:#35271e;border:1px solid #715337;color:#edc7a3;font-size:.8rem;line-height:1.45}
