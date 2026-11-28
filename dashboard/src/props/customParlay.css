@@ -39,6 +39,9 @@
 .custom-parlay-confidence small{color:#9fe2b4;font-size:.64rem;font-weight:700;text-align:right;line-height:1.3}
 .custom-parlay-bar{width:100%;height:8px;border-radius:99px;background:#1c3328;overflow:hidden}
 .custom-parlay-bar>span{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#3d8f62,#9fe2b4)}
+.custom-parlay-generate{grid-column:1 / -1;display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px}
+.custom-parlay-generate button{background:#a5e6bd;color:#10261b;border:0;border-radius:8px;min-height:48px;padding:12px 22px;font-weight:800;font-size:1rem}
+.custom-parlay-generate span{color:#9db5aa;font-size:.75rem;line-height:1.4}
 .custom-parlay-actions{display:flex;justify-content:flex-end;margin-top:12px}
 .custom-parlay-actions button{background:#a5e6bd;color:#10261b;border:0;border-radius:8px;padding:10px 14px;font-weight:800;min-height:44px}
 .custom-parlay-actions button:disabled{background:#24362c;color:#8ea89a}
@@ -52,7 +55,7 @@
   .custom-parlay-logo{width:32px;height:32px}
   .custom-parlay-confidence{grid-column:1 / -1;align-items:stretch}
   .custom-parlay-confidence strong,.custom-parlay-confidence small{align-self:flex-end}
-  .custom-parlay-actions button{width:100%}
+  .custom-parlay-actions button,.custom-parlay-generate button{width:100%}
 }
 @media(max-width:420px){
   .custom-parlay-form,.custom-parlay-flow{grid-template-columns:1fr}

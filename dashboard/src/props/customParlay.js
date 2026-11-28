@@ -10,8 +10,6 @@ import { boardGame, filePropCandidates, legHit, normName } from './parlayBoard.j
 import { scatterAbbrev, scatterGameKey } from './scatterCheck.js'
 
 const TYPE_ORDER = { outcome: 0, td: 1, prop: 2 }
-const TYPE_NAME = { outcome: 'game outcome', td: 'touchdown scorer', prop: 'prop' }
-
 export function formatChance(value) {
   if (!Number.isFinite(value)) return '—'
   const pct = Math.round(value * 1000) / 10
@@ -642,21 +640,33 @@ function coverEveryGame(chosen, gameList, pools, types, mode, required, canTake,
   return false
 }
 
-function emptyReason(type) {
-  if (type === 'outcome') return 'No unstarted game has a moneyline or spread the model likes.'
-  if (type === 'td') return 'No unstarted game has a season-weighted touchdown scorer with at least three games.'
-  return 'No unstarted game has a prop on the deduped list.'
+const TYPE_LABEL = { outcome: 'Game outcomes', td: 'Touchdown scorers', prop: 'Props' }
+
+export function skipNote(type) {
+  if (type === 'outcome') return 'Game outcomes are checked, but no unstarted game has a moneyline or spread the model likes. Uncheck Game outcomes. This parlay uses the other selected types.'
+  if (type === 'td') return 'Touchdown scorers are checked, but none are available yet. Rosters may still be loading, or no player has three games with a touchdown. Uncheck Touchdown scorers. This parlay uses the other selected types.'
+  return 'Props are checked, but this week’s file has none for the unstarted games. Uncheck Props. This parlay uses the other selected types.'
+}
+
+function emptyReason(types) {
+  const names = types.map(type => TYPE_LABEL[type] || type).join(', ')
+  return `None of the selected types have a leg on an unstarted game (${names}). Uncheck an empty type, or lower Number of games. The generator only uses games that have not kicked off.`
 }
 
 export function buildCustomParlays(pools = {}, input, { mode = 'confidence', limit = 8, oddsRange = null } = {}) {
-  const types = checkedTypes(input?.types)
+  const requested = checkedTypes(input?.types)
   const byType = {
     outcome: (pools.outcome || []).map(decorateLeg),
     td: (pools.td || []).map(decorateLeg),
     prop: (pools.prop || []).map(decorateLeg),
   }
-  for (const type of types) {
-    if (!byType[type].length) return { parlays: [], reason: emptyReason(type) }
+  const skipped = requested.filter(type => !byType[type].length)
+  const types = requested.filter(type => byType[type].length)
+  const note = skipped.map(skipNote).join(' ')
+  if (!types.length) return { parlays: [], reason: emptyReason(requested), skipped }
+  const working = {
+    ...input,
+    types: { outcome: types.includes('outcome'), td: types.includes('td'), prop: types.includes('prop') },
   }
   const games = new Map()
   for (const type of types) {
@@ -666,17 +676,17 @@ export function buildCustomParlays(pools = {}, input, { mode = 'confidence', lim
     }
   }
   let catalog = [...games.values()]
-  if (input.legsPerGame != null) catalog = catalog.filter(game => supplyCount(game.legs) >= input.legsPerGame)
-  if (catalog.length < input.games) {
+  if (working.legsPerGame != null) catalog = catalog.filter(game => supplyCount(game.legs) >= working.legsPerGame)
+  if (catalog.length < working.games) {
     const count = catalog.length
-    return { parlays: [], reason: `Only ${count} unstarted ${count === 1 ? 'game has' : 'games have'} enough of the selected legs. Lower the game count.` }
+    return { parlays: [], reason: `Only ${count} unstarted ${count === 1 ? 'game has' : 'games have'} these legs, and Number of games is ${working.games}. Lower Number of games${working.legsPerGame != null ? ', or clear Legs per game' : ''}.`, skipped, note }
   }
   const ranked = [...catalog].sort((a, b) => {
-    const score = game => [...game.legs].sort(compareLegs(mode)).slice(0, input.legsPerGame || 3).reduce((sum, leg) => sum + legScore(leg, mode), 0)
+    const score = game => [...game.legs].sort(compareLegs(mode)).slice(0, working.legsPerGame || 3).reduce((sum, leg) => sum + legScore(leg, mode), 0)
     return score(b) - score(a) || String(a.kickoff).localeCompare(String(b.kickoff)) || String(a.id).localeCompare(String(b.id))
   })
   let pool = ranked
-  if (combinationCount(pool.length, input.games) > 5000) pool = ranked.slice(0, Math.min(ranked.length, input.games + 6))
+  if (combinationCount(pool.length, working.games) > 5000) pool = ranked.slice(0, Math.min(ranked.length, working.games + 6))
   const seen = new Set()
   const found = []
   let rejectedByOdds = false
@@ -690,7 +700,7 @@ export function buildCustomParlays(pools = {}, input, { mode = 'confidence', lim
     seen.add(priced.id)
     found.push(priced)
   }
-  for (const combo of combinations(pool, input.games)) keep(bestFill(combo, byType, input, mode, new Set()))
+  for (const combo of combinations(pool, working.games)) keep(bestFill(combo, byType, working, mode, new Set()))
   found.sort(compareParlays(mode))
   if (found.length < 2 && found[0]) {
     const ids = new Set(found[0].legs.map(leg => leg.gameId))
@@ -700,15 +710,15 @@ export function buildCustomParlays(pools = {}, input, { mode = 'confidence', lim
       const worst = [...found[found.length - 1].legs].sort(compareLegs(mode)).at(-1)
       if (!worst) break
       banned.add(worst.id)
-      keep(bestFill(combo.length ? combo : pool.filter(game => ids.has(game.id)), byType, input, mode, banned))
+      keep(bestFill(combo.length ? combo : pool.filter(game => ids.has(game.id)), byType, working, mode, banned))
     }
     found.sort(compareParlays(mode))
   }
   if (!found.length) {
     const reason = rejectedByOdds
-      ? 'No parlay in this mix has a snapshot price inside that American range. A leg without a saved price stays out of the range. Clear the odds, or use priced outcomes.'
-      : `No mix of ${input.games} ${input.games === 1 ? 'game' : 'games'} can fill ${input.legs} legs from the selected types without repeating a leg.`
-    return { parlays: [], reason }
+      ? 'No mix has a saved price inside Min American and Max American. Clear those boxes. Props and touchdowns often have no snapshot price, so a range only fits when every leg is priced.'
+      : `No mix of ${working.games} ${working.games === 1 ? 'game' : 'games'} can fill ${working.legs} legs without repeating a leg. Lower Number of legs or Number of games, or clear Legs per game.`
+    return { parlays: [], reason, skipped, note }
   }
-  return { parlays: found.slice(0, limit), reason: null, typeName: TYPE_NAME }
+  return { parlays: found.slice(0, limit), reason: null, skipped, note }
 }
