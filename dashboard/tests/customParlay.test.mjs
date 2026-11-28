@@ -6,13 +6,16 @@ import {
   buildCustomParlays,
   combinedAmerican,
   fairAmerican,
+  filterMismatchPools,
   filterPools,
   legValue,
   oddsDirection,
   outcomeCandidates,
+  presentLegs,
   priceMatchesTarget,
   propCandidates,
   priceInRange,
+  revealedLegs,
   runningAmerican,
   seasonTdShare,
   validateCustomParlay,
@@ -426,4 +429,57 @@ test('a target odds slot keeps the closest priced leg and a miss falls back', ()
   assert.ok(fair?.text)
   assert.equal(oddsDirection(150, 420), 'up')
   assert.equal(oddsDirection(420, 150), 'down')
+})
+
+test('mismatches only keeps priced mismatches from outcomes, touchdowns, and props', () => {
+  const pools = {
+    outcome: [
+      leg({ id: 'mia', type: 'outcome', gameId: 'A', playerId: null, confidence: 0.73, price: -113, priced: true, title: 'Miami Dolphins +5.5' }),
+      leg({ id: 'fair', type: 'outcome', gameId: 'B', playerId: null, confidence: 0.52, price: -110, priced: true }),
+    ],
+    td: [
+      leg({ id: 'judkins', type: 'td', gameId: 'C', playerId: 'judkins', confidence: 0.8 }),
+    ],
+    prop: [
+      leg({ id: 'jeanty', type: 'prop', gameId: 'C', playerId: 'jeanty', confidence: 0.73 }),
+      leg({ id: 'plus', type: 'prop', gameId: 'D', playerId: 'plus', confidence: 0.45, price: 250, priced: true }),
+    ],
+  }
+  const filtered = filterMismatchPools(pools)
+  assert.deepEqual(filtered.outcome.map(item => item.id), ['mia'])
+  assert.deepEqual(filtered.td.map(item => item.id), [])
+  assert.deepEqual(filtered.prop.map(item => item.id), ['plus'])
+  const input = validateCustomParlay({ legs: '2', games: '2', legsPerGame: '', types: types(true, true, true) }).input
+  const parlay = buildCustomParlays(filtered, input, { prioritizeMismatch: true }).parlays[0]
+  assert.ok(parlay)
+  assert.ok(parlay.legs.every(item => item.mismatch))
+  assert.equal(parlay.legs.some(item => item.id === 'jeanty' || item.id === 'judkins' || item.id === 'fair'), false)
+})
+
+test('an unpriced week still surfaces the one priced outcome mismatch', () => {
+  const pools = filterMismatchPools({
+    outcome: [
+      leg({ id: 'mia', type: 'outcome', gameId: 'NYJ-MIA', playerId: null, confidence: 0.73, price: -113, priced: true, title: 'Miami Dolphins +5.5' }),
+    ],
+    td: [
+      leg({ id: 'judkins', type: 'td', gameId: 'LV-CLE', playerId: 'judkins', confidence: 0.8 }),
+    ],
+    prop: [
+      leg({ id: 'jeanty', type: 'prop', gameId: 'LV-CLE', playerId: 'jeanty', confidence: 0.73 }),
+    ],
+  })
+  const input = validateCustomParlay({ legs: '4', games: '2', legsPerGame: '', types: types(true, true, true) }).input
+  const built = buildCustomParlays(pools, input)
+  assert.equal(built.parlays.length, 0)
+  const rows = presentLegs(pools).filter(item => item.mismatch)
+  assert.deepEqual(rows.map(item => item.id), ['mia'])
+  assert.equal(rows[0].title, 'Miami Dolphins +5.5')
+})
+
+test('expand all parlay legs shows every leg immediately', () => {
+  const legs = [{ id: 'a' }, { id: 'b' }, { id: 'c' }, { id: 'd' }]
+  assert.deepEqual(revealedLegs(legs, 1, true).map(item => item.id), ['a', 'b', 'c', 'd'])
+  assert.deepEqual(revealedLegs(legs, 4, false).map(item => item.id), ['a', 'b', 'c', 'd'])
+  assert.deepEqual(revealedLegs(legs, 1, false).map(item => item.id), ['a'])
+  assert.deepEqual(revealedLegs(legs, 2, false).map(item => item.id), ['a', 'b'])
 })

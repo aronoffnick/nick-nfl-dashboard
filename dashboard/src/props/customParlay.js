@@ -445,14 +445,50 @@ function decorateLeg(leg) {
   }
 }
 
+const LEG_TYPES = ['outcome', 'td', 'prop']
+
+function decoratedLegs(pools) {
+  return LEG_TYPES.flatMap(type => (pools?.[type] || []).map(decorateLeg))
+}
+
+/** A leg the model prices at least 5 points and 1.25× above the book. */
+export function isPricedMismatch(leg) {
+  return Boolean(classifyMismatch(leg?.confidence, leg?.price, leg?.oppositePrice))
+}
+
+/**
+ * Mismatches only applies to every leg type. Week files often have a price on
+ * the moneyline or spread and none on unstarted props or touchdowns, so
+ * filtering touchdowns alone leaves the view unchanged.
+ */
+export function filterMismatchPools(pools) {
+  return {
+    outcome: (pools?.outcome || []).filter(isPricedMismatch),
+    td: (pools?.td || []).filter(isPricedMismatch),
+    prop: (pools?.prop || []).filter(isPricedMismatch),
+  }
+}
+
+export function presentLegs(pools) {
+  return decoratedLegs(pools)
+}
+
 export function slateMismatchSummary(pools) {
-  const legs = ['outcome', 'td', 'prop'].flatMap(type => (pools?.[type] || []).map(decorateLeg))
+  const legs = decoratedLegs(pools)
   const flagged = legs.filter(leg => leg.mismatch)
   const near = legs
     .filter(leg => !leg.mismatch && Number.isFinite(leg.edge) && leg.edge > 0)
     .sort((a, b) => b.edge - a.edge || String(a.id).localeCompare(String(b.id)))
     .slice(0, 3)
   return { count: flagged.length, near }
+}
+
+/** Checked means every leg is visible. Otherwise the card reveals `shown` legs. */
+export function revealedLegs(legs, shown, expandAll) {
+  const list = legs || []
+  if (expandAll) return list.slice()
+  const count = Math.max(0, Math.min(list.length, Number(shown) || 0))
+  return list.slice(0, count)
 }
 
 export function priceInRange(price, range) {
