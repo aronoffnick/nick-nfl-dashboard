@@ -12,15 +12,18 @@ import {
   buildCustomParlays,
   filterPools,
   formatChance,
+  filterMismatchPools,
   formatSignedChance,
   oddsDirection,
   outcomeCandidates,
+  presentLegs,
   propCandidates,
+  revealedLegs,
   runningAmerican,
   slateMismatchSummary,
   validateCustomParlay,
 } from './customParlay.js'
-import { bookShort, buildTdScorers, classifyMismatch, collectTdPrices, filterTdAxis } from './tdScorers.js'
+import { bookShort, buildTdScorers, collectTdPrices, filterTdAxis } from './tdScorers.js'
 import './customParlay.css'
 
 const EMPTY_TYPES = { outcome: true, td: true, prop: true }
@@ -122,6 +125,19 @@ function unstarted(game) {
   return game && !game.started && !game.final && game.away?.abbr && game.home?.abbr
 }
 
+function groupLegs(legs) {
+  const groups = []
+  for (const leg of legs) {
+    let group = groups.find(item => item.id === leg.gameId)
+    if (!group) {
+      group = { id: leg.gameId, label: leg.gameLabel, legs: [] }
+      groups.push(group)
+    }
+    group.legs.push(leg)
+  }
+  return groups
+}
+
 export default function CustomParlay({ data, matchups, roster, halfLife, window = null }) {
   const slate = useMemo(() => (matchups || []).filter(unstarted), [matchups])
   const [legs, setLegs] = useState('4')
@@ -138,7 +154,7 @@ export default function CustomParlay({ data, matchups, roster, halfLife, window 
   const [tdMode, setTdMode] = useState('mix')
   const [mismatchesOnly, setMismatchesOnly] = useState(false)
   const [targets, setTargets] = useState([])
-  const [instant, setInstant] = useState(false)
+  const [expandAll, setExpandAll] = useState(false)
   const [shown, setShown] = useState(1)
   const [option, setOption] = useState(0)
   const [loadedRoster, setLoadedRoster] = useState(roster || null)
@@ -215,14 +231,14 @@ export default function CustomParlay({ data, matchups, roster, halfLife, window 
   }, [targets, slotCount])
   const readyPools = useMemo(() => {
     const picked = team === 'all' ? null : team
-    let td = filterTdAxis(pools.td, tdMode)
-    if (mismatchesOnly) td = td.filter(leg => classifyMismatch(leg.confidence, leg.price, leg.oppositePrice))
+    const td = filterTdAxis(pools.td, tdMode)
     const filtered = filterPools({
       outcome: outcomeCandidates(slate, odds.merged, picked),
       td,
       prop: pools.prop,
     }, picked)
-    return script.active ? applyGameScript(filtered, { props: script.props, selection, matchup: scriptMatchup }) : filtered
+    const scripted = script.active ? applyGameScript(filtered, { props: script.props, selection, matchup: scriptMatchup }) : filtered
+    return mismatchesOnly ? filterMismatchPools(scripted) : scripted
   }, [team, pools.td, pools.prop, slate, odds.merged, script, selection, scriptMatchup, tdMode, mismatchesOnly])
   const slateSummary = useMemo(() => {
     const picked = team === 'all' ? null : team
@@ -246,11 +262,12 @@ export default function CustomParlay({ data, matchups, roster, halfLife, window 
   const index = parlays.length ? Math.min(option, parlays.length - 1) : 0
   const parlay = parlays[index] || null
   const reduceMotion = useMemo(() => Boolean(globalThis.window?.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches), [])
-  const showAll = instant || reduceMotion
+  const showAll = expandAll || reduceMotion
   const parlayKey = parlay?.id || ''
+  const revealKey = `${parlayKey}:${showAll ? 'all' : 'step'}`
   const [trackedKey, setTrackedKey] = useState('')
-  if (parlayKey !== trackedKey) {
-    setTrackedKey(parlayKey)
+  if (revealKey !== trackedKey) {
+    setTrackedKey(revealKey)
     setShown(showAll ? (parlay?.legs.length || 0) : Math.min(1, parlay?.legs.length || 0))
   }
   useEffect(() => {
@@ -267,21 +284,23 @@ export default function CustomParlay({ data, matchups, roster, halfLife, window 
     return () => clearInterval(timer)
   }, [parlay, showAll])
   const emptySlate = slate.length === 0
+  const mismatchRows = mismatchesOnly && validation.ok && oddsCheck.ok && !parlay
+    ? presentLegs(readyPools)
+      .filter(leg => leg.mismatch)
+      .sort((a, b) => (b.mismatch?.edge || 0) - (a.mismatch?.edge || 0) || String(a.id).localeCompare(String(b.id)))
+    : []
   const message = emptySlate
     ? 'Every game this week has already kicked off. The generator only uses games that have not started, so there is no parlay to build.'
-    : !oddsCheck.ok ? oddsCheck.message : !validation.ok ? validation.message : built?.reason
+    : !oddsCheck.ok ? oddsCheck.message : !validation.ok ? validation.message
+      : mismatchRows.length ? null
+        : mismatchesOnly && !parlay
+          ? 'Mismatches only is on, and no unstarted leg clears +5 pts and 1.25×.'
+          : built?.reason
   const skippedNote = parlay && built?.note ? built.note : ''
-  const visibleLegs = parlay ? parlay.legs.slice(0, showAll ? parlay.legs.length : shown) : []
-  const building = Boolean(parlay && visibleLegs.length < parlay.legs.length)
-  const groups = []
-  for (const leg of visibleLegs) {
-    let group = groups.find(item => item.id === leg.gameId)
-    if (!group) {
-      group = { id: leg.gameId, label: leg.gameLabel, legs: [] }
-      groups.push(group)
-    }
-    group.legs.push(leg)
-  }
+  const visibleLegs = revealedLegs(parlay?.legs, shown, showAll)
+  const building = Boolean(parlay && visibleLegs.length < (parlay.legs.length || 0))
+  const groups = groupLegs(visibleLegs)
+  const mismatchGroups = groupLegs(mismatchRows)
   const perGameSet = validation.ok && validation.input.legsPerGame != null
   const unpricedFill = valueMode && parlay?.legs.some(leg => leg.type !== 'outcome' && !leg.priced)
   const summary = script.active ? scriptSummary(selection, scriptMatchup) : 'One parlay from this week’s unstarted games'
@@ -404,13 +423,18 @@ export default function CustomParlay({ data, matchups, roster, halfLife, window 
         <input type="checkbox" checked={valueMode} onChange={event => { setValueMode(event.target.checked); setOption(0) }} />
         Optimize for value
       </label>
-      <label className="custom-parlay-value">
+      <label className="custom-parlay-value" title="Keep only legs the model prices at least 5 points and 1.25× above the book.">
         <input type="checkbox" checked={mismatchesOnly} onChange={event => { setMismatchesOnly(event.target.checked); setOption(0) }} />
         Mismatches only
       </label>
-      <label className="custom-parlay-value">
-        <input type="checkbox" checked={instant} onChange={event => setInstant(event.target.checked)} />
-        Show legs instantly
+      <label className="custom-parlay-value" title="Show every leg of the parlay at once. Uncheck to reveal them one by one.">
+        <input
+          type="checkbox"
+          checked={showAll}
+          disabled={reduceMotion || undefined}
+          onChange={event => setExpandAll(event.target.checked)}
+        />
+        Expand all parlay legs
       </label>
       <div className="custom-parlay-generate">
         <button type="submit">Generate</button>
@@ -421,11 +445,24 @@ export default function CustomParlay({ data, matchups, roster, halfLife, window 
       ? 'No game is being scripted. The parlay uses the model as it stands.'
       : valueMode
         ? 'Value ranks by expected profit per dollar: model probability times the decimal price, minus 1. A book −500 the model makes −220 is overvalued. A +150 the model makes +110 is undervalued. Mismatch touchdowns rank first. A touchdown with no line can still fill a leg.'
-        : 'Confidence ranks the moneyline or spread model probability, the touchdown model, and each prop’s hit chance. Mix and Value still put mismatch touchdowns first.'}</p>
+        : 'Confidence ranks the moneyline or spread model probability, the touchdown model, and each prop’s hit chance. Mix and Value still put mismatch touchdowns first.'}{mismatchesOnly ? ' Mismatches only keeps a leg when the model beats the book by at least 5 points and 1.25×, including moneylines and spreads.' : ''}{reduceMotion ? ' Legs stay expanded because this browser is set to reduce motion.' : ''}</p>
     <div id="parlay-result">
     {validation.note ? <p className="custom-parlay-note">{validation.note}</p> : null}
     {skippedNote ? <p className="custom-parlay-note">{skippedNote}</p> : null}
     {message ? <p className="custom-parlay-error" role="alert">{message}</p> : null}
+    {mismatchRows.length ? <article className="custom-parlay-card" aria-live="polite" data-mismatch-rows>
+      <header>
+        <div>
+          <small>MISMATCHES ONLY</small>
+          <h4>{mismatchRows.length} {mismatchRows.length === 1 ? 'leg' : 'legs'} on this slate</h4>
+        </div>
+      </header>
+      <p className="custom-parlay-note">These legs beat the book by at least 5 points and 1.25×. There are not enough of them to fill {validation.input.legs} {validation.input.legs === 1 ? 'leg' : 'legs'} across {validation.input.games} {validation.input.games === 1 ? 'game' : 'games'}.</p>
+      {mismatchGroups.map(group => <div key={group.id} className="custom-parlay-game">
+        <h5>{group.label}</h5>
+        <ol>{group.legs.map(leg => <LegRow key={leg.id} leg={leg} />)}</ol>
+      </div>)}
+    </article> : null}
     {parlay ? <article className="custom-parlay-card" aria-live="polite">
       <header>
         <div>
