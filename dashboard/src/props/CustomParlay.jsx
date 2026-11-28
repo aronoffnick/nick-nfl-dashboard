@@ -126,7 +126,10 @@ export default function CustomParlay({ data, matchups, roster, halfLife, window 
     if (activeRoster) {
       for (const game of slate) {
         for (const [side, opponent] of [[game.away, game.home], [game.home, game.away]]) {
-          for (const player of projectTeam(data, side, opponent, activeRoster, halfLife, null)) {
+          let projected = []
+          try { projected = projectTeam(data, side, opponent, activeRoster, halfLife, null) }
+          catch { projected = [] }
+          for (const player of projected) {
             if (player.unavailable) continue
             const share = seasonTdShare(player.logs, halfLife)
             if (share.rate == null || share.n < 3 || share.rate <= 0) continue
@@ -169,7 +172,11 @@ export default function CustomParlay({ data, matchups, roster, halfLife, window 
   const parlays = built?.parlays || []
   const index = parlays.length ? Math.min(option, parlays.length - 1) : 0
   const parlay = parlays[index] || null
-  const message = !oddsCheck.ok ? oddsCheck.message : !validation.ok ? validation.message : built?.reason
+  const emptySlate = slate.length === 0
+  const message = emptySlate
+    ? 'Every game this week has already kicked off. The generator only uses games that have not started, so there is no parlay to build.'
+    : !oddsCheck.ok ? oddsCheck.message : !validation.ok ? validation.message : built?.reason
+  const skippedNote = parlay && built?.note ? built.note : ''
   const groups = []
   if (parlay) {
     for (const leg of parlay.legs) {
@@ -192,6 +199,11 @@ export default function CustomParlay({ data, matchups, roster, halfLife, window 
     setScriptGameId('')
     setOption(0)
   }
+  function generate(event) {
+    event.preventDefault()
+    setOption(0)
+    document.getElementById('parlay-result')?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+  }
   function chooseScriptGame(event) {
     setScriptGameId(event.target.value)
     setOutcome('')
@@ -203,7 +215,7 @@ export default function CustomParlay({ data, matchups, roster, halfLife, window 
     <div className="custom-parlay-title"><h3>Bet generator</h3><span>Week {data?.week} · {summary}</span></div>
     <p className="custom-parlay-help">Pick a team, or all of them, then how that game goes. Legs, games, and the checked types fill one parlay across this week’s unstarted games. Leave legs per game blank for no per-game limit. Leave the odds blank to skip a price filter. A scripted prop shows an up or down arrow.</p>
     <p className="custom-parlay-note">{SNAPSHOT_NOTE}</p>
-    <form className="custom-parlay-form" onSubmit={event => event.preventDefault()}>
+    <form className="custom-parlay-form" onSubmit={generate}>
       <label>Team
         <select value={team} aria-label="Team" onChange={chooseTeam}>
           <option value="all">All teams</option>
@@ -268,13 +280,19 @@ export default function CustomParlay({ data, matchups, roster, halfLife, window 
         <input type="checkbox" checked={valueMode} onChange={event => { setValueMode(event.target.checked); setOption(0) }} />
         Optimize for value
       </label>
+      <div className="custom-parlay-generate">
+        <button type="submit">Generate</button>
+        <span>The result below updates as you change the controls. Generate jumps to it.</span>
+      </div>
     </form>
     <p className="custom-parlay-mode">{!scriptMatchup && team === 'all'
       ? 'No game is being scripted. The parlay uses the model as it stands.'
       : valueMode
         ? 'Value ranks by expected profit per dollar: model probability times the decimal price, minus 1. A book −500 the model makes −220 is overvalued. A +150 the model makes +110 is undervalued. No line ranks last.'
         : 'Confidence ranks the moneyline or spread model probability, the season-weighted touchdown rate, and each prop’s hit chance.'}</p>
+    <div id="parlay-result">
     {validation.note ? <p className="custom-parlay-note">{validation.note}</p> : null}
+    {skippedNote ? <p className="custom-parlay-note">{skippedNote}</p> : null}
     {message ? <p className="custom-parlay-error" role="alert">{message}</p> : null}
     {parlay ? <article className="custom-parlay-card" aria-live="polite">
       <header>
@@ -301,5 +319,6 @@ export default function CustomParlay({ data, matchups, roster, halfLife, window 
       </div>
       <small className="custom-parlay-disclaimer">Estimates only. Same-game legs are not independent, so the combined figure is not a true parlay probability. Confirm status, lines, and odds with your sportsbook.</small>
     </article> : null}
+    </div>
   </section>
 }

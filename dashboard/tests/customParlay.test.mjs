@@ -269,6 +269,32 @@ test('a script arrow outranks a slightly higher raw prop when the side agrees', 
   assert.equal(parlay.legs[0].arrow, 'up')
 })
 
+test('the default home settings still build a parlay when touchdowns are not ready', () => {
+  const input = validateCustomParlay({
+    legs: '4', games: '2', legsPerGame: '',
+    types: { outcome: true, td: true, prop: true },
+  }).input
+  const pools = {
+    outcome: [
+      leg({ id: 'o1', type: 'outcome', gameId: 'A', playerId: null, confidence: 0.62, price: -110, priced: true }),
+      leg({ id: 'o2', type: 'outcome', gameId: 'B', playerId: null, confidence: 0.58, price: -120, priced: true }),
+    ],
+    td: [],
+    prop: [
+      leg({ id: 'p1', gameId: 'A', playerId: 'a', confidence: 0.7 }),
+      leg({ id: 'p2', gameId: 'B', playerId: 'b', confidence: 0.66 }),
+      leg({ id: 'p3', gameId: 'A', playerId: 'c', confidence: 0.6 }),
+      leg({ id: 'p4', gameId: 'B', playerId: 'd', confidence: 0.55 }),
+    ],
+  }
+  const result = buildCustomParlays(pools, input)
+  assert.ok(result.parlays.length >= 1)
+  assert.equal(result.parlays[0].legs.length, 4)
+  assert.equal(result.parlays[0].games, 2)
+  assert.ok(result.skipped.includes('td'))
+  assert.match(result.note, /Uncheck Touchdown scorers/)
+})
+
 test('blank American odds are optional and a real range keeps the priced leg inside it', () => {
   assert.deepEqual(americanBounds('', ''), { ok: true, range: null })
   assert.equal(americanBounds('50', '').ok, false)
