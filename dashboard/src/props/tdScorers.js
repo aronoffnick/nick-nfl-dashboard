@@ -308,7 +308,8 @@ export function buildTdScorers({ data, matchups, halfLife = 3, book = null, pric
       computed.sort((a, b) => b.prob - a.prob || a.row.player.name.localeCompare(b.row.player.name))
       computed.forEach((item, index) => {
         const highConfidence = index < 2 || item.prob >= HIGH_CONFIDENCE_MIN
-        const highValue = Boolean(item.sleeper && item.leak && item.ev != null && item.ev > 0)
+        // A book price has to be plus-EV. With no saved line, a sleeper on a leaky defense is still a value leg.
+        const highValue = Boolean(item.sleeper && item.leak && !(item.ev != null && item.ev <= 0))
         let axis = null
         if (highConfidence && highValue) axis = 'both'
         else if (highConfidence) axis = 'confidence'

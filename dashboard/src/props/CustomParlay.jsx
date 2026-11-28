@@ -28,7 +28,7 @@ const SNAPSHOT_NOTE = 'Unstarted games only. Prices are a static snapshot, not l
 
 function formatBook(price) {
   const n = Number(price)
-  if (!Number.isFinite(n)) return '—'
+  if (!Number.isFinite(n) || n === 0) return '—'
   return n > 0 ? `+${n}` : String(n)
 }
 

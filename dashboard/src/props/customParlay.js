@@ -421,9 +421,9 @@ export function legValue(probability, price) {
   const book = Number(price)
   const fair = fairAmerican(probability)
   const implied = americanImplied(book)
-  if (fair == null || implied == null) return { hasLine: false, fair: null, book: null, edge: null, ev: null, tag: 'no-line' }
+  if (fair == null || implied == null) return { hasLine: false, fair: fair ?? null, book: null, edge: null, ev: null, tag: 'no-line' }
   const decimal = americanToDecimal(book)
-  if (!Number.isFinite(decimal) || decimal <= 1) return { hasLine: false, fair: null, book: null, edge: null, ev: null, tag: 'no-line' }
+  if (!Number.isFinite(decimal) || decimal <= 1) return { hasLine: false, fair, book: null, edge: null, ev: null, tag: 'no-line' }
   const edge = Number(probability) - implied
   const ev = Number(probability) * decimal - 1
   const tag = edge > 1e-4 ? 'undervalued' : edge < -1e-4 ? 'overvalued' : 'fair'

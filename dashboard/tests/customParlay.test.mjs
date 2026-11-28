@@ -118,6 +118,7 @@ test('a −500 price the model makes −220 is overvalued, and a +150 the model 
   assert.equal(dog.book, 150)
   assert.ok(dog.ev > favorite.ev)
   assert.equal(legValue(0.6, null).tag, 'no-line')
+  assert.equal(legValue(0.6, null).fair, -150)
 })
 
 test('confidence mode picks the higher hit chance and value mode ranks profit per dollar', () => {
