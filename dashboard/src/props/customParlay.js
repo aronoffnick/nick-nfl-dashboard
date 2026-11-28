@@ -8,6 +8,7 @@ import { favoriteWinEstimate } from './diversifiedParlays.js'
 import { valid, weightedShare } from './model.js'
 import { boardGame, filePropCandidates, legHit, normName } from './parlayBoard.js'
 import { scatterAbbrev, scatterGameKey } from './scatterCheck.js'
+import { classifyMismatch, mismatchRank } from './tdScorers.js'
 
 const TYPE_ORDER = { outcome: 0, td: 1, prop: 2 }
 export function formatChance(value) {
@@ -124,6 +125,8 @@ function outcomeLeg(game, team, pick) {
     valueScore: Number(pick.kelly) || 0,
     priced: true,
     price: pick.price,
+    book: pick.book || '',
+    oppositePrice: pick.oppositePrice ?? null,
     kelly: pick.kelly,
     edge: pick.edge,
   }
@@ -187,17 +190,20 @@ function teamOutcomes(matchups, oddsFile, teamAbbr) {
     const probs = winProbs(game)
     const covers = coverPair(game, odds.spread)
     const choices = []
+    const other = sideName === 'away' ? game.home : game.away
     const ml = quoteFor(odds.moneyline, team.abbr)
     if (ml) {
       const kelly = kellyFraction(probs[sideName], ml.price)
       const implied = americanImplied(ml.price)
-      if (kelly != null) choices.push({ bet: 'ML', prob: probs[sideName], kelly, edge: implied == null ? 0 : probs[sideName] - implied, price: ml.price, line: null, book: ml.book })
+      const opposite = quoteFor(odds.moneyline, other.abbr)
+      if (kelly != null) choices.push({ bet: 'ML', prob: probs[sideName], kelly, edge: implied == null ? 0 : probs[sideName] - implied, price: ml.price, line: null, book: ml.book, oppositePrice: opposite?.price ?? null })
     }
     const spread = quoteFor(odds.spread, team.abbr)
     if (spread && covers) {
       const kelly = kellyFraction(covers[sideName], spread.price)
       const implied = americanImplied(spread.price)
-      if (kelly != null) choices.push({ bet: 'Spread', prob: covers[sideName], kelly, edge: implied == null ? 0 : covers[sideName] - implied, price: spread.price, line: spread.line, book: spread.book })
+      const opposite = quoteFor(odds.spread, other.abbr)
+      if (kelly != null) choices.push({ bet: 'Spread', prob: covers[sideName], kelly, edge: implied == null ? 0 : covers[sideName] - implied, price: spread.price, line: spread.line, book: spread.book, oppositePrice: opposite?.price ?? null })
     }
     if (!choices.length) continue
     choices.sort((a, b) => b.kelly - a.kelly || b.edge - a.edge)
@@ -312,6 +318,7 @@ export function propCandidates(parlayData, matchups) {
         valueScore: edge == null ? 0 : edge,
         priced: edge != null,
         price: edge == null ? null : leg.price,
+        book: leg.book || '',
         kelly: null,
         edge,
       })
@@ -434,7 +441,18 @@ function decorateLeg(leg) {
     ev: value.ev,
     valueTag: value.tag,
     valueScore: value.hasLine ? value.ev : null,
+    mismatch: classifyMismatch(leg?.confidence, leg?.price, leg?.oppositePrice),
   }
+}
+
+export function slateMismatchSummary(pools) {
+  const legs = ['outcome', 'td', 'prop'].flatMap(type => (pools?.[type] || []).map(decorateLeg))
+  const flagged = legs.filter(leg => leg.mismatch)
+  const near = legs
+    .filter(leg => !leg.mismatch && Number.isFinite(leg.edge) && leg.edge > 0)
+    .sort((a, b) => b.edge - a.edge || String(a.id).localeCompare(String(b.id)))
+    .slice(0, 3)
+  return { count: flagged.length, near }
 }
 
 export function priceInRange(price, range) {
@@ -466,14 +484,56 @@ function legScore(leg, mode) {
   return (Number(leg.confidence) || 0) + nudge
 }
 
-function compareLegs(mode) {
+function compareLegs(mode, prioritizeMismatch = false) {
   return (a, b) => {
+    if (prioritizeMismatch) {
+      const tier = mismatchRank(b) - mismatchRank(a)
+      if (tier) return tier
+      if (mismatchRank(a)) {
+        const edge = (b.mismatch?.edge || 0) - (a.mismatch?.edge || 0)
+        if (Math.abs(edge) > 1e-12) return edge
+      }
+    }
     const diff = legScore(b, mode) - legScore(a, mode)
     if (diff) return diff
     const confidence = (b.confidence || 0) - (a.confidence || 0)
     if (confidence) return confidence
     return String(a.id).localeCompare(String(b.id))
   }
+}
+
+function profitOf(american) {
+  const price = Number(american)
+  if (!Number.isFinite(price) || Math.abs(price) < 100) return null
+  return price > 0 ? price / 100 : 100 / -price
+}
+
+/** Base window: ±25 American points at |odds| <= 200, otherwise ±15% of the profit. `scale` widens it. */
+export function priceMatchesTarget(price, target, scale = 1) {
+  const quoted = Number(price)
+  const goal = Number(target)
+  if (!Number.isFinite(quoted) || quoted === 0 || !Number.isFinite(goal)) return false
+  const widen = Number(scale) > 0 ? Number(scale) : 1
+  if (Math.abs(goal) <= 200) return Math.abs(quoted - goal) <= 25 * widen
+  const base = profitOf(goal)
+  const got = profitOf(quoted)
+  if (base == null || got == null || base === 0) return false
+  return Math.abs(got - base) <= Math.abs(base) * 0.15 * widen
+}
+
+export function runningAmerican(legs, field = 'price') {
+  const priced = (legs || [])
+    .map(leg => ({ price: leg?.[field] }))
+    .filter(leg => Number.isFinite(Number(leg.price)) && Number(leg.price) !== 0)
+  if (!priced.length) return null
+  return combinedAmerican(priced)
+}
+
+export function oddsDirection(previous, next) {
+  if (!Number.isFinite(previous) || !Number.isFinite(next)) return null
+  if (next > previous + 0.5) return 'up'
+  if (next < previous - 0.5) return 'down'
+  return 'flat'
 }
 
 function combinations(items, size) {
@@ -545,7 +605,7 @@ function compareParlays() {
   }
 }
 
-function bestFill(gameList, pools, input, mode, banned) {
+function bestFill(gameList, pools, input, mode, banned, targets = null, prioritizeMismatch = false) {
   const types = checkedTypes(input.types)
   const ids = new Set(gameList.map(game => game.id))
   const limited = input.legsPerGame != null
@@ -555,8 +615,10 @@ function bestFill(gameList, pools, input, mode, banned) {
   const usedOutcomes = new Set()
   const chosen = []
   const required = types.length <= input.legs
+  const order = compareLegs(mode, prioritizeMismatch)
 
   const available = type => (pools[type] || []).filter(leg => ids.has(leg.gameId) && !banned.has(leg.id))
+  const poolLegs = () => types.flatMap(type => pools[type] || []).filter(leg => ids.has(leg.gameId) && !banned.has(leg.id))
   function canTake(leg, ignore) {
     if (!leg || banned.has(leg.id) || usedIds.has(leg.id)) return false
     if (leg.playerId && usedPlayers.has(leg.playerId) && leg.playerId !== ignore?.playerId) return false
@@ -564,12 +626,13 @@ function bestFill(gameList, pools, input, mode, banned) {
     if (limited && (cap.get(leg.gameId) ?? 0) < 1) return false
     return ids.has(leg.gameId)
   }
-  function take(leg) {
-    chosen.push(leg)
-    usedIds.add(leg.id)
-    if (leg.playerId) usedPlayers.add(leg.playerId)
-    if (leg.type === 'outcome') usedOutcomes.add(leg.gameId)
-    if (limited) cap.set(leg.gameId, cap.get(leg.gameId) - 1)
+  function take(leg, extra) {
+    const row = extra ? { ...leg, ...extra } : leg
+    chosen.push(row)
+    usedIds.add(row.id)
+    if (row.playerId) usedPlayers.add(row.playerId)
+    if (row.type === 'outcome') usedOutcomes.add(row.gameId)
+    if (limited) cap.set(row.gameId, cap.get(row.gameId) - 1)
   }
   function release(leg) {
     const index = chosen.indexOf(leg)
@@ -580,26 +643,70 @@ function bestFill(gameList, pools, input, mode, banned) {
     if (limited) cap.set(leg.gameId, cap.get(leg.gameId) + 1)
   }
 
+  const filled = (targets || []).slice(0, input.legs)
+    .map((value, index) => ({ value, index }))
+    .filter(item => item.value != null && item.value !== '')
+    .map(item => ({ value: Number(item.value), index: item.index }))
+    .filter(item => Number.isFinite(item.value) && Math.abs(item.value) >= 100)
+  if (filled.length) {
+    const open = poolLegs()
+    const pending = [...filled].sort((a, b) => {
+      const count = item => open.filter(leg => priceMatchesTarget(leg.price, item.value, 1)).length
+      return count(a) - count(b) || a.index - b.index
+    })
+    for (const item of pending) {
+      if (chosen.length >= input.legs) break
+      let pick = null
+      let met = false
+      for (const scale of [1, 2, 3, 4]) {
+        const fits = open.filter(leg => priceMatchesTarget(leg.price, item.value, scale) && canTake(leg)).sort(order)
+        if (!fits.length) continue
+        pick = fits[0]
+        met = scale === 1
+        break
+      }
+      const fallback = !pick
+      if (!pick) pick = open.filter(leg => canTake(leg)).sort(order)[0]
+      if (!pick) return null
+      take(pick, {
+        targetOdds: item.value,
+        targetMet: met && !fallback,
+        targetFallback: fallback,
+      })
+    }
+  }
+
   const placeOrder = [...types].sort((a, b) => {
     const gamesOf = type => new Set(available(type).map(leg => leg.gameId)).size
     return gamesOf(a) - gamesOf(b) || TYPE_ORDER[a] - TYPE_ORDER[b]
   })
   if (required) {
     for (const type of placeOrder) {
-      const pick = available(type).sort(compareLegs(mode)).find(leg => canTake(leg))
-      if (!pick) return null
-      take(pick)
+      if (chosen.some(leg => leg.type === type)) continue
+      const pick = available(type).sort(order).find(leg => canTake(leg))
+      if (pick && chosen.length < input.legs) {
+        take(pick)
+        continue
+      }
+      const donor = [...chosen].sort(order).reverse().find(leg => (
+        !leg.targetMet
+        && !(types.includes(leg.type) && chosen.filter(item => item.type === leg.type).length <= 1)
+      ))
+      const replacement = donor && available(type).sort(order).find(leg => canTake(leg, donor))
+      if (!donor || !replacement) return null
+      release(donor)
+      take(replacement)
     }
   }
 
-  const rest = types.flatMap(type => pools[type] || []).filter(leg => ids.has(leg.gameId)).sort(compareLegs(mode))
+  const rest = poolLegs().sort(order)
   for (const leg of rest) {
     if (chosen.length >= input.legs) break
     if (canTake(leg)) take(leg)
   }
   if (chosen.length !== input.legs) return null
 
-  if (!limited && !coverEveryGame(chosen, gameList, pools, types, mode, required, canTake, release, take)) return null
+  if (!limited && !coverEveryGame(chosen, gameList, pools, types, mode, required, canTake, release, take, prioritizeMismatch)) return null
   if (limited) {
     for (const game of gameList) {
       if (chosen.filter(leg => leg.gameId === game.id).length !== input.legsPerGame) return null
@@ -609,8 +716,14 @@ function bestFill(gameList, pools, input, mode, banned) {
   return summarize(chosen, mode)
 }
 
-function coverEveryGame(chosen, gameList, pools, types, mode, required, canTake, release, take) {
+function coverEveryGame(chosen, gameList, pools, types, mode, required, canTake, release, take, prioritizeMismatch = false) {
   const requiredTypes = required ? types : []
+  const order = compareLegs(mode, prioritizeMismatch)
+  const removalOrder = (a, b) => {
+    const sticky = (a.targetMet ? 1 : 0) - (b.targetMet ? 1 : 0)
+    if (sticky) return -sticky
+    return order(a, b)
+  }
   let guard = 0
   while (guard++ < 24) {
     const counts = new Map(gameList.map(game => [game.id, 0]))
@@ -620,13 +733,13 @@ function coverEveryGame(chosen, gameList, pools, types, mode, required, canTake,
     const donors = [...counts.entries()].filter(([, count]) => count >= 2).map(([id]) => id)
     let swapped = false
     for (const donorId of donors) {
-      const donorLegs = chosen.filter(leg => leg.gameId === donorId).sort(compareLegs(mode))
+      const donorLegs = chosen.filter(leg => leg.gameId === donorId).sort(removalOrder)
       for (let i = donorLegs.length - 1; i >= 0 && !swapped; i--) {
         const removed = donorLegs[i]
         const alone = requiredTypes.includes(removed.type) && chosen.filter(leg => leg.type === removed.type).length <= 1
         const replacement = types.flatMap(type => pools[type] || [])
           .filter(leg => leg.gameId === empty.id)
-          .sort(compareLegs(mode))
+          .sort(order)
           .find(leg => (!alone || leg.type === removed.type) && canTake(leg, removed))
         if (!replacement) continue
         release(removed)
@@ -644,7 +757,7 @@ const TYPE_LABEL = { outcome: 'Game outcomes', td: 'Touchdown scorers', prop: 'P
 
 export function skipNote(type) {
   if (type === 'outcome') return 'Game outcomes are checked, but no unstarted game has a moneyline or spread the model likes. Uncheck Game outcomes. This parlay uses the other selected types.'
-  if (type === 'td') return 'Touchdown scorers are checked, but none are available yet. Rosters may still be loading, or no player has three games with a touchdown. Uncheck Touchdown scorers. This parlay uses the other selected types.'
+  if (type === 'td') return 'Touchdown scorers are checked, but none fit this TD mode. Uncheck Touchdown scorers, or switch TD mode to Mix. This parlay uses the other selected types.'
   return 'Props are checked, but this week’s file has none for the unstarted games. Uncheck Props. This parlay uses the other selected types.'
 }
 
@@ -653,7 +766,7 @@ function emptyReason(types) {
   return `None of the selected types have a leg on an unstarted game (${names}). Uncheck an empty type, or lower Number of games. The generator only uses games that have not kicked off.`
 }
 
-export function buildCustomParlays(pools = {}, input, { mode = 'confidence', limit = 8, oddsRange = null } = {}) {
+export function buildCustomParlays(pools = {}, input, { mode = 'confidence', limit = 8, oddsRange = null, targets = null, prioritizeMismatch = false } = {}) {
   const requested = checkedTypes(input?.types)
   const byType = {
     outcome: (pools.outcome || []).map(decorateLeg),
@@ -681,8 +794,9 @@ export function buildCustomParlays(pools = {}, input, { mode = 'confidence', lim
     const count = catalog.length
     return { parlays: [], reason: `Only ${count} unstarted ${count === 1 ? 'game has' : 'games have'} these legs, and Number of games is ${working.games}. Lower Number of games${working.legsPerGame != null ? ', or clear Legs per game' : ''}.`, skipped, note }
   }
+  const order = compareLegs(mode, prioritizeMismatch)
   const ranked = [...catalog].sort((a, b) => {
-    const score = game => [...game.legs].sort(compareLegs(mode)).slice(0, working.legsPerGame || 3).reduce((sum, leg) => sum + legScore(leg, mode), 0)
+    const score = game => [...game.legs].sort(order).slice(0, working.legsPerGame || 3).reduce((sum, leg) => sum + legScore(leg, mode) + (prioritizeMismatch ? mismatchRank(leg) * 5 : 0), 0)
     return score(b) - score(a) || String(a.kickoff).localeCompare(String(b.kickoff)) || String(a.id).localeCompare(String(b.id))
   })
   let pool = ranked
@@ -700,17 +814,17 @@ export function buildCustomParlays(pools = {}, input, { mode = 'confidence', lim
     seen.add(priced.id)
     found.push(priced)
   }
-  for (const combo of combinations(pool, working.games)) keep(bestFill(combo, byType, working, mode, new Set()))
+  for (const combo of combinations(pool, working.games)) keep(bestFill(combo, byType, working, mode, new Set(), targets, prioritizeMismatch))
   found.sort(compareParlays(mode))
   if (found.length < 2 && found[0]) {
     const ids = new Set(found[0].legs.map(leg => leg.gameId))
     const combo = pool.filter(game => ids.has(game.id))
     const banned = new Set()
     for (let step = 0; found.length < limit && step < limit * 3; step++) {
-      const worst = [...found[found.length - 1].legs].sort(compareLegs(mode)).at(-1)
+      const worst = [...found[found.length - 1].legs].sort(order).reverse().find(leg => !leg.targetMet)
       if (!worst) break
       banned.add(worst.id)
-      keep(bestFill(combo.length ? combo : pool.filter(game => ids.has(game.id)), byType, working, mode, banned))
+      keep(bestFill(combo.length ? combo : pool.filter(game => ids.has(game.id)), byType, working, mode, banned, targets, prioritizeMismatch))
     }
     found.sort(compareParlays(mode))
   }

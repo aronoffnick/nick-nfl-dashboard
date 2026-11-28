@@ -12,6 +12,21 @@
 .custom-parlay-up{color:#a5e6bd;font-style:normal}
 .custom-parlay-down{color:#e5a68f;font-style:normal}
 .custom-parlay-form input::placeholder{color:#7d9088}
+.custom-parlay-targets{grid-column:1 / -1;margin:0;padding:10px 12px 12px;border:1px solid #365344;border-radius:10px;display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px 10px}
+.custom-parlay-targets legend{padding:0 6px;color:#9fe2b4;font-size:.72rem;font-weight:800;letter-spacing:.06em;display:flex;align-items:center;gap:8px}
+.custom-parlay-targets legend button{background:transparent;color:#c5d5e0;border:1px solid #3d684f;border-radius:8px;min-height:32px;padding:4px 10px;font-weight:700}
+.custom-parlay-hint{color:#e5a68f;font-size:.68rem;font-weight:650;line-height:1.3}
+.custom-parlay-mismatches{margin:8px 0 0;color:#d6ffe8;font-size:.82rem;font-weight:800}
+.custom-parlay-badges{display:flex;flex-wrap:wrap;gap:4px;margin:4px 0 2px}
+.custom-parlay-badge{display:inline-block;border-radius:99px;padding:3px 8px;font-size:.62rem;letter-spacing:.03em;line-height:1.3}
+.custom-parlay-badge-confidence{background:#1c3d34;color:#b7edc9}
+.custom-parlay-badge-value{background:#3a2e14;color:#f0d7a2}
+.custom-parlay-badge-mismatch{background:#1f6b45;color:#e7fff1}
+.custom-parlay-badge-big{background:#0e8f55;color:#fff;box-shadow:0 0 0 1px #b6ffd4}
+.custom-parlay-badge-both{background:#e9fff3;color:#083322;box-shadow:0 0 0 2px #7dffb5;font-size:.68rem}
+.custom-parlay-ticker{display:flex;flex-wrap:wrap;gap:12px 18px;margin-top:12px;padding:10px 12px;border:1px solid #3d684f;border-radius:10px;background:#10211a}
+.custom-parlay-ticker small{display:block;color:#9db5aa;font-size:.66rem;font-weight:800;letter-spacing:.04em}
+.custom-parlay-ticker strong{display:block;margin-top:2px;color:#e7fff1;font-size:1.35rem;font-variant-numeric:tabular-nums;line-height:1.1}
 .custom-parlay-include{grid-column:1 / -1;margin:0;padding:10px 12px;border:1px solid #365344;border-radius:10px;display:flex;flex-wrap:wrap;gap:8px 16px}
 .custom-parlay-include legend{padding:0 6px;color:#9fe2b4;font-size:.72rem;font-weight:800;letter-spacing:.06em}
 .custom-parlay-include label,.custom-parlay-form label.custom-parlay-value{flex-direction:row;align-items:center;gap:8px;min-height:44px;font-weight:600}
@@ -49,6 +64,7 @@
 @media(max-width:700px){
   .custom-parlay{padding:12px}
   .custom-parlay-form{grid-template-columns:1fr 1fr}
+  .custom-parlay-targets{grid-template-columns:1fr}
   .custom-parlay-card>header{flex-direction:column}
   .custom-parlay-score{align-items:flex-start}
   .custom-parlay-leg{grid-template-columns:32px minmax(0,1fr);padding:10px}

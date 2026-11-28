@@ -8,12 +8,16 @@ import {
   fairAmerican,
   filterPools,
   legValue,
+  oddsDirection,
   outcomeCandidates,
+  priceMatchesTarget,
   propCandidates,
   priceInRange,
+  runningAmerican,
   seasonTdShare,
   validateCustomParlay,
 } from '../src/props/customParlay.js'
+import { mismatchRank } from '../src/props/tdScorers.js'
 import { selectionFromChoices, scriptSummary } from '../src/props/gameScript.js'
 
 const types = (outcome, td, prop) => ({ outcome, td, prop })
@@ -360,4 +364,65 @@ test('outcome candidates use the model pick and skip games that already started'
   assert.equal(outcomes[0].type, 'outcome')
   assert.ok(outcomes[0].confidence > 0.5)
   assert.ok(outcomes[0].valueScore > 0)
+})
+
+test('optimize for value still includes a touchdown leg that has no book line', () => {
+  const pools = {
+    outcome: [
+      leg({ id: 'o1', type: 'outcome', gameId: 'A', playerId: null, confidence: 0.62, price: -110, priced: true }),
+      leg({ id: 'o2', type: 'outcome', gameId: 'B', playerId: null, confidence: 0.58, price: -120, priced: true }),
+    ],
+    td: [
+      leg({ id: 'td-a', type: 'td', gameId: 'A', playerId: 'scorer-a', confidence: 0.48 }),
+      leg({ id: 'td-b', type: 'td', gameId: 'B', playerId: 'scorer-b', confidence: 0.41 }),
+    ],
+    prop: [
+      leg({ id: 'p1', gameId: 'A', playerId: 'a', confidence: 0.7, price: 150, priced: true }),
+      leg({ id: 'p2', gameId: 'B', playerId: 'b', confidence: 0.66, price: 180, priced: true }),
+      leg({ id: 'p3', gameId: 'A', playerId: 'c', confidence: 0.6, price: -110, priced: true }),
+      leg({ id: 'p4', gameId: 'B', playerId: 'd', confidence: 0.55, price: -130, priced: true }),
+    ],
+  }
+  const input = validateCustomParlay({ legs: '4', games: '2', legsPerGame: '', types: types(true, true, true) }).input
+  const parlay = buildCustomParlays(pools, input, { mode: 'value', prioritizeMismatch: true }).parlays[0]
+  assert.equal(parlay.legs.some(item => item.type === 'td'), true)
+})
+
+test('a likely touchdown mismatch ranks ahead of a longer-shot mismatch', () => {
+  const likely = leg({ id: 'likely', type: 'td', gameId: 'A', playerId: 'star', confidence: 0.52, price: 180, priced: true })
+  const long = leg({ id: 'long', type: 'td', gameId: 'A', playerId: 'sleeper', confidence: 0.22, price: 500, priced: true })
+  const prop = leg({ id: 'prop', type: 'prop', gameId: 'B', playerId: 'other', confidence: 0.45, price: -110, priced: true })
+  const input = validateCustomParlay({ legs: '2', games: '2', legsPerGame: '', types: types(false, true, true) }).input
+  const parlay = buildCustomParlays({ td: [likely, long], prop: [prop] }, input, { mode: 'value', prioritizeMismatch: true }).parlays[0]
+  assert.equal(parlay.legs[0].id === 'likely' || parlay.legs.some(item => item.id === 'likely'), true)
+  assert.ok(mismatchRank(parlay.legs.find(item => item.id === 'likely')) > mismatchRank(parlay.legs.find(item => item.id === 'long') || { mismatch: null }))
+  assert.equal(parlay.legs.find(item => item.id === 'likely').mismatch.likely, true)
+  assert.equal(parlay.legs.map(item => item.id).includes('long'), false)
+})
+
+test('a target odds slot keeps the closest priced leg and a miss falls back', () => {
+  assert.equal(priceMatchesTarget(180, 200, 1), true)
+  assert.equal(priceMatchesTarget(280, 200, 1), false)
+  assert.equal(priceMatchesTarget(280, 200, 4), true)
+  const pools = {
+    prop: [
+      leg({ id: 'short', gameId: 'A', playerId: 'a', confidence: 0.8, price: -110, priced: true }),
+      leg({ id: 'near', gameId: 'B', playerId: 'b', confidence: 0.42, price: 180, priced: true }),
+      leg({ id: 'far', gameId: 'B', playerId: 'c', confidence: 0.7, price: 400, priced: true }),
+    ],
+  }
+  const input = validateCustomParlay({ legs: '2', games: '2', legsPerGame: '', types: types(false, false, true) }).input
+  const matched = buildCustomParlays(pools, input, { targets: [200, null] }).parlays[0]
+  assert.ok(matched.legs.some(item => item.id === 'near' && item.targetMet))
+  assert.equal(matched.legs.some(item => item.id === 'far'), false)
+  const missed = buildCustomParlays(pools, input, { targets: [5000, null] }).parlays[0]
+  const fallback = missed.legs.find(item => item.targetFallback)
+  assert.ok(fallback)
+  assert.equal(fallback.targetOdds, 5000)
+  const book = runningAmerican(matched.legs, 'price')
+  const fair = runningAmerican(matched.legs, 'fairLine')
+  assert.ok(book?.text)
+  assert.ok(fair?.text)
+  assert.equal(oddsDirection(150, 420), 'up')
+  assert.equal(oddsDirection(420, 150), 'down')
 })
