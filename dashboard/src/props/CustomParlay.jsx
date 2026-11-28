@@ -37,7 +37,7 @@ function valueDetail(leg) {
   const target = leg.targetOdds == null || leg.targetFallback
     ? ''
     : ` · Target ${formatBook(leg.targetOdds)}${leg.targetMet ? ' ✓' : ''}`
-  if (!leg.hasLine) return `No line${target}`
+  if (!leg.hasLine) return `No line${target} · Fair ${formatBook(leg.fairLine)}`
   const tag = leg.valueTag === 'undervalued' ? 'Undervalued ↑' : leg.valueTag === 'overvalued' ? 'Overvalued ↓' : 'Fair'
   return `Book ${formatBook(leg.bookLine)}${bookName}${target} · Fair ${formatBook(leg.fairLine)} · ${tag}`
 }
